@@ -1,0 +1,872 @@
+<html>
+<head>
+<script>
+
+	function zClick(xpos, ypos){
+
+
+
+ip = xpos;jp = ypos;
+
+		//handle clicking here
+		//zLog("zclick called",3);
+		zLog([xpos,ypos],2);
+		zLog(checkAngels(xpos, ypos),2);
+
+		if (checkAngels(xpos, ypos)){
+			zReset();
+		}
+		//togglecell(xpos,ypos);
+		//followermoveto.target = [xpos,ypos];
+	}
+
+
+
+	function zInit(){
+randomgrid();
+angels = [];
+angels.push(new zAngel());
+
+angels.push(new zAngel());
+	}
+ var num = 0;
+ var ip = 0;
+ var jp = 0;
+var numalive = 0;
+var nx,ny,alivens;
+
+function togglecell(i,j){
+
+
+	grid[i][j][0] = !grid[i][j][0];
+	lastgrid[i][j][0]=grid[i][j][0];
+	grid[i][j][8]=0;
+	grid[i][j][4]=true;
+
+	if (grid[i][j][0])
+	{//became alive
+		grid[i][j][3] = 0;
+		grid[i][j][1]++;
+		grid[i][j][5]=true;
+		grid[i][j][2]++;
+		grid[i][j][6]=true;
+	}
+	else{
+
+	}
+	//drawGrid();
+}
+
+
+function zGStep(){
+	lastgrid = zClone(grid);
+
+
+
+
+	for (i=0;i<numcols;i++){
+		for(j=0;j<numrows;j++){
+
+
+			numalive = countalivecells(i,j);
+
+			//life
+			if (numalive == 4){
+				grid[i][j][0] = lastgrid[i][j][0];
+			}
+			else if (numalive == 3){
+				grid[i][j][0] = true;
+			}
+			else{
+				grid[i][j][0] = false;
+			}
+
+
+			//meta
+			//unchanged
+			if (grid[i][j][0] == lastgrid[i][j][0]){
+				//alive twive in a row
+				if (grid[i][j][0])
+				{
+					grid[i][j][1]++;
+					grid[i][j][5]=true;
+					grid[i][j][3]++;
+					grid[i][j][7]=true;
+				}
+				else
+				//dead twice in a row
+				{
+					grid[i][j][8]++;
+					if(grid[i][j][8] > 26)
+					{
+						grid[i][j][3]=Math.max(grid[i][j][3]-1,0);
+						grid[i][j][8]=0;
+					}
+
+				}
+			}
+
+			else{//changed state
+				grid[i][j][8]=0;
+				grid[i][j][4]=true;
+
+				if (grid[i][j][0])
+				{//became alive
+					grid[i][j][3] = 0;
+					grid[i][j][1]++;
+					grid[i][j][5]=true;
+					grid[i][j][2]++;
+					grid[i][j][6]=true;
+				}
+				else{
+
+				}
+			}
+
+
+
+
+		}
+	}
+
+	for (let za of angels){
+		zAngelTouch(za);
+	}
+
+}
+
+	function drawGrid(){
+
+				for (i=0;i<numcols;i++){
+					for(j=0;j<numrows;j++){
+						if (grid[i][j][0]){
+
+								zSetCellTC(i,j,wrappedfrom(dcolors,grid[i][j][2]));
+
+								zSetCellBG(i,j,wrappedfrom(lcolors,grid[i][j][3]));
+
+
+						}
+						else{
+
+								zSetCellTC(i,j,wrappedfrom(lcolors,grid[i][j][2]));
+
+								zSetCellBG(i,j,wrappedfrom(dcolors,grid[i][j][3]));
+
+						}
+
+						if (grid[i][j][5])
+						zSetCellText(i,j,wrappedfrom(chars,grid[i][j][1]-1));
+
+						grid[i][j][4]=false;
+						grid[i][j][5]=false;
+						grid[i][j][6]=false;
+						grid[i][j][7]=false;
+
+					}
+				}
+	}
+
+	function countalivecells(x,y){
+		 alivens = 0;
+		 nx = x;
+		 ny = y;
+		for (n = 0; n < 9 ;n++){
+			nx = zWrapCoord(x + offs[n][0], numcols );
+			ny =zWrapCoord(y + offs[n][1], numrows );
+			if (lastgrid[nx][ny][0]){
+				alivens = alivens + 1;
+			}
+		}
+		return alivens;
+	}
+
+
+	function randomgrid(){
+		for (i=0;i<numcols;i++){
+			for (j=0;j<numrows;j++){
+				grid[i][j][0] = Math.random() >= 0.5;
+				if (grid[i][j][0]) grid[i][j][5]=true;
+
+			}
+		}
+		lastgrid = zClone(grid);
+
+	}
+
+
+
+</script>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ztext</title>
+	<style type="text/css">
+	.tcell{
+		height:12px;width:12px;
+	}
+	table{
+		font-family: monospace;
+		vertical-align: top;
+		text-align:center;
+		table-layout: fixed;
+		border-spacing:0px;
+		margin: 0 auto;
+		padding:0;
+	}
+td{
+	vertical-align: top;
+
+	width:12px;height:12px;
+	max-width: 12px;max-height: 12px;
+	padding:0;
+	margin:0;
+	font-size:12px;
+
+  white-space: nowrap;
+}
+tr{
+	height:12px;
+	max-height: 12px;
+	margin:0;
+	padding:0;
+}
+
+	.topmenu{
+		display:block; margin: auto;
+		width:80%;height:32px;font-size:20px;overflow:hidden;padding:0px;
+	}
+	.menubutton{
+		float:left;display:block;text-align:center;width:50%;background-color: #cacaca; padding: 0px 0;
+	}
+	body {
+		position:relative;
+	}
+	.settings{
+		display:none;padding:0;position:fixed;top: 50%;width:200px;height:200px;
+		left: 50%;
+		margin-top: -100px;
+		margin-left: -100px;
+		background-color:#cacaca;
+		text-align: center;
+	}
+	.logmenu{
+		display:none;padding:0;position:fixed;top: 20%;height:80%;
+		right:0px;
+		left:80%;
+		margin-top: -100px;
+
+		background-color:#cacaca;
+		text-align: left;
+		overflow:scroll;
+		display:"none";
+	}
+
+	#tableholder{
+		width:100%;
+		text-align:center;
+		position: absolute;
+		top:34px;
+		left:0;
+
+
+
+	}
+	@media screen and (min-width: 600px) {
+		.menubutton:hover{
+			background-color: #808080;
+		}
+		.logmenu{
+			padding:0;position:fixed;top: 20%;height:80%;
+			right:0px;
+			left:92%;
+			margin-top: -100px;
+
+			background-color:#cacaca;
+			text-align: left;
+			overflow:scroll;
+			display:block;
+		}
+
+	}
+
+}
+</style>
+</head>
+<body>
+<div id="tableholder">
+
+</div>
+
+
+
+	<div id="settingsmenu" class="settings"><b> settings here lol</b><HR />
+		<BR />step rate (in ms):
+		<input value="500" name="ratefield" id="ratefield" />
+		<BR /><BR />
+		<div onclick="settingsmenutoggle()"  title="close" class="menubutton" style="float:none;position:absolute;margin:auto;width:50%;bottom:0;left:20;right:20;">🆗</div>
+	</div>
+
+
+	<div id="topmenubuttons" class="topmenu">
+		<div onclick="stopemu()" id="pbutton" title="play/pause" class="menubutton">⏸️</div>
+		<div onclick="zReset()" id="rsbutton" title="reset" class="menubutton" >🔄</div>
+		<!--<div onclick="logviewtoggle()" id="gbutton" title="toggle log" class="menubutton" >🧾</div>
+		<div onclick="settingsmenutoggle()" id="settingsbutton" title="toggle settings" class="menubutton">⚙️</div>
+	-->
+</div>
+	<div id="logmenu" class="logmenu">
+	</div>
+
+	<script>
+
+	//// engine code below this lol
+
+function zAngel(){
+	this.asize = 3;
+
+		loc = [randintinc(2,numcols-2),randintinc(2,numrows-2)];
+
+		this.vel = randfrom(nonzoffs);
+	this.zr = new zRect(loc[0],loc[1],this.asize,this.asize);
+}
+
+function zAngelTouch(ang){
+
+	nc = [zWrapCoord(ang.zr.pos[0] + ang.vel[0],numcols),zWrapCoord(ang.zr.pos[1] + ang.vel[1],numrows)]
+	ang.zr = MoveRect(ang.zr,nc);
+
+	for (i=0;i<ang.zr.width;i++){
+		for (j = 0;j<ang.zr.height;j++){
+			nx = zWrapCoord(ang.zr.pos[0] + i,numcols);
+			ny = zWrapCoord(ang.zr.pos[1] + j,numrows);
+			//grid[nx][ny][0]=true;
+			togglecell(nx,ny);
+		}
+	}
+}
+
+
+function checkAngels(x,y){
+	res = false;
+	for (let za of angels){
+		for (i=0;i<za.zr.width;i++){
+			for (j = 0;j<za.zr.height;j++){
+				nx = zWrapCoord(za.zr.pos[0] + i,numcols);
+				ny = zWrapCoord(za.zr.pos[1] + j,numrows);
+				if (nx == x && ny == y){
+					res = true;
+				}
+			}
+	}
+}
+
+	return res;
+}
+
+	function zRect(x1,y1,w,h){
+		this.width = w;
+		this.height = h;
+		this.topleft = [x1,y1];
+		this.topright = [x1+w,y1];
+		this.bottomleft = [x1,y1+h];
+		this.bottomright = [x1+w,y1+h];
+		this.center = [x1 + (w/2), y1 + (h/2)];
+		this.minx = Math.min(x1,x1+w);
+		this.miny = Math.min(y1,y1+h);
+		this.maxx = Math.max(x1,x1+w);
+		this.maxy = Math.max(y1,y1+h);
+		this.pos = [x1,y1];
+
+	}
+
+	function MoveRect(zr, newtopleft){
+		newzr = new zRect(newtopleft[0],newtopleft[1],zr.width,zr.height);
+
+		return newzr;
+	}
+
+
+	(function() {
+		var lastTime = 0;
+		var vendors = ['webkit', 'moz'];
+		for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+				window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+				window.cancelAnimationFrame =
+					window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+		}
+
+		if (!window.requestAnimationFrame)
+				window.requestAnimationFrame = function(callback, element) {
+						var currTime = new Date().getTime();
+						var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+						var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+							timeToCall);
+						lastTime = currTime + timeToCall;
+						return id;
+				};
+
+		if (!window.cancelAnimationFrame)
+				window.cancelAnimationFrame = function(id) {
+						clearTimeout(id);
+				};
+	}());
+
+
+
+	function isWithin(x,a,b){
+		return (x >= a && x <= b);
+	}
+
+
+
+/// core engine loop below
+
+
+
+	//engine step
+	function dostep(){
+		if (zEmulating){
+
+
+
+			zGStep();
+
+		}
+
+	}
+
+
+
+	function zDisplayStep(){
+		if (zEmulating){
+drawGrid();
+
+		}
+
+		 animid = requestAnimationFrame(zDisplayStep);
+	}
+
+
+
+	function zLog(msg, priority = 2){
+		if (priority > 0){
+			console.log(msg);
+		}
+		if (priority > 1){
+			logdiv.innerHTML += "<br />"+msg;
+			logdiv.scrollTop = logdiv.scrollHeight;
+		}
+		if (priority > 2){
+			window.status = msg;
+			document.title = msg;
+		}
+		if (priority > 3){
+			alert(msg);
+		}
+	}
+
+
+
+	function zClone(thing){
+		return JSON.parse(JSON.stringify(thing));
+	}
+
+	function zReset(){
+
+		thold.innerHTML = "";
+		logdiv.innerHTML = "";
+		chars = [" "];
+		chars = chars.concat([' ','a','a','a','a','a','a','a','a','b','c','c','d','e','e','e','e','e','e','e','e','e','e','e']);
+		chars = chars.concat([' ','e','e','f','f','g','g','h','h','h','h','h','h','i','i','i','i','i','i','i']);
+		chars = chars.concat([' ','j','k','l','l','l','l','m','m','n','n','n','n','n','n','o','o','o','o','o','o','o']);
+		chars = chars.concat([' ','p','p','q','r','r','r','r','r','r','r','s','s','s','s','s','s','t','t','t','t']);
+		chars = chars.concat([' ','t','t','u','u','v','w','w','x','y','y','z',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','.']);
+		chars = chars.concat([' ','.','.',',',',',',',' ','.','!','?','?',' ',' ',' ',' ',' ',' ']);
+	//	console.log(chars);
+
+		chars = zShuffle(chars);
+		console.log(chars);
+		grid = new Array(numcols);
+		for (i=0;i<numcols;i++){
+			grid[i]=new Array(numrows);
+			for (j=0;j<numrows;j++){
+				grid[i][j]=[0,0,0,0,0,false];
+			}
+		}
+
+		zMakeTable();
+
+			zInit();
+			drawGrid();
+	}
+
+
+	function zCell(x,y){
+		return maintable.rows[y].cells[x].children[0];
+	}
+
+	function zSetCellText(x,y,text){
+		let tc = zCell(x,y);
+
+
+		tc.innerHTML = text;
+	}
+
+	function zSetCellColors(x,y,texc,bgc){
+		let tc = zCell(x,y);
+		tc.style.backgroundColor = bgc;
+		tc.style.color = texc;
+	}
+
+	function zSetCellBG(x,y,bgc){
+		let tc = zCell(x,y);
+
+		tc.style.backgroundColor = bgc;
+	}
+
+	function zSetCellTC(x,y,texc){
+		let tc = zCell(x,y);
+
+		tc.style.color = texc;
+	}
+
+
+	function zMakeTable(){
+
+		var tbl = document.createElement("table");
+		maintable = tbl;
+	   var tblBody = document.createElement("tbody");
+
+
+		var colh = 12;
+		var rowh = 12;
+		var cind = 0;
+		  // creating all cells
+		  for (var i = 0; i < numrows; i++) {
+		    // creates a table row
+		    var row = document.createElement("tr");
+
+		    for (var j = 0; j < numcols; j++) {
+		      // Create a <td> element and a text node, make the text
+		      // node the contents of the <td>, and put the <td> at
+		      // the end of the table row
+		      var cell = document.createElement("td");
+
+		      var cellText = document.createElement("div");
+					cellText.id = "cellx" + j + "y" + i;
+					cellText.className = "tcell";
+				//	cellText.innerHTML = " ";
+				 cind = Math.floor(Math.random() * chars.length);
+					cellText.innerHTML = ' ';
+					grid[i][j][1] = cind+1;
+
+				//	cellText.style.color = randfrom(zColors);
+				//	cellText.style.backgroundColor = randfrom(zColors);
+		      cell.appendChild(cellText);
+					cellText.addEventListener('click',function(event) {
+
+						newid = this.id.replace('cellx','');
+						newids = newid.split('y');
+						zClick(newids[0],newids[1]);
+						//zClick(i,j);
+					}, false);
+		      row.appendChild(cell);
+		    }
+
+		    // add the row to the end of the table body
+		    tblBody.appendChild(row);
+		  }
+
+		tbl.appendChild(tblBody);
+		thold.appendChild(tbl);
+
+	}
+
+//	var lcolors = ['white','red','yellow','lime','aqua','blue','fuchsia','pink','silver'];
+//	var dcolors = ['black','gray','maroon','olive','green','teal','navy','purple'];
+	var dcolors = ['#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#006d2c','#00441b'].reverse();
+
+	var lcolors = ['#ffe6f2','#ffc7e3','#ffb3d9','#ffa3d1','#ff99cc','#ff8ac4','#ff7abd'];
+
+	var zColors = lcolors.concat(dcolors);
+	var nonzoffs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+	var offs = zClone(nonzoffs);
+	offs.push([0,0]);
+	var chars = [' '];
+
+	//var chars = genCharArray('A','Z').concat(genCharArray('a','z')).concat(genCharArray('0','9'));
+	var numrows = 64;
+	var numcols = 64;
+	var grid = new Array(numcols);
+	for (i=0;i<numcols;i++){
+		grid[i]=new Array(numrows);
+	}
+	var lastgrid;
+	var w = window.innerWidth * 0.9;
+	var h = window.innerHeight * 0.85;
+	var settingsmenu  = document.getElementById("settingsmenu");
+	var logdiv = document.getElementById("logmenu");
+
+
+	var thold = document.getElementById("tableholder");
+	var maintable;
+	var elemLeft = thold.offsetLeft;
+	var   elemTop = thold.offsetTop;
+	var settingsopen = false;
+	var wasemu = true;
+	//var canv = document.getElementById("theCanvas");
+	var pb = document.getElementById("pbutton");
+	var ratefield = document.getElementById("ratefield");
+	var topmenud = document.getElementById("topmenubuttons");
+	logdiv.style.display = "none";
+	//topmenud.style.display = "none";
+//	canv.width = w;
+//	canv.height = h ;
+	var zStepRate = getUrlParam("rate",500);
+	var zEmulating = true;
+//	var ctx = canv.getContext("2d");
+//	var zScale = 2;
+//	ctx.scale(zScale,zScale);
+
+//	var sw = w/zScale;
+//	var sh = h/zScale;
+	var logopen = false;
+	var ismobile = true;
+	if (window.innerWidth > 600){
+		logopen = false;
+		ismobile = false;
+	}
+	//ctx.font = "8px monaco";
+	//var elemLeft = canv.offsetLeft;
+	//var   elemTop = canv.offsetTop;
+	/*
+	canv.addEventListener('click', function(event) {
+		var xval = event.pageX - elemLeft,
+		yval = event.pageY - elemTop;
+
+		xval = xval/zScale;
+		yval = yval/zScale;
+		yval -= 5;
+		xval -= 5;
+
+		if (zEmulating)
+		zClick(xval, yval);
+
+
+
+	}, false);
+*/
+var lastRender = Date.now()
+var zDT = 0;
+
+var zRepeater= null;
+var animid = null;
+	zReset();
+
+	zRepeater = setInterval(dostep,zStepRate);
+
+ zDisplayStep();
+
+	function stopemu()
+	{
+		if (zEmulating){
+			clearInterval(zRepeater);
+
+			zEmulating = false;
+			pb.innerHTML = "▶️";
+		}
+		else{
+			dostep();
+
+			zRepeater = setInterval(dostep,zStepRate);
+			zEmulating = true;
+			pb.innerHTML = "⏸️";
+
+		}
+	}
+	function logviewtoggle(){
+		if(!logopen){
+			logopen = true;
+			logdiv.style.display = "block";
+		}
+		else{	logopen = false;logdiv.style.display = "none";}
+
+	}
+
+
+
+	function settingsmenutoggle(){
+
+		if (!settingsopen) {
+			settingsmenu.style.display = "block";
+			//zClearScreen();
+
+
+			settingsopen = true;
+			wasemu = zEmulating;
+			zEmulating = false;
+			topmenud.style.display="none";
+
+		} else {
+			settingsmenu.style.display = "none";
+			settingsopen = false;
+
+			if (wasemu)
+			zEmulating = true;
+			topmenud.style.display = "block";
+			setrate(ratefield.value);
+		}
+	}
+
+
+	function setrate(nr){
+		var newrate = nr;
+		if (newrate != null && !isNaN(newrate) && newrate > 0) {
+			zStepRate = newrate;
+			clearInterval(zRepeater);
+			if (zEmulating){
+				zRepeater = setInterval(dostep,zStepRate);
+
+			}
+		}
+	}
+
+
+
+
+
+	function getUrlParam(parameter, defaultvalue){
+		var urlparameter = defaultvalue;
+		if(window.location.href.indexOf(parameter) > -1){
+			urlparameter = getUrlVars()[parameter];
+		}
+		return urlparameter;
+	}
+
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}
+
+
+	function randfrom(myarray){
+		return myarray[Math.floor(Math.random() * myarray.length)];
+	}
+
+	function randintinc(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) ) + min;
+	}
+
+function zClamp(num, min, max){
+	return Math.min(Math.max(num, min), max);
+}
+
+function zWrapCoord(x, maxx, min=0){
+	var res = x;
+	if (x<min)
+	res =  x + maxx;
+	if (x >= maxx)
+	res = x - maxx;
+	return res;
+}
+
+	function randposneg(){
+		return randfrom([-1,1]);
+	}
+
+
+	function normalize(vect){
+		var mag = Math.sqrt(sqrmag(vect));
+		var outvect = [vect[0], vect[1]];
+		if(Math.abs(mag) < 1e-9) {
+			outvect[0] = 0;
+			outvect[1] = 0;
+		}
+		else{
+			outvect[0] = vect[0]/mag;
+			outvect[1] = vect[1]/mag;
+		}
+		return outvect;
+	}
+
+	function zRandDirect(zmc, speed){
+		zmc.velocity = normalize([randintinc(-32,32),randintinc(-32,32)]);
+		zmc.velocity[0] *= speed;
+		zmc.velocity[1] *= speed;
+
+	}
+
+	function sqrmag(vect){
+		return (vect[0] * vect[0] + vect[1] * vect[1]);
+	}
+
+	function offset(v1, v2){
+		var deltaX = v2[0] - v1[0];
+		var deltaY = v2[1] - v1[1];
+		return [deltaX, deltaY];
+	}
+
+	function sqrdist(v1, v2){
+		var vofs = offset(v1, v2);
+		return (vofs[0] * vofs[0] + vofs[1] * vofs[1]);
+	}
+
+	function wrappedfrom(array,num){
+		if(num==0)
+		return array[0]
+		return array[num%array.length];
+	}
+
+	function partial(func /*, 0..n args */) {
+		var args = Array.prototype.slice.call(arguments).splice(1);
+		return function() {
+			var allArguments = args.concat(Array.prototype.slice.call(arguments));
+			return func.apply(this, allArguments);
+		};
+	}
+
+	function clonearray(array){
+		newarray = [];
+		for (i = 0; i < array.length; i++) {
+			newarray.push(array[i]);
+		}
+	}
+
+	function genCharArray(charA, charZ) {
+    var a = [], i = charA.charCodeAt(0), j = charZ.charCodeAt(0);
+    for (; i <= j; ++i) {
+        a.push(String.fromCharCode(i));
+    }
+    return a;
+}
+
+	function zShuffle(array) {
+		var currentIndex = array.length, temporaryValue, randomIndex;
+
+		// While there remain elements to shuffle...
+		while (0 !== currentIndex) {
+
+			// Pick a remaining element...
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+
+			// And swap it with the current element.
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+
+		return array;
+	}
+
+	</script>
+
+</body>
+
+
+</html>
