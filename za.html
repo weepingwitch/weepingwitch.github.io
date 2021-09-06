@@ -26,7 +26,10 @@ ip = xpos;jp = ypos;
 	function zInit(){
 randomgrid();
 angels = [];
-angels.push(new zAngel());
+for (i = 0; i < numangels; i ++){
+	angels.push(new zAngel());
+}
+
 
 
 	}
@@ -238,16 +241,17 @@ tr{
 		width:80%;height:32px;font-size:20px;overflow:hidden;padding:0px;
 	}
 	.menubutton{
-		float:left;display:block;text-align:center;width:50%;background-color: #cacaca; padding: 0px 0;
+		float:left;display:block;text-align:center;width:33%;background-color: #cacaca; padding: 0px 0;
 	}
 	body {
 		position:relative;
 	}
 	.settings{
-		display:none;padding:0;position:fixed;top: 50%;width:200px;height:200px;
+		display:none;padding:0;position:fixed;top: 50%;width:200px;height:220px;
 		left: 50%;
 		margin-top: -100px;
 		margin-left: -100px;
+		line-height:120%;
 		background-color:#cacaca;
 		text-align: center;
 	}
@@ -301,10 +305,14 @@ tr{
 
 
 
-	<div id="settingsmenu" class="settings"><b> settings here lol</b><HR />
-		<BR />step rate (in ms):
-		<input value="500" name="ratefield" id="ratefield" />
-		<BR /><BR />
+	<div id="settingsmenu" class="settings"><b>configure the angels</b><HR />
+		<label for="ratefield">step rate (in ms):</label>
+		<input value="500" name="ratefield" id="ratefield" /><BR>
+		<BR /><label for="numangels">number of angels (1-12):</label>
+		<BR /><input value="1" name="numangels" id="numangels" /><BR>
+		<BR /><label for="gridsize">grid dimensions (7-144):</label>
+		<BR /><input value="42" name="gridsize" id="gridsize" /> <br />
+		<br /><br />
 		<div onclick="settingsmenutoggle()"  title="close" class="menubutton" style="float:none;position:absolute;margin:auto;width:50%;bottom:0;left:20;right:20;">🆗</div>
 	</div>
 
@@ -312,9 +320,10 @@ tr{
 	<div id="topmenubuttons" class="topmenu">
 		<div onclick="stopemu()" id="pbutton" title="play/pause" class="menubutton">⏸️</div>
 		<div onclick="zReset()" id="rsbutton" title="reset" class="menubutton" >🔄</div>
-		<!--<div onclick="logviewtoggle()" id="gbutton" title="toggle log" class="menubutton" >🧾</div>
 		<div onclick="settingsmenutoggle()" id="settingsbutton" title="toggle settings" class="menubutton">⚙️</div>
-	-->
+
+		<!--<div onclick="logviewtoggle()" id="gbutton" title="toggle log" class="menubutton" >🧾</div>
+		-->
 </div>
 	<div id="logmenu" class="logmenu">
 	</div>
@@ -599,6 +608,7 @@ drawGrid();
 	//var chars = genCharArray('A','Z').concat(genCharArray('a','z')).concat(genCharArray('0','9'));
 	var numrows = 42;
 	var numcols = 42;
+	var numangels = 1;
 	var grid = new Array(numcols);
 	for (i=0;i<numcols;i++){
 		grid[i]=new Array(numrows);
@@ -619,6 +629,8 @@ drawGrid();
 	//var canv = document.getElementById("theCanvas");
 	var pb = document.getElementById("pbutton");
 	var ratefield = document.getElementById("ratefield");
+	var numangelsfield = document.getElementById("numangels");
+	var gridsizefield = document.getElementById("gridsize");
 	var topmenud = document.getElementById("topmenubuttons");
 	logdiv.style.display = "none";
 	//topmenud.style.display = "none";
@@ -717,6 +729,13 @@ var animid = null;
 			zEmulating = true;
 			topmenud.style.display = "block";
 			setrate(ratefield.value);
+			numangels = numangelsfield.value;
+			numangels = zClamp(numangels,1,12);
+			numrows = gridsizefield.value;
+			numcols = gridsizefield.value;
+			numrows = zClamp(numrows,7,144);
+			numcols = zClamp(numcols,7,144);
+			zReset();
 		}
 	}
 
