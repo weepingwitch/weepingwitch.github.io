@@ -1,0 +1,239 @@
+<html>
+<head>
+<title>hex</title>
+<style type="text/css">
+#mcanvas{
+  display:block;
+  margin:auto;
+
+  border:2px solid black;
+}
+#canvasholder{
+  display:block;
+  margin:auto;
+  width:100%;
+}
+</style>
+
+<script>
+
+const cwidth = 600;
+const cheight = 600;
+const r = 20;
+
+</script>
+
+
+
+
+</head>
+<body>
+  <div id="canvasholder"></div>
+
+
+<script>
+// EXECUTION STARTS HERE
+const canvasholder = document.getElementById("canvasholder");
+canvasholder.innerHTML="<canvas id='mcanvas' width='" + cwidth + "' height='" + cheight + "'></canvas>";
+const canvas = document.getElementById('mcanvas');
+var elemLeft = canvas.offsetLeft;
+var elemTop = canvas.offsetTop;
+canvas.addEventListener('click', function(event) {
+  var xval = event.pageX - elemLeft,
+  yval = event.pageY - elemTop;
+  click(xval,yval);
+
+}, false);
+
+const ctx = canvas.getContext('2d');
+
+const a = 2 * Math.PI / 6;
+
+var allcells = [];
+
+init();
+
+
+/////////
+
+function HexSpot(xpos, ypos){
+  this.drawx = xpos;
+  this.drawy = ypos;
+  var retpos = HexCoordsFromPix(xpos,ypos);
+  this.x = retpos.x;
+  this.y = retpos.y;
+  this.color=randfrom(["green","purple","blue","gray","pink"]);
+}
+
+
+function click(x,y){
+  //console.log(x,y);
+
+  var retpos;
+  retpos = HexCoordsFromPix(x,y, retpos);
+  if (retpos.x%2==1){
+    retpos.y -=1;
+  }
+  console.log(retpos);
+  var touchedhex = allcells[retpos.y][retpos.x];
+  drawHexagon(touchedhex,true);
+  var ittouches = findTouching(touchedhex);
+  //console.log(ittouches);
+  for (let th of ittouches){
+    drawHexagon(th, true);
+  }
+
+}
+
+function getHex(ix, iy){
+  if (ix >= 0 && iy >= 0 && ix < allcells[0].length && iy < allcells.length){
+    return allcells[iy][ix];
+  }
+  else{return null}
+}
+
+
+function findTouching(hex){
+  var touchings = [];
+  var nx, ny;
+  var touchpos = [[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,-1]];
+  if (hex.x%2==1){
+    touchpos = [[0,-2],[0,0],[-1,0],[1,0],[-1,-1],[1,-1]]
+  }
+
+  for (let offs of touchpos){
+    //console.log(offs);
+    nx = hex.x + offs[0];
+    ny = hex.y + offs[1];
+    console.log(nx, ny);
+    var nh = getHex(nx,ny);
+    if (nh != null){
+      console.log(nh);
+      touchings.push(nh);
+    }
+  }
+
+
+
+
+
+  return touchings;
+}
+
+
+function HexCoordsFromPix (x, y, retPos){
+  var w = r * 2;
+  var h = Math.sqrt(3) * r;
+    if(retPos === undefined){
+        retPos = {};
+    }
+    var xa, ya, xpos, xx, yy, r2, h2;
+    r2 = r / 2;
+    h2 = h / 2;
+    xx = Math.floor(x / r2);
+    yy = Math.floor(y / h2);
+    xpos = Math.floor(xx / 3);
+    xx %= 6;
+    if (xx % 3 === 0) {      // column with diagonals
+        xa = (x % r2) / r2;  // to find the diagonals
+        ya = (y % h2) / h2;
+        if (yy % 2===0) {
+            ya = 1 - ya;
+        }
+        if (xx === 3) {
+            xa = 1 - xa;
+        }
+        if (xa > ya) {
+            retPos.x = xpos + (xx === 3 ? -1 : 0);
+            retPos.y = Math.floor(yy / 2);
+            return retPos;
+        }
+        retPos.x = xpos + (xx === 0 ? -1 : 0);
+        retPos.y = Math.floor((yy + 1) / 2);
+        return retPos;
+    }
+    if (xx < 3) {
+        retPos.x = xpos + (xx === 3 ? -1 : 0);
+        retPos.y = Math.floor(yy / 2);
+        return retPos;
+    }
+    retPos.x = xpos + (xx === 0 ? -1 : 0);
+    retPos.y = Math.floor((yy + 1) / 2);
+    return retPos;
+}
+
+
+function init() {
+
+  makeGrid(canvas.width, canvas.height);
+  drawGrid();
+}
+
+function makeGrid(width, height){
+  for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
+    var nr = [];
+    for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
+      var nh = new HexSpot(x,y);
+      //console.log(x,y,nh.color);
+      nr.push(nh);
+    }
+    allcells.push(nr);
+  }
+}
+
+
+
+function drawGrid() {
+  var dofill = false;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let r of allcells){
+        for (let c of r){
+          drawHexagon(c, dofill);
+          //dofill = randfrom([true,false]);
+        }
+
+      }
+
+
+
+}
+
+function drawHexagon(hex, filled=false) {
+  x = hex.drawx;
+  y = hex.drawy;
+  //console.log(x,y);
+  //console.log(hex.color);
+  ctx.fillStyle = hex.color;
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
+  }
+  ctx.closePath();
+  if (filled){
+    ctx.fill();
+    ctx.stroke();
+  }
+  else{
+   ctx.stroke();
+  }
+
+}
+
+
+
+
+
+
+/////
+
+function randfrom(myarray){
+  return myarray[Math.floor(Math.random() * myarray.length)];
+}
+
+
+</script>
+
+</body>
+
+</html>
