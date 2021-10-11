@@ -30,10 +30,6 @@ const cwidth = 600;
 const cheight = 620;
 
 </script>
-
-
-
-
 </head>
 <body>
   <div id="statstext">x</div>
@@ -73,11 +69,7 @@ const cheight = 620;
 
   init();
   var nhx = cellgrid[0].length;
-  var nhy = cellgrid.length;
-
-
-
-  var startc = cellgrid[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
+  var nhy = cellgrid.length;  var startc = cellgrid[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
   makePlantHex(startc);
   var tcc = findTouching(startc);
   var nw = randfrom(tcc);
@@ -89,11 +81,7 @@ const cheight = 620;
         makeWaterHex(nc);
       }
     }
-  }
-
-
-
-  var newc = startc;
+  }  var newc = startc;
 
   for (var z=0;z<6;z+=1){
     while (newc == startc || newc.iswater){
@@ -201,11 +189,7 @@ const cheight = 620;
       }
     }
 
-  }
-
-
-
-  function makePlantHex(nh){
+  }  function makePlantHex(nh){
     touchedhex = nh;
     touchedhex.isplant = true;
     touchedhex.blocked = false;
@@ -225,11 +209,7 @@ const cheight = 620;
       if (touchedhex.istarget){
         alert("you won!!!");
         location.reload();
-      }
-
-
-
-    var visib = findwithin(touchedhex,3);
+      }    var visib = findwithin(touchedhex,3);
     for (let v of visib){
       v.uncovered = true;
     }
@@ -301,10 +281,6 @@ const cheight = 620;
         touchings.push(nh);
       }
     }
-
-
-
-
 
     return touchings;
   }
@@ -379,11 +355,7 @@ makeplantpal();
     var c2;
     p.push("rgb(" + startc[0] + "," + startc[1] + "," + startc[2] + ")");
     c2 = startc;
-    for (i=0;i<num;i++){
-
-
-
-        offs = (Math.random() - .5)*10;
+    for (i=0;i<num;i++){        offs = (Math.random() - .5)*10;
         //console.log(offs);
         c2 = [c2[0] + offs, c2[1] + offs, c2[2] + offs];
 
@@ -398,11 +370,7 @@ makeplantpal();
 plantcolors.push("rgb(" + startc[0] + "," + startc[1] + "," + startc[2] + ")");
 c2 = startc;
 
-    for (i=0;i<10;i++){
-
-
-
-        offs = 55;
+    for (i=0;i<10;i++){        offs = 55;
         //console.log(offs);
         c2 = [c2[0] + offs/3, c2[1] + offs/2, c2[2] + offs/3];
 
@@ -459,10 +427,6 @@ function drawgrid(){
 
       }
     }
-
-
-
-
     drawgrid();
     for (let hc of highlights){
       highlightHex(hc, "green");
@@ -473,11 +437,7 @@ function drawgrid(){
 
   function highlightHex(hex,hcolor){
     drawHexagon(hex,"transparent",hcolor);
-  }
-
-
-
-  function drawHexagon(hex, fillcolor, outlinecolor) {
+  }  function drawHexagon(hex, fillcolor, outlinecolor) {
     x = hex.drawx;
     y = hex.drawy;
     //console.log(x,y);
@@ -501,12 +461,10 @@ function drawgrid(){
 
 
     ctx.fillStyle = hex.textcolor;
-
-
     if (hex.uncovered )
     {
       if (hex.isplant){
-          ctx.fillText(hex.wetness,x,y+2);
+          //ctx.fillText(hex.wetness,x,y+2);
       }
       else{
         if (hex.haswater){
@@ -515,9 +473,6 @@ function drawgrid(){
       }
 
     }
-
-
-
     ctx.strokeStyle = outlinecolor;
     if (!hex.uncovered){
       ctx.strokeStyle = "black";
@@ -529,10 +484,6 @@ function drawgrid(){
     ctx.stroke();
 
   }
-
-
-
-
 
 
   /////
