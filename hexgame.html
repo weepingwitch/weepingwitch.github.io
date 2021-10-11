@@ -332,14 +332,14 @@ var drawwets = true;
     }
      var newc = startc;
      //make random water bits
-    for (var z=0;z<6;z+=1){
+    for (var z=0;z<5;z+=1){
       while (newc == startc || newc.iswater){
         newc = randfrom(randfrom(cellgrid))
       }
       makeWaterHex(newc);
       makeWaterHex(randfrom(findTouching(newc)));
       makeWaterHex(randfrom(findTouching(newc)));
-      makeWaterHex(randfrom(findTouching(newc)));
+
       makeWaterHex(randfrom(findTouching(makeWaterHex(randfrom(findTouching(newc))))));
     }
 
