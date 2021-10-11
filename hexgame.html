@@ -403,7 +403,7 @@ var drawwets = true;
 
             c = Math.sqrt( na*na + nb*nb );
             console.log(c);
-          
+
           newc.blocked = false;
           newc.iswater = false;
           newc.istarget = true;
@@ -560,12 +560,16 @@ function drawgrid(){
         if (hex.haswater){
           //ctx.fillText("~",x,y+2);
         }
+
+        if ( hex.istarget){
+          ctx.fillStyle = "white";
+          ctx.fillText("!!!",x,y+2);
+        }
       }
 
     }
     //ctx.fillText(hex.maxwet,x,y+2);
-    //if (hex.istarget)
-      //ctx.fillText("!!!",x,y+2);
+
     ctx.strokeStyle = outlinecolor;
     if (!hex.uncovered){
       ctx.strokeStyle = "black";
