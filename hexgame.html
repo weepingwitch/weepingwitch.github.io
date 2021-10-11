@@ -1,25 +1,25 @@
 <html>
 <head>
-<title>hexplant</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hexplant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style type="text/css">
-#mcanvas{
-  display:block;
-  margin:auto;
+  <style type="text/css">
+  #mcanvas{
+    display:block;
+    margin:auto;
 
-}
-#canvasholder{
-  display:block;
-  margin:auto;
-  width:100%;
-}
-#statstext{
-  display:block;
-  margin:auto;
-  text-align: center;
-  border:2px solid black;
-}
+  }
+  #canvasholder{
+    display:block;
+    margin:auto;
+    width:100%;
+  }
+  #statstext{
+    display:none;
+    margin:auto;
+    text-align: center;
+    border:2px solid black;
+  }
 </style>
 
 <script>
@@ -40,243 +40,281 @@ const cheight = 620;
   <div id="canvasholder"></div>
 
 
-<script>
-// EXECUTION STARTS HERE
-const canvasholder = document.getElementById("canvasholder");
-canvasholder.innerHTML="<canvas id='mcanvas' width='" + cwidth + "' height='" + cheight + "'></canvas>";
-const canvas = document.getElementById('mcanvas');
-const stext = document.getElementById('statstext');
-canvas.addEventListener('click', function(event) {
-  var elemLeft = canvas.offsetLeft;
-  var elemTop = canvas.offsetTop;
-  var xval = event.pageX - elemLeft,
-  yval = event.pageY - elemTop;
-  click(xval,yval);
+  <script>
+  // EXECUTION STARTS HERE
+  const canvasholder = document.getElementById("canvasholder");
+  canvasholder.innerHTML="<canvas id='mcanvas' width='" + cwidth + "' height='" + cheight + "'></canvas>";
+  const canvas = document.getElementById('mcanvas');
+  const stext = document.getElementById('statstext');
+  canvas.addEventListener('click', function(event) {
+    var elemLeft = canvas.offsetLeft;
+    var elemTop = canvas.offsetTop;
+    var xval = event.pageX - elemLeft,
+    yval = event.pageY - elemTop;
+    click(xval,yval);
 
-}, false);
+  }, false);
 
-const ctx = canvas.getContext('2d');
-ctx.textAlign="center";
-const a = 2 * Math.PI / 6;
+  const ctx = canvas.getContext('2d');
+  ctx.textAlign="center";
+  const a = 2 * Math.PI / 6;
 
-var allcells = [];
-var groundcolors = [];
-var plantcolors = [];
-var rockcolors = [];
-var watercolors = [];
-var highlights = [];
-var allplants = [];
-var waterleft = 100;
-var absorption = 0;
-var numplants = 0;
-
-init();
-var nhx = allcells[0].length;
-var nhy = allcells.length;
-for (var z=0;z<10;z+=1){
-  makeWaterHex(randfrom(randfrom(allcells)));
-}
-
-
-var startc = allcells[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
-makePlantHex(startc)
-var newc = startc;
-
-var c = 0;
-
-while (c <4){
-  newc = allcells[randintinc(1,nhy-2)][randintinc(1,nhx-2)]
-   var na = startc.x-newc.x;
-   var nb = startc.y-newc.y;
-
-   c = Math.sqrt( na*na + nb*nb );
-}
-newc.blocked = false;
-newc.iswater = false;
-newc.istarget = true;
-newc.color = "purple";
-drawGrid();
-
-/////////
-
-function HexSpot(xpos, ypos){
-  this.isplant = false;
-  this.iswater = false;
-  this.istarget = false;
-  this.drawx = xpos;
-  this.drawy = ypos;
-  var retpos = HexCoordsFromPix(xpos,ypos);
-  this.x = retpos.x;
-  this.y = retpos.y;
-  this.color=randfrom(groundcolors);
-  this.textcolor = "white";
-  this.text="";
-  this.uncovered = false;
-  //this.haswater = randfrom([false,false,true])
-  this.blocked = randfrom([false, false, false, true,false]);
-  if (this.blocked){
-    this.color = randfrom(rockcolors);
-
-  }
-
-
-}
-
-
-function click(x,y){
-  //console.log(x,y);
-
-  var retpos;
-  retpos = HexCoordsFromPix(x,y-2, retpos);
-  if (retpos.x%2==1){
-    retpos.y -=1;
-  }
-  //console.log(retpos);
-  if (retpos.x >= 0 && retpos.y >= 0 && retpos.x < allcells[0].length && retpos.y < allcells.length){
-
-    var touchedhex = allcells[retpos.y][retpos.x];
-    if (highlights.includes(touchedhex) && !touchedhex.isplant){
-      makePlantHex(touchedhex);
-      drawGrid();
-    }
-  }
-
-}
-
-function updatewater(){
+  var cellgrid = [];
+  var allcells = [];
+  var groundcolors = [];
+  var plantcolors = [];
+  var rockcolors = [];
+  var watercolors = [];
+  var highlights = [];
+  var allplants = [];
+  var waterleft = 100;
   var absorption = 0;
-  var cost = 0
-  for (let pc of allplants){
-    if (!pc.haswater){
-      cost += 2;
+  var numplants = 0;
+
+  init();
+  var nhx = cellgrid[0].length;
+  var nhy = cellgrid.length;
+
+
+
+  var startc = cellgrid[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
+  makePlantHex(startc);
+  var tcc = findTouching(startc);
+  var nw = randfrom(tcc);
+  var twc = findTouching(nw);
+  makeWaterHex(nw);
+  for (let nc of twc){
+    if (!nc.isplant){
+      if (tcc.includes(nc)){
+        makeWaterHex(nc);
+      }
     }
-    else{
-      absorption+=3;
+  }
+
+
+
+  var newc = startc;
+
+  for (var z=0;z<6;z+=1){
+    while (newc == startc || newc.iswater){
+      newc = randfrom(randfrom(cellgrid))
     }
-  }
-  waterleft -= cost;
-  waterleft += absorption;
-  if (waterleft <= 0){
-    alert("you ran out of water!!! :( :(");
-    location.reload();
-  }
-
-  stext.innerHTML = "water: " + waterleft + "  absorption: " + absorption + "  cost: " + cost;
-}
-
-function makePlantHex(nh){
-  touchedhex = nh;
-  touchedhex.isplant = true;
-  touchedhex.blocked = false;
-  touchedhex.color = randfrom(plantcolors);
-  touchedhex.text = ".";
-  numplants+=1;
-  waterleft-=4;
-  if (touchedhex.haswater){
-    waterleft += 10;
+    makeWaterHex(newc);
+    makeWaterHex(randfrom(findTouching(newc)));
+    makeWaterHex(randfrom(findTouching(newc)));
+    makeWaterHex(randfrom(findTouching(newc)));
+    makeWaterHex(randfrom(findTouching(newc)));
   }
 
-  //highlightHex(touchedhex,"blue");
-  var ittouches = findwithin(touchedhex,1);
-  //console.log(ittouches);
-  for (let th of ittouches){
-    if (!highlights.includes(th) && !th.blocked &&!th.iswater){
-      highlights.push(th);
+  var c = 0;
 
-    }
-    if (th.istarget){
-      alert("you won!!!");
-      location.reload();
-    }
+  while (c <6){
+    newc = cellgrid[randintinc(1,nhy-2)][randintinc(1,nhx-2)]
+    var na = startc.x-newc.x;
+    var nb = startc.y-newc.y;
 
-
+    c = Math.sqrt( na*na + nb*nb );
+    //console.log(c);
   }
-  var visib = findwithin(touchedhex,3);
-  for (let v of visib){
-    v.uncovered = true;
-  }
-allplants.push(touchedhex);
+  newc.blocked = false;
+  newc.iswater = false;
+  newc.istarget = true;
+  newc.color = "purple";
+  doStep();
 
-}
+  /////////
 
-function makeWaterHex(nh){
-  nh.blocked = false;
-  nh.iswater = true;
-  nh.color = randfrom(watercolors);
-  var ittouches = findwithin(nh,1);
-  for (let th of ittouches){
-    if (!th.blocked){
-      th.haswater = true;
-      th.textcolor = nh.color;
-      th.text = "o";
+  function HexSpot(xpos, ypos){
+    this.isplant = false;
+    this.iswater = false;
+    this.istarget = false;
+    this.wetness = 0;
+    this.drawx = xpos;
+    this.drawy = ypos;
+    var retpos = HexCoordsFromPix(xpos,ypos);
+    this.x = retpos.x;
+    this.y = retpos.y;
+    this.color=randfrom(groundcolors);
+    this.textcolor = "cyan";
+    this.text="";
+    this.uncovered = false;
+    //this.haswater = randfrom([false,false,true])
+    this.blocked = randfrom([false, false, false, true,false]);
+    if (this.blocked){
+      this.color = randfrom(rockcolors);
+
     }
 
-  }
-}
 
-function getHex(ix, iy){
-  if (ix >= 0 && iy >= 0 && ix < allcells[0].length && iy < allcells.length){
-    return allcells[iy][ix];
   }
-  else{return null}
-}
 
-function findwithin (hex, dist){
-  var ret = [];
-  var touchx;
-  ret.push(hex);
-  for (var i=0;i<dist;i+=1){
-    var nret = clonearray(ret);
-    for (let shex of nret){
-      //console.log(shex)
-       touchx = findTouching(shex);
-      //console.log(touchx);
-      for (let th of touchx){
-        //console.log(th);
-        if (!ret.includes(th)){
-          ret.push(th);
+  function evalWater(){
+    for (let cc of allplants){
+
+      if (cc.haswater){
+        cc.wetness = 9;
+      }
+      var tcs = findTouching(cc)
+      for (let tc of tcs){
+        if (tc.isplant)
+        flow(cc,tc);
+      }
+      cc.color = plantcolors[cc.wetness];
+      if (cc.wetness <= 0){
+        killplant(cc);
+      }
+
+    }
+
+  }
+
+  function killplant(hex){
+    hex.isplant = false;
+    hex.color = randfrom(groundcolors);
+    hex.wetness = 0;
+  }
+
+
+  function flow(hexf, hext){
+    console.log(hext.x);
+    var newwet = Math.max(hext.wetness,hexf.wetness - 1);
+    hext.wetness = newwet;
+  }
+
+
+  function click(x,y){
+    //console.log(x,y);
+
+    var retpos;
+    retpos = HexCoordsFromPix(x,y-2, retpos);
+    if (retpos.x%2==1){
+      retpos.y -=1;
+    }
+    //console.log(retpos);
+    if (retpos.x >= 0 && retpos.y >= 0 && retpos.x < cellgrid[0].length && retpos.y < cellgrid.length){
+
+      var touchedhex = cellgrid[retpos.y][retpos.x];
+      if (highlights.includes(touchedhex) && !touchedhex.isplant){
+        makePlantHex(touchedhex);
+        doStep();
+
+      }
+    }
+
+  }
+
+
+
+  function makePlantHex(nh){
+    touchedhex = nh;
+    touchedhex.isplant = true;
+    touchedhex.blocked = false;
+    touchedhex.color = randfrom(plantcolors);
+    touchedhex.text = ".";
+    touchedhex.textcolor = "blue";
+    numplants+=1;
+    waterleft-=4;
+    if (touchedhex.haswater){
+      waterleft += 10;
+    }
+
+    //highlightHex(touchedhex,"blue");
+  //  var ittouches = findwithin(touchedhex,1);
+    //console.log(ittouches);
+
+      if (touchedhex.istarget){
+        alert("you won!!!");
+        location.reload();
+      }
+
+
+
+    var visib = findwithin(touchedhex,3);
+    for (let v of visib){
+      v.uncovered = true;
+    }
+    allplants.push(touchedhex);
+
+  }
+
+  function makeWaterHex(nh){
+    nh.blocked = false;
+    nh.iswater = true;
+    nh.color = randfrom(watercolors);
+    var ittouches = findwithin(nh,1);
+    for (let th of ittouches){
+      if (!th.blocked){
+        th.haswater = true;
+        //th.textcolor = nh.color;
+        th.text = "o";
+      }
+
+    }
+  }
+
+  function getHex(ix, iy){
+    if (ix >= 0 && iy >= 0 && ix < cellgrid[0].length && iy < cellgrid.length){
+      return cellgrid[iy][ix];
+    }
+    else{return null}
+  }
+
+  function findwithin (hex, dist){
+    var ret = [];
+    var touchx;
+    ret.push(hex);
+    for (var i=0;i<dist;i+=1){
+      var nret = clonearray(ret);
+      for (let shex of nret){
+        //console.log(shex)
+        touchx = findTouching(shex);
+        //console.log(touchx);
+        for (let th of touchx){
+          //console.log(th);
+          if (!ret.includes(th)){
+            ret.push(th);
+          }
         }
+      }
+
+
+    }
+    return ret;
+  }
+
+  function findTouching(hex){
+    var touchings = [];
+    var nx, ny;
+    var touchpos = [[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,-1]];
+    if (hex.x%2==1){
+      touchpos = [[0,-2],[0,0],[-1,0],[1,0],[-1,-1],[1,-1]]
+    }
+
+    for (let offs of touchpos){
+      //console.log(offs);
+      nx = hex.x + offs[0];
+      ny = hex.y + offs[1];
+      //console.log(nx, ny);
+      var nh = getHex(nx,ny);
+      if (nh != null){
+        //console.log(nh);
+        touchings.push(nh);
       }
     }
 
 
-  }
-  return ret;
-}
 
-function findTouching(hex){
-  var touchings = [];
-  var nx, ny;
-  var touchpos = [[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,-1]];
-  if (hex.x%2==1){
-    touchpos = [[0,-2],[0,0],[-1,0],[1,0],[-1,-1],[1,-1]]
-  }
 
-  for (let offs of touchpos){
-    //console.log(offs);
-    nx = hex.x + offs[0];
-    ny = hex.y + offs[1];
-    //console.log(nx, ny);
-    var nh = getHex(nx,ny);
-    if (nh != null){
-      //console.log(nh);
-      touchings.push(nh);
-    }
+
+    return touchings;
   }
 
 
-
-
-
-  return touchings;
-}
-
-
-function HexCoordsFromPix (x, y, retPos){
-  var w = r * 2;
-  var h = Math.sqrt(3) * r;
+  function HexCoordsFromPix (x, y, retPos){
+    var w = r * 2;
+    var h = Math.sqrt(3) * r;
     if(retPos === undefined){
-        retPos = {};
+      retPos = {};
     }
     var xa, ya, xpos, xx, yy, r2, h2;
     r2 = r / 2;
@@ -286,129 +324,199 @@ function HexCoordsFromPix (x, y, retPos){
     xpos = Math.floor(xx / 3);
     xx %= 6;
     if (xx % 3 === 0) {      // column with diagonals
-        xa = (x % r2) / r2;  // to find the diagonals
-        ya = (y % h2) / h2;
-        if (yy % 2===0) {
-            ya = 1 - ya;
-        }
-        if (xx === 3) {
-            xa = 1 - xa;
-        }
-        if (xa > ya) {
-            retPos.x = xpos + (xx === 3 ? -1 : 0);
-            retPos.y = Math.floor(yy / 2);
-            return retPos;
-        }
-        retPos.x = xpos + (xx === 0 ? -1 : 0);
-        retPos.y = Math.floor((yy + 1) / 2);
-        return retPos;
-    }
-    if (xx < 3) {
+      xa = (x % r2) / r2;  // to find the diagonals
+      ya = (y % h2) / h2;
+      if (yy % 2===0) {
+        ya = 1 - ya;
+      }
+      if (xx === 3) {
+        xa = 1 - xa;
+      }
+      if (xa > ya) {
         retPos.x = xpos + (xx === 3 ? -1 : 0);
         retPos.y = Math.floor(yy / 2);
         return retPos;
+      }
+      retPos.x = xpos + (xx === 0 ? -1 : 0);
+      retPos.y = Math.floor((yy + 1) / 2);
+      return retPos;
+    }
+    if (xx < 3) {
+      retPos.x = xpos + (xx === 3 ? -1 : 0);
+      retPos.y = Math.floor(yy / 2);
+      return retPos;
     }
     retPos.x = xpos + (xx === 0 ? -1 : 0);
     retPos.y = Math.floor((yy + 1) / 2);
     return retPos;
-}
-
-
-function init() {
-  makeColors();
-  makeGrid(canvas.width, canvas.height);
-  drawGrid();
-}
-
-function makeColors(){
-  var c1 = [randintinc(10,20),randintinc(10,20),randintinc(10,20)];
-  makepallette(groundcolors,c1,8,2);
-  var c2 = [randintinc(0,20),randintinc(170,200),randintinc(0,20)];
-  makepallette(plantcolors, c2, 8,6);
-   c2 = [randintinc(0,20),randintinc(0,20),randintinc(220,250)];
-  makepallette(watercolors, c2, 8,2);
-  var c30 = randintinc(150,160)
-  var c3 = [c30,c30,c30];
-  makepallette(rockcolors,c3,8,1);
-
-}
-
-function makepallette(p, startc, num, d=2){
-  p.push("rgb(" + startc[0] + "," + startc[1] + "," + startc[2] + ")");
-  var offs = [randposneg() * d, randposneg() * d, randposneg() * d];
-  var c2 = startc;
-  for (i=0;i<num;i++){
-     c2 = [c2[0] + offs[0], c2[1] + offs[1], c2[2] + offs[2]];
-    p.push("rgb(" + c2[0] + "," + c2[1] + "," + c2[2] + ")");
   }
-}
 
-function makeGrid(width, height){
-  for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
-    var nr = [];
-    for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
-      var nh = new HexSpot(x,y);
-      //console.log(x,y,nh.color);
-      nr.push(nh);
+
+  function init() {
+    makeColors();
+    makeGrid(canvas.width, canvas.height);
+    doStep();
+  }
+
+  function makeColors(){
+
+    var c1 = [38,23,23];
+
+    makepallette(groundcolors,c1,10);
+    //console.log(groundcolors);
+makeplantpal();
+    c2 = [randintinc(0,20),randintinc(0,20),randintinc(220,250)];
+    makepallette(watercolors, c2, 8);
+    var c30 = randintinc(80,90)
+    var c3 = [c30,c30,c30];
+    makepallette(rockcolors,c3,5,1);
+
+  }
+
+  function makepallette(p, startc, num){
+
+    var offs;
+    var c2;
+    p.push("rgb(" + startc[0] + "," + startc[1] + "," + startc[2] + ")");
+    c2 = startc;
+    for (i=0;i<num;i++){
+
+
+
+        offs = (Math.random() - .5)*10;
+        //console.log(offs);
+        c2 = [c2[0] + offs, c2[1] + offs, c2[2] + offs];
+
+      p.push("rgb(" + c2[0] + "," + c2[1] + "," + c2[2] + ")");
     }
-    allcells.push(nr);
   }
-}
+
+
+  function makeplantpal(){
+    var startc = [0,90,0];
+
+plantcolors.push("rgb(" + startc[0] + "," + startc[1] + "," + startc[2] + ")");
+c2 = startc;
+
+    for (i=0;i<10;i++){
 
 
 
-function drawGrid() {
+        offs = 50;
+        //console.log(offs);
+        c2 = [c2[0] + offs/2, c2[1] + offs, c2[2] + offs/2];
 
+      plantcolors.push("rgb(" + c2[0] + "," + c2[1] + "," + c2[2] + ")");
+    }
+  }
+
+  function makeGrid(width, height){
+    for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
+      var nr = [];
+      for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
+        var nh = new HexSpot(x,y);
+        //console.log(x,y,nh.color);
+        allcells.push(nh);
+        nr.push(nh);
+      }
+      cellgrid.push(nr);
+    }
+  }
+
+
+function drawgrid(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (let r of allcells){
-        for (let c of r){
-          drawHexagon(c,c.color,"transparent");
-          //dofill = randfrom([true,false]);
+  for (let c of allcells){
+
+      drawHexagon(c,c.color,"black");
+      //dofill = randfrom([true,false]);
+
+
+  }
+}
+
+
+  function doStep() {
+    for (var z=0;z<10;z++){
+      evalWater();
+    }
+
+    allplants = [];
+    highlights = [];
+    for (let cc of allcells){
+      if (cc.isplant){
+        allplants.push(cc);
+        if (cc.wetness>1){
+          ittouches = findTouching(cc);
+          for (let th of ittouches){
+            if (!highlights.includes(th) && !th.blocked &&!th.iswater){
+              highlights.push(th);
+
+            }
+          }
         }
 
       }
-
-      for (let hc of highlights){
-          highlightHex(hc, "green");
-      }
-
-
-updatewater();
-}
-
-function highlightHex(hex,hcolor){
-  drawHexagon(hex,"transparent",hcolor);
-}
+    }
 
 
 
-function drawHexagon(hex, fillcolor, outlinecolor) {
-  x = hex.drawx;
-  y = hex.drawy;
-  //console.log(x,y);
-  //console.log(hex.color);
-  //console.log(fillcolor);
-  if (hex.uncovered){
-  ctx.fillStyle = fillcolor;
-}
-else{
-  ctx.fillStyle = "black";
-}
+
+    drawgrid();
+    for (let hc of highlights){
+      highlightHex(hc, "green");
+    }
 
 
-  ctx.beginPath();
-  for (let i = 0; i < 6; i++) {
-    ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
   }
-  ctx.closePath();
+
+  function highlightHex(hex,hcolor){
+    drawHexagon(hex,"transparent",hcolor);
+  }
+
+
+
+  function drawHexagon(hex, fillcolor, outlinecolor) {
+    x = hex.drawx;
+    y = hex.drawy;
+    //console.log(x,y);
+    //console.log(hex.color);
+    //console.log(fillcolor);
+    if (hex.uncovered){
+      ctx.fillStyle = fillcolor;
+    }
+    else{
+      ctx.fillStyle = "black";
+    }
+
+
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
+    }
+    ctx.closePath();
 
     ctx.fill();
 
 
     ctx.fillStyle = hex.textcolor;
-    if (hex.uncovered)
-    ctx.fillText(hex.text,x,y+2);
+
+
+    if (hex.uncovered )
+    {
+      if (hex.isplant){
+          ctx.fillText(hex.wetness,x,y+2);
+      }
+      else{
+        if (hex.haswater){
+          //ctx.fillText("~",x,y+2);
+        }
+      }
+
+    }
+
+
 
     ctx.strokeStyle = outlinecolor;
     if (!hex.uncovered){
@@ -420,39 +528,39 @@ else{
 
     ctx.stroke();
 
-}
+  }
 
 
 
 
 
 
-/////
+  /////
 
-function randfrom(myarray){
-  return myarray[Math.floor(Math.random() * myarray.length)];
-}
-function randintinc(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
+  function randfrom(myarray){
+    return myarray[Math.floor(Math.random() * myarray.length)];
+  }
+  function randintinc(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+  }
 
-function randposneg(){
-	return randfrom([-1,1]);
-}
+  function randposneg(){
+    return randfrom([-1,1]);
+  }
 
 
-	function clonearray(array){
-		newarray = [];
-		for (i = 0; i < array.length; i++) {
-			newarray.push(array[i]);
-		}
+  function clonearray(array){
+    newarray = [];
+    for (i = 0; i < array.length; i++) {
+      newarray.push(array[i]);
+    }
     return newarray
-	}
+  }
 
 
-  	function clone(thing){
-  		return JSON.parse(JSON.stringify(thing));
-  	}
+  function clone(thing){
+    return JSON.parse(JSON.stringify(thing));
+  }
 </script>
 
 </body>
