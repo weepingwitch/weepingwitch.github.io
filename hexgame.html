@@ -28,7 +28,7 @@
 const r = 20;
 const cwidth = 600;
 const cheight = 620;
-
+var createmode = true;
 </script>
 </head>
 <body>
@@ -63,52 +63,12 @@ const cheight = 620;
   var watercolors = [];
   var highlights = [];
   var allplants = [];
-  var waterleft = 100;
-  var absorption = 0;
+
   var numplants = 0;
-
+  var steps = 0;
+var drawwets = true;
   init();
-  var nhx = cellgrid[0].length;
-  var nhy = cellgrid.length;  var startc = cellgrid[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
-  makePlantHex(startc);
-  var tcc = findTouching(startc);
-  var nw = randfrom(tcc);
-  var twc = findTouching(nw);
-  makeWaterHex(nw);
-  for (let nc of twc){
-    if (!nc.isplant){
-      if (tcc.includes(nc)){
-        makeWaterHex(nc);
-      }
-    }
-  }  var newc = startc;
 
-  for (var z=0;z<6;z+=1){
-    while (newc == startc || newc.iswater){
-      newc = randfrom(randfrom(cellgrid))
-    }
-    makeWaterHex(newc);
-    makeWaterHex(randfrom(findTouching(newc)));
-    makeWaterHex(randfrom(findTouching(newc)));
-    makeWaterHex(randfrom(findTouching(newc)));
-    makeWaterHex(randfrom(findTouching(newc)));
-  }
-
-  var c = 0;
-
-  while (c <6){
-    newc = cellgrid[randintinc(1,nhy-2)][randintinc(1,nhx-2)]
-    var na = startc.x-newc.x;
-    var nb = startc.y-newc.y;
-
-    c = Math.sqrt( na*na + nb*nb );
-    //console.log(c);
-  }
-  newc.blocked = false;
-  newc.iswater = false;
-  newc.istarget = true;
-  newc.color = "purple";
-  doStep();
 
   /////////
 
@@ -117,8 +77,10 @@ const cheight = 620;
     this.iswater = false;
     this.istarget = false;
     this.wetness = -1;
+    this.maxwet = -1;
     this.drawx = xpos;
     this.drawy = ypos;
+    this.evaled = false;
     var retpos = HexCoordsFromPix(xpos,ypos);
     this.x = retpos.x;
     this.y = retpos.y;
@@ -138,35 +100,47 @@ const cheight = 620;
 
   function evalWater(){
     for (let cc of allplants){
-
+      //cc.wetness-=1;
       if (cc.haswater){
         cc.wetness = 8;
       }
+
       var tcs = findTouching(cc)
       for (let tc of tcs){
         if (tc.isplant)
         flow(cc,tc);
       }
       cc.color = plantcolors[cc.wetness];
-      if (cc.wetness < 0){
-        killplant(cc);
-      }
+
 
     }
 
   }
 
   function killplant(hex){
+    //console.log(hex);
     hex.isplant = false;
     hex.color = randfrom(groundcolors);
-    hex.wetness = 0;
+    hex.wetness = -1;
   }
 
 
-  function flow(hexf, hext){
-    console.log(hext.x);
-    var newwet = Math.max(hext.wetness,hexf.wetness - 1);
-    hext.wetness = newwet;
+  function flow(hexf, hext, forreal = true){
+    //console.log(hext.x);
+    var newwet;
+
+    if (forreal){
+      newwet =  Math.max(hext.wetness,hexf.wetness - 1);
+      hext.wetness = newwet;
+    }
+    else{
+      //console.log("evaluating");
+      newwet = Math.max(hext.maxwet,hexf.maxwet - 1);
+      if (newwet > hext.maxwet)
+      hext.evaled = false;
+      hext.maxwet = newwet;
+    }
+
   }
 
 
@@ -182,11 +156,17 @@ const cheight = 620;
     if (retpos.x >= 0 && retpos.y >= 0 && retpos.x < cellgrid[0].length && retpos.y < cellgrid.length){
 
       var touchedhex = cellgrid[retpos.y][retpos.x];
-      if (highlights.includes(touchedhex) && !touchedhex.isplant){
-        makePlantHex(touchedhex);
-        doStep();
+      if (highlights.includes(touchedhex)){
 
-      }
+
+          makePlantHex(touchedhex);
+          doStep();
+
+        }
+
+
+
+
     }
 
   }  function makePlantHex(nh){
@@ -197,10 +177,7 @@ const cheight = 620;
     touchedhex.text = ".";
     touchedhex.textcolor = "blue";
     numplants+=1;
-    waterleft-=4;
-    if (touchedhex.haswater){
-      waterleft += 10;
-    }
+
 
     //highlightHex(touchedhex,"blue");
   //  var ittouches = findwithin(touchedhex,1);
@@ -218,18 +195,22 @@ const cheight = 620;
   }
 
   function makeWaterHex(nh){
-    nh.blocked = false;
-    nh.iswater = true;
-    nh.color = randfrom(watercolors);
-    var ittouches = findwithin(nh,1);
-    for (let th of ittouches){
-      if (!th.blocked){
-        th.haswater = true;
-        //th.textcolor = nh.color;
-        th.text = "o";
-      }
+    if (!nh.isplant){
+      nh.blocked = false;
+      nh.iswater = true;
+      nh.color = randfrom(watercolors);
+      var ittouches = findwithin(nh,1);
+      for (let th of ittouches){
+        if (!th.blocked){
+          th.haswater = true;
+          //th.textcolor = nh.color;
+          th.text = "o";
+        }
 
+      }
     }
+
+    return nh
   }
 
   function getHex(ix, iy){
@@ -331,7 +312,106 @@ const cheight = 620;
   function init() {
     makeColors();
     makeGrid(canvas.width, canvas.height);
-    doStep();
+    drawgrid();
+    var nhx = cellgrid[0].length;
+    var nhy = cellgrid.length;  var startc = cellgrid[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
+    allplants = [];
+    //make starting spot
+    makePlantHex(startc);
+    var tcc = findTouching(startc);
+    var nw = randfrom(tcc);
+    var twc = findTouching(nw);
+    //surround starting spot with water
+    makeWaterHex(nw);
+    for (let nc of twc){
+      if (!nc.isplant){
+        if (tcc.includes(nc)){
+          makeWaterHex(nc);
+        }
+      }
+    }
+     var newc = startc;
+     //make random water bits
+    for (var z=0;z<6;z+=1){
+      while (newc == startc || newc.iswater){
+        newc = randfrom(randfrom(cellgrid))
+      }
+      makeWaterHex(newc);
+      makeWaterHex(randfrom(findTouching(newc)));
+      makeWaterHex(randfrom(findTouching(newc)));
+      makeWaterHex(randfrom(findTouching(newc)));
+      makeWaterHex(randfrom(findTouching(makeWaterHex(randfrom(findTouching(newc))))));
+    }
+
+
+    //place goal spot
+
+    var toeval = [];
+    var numeval = 0;
+    var reachables = [];
+
+    var myhex = startc;
+    myhex.maxwet = 8;
+
+    var ct = findTouching(myhex);
+    for (let cth of ct){
+      if (!cth.blocked && !cth.iswater){
+        if (cth.haswater)
+          cth.maxwet = 8;
+        flow(myhex,cth,false);
+        cth.evaled = true;
+        toeval.push(cth);
+        reachables.push(cth);
+      }
+    }
+    while(toeval.length > 0){
+      //console.log("evaluating hexes");
+      myhex = toeval.pop();
+      numeval += 1;
+      myhex.evaled = true;
+      var ct = findTouching(myhex);
+      for (let cth of ct){
+        if (!cth.blocked && !cth.iswater){
+          if (cth.haswater)
+          cth.maxwet = 8;
+          flow(myhex,cth,false);
+          if(!cth.evaled && !toeval.includes(cth))
+          toeval.push(cth)
+          if (myhex.maxwet>0 && !reachables.includes(cth))
+          reachables.push(cth);
+        }
+      }
+      if (numeval > 9999){
+        location.reload();
+      }
+    }
+    //console.log(reachables.length);
+    if (numeval < 10){
+      location.reload();
+    }else{
+
+
+          reachables.sort((a,b)=> {return a.maxwet-b.maxwet});
+          //console.log(reachables[0].maxwet);
+          newc = reachables[0];
+          var c = 0;
+
+          while (c <6){
+            //newc = cellgrid[randintinc(1,nhy-2)][randintinc(1,nhx-2)]
+            var na = startc.x-newc.x;
+            var nb = startc.y-newc.y;
+
+            c = Math.sqrt( na*na + nb*nb );
+            console.log(c);
+          }
+          newc.blocked = false;
+          newc.iswater = false;
+          newc.istarget = true;
+          newc.color = "purple";
+          doStep();
+    }
+
+
   }
 
   function makeColors(){
@@ -379,6 +459,8 @@ c2 = startc;
   }
 
   function makeGrid(width, height){
+    allcells = [];
+    cellgrid = [];
     for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
       var nr = [];
       for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
@@ -415,13 +497,16 @@ function drawgrid(){
     for (let cc of allcells){
       if (cc.isplant){
         allplants.push(cc);
+
         if (cc.wetness>0){
           ittouches = findTouching(cc);
           for (let th of ittouches){
+
             if (!highlights.includes(th) && !th.blocked &&!th.iswater){
               highlights.push(th);
 
             }
+
           }
         }
 
@@ -429,7 +514,11 @@ function drawgrid(){
     }
     drawgrid();
     for (let hc of highlights){
-      highlightHex(hc, "green");
+      var hcl = "green";
+      if (!createmode){
+        hcl = "red"
+      }
+      highlightHex(hc, hcl);
     }
 
 
@@ -464,7 +553,8 @@ function drawgrid(){
     if (hex.uncovered )
     {
       if (hex.isplant){
-          //ctx.fillText(hex.wetness,x,y+2);
+        if (drawwets)
+          ctx.fillText(hex.wetness,x,y+2);
       }
       else{
         if (hex.haswater){
@@ -473,6 +563,9 @@ function drawgrid(){
       }
 
     }
+    //ctx.fillText(hex.maxwet,x,y+2);
+    //if (hex.istarget)
+      //ctx.fillText("!!!",x,y+2);
     ctx.strokeStyle = outlinecolor;
     if (!hex.uncovered){
       ctx.strokeStyle = "black";
