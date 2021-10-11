@@ -29,6 +29,7 @@ const r = 20;
 const cwidth = 600;
 const cheight = 620;
 var createmode = true;
+var thetarget;
 </script>
 </head>
 <body>
@@ -408,6 +409,7 @@ var drawwets = true;
           newc.blocked = false;
           newc.iswater = false;
           newc.istarget = true;
+          thetarget = newc;
           newc.color = "purple";
           doStep();
     }
