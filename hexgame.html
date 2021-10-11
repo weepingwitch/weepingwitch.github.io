@@ -128,7 +128,7 @@ const cheight = 620;
     this.isplant = false;
     this.iswater = false;
     this.istarget = false;
-    this.wetness = 0;
+    this.wetness = -1;
     this.drawx = xpos;
     this.drawy = ypos;
     var retpos = HexCoordsFromPix(xpos,ypos);
@@ -152,7 +152,7 @@ const cheight = 620;
     for (let cc of allplants){
 
       if (cc.haswater){
-        cc.wetness = 9;
+        cc.wetness = 8;
       }
       var tcs = findTouching(cc)
       for (let tc of tcs){
@@ -160,7 +160,7 @@ const cheight = 620;
         flow(cc,tc);
       }
       cc.color = plantcolors[cc.wetness];
-      if (cc.wetness <= 0){
+      if (cc.wetness < 0){
         killplant(cc);
       }
 
@@ -402,9 +402,9 @@ c2 = startc;
 
 
 
-        offs = 50;
+        offs = 55;
         //console.log(offs);
-        c2 = [c2[0] + offs/2, c2[1] + offs, c2[2] + offs/2];
+        c2 = [c2[0] + offs/3, c2[1] + offs/2, c2[2] + offs/3];
 
       plantcolors.push("rgb(" + c2[0] + "," + c2[1] + "," + c2[2] + ")");
     }
@@ -447,7 +447,7 @@ function drawgrid(){
     for (let cc of allcells){
       if (cc.isplant){
         allplants.push(cc);
-        if (cc.wetness>1){
+        if (cc.wetness>0){
           ittouches = findTouching(cc);
           for (let th of ittouches){
             if (!highlights.includes(th) && !th.blocked &&!th.iswater){
