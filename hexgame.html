@@ -393,7 +393,8 @@ var drawwets = true;
 
           reachables.sort((a,b)=> {return a.maxwet-b.maxwet});
           //console.log(reachables[0].maxwet);
-          newc = reachables[0];
+          var goals = reachables.slice(0,16);
+          newc = randfrom(goals);
           var c = 0;
 
           while (c <6){
