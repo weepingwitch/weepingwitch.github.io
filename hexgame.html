@@ -397,14 +397,13 @@ var drawwets = true;
           newc = randfrom(goals);
           var c = 0;
 
-          while (c <6){
-            //newc = cellgrid[randintinc(1,nhy-2)][randintinc(1,nhx-2)]
+
             var na = startc.x-newc.x;
             var nb = startc.y-newc.y;
 
             c = Math.sqrt( na*na + nb*nb );
             console.log(c);
-          }
+          
           newc.blocked = false;
           newc.iswater = false;
           newc.istarget = true;
