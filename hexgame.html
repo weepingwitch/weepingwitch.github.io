@@ -81,8 +81,15 @@ for (var z=0;z<10;z+=1){
 var startc = allcells[randintinc(2,nhy-3)][randintinc(2,nhx-3)];
 makePlantHex(startc)
 var newc = startc;
-while (newc == startc){
+
+var c = 0;
+
+while (c <4){
   newc = allcells[randintinc(1,nhy-2)][randintinc(1,nhx-2)]
+   var na = startc.x-newc.x;
+   var nb = startc.y-newc.y;
+
+   c = Math.sqrt( na*na + nb*nb );
 }
 newc.blocked = false;
 newc.iswater = false;
