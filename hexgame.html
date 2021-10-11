@@ -361,6 +361,7 @@ var drawwets = true;
         flow(myhex,cth,false);
         cth.evaled = true;
         toeval.push(cth);
+        if (myhex.maxwet>0 && !reachables.includes(cth))
         reachables.push(cth);
       }
     }
@@ -375,7 +376,7 @@ var drawwets = true;
           if (cth.haswater)
           cth.maxwet = 8;
           flow(myhex,cth,false);
-          if(!cth.evaled && !toeval.includes(cth))
+          if(myhex.maxwet>0 && !cth.evaled && !toeval.includes(cth))
           toeval.push(cth)
           if (myhex.maxwet>0 && !reachables.includes(cth))
           reachables.push(cth);
