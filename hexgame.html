@@ -4,6 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style type="text/css">
+  body{
+    background-color: rgb(38,23,23);
+  }
   #mcanvas{
     display:block;
     margin:auto;
@@ -26,8 +29,24 @@
 
 
 const r = 20;
-const cwidth = 600;
-const cheight = 620;
+
+var cwidth, cheight;
+var vw = window.innerWidth;
+var vh = window.innerHeight;
+var bigger = true;
+if (vw>vh){
+  console.log("wide");
+   cwidth = 800;
+   cheight = 620;
+
+}
+else{
+  console.log("tall");
+   cwidth = 360;
+   cheight = 620;
+   bigger = false;
+}
+
 var createmode = true;
 var thetarget;
 </script>
@@ -42,7 +61,7 @@ var thetarget;
   const canvasholder = document.getElementById("canvasholder");
   canvasholder.innerHTML="<canvas id='mcanvas' width='" + cwidth + "' height='" + cheight + "'></canvas>";
   const canvas = document.getElementById('mcanvas');
-  const stext = document.getElementById('statstext');
+
   canvas.addEventListener('click', function(event) {
     var elemLeft = canvas.offsetLeft;
     var elemTop = canvas.offsetTop;
@@ -333,7 +352,12 @@ var drawwets = true;
     }
      var newc = startc;
      //make random water bits
-    for (var z=0;z<5;z+=1){
+     var numwat = 5;
+
+     if (!bigger){
+       numwat = 3;
+     }
+    for (var z=0;z<numwat;z+=1){
       while (newc == startc || newc.iswater){
         newc = randfrom(randfrom(cellgrid))
       }
