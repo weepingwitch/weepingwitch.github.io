@@ -452,7 +452,9 @@ makeplantpal();
     makepallette(watercolors, c2, 8);
     var c30 = randintinc(80,90)
     var c3 = [c30,c30,c30];
-    makepallette(rockcolors,c3,5,1);
+    makepallette(rockcolors,c3,10,10);
+    console.log(plantcolors);
+    plantcolors = ["rgb(0,90,0)","rgb(28.3,110,28.3)","rgb(36.64,125,36.64)","rgb(55,140.5,55)","rgb(83.3,160,83.3)","rgb(100.6,190,100.6)","rgb(130.9,210,130.9)","rgb(150.3,230.5,150.3)","rgb(180.6,250,180.6)","rgb(190,337.5,190)","rgb(200.3,365,200.3)"];
 
   }
 
@@ -548,12 +550,61 @@ function drawgrid(){
       highlightHex(hc, hcl);
     }
 
+    for (let cc of allplants){
+      if (cc.haswater){
+        ittouches = findTouching(cc);
+        for (let th of ittouches){
+          if (th.iswater){
+            drawwaterroots(cc,th);
+
+          }
+          }
+      }
+    }
+
 
   }
 
+  function drawwaterroots(hexplant, hexwater){
+  //  console.log("drawing roots");
+    //console.log(hexplant.drawx);
+    var ss = ctx.strokeStyle;
+    ctx.strokeStyle = "white";
+    var linestartx = hexplant.drawx;
+    var linestarty = hexplant.drawy;
+    var lineendx = hexwater.drawx;
+    var lineendy = hexwater.drawy;
+
+    var offsx = (lineendx - linestartx) / 3;
+    var offsy = (lineendy - linestarty) / 3;
+    //for (var s = 0; s < 2; s += 1){
+      ctx.beginPath();
+      ctx.moveTo(linestartx +offsx,linestarty + offsy);
+      ctx.lineTo(lineendx - offsx,lineendy - offsy);
+      ctx.stroke();
+  //  }
+    perp = getPerpOfLine(linestartx +offsx,linestarty + offsy,lineendx - offsx,lineendy - offsy);
+    ctx.beginPath();
+    //console.log(perp);
+    ctx.moveTo(linestartx +offsx + perp[0],linestarty + offsy + perp[1]);
+    ctx.lineTo(lineendx - offsx + (perp[0]*2),lineendy - offsy + (perp[1]*2));
+    ctx.stroke();
+    ctx.beginPath();
+    //console.log(perp);
+    ctx.moveTo(linestartx +offsx - perp[0],linestarty + offsy - perp[1]);
+    ctx.lineTo(lineendx - offsx - (perp[0]*2),lineendy - offsy - (perp[1]*2));
+    ctx.stroke();
+  }
+
   function highlightHex(hex,hcolor){
-    drawHexagon(hex,"transparent",hcolor);
-  }  function drawHexagon(hex, fillcolor, outlinecolor) {
+    drawHexagon(hex,"transparent",hcolor, true);
+  }
+
+
+
+
+  function drawHexagon(hex, fillcolor, outlinecolor,highlightdo=false) {
+    ctx.font = "18px monospace";
     x = hex.drawx;
     y = hex.drawy;
     //console.log(x,y);
@@ -570,6 +621,7 @@ function drawgrid(){
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
       ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
+
     }
     ctx.closePath();
 
@@ -581,16 +633,41 @@ function drawgrid(){
     {
       if (hex.isplant){
         if (drawwets)
-          ctx.fillText(hex.wetness,x,y+2);
+          ctx.fillText(hex.wetness,x,y+4);
       }
       else{
-        if (hex.haswater){
-          //ctx.fillText("~",x,y+2);
+        if (hex.iswater){
+          ctx.fillStyle = "cyan";
+          ctx.fillText("~",x,y-2);
+          ctx.fillText("~",x-7,y+11);
+          ctx.fillText("~",x+7,y+11);
         }
 
-        if ( hex.istarget){
+        else if (hex.blocked){
+
+
+        }
+
+      else  if ( hex.istarget){
           ctx.fillStyle = "white";
-          ctx.fillText("!!!",x,y+2);
+          ctx.fillText("!!!",x,y+4);
+        }
+        else{
+
+          if (hex.haswater){
+            ctx.fillStyle = "blue";
+            ctx.fillText(".",x+2,y-6);
+            ctx.fillText(".",x-10,y+2);
+            ctx.fillText(".",x+10,y+2);
+            ctx.fillText(".",x-2,y+12);
+          }
+          else{
+          //  ctx.fillStyle = "black";
+          //  ctx.fillText(".",x-10,y);
+          //  ctx.fillText(".",x+8,y-4);
+          //  ctx.fillText(".",x,y+10);
+          }
+
         }
       }
 
@@ -604,8 +681,10 @@ function drawgrid(){
     if (hex.uncovered && hex.blocked){
       ctx.strokeStyle = "gray"
     }
+    if (highlightdo){
+      ctx.stroke();
+    }
 
-    ctx.stroke();
 
   }
 
@@ -636,6 +715,15 @@ function drawgrid(){
   function clone(thing){
     return JSON.parse(JSON.stringify(thing));
   }
+
+  function getPerpOfLine(x1,y1,x2,y2){ // the two points can not be the same
+    var nx = x2 - x1;  // as vector
+    var ny = y2 - y1;
+    const len = Math.sqrt(nx * nx + ny * ny);  // length of line
+    nx /= len/3.5;  // make one unit long
+    ny /= len/3.5;  // which we call normalising a vector
+    return [-ny, nx]; // return the normal  rotated 90 deg
+}
 </script>
 
 </body>
