@@ -297,6 +297,22 @@ var vw,vh;
         yval = (event.clientY - rect.top) * scaleY;
         mup(xval,yval);
       }, false);
+      canv.addEventListener('touchstart', function(event) {
+        var rect = canv.getBoundingClientRect(), // abs. size of element
+              scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
+              scaleY = canv.height / rect.height;
+        var xval = (event.clientX - rect.left) * scaleX ,
+        yval = (event.clientY - rect.top) * scaleY;
+        mdown(xval,yval);
+      }, false);
+      canv.addEventListener('touchend', function(event) {
+        var rect = canv.getBoundingClientRect(), // abs. size of element
+              scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
+              scaleY = canv.height / rect.height;
+        var xval = (event.clientX - rect.left) * scaleX ,
+        yval = (event.clientY - rect.top) * scaleY;
+        mup(xval,yval);
+      }, false);
 
 
 
