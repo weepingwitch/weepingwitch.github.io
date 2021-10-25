@@ -298,6 +298,9 @@ var vw,vh;
         mup(xval,yval);
       }, false);
       canv.addEventListener('touchstart', function(event) {
+        document.addEventListener("touchstart",function(e) {
+          e.preventDefault();
+        },false);
         var rect = canv.getBoundingClientRect(), // abs. size of element
               scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
               scaleY = canv.height / rect.height;
@@ -306,12 +309,16 @@ var vw,vh;
         mdown(xval,yval);
       }, false);
       canv.addEventListener('touchend', function(event) {
+        document.removeEventListener("touchstart",function(e) {
+          e.preventDefault();
+        });
         var rect = canv.getBoundingClientRect(), // abs. size of element
               scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
               scaleY = canv.height / rect.height;
         var xval = (event.clientX - rect.left) * scaleX ,
         yval = (event.clientY - rect.top) * scaleY;
         mup(xval,yval);
+
       }, false);
 
 
@@ -319,6 +326,7 @@ var vw,vh;
       ctx = canv.getContext('2d');
       ctx.textAlign="center";
     }
+
 
 
     function mdown(xv,yv){
