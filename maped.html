@@ -3,13 +3,13 @@
   <title>maped</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-  const maped_version = 0.5;
+  const maped_version = 0.65;
 
   function Map(){
     this.maped_version = maped_version;
     this.name = "new_map";
-    this.grid_cols = 32;
-    this.grid_rows = 18;
+    this.grid_cols = 64;
+    this.grid_rows = 64;
     this.unit_width = 16;
     this.unit_height = 9;
     this.allrooms = [];
@@ -29,73 +29,80 @@
   }
   .doorlink, .roomlink{
     border:1px solid blue;
-    padding:2px;
+    padding:0px;
     display:inline;
+  }
+  .tabbtn, .tabbtna{
+    display:inline-block;
+    width:48%;
+    text-align: center;
+    background-color: #aaaaaa;
+    border:1px solid black;
+  }
+  .tabbtna{
+    background-color: #999999;
   }
   #mcanvas{
     padding: 0px;
     margin:0px;
-    width:100%;
-    height:100%;
+
     border: 1px solid black;
 
   }
+  #leftcontent{
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    width:75%;
+    height:100%;
+  }
   #topbar{
     padding:0px;
-    position:fixed;
     top:0px;
-    height:2em;
-    width:75%;
-    border: 2px solid red;
+    height:4%;
+    width:100%;
+    border: 4px solid red;
   }
   #editorholder{
-    position: fixed;
-    top:2em;
+    display:block;
     padding: 0px;
     margin:0px;
-    width:75%;
-    height:68%;
+    width:100%;
+    height:69%;
     border: 4px solid purple;
+    overflow:scroll;
+  }
+  #bottompanel{
+    display:block;
+    height:23%;
+    padding-left:0px;
+    margin:0px;
+    border:4px solid blue;
+    width:100%;
+
+    overflow:scroll;
   }
   #rightpanel{
     padding:0px;
     margin:0px;
-    border:2px solid green;
+    border:4px solid green;
     position:fixed;
     width:24%;
     right:0;
     top:0;
-    bottom:6em;
+    bottom:3;
 
   }
   #rightcontents{
     position:fixed;
     top:2em;
-    bottom:6em;
+
     width:24%;
     overflow-y:scroll;
   }
-  #bottompanel{
 
-    padding-left:0px;
-    margin-left:2px;
-    border:2px solid blue;
-    position:fixed;
-    width:75%;
-    bottom:0;
-    height:24%;
-    overflow:scroll;
-  }
-  #controlbox{
-    padding-left: 1%;
-    border:2px solid purple;
-    position:fixed;
-    width:23%;
-    right:0;
-    bottom:0;
-    height:6em;
 
-  }
   /* Positions the plus sign 5px from the right. Centers it using the transform property. */
 
   .accordion .label::before {
@@ -166,46 +173,48 @@
   }
 </style>
 </head>
-<body><div id="topbar">current region:
-  <select name="regionsel" onchange="{curregion = this.value;}">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-  </select> |
-  current door type:
-    <select name="doortypesel" onchange="{curdoortype = this.value;}">
-      <option value="0">0</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-    </select>
+<body><div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map json</button></a>
+|  upload map json:  <input id="ufile" type="file" name="map upload" accept=".json"/>
+
+
+    <div style='display:inline;float:right'>
+      current region:
+        <select name="regionsel" onchange="{curregion = this.value;}">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select> |
+        current door type:
+          <select name="doortypesel" onchange="{curdoortype = this.value;}">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+</div>
 </div>
   <div id="editorholder">
   </div>
+  <div id="bottompanel">
+  </div>
+</div>
   <div id="rightpanel">
     <div id="righttitle"></div>
     <div id="rightcontents">
     </div>
   </div>
 
-  <div id="bottompanel">
-  </div>
-  <div id="controlbox"><BR>
-    <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map json</button></a>
-    <HR>
-      <label for="ufile">upload map json:</label>
-      <input id="ufile" type="file" name="map upload" accept=".json"/>
 
-    </div>
+
     <script>
     const canvasholder = document.getElementById("editorholder");
     const rpanel = document.getElementById("rightpanel");
@@ -221,22 +230,25 @@
     var curdoor;
     var curregion = 0;
     var curdoortype = 0;
+var vw,vh;
 
-    var vw = window.innerWidth * .75;
-    var vh = window.innerHeight * .7;
     var bigger = true;
     var dsx,dsy,dex,dey = -1;
 
     var regcols = ["#990000","#994c00","#999900","#009900","#009999","#004c99","#4c0099","#990099"];
-    var doorcols =["#ff9999","#ffcc99","#ffff99","#99ffc99","#99ffff","#99ccff","#cc99ff","#ff99ff"];
+    var doorcols =["#ff9999","#ffcc99","#ffff99","#99ff99","#99ffff","#99ccff","#cc99ff","#ff99ff"];
     var map = null;
 
     init();
+    updateroomlist();
     drawmap();
 
     function init(){
 
       map = new Map();
+       vw = map.grid_cols*map.unit_width*4;
+
+       vh = map.grid_rows*map.unit_height*4;
 
       for (var i = 0; i < map.grid_rows;i+=1){
         var newrow = [];
@@ -289,6 +301,7 @@
 
 
       ctx = canv.getContext('2d');
+      ctx.textAlign="center";
     }
 
 
@@ -335,6 +348,7 @@
           }
           else{
             //expand room?
+            TryExpand(map.allrooms[map.roomgrid[dsy][dsx]],[gx,gy]);
           }
 
         }
@@ -367,7 +381,6 @@
           allowed = false;
         }
       }
-
       if (allowed){
         map.allrooms.push(rm);
 
@@ -380,10 +393,45 @@
         updateroomlist();
         drawmap();
       }
-
-
+      else{
+        map.nextroomnum-=1;
+      }
     }
 
+function TryExpand(rm,exto){
+  console.log("trying expand");
+  var allowed = true;
+  var nl = Math.min(rm.tlunit[0],exto[0]);
+  var nr = Math.max(rm.tlunit[0]+ rm.gridwidth-1,exto[0]);
+  var nt = Math.min(rm.tlunit[1] ,exto[1]);
+  var nb = Math.max(rm.tlunit[1] + rm.gridheight-1,exto[1]);
+  for (var i = nl; i <= nr;i+=1){
+    for (var j = nt; j <= nb;j+=1){
+        if (map.roomgrid[j][i] != -1 && !(isArrayInArray(rm.units,[i,j]))){
+          allowed = false;
+
+          console.log("collided at " + [i,j]);
+
+        }
+    }
+  }
+  if (allowed){
+    rm.tlunit=[nl,nt];
+    rm.units = [];
+    rm.gridwidth = (nr-nl)+1;
+    rm.gridheight = (nb-nt)+1;
+    for (var j=0;j<rm.gridheight;j+=1){
+      for (var i=0;i<rm.gridwidth;i+=1){
+        var ru = [rm.tlunit[0]+i,rm.tlunit[1]+j]
+        rm.units.push(ru);
+        map.roomgrid[ru[1]][ru[0]] = rm.id;
+      }
+    }
+    curroom = rm;
+    updateroomlist();
+    drawmap();
+  }
+}
 
 
     function Room(sunit, w=0,h=0){
@@ -424,7 +472,12 @@
       }
 
       if (allowed){
-        var d = new Door(ufrom, uto);
+
+        var pfrs = JSON.parse(JSON.stringify(map.allrooms[GetRoomIDByUnit(ufrom)].units));
+        pfrs = findClosestUnit(pfrs,uto);
+        var ptrs = JSON.parse(JSON.stringify(map.allrooms[GetRoomIDByUnit(uto)].units));
+        ptrs = findClosestUnit(ptrs,ufrom);
+        var d = new Door(pfrs[0], ptrs[0]);
 
         map.allrooms[d.rfromid].doors.push(d);
         map.allrooms[d.rtoid].doors.push(d);
@@ -504,7 +557,7 @@ function removeRoom(rindex){
 
           htmlb += "name: <input type='text' value='" + rm.name + "' onchange='{map.allrooms[" + rm.id + "].name=this.value;updateroomlist();}'><BR>";
           htmlb += "id: " + rm.id + "&nbsp;&nbsp;&nbsp;&nbsp;";
-          htmlb += "region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
+          htmlb += "<div style='display:inline;background-color:" + regcols[rm.region] + ";color:white;'>region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
 
           for (var r = 0; r < 8; r += 1){
             htmlb += "<option value='"+r+"' ";
@@ -513,7 +566,7 @@ function removeRoom(rindex){
             }
             htmlb += ">"+r+"</option>"
           }
-          htmlb += "</select><BR>";
+          htmlb += "</select></div><BR>";
 
           htmlb += "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
           htmlb += "units: " + JSON.stringify(rm.units) + "<BR>";
@@ -557,10 +610,10 @@ function removeRoom(rindex){
 var htmls = "&nbsp;";
 
 if (roommode){
-  htmls += "<B>rooms</b> | <a onclick='{roommode=false;curroom=null;updateroomlist();drawmap();}'>doors</a>";
+  htmls += "<div class='tabbtna'><B>rooms</b> </div><div class='tabbtn' onclick='{roommode=false;curroom=null;updateroomlist();drawmap();}'>doors</div>";
 }
 else{
-  htmls += "<a onclick='{roommode=true;curdoor=null;updateroomlist();drawmap();}'>rooms</a> | <b>doors</b>";
+  htmls += "<div class='tabbtn' onclick='{roommode=true;curdoor=null;updateroomlist();drawmap();}'>rooms</div><div class='tabbtna'><b>doors</b></div>";
 }
 rpanel.children[0].innerHTML = htmls;
        htmls = "<div class='accordion'>";
@@ -588,7 +641,7 @@ rpanel.children[0].innerHTML = htmls;
             if (curdoor == rm){
               htmls += " active";
             }
-            htmls +="' id='" + rm.id + "'><div class='label' style='background-color:" + doorcols[rm.doortype] + "'>door " + rm.id +"</div>";
+            htmls +="' id='" + rm.id + "'><div class='label' style='color:black;background-color:" + doorcols[rm.doortype] + "'>door " + rm.id +"</div>";
             htmls += "<div class='content'>";
             htmls += "id: " + rm.id + "<BR>";
             htmls += "from: " + rm.rfromid + ", ";
@@ -647,6 +700,8 @@ rpanel.children[0].innerHTML = htmls;
       var rt = rm.tlunit[1] * grid_unit_height;
       var rb = rt + (rm.gridheight * grid_unit_height);
       var rr = rl + (rm.gridwidth * grid_unit_width);
+      var cx = rl + ((rr-rl)/2);
+      var cy = rt + ((rb-rt)/2);
       ctx.moveTo(rl,rt);
       ctx.lineTo(rr,rt);
       ctx.lineTo(rr,rb);
@@ -654,8 +709,8 @@ rpanel.children[0].innerHTML = htmls;
       ctx.lineTo(rl,rt);
       ctx.closePath();
       if (highlight){
-        ctx.fillStyle = "rgba(255,255,255,.5)";
-        ctx.strokeStyle = "white";
+        ctx.fillStyle = "rgba(255,255,255,.9)";
+        ctx.strokeStyle = regcols[rm.region];
       }
       else{
         ctx.fillStyle = regcols[rm.region];
@@ -663,6 +718,12 @@ rpanel.children[0].innerHTML = htmls;
       }
       ctx.fill();
       ctx.stroke();
+
+      ctx.fillStyle = "white";
+      if (highlight){
+        ctx.fillStyle="blue";
+      }
+      ctx.fillText(rm.id,cx,cy+3);
     }
 
     function drawdoor(dr, highlight = false){
@@ -674,12 +735,13 @@ rpanel.children[0].innerHTML = htmls;
       var rtcy = (dr.unitto[1]*grid_unit_height) + (grid_unit_height/2);
       var cx = rfcx + (.5)*(rtcx-rfcx);
       var cy = rfcy + (.5)*(rtcy - rfcy);
-      var dw = grid_unit_height / 5;
+      var dw = grid_unit_height / 3;
+      var dh = dw/2;
 
       var dl = cx - dw;
       var ndr = cx + dw;
-      var dt = cy - dw;
-      var db = cy + dw;
+      var dt = cy - dh;
+      var db = cy + dh;
 
       ctx.moveTo(dl,dt);
       ctx.lineTo(dl,db);
@@ -687,12 +749,20 @@ rpanel.children[0].innerHTML = htmls;
       ctx.lineTo(ndr,dt);
       ctx.lineTo(dl,dt);
       ctx.closePath();
+      ctx.strokeStyle="black";
       ctx.fillStyle = doorcols[dr.doortype];
       if (highlight){
-        ctx.fillStyle = "rgba(0,0,0,.5)";
+        ctx.fillStyle = "rgba(255,255,255,.9)";
+        ctx.strokeStyle = doorcols[dr.doortype];
       }
 
       ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "black";
+      if (highlight){
+        ctx.fillStyle="blue";
+      }
+      ctx.fillText(dr.id,cx,cy+3);
 
 
 
@@ -716,6 +786,22 @@ rpanel.children[0].innerHTML = htmls;
         ctx.stroke();
       }
     }
+
+
+    function findClosestUnit(cunits, nunit) {
+        return cunits.sort(function (a, b) {
+          if ((Math.pow(a[0]-nunit[0],2) + Math.pow(a[1]-nunit[1],2)) < (Math.pow(b[0]-nunit[0],2) + Math.pow(b[1]-nunit[1],2)))
+             return -1;
+          if ((Math.pow(a[0]-nunit[0],2) + Math.pow(a[1]-nunit[1],2)) > (Math.pow(b[0]-nunit[0],2) + Math.pow(b[1]-nunit[1],2)))
+            return 1;
+          return 0;
+        });
+    }
+
+
+
+
+
     function makecol(){
       accordion = document.getElementsByClassName('acontainer');
 
@@ -817,7 +903,14 @@ rpanel.children[0].innerHTML = htmls;
       });
       reader.readAsText(file);
     });
+    function isArrayInArray(arr, item){
+      var item_as_string = JSON.stringify(item);
 
+      var contains = arr.some(function(ele){
+        return JSON.stringify(ele) === item_as_string;
+      });
+      return contains;
+    }
     </script>
 
   </body>
