@@ -1,0 +1,824 @@
+<html>
+<head>
+  <title>maped</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+  const maped_version = 0.5;
+
+  function Map(){
+    this.maped_version = maped_version;
+    this.name = "new_map";
+    this.grid_cols = 32;
+    this.grid_rows = 18;
+    this.unit_width = 16;
+    this.unit_height = 9;
+    this.allrooms = [];
+    this.alldoors = [];
+    this.roomgrid = [];
+    this.nextroomnum = 0;
+    this.nextdoornum = 0;
+  }
+
+  </script>
+
+  <style type="text/css">
+  body{
+    padding: 0px;
+    margin:0px;
+    background-color: #bbbbbb;
+  }
+  .doorlink, .roomlink{
+    border:1px solid blue;
+    padding:2px;
+    display:inline;
+  }
+  #mcanvas{
+    padding: 0px;
+    margin:0px;
+    width:100%;
+    height:100%;
+    border: 1px solid black;
+
+  }
+  #topbar{
+    padding:0px;
+    position:fixed;
+    top:0px;
+    height:2em;
+    width:75%;
+    border: 2px solid red;
+  }
+  #editorholder{
+    position: fixed;
+    top:2em;
+    padding: 0px;
+    margin:0px;
+    width:75%;
+    height:68%;
+    border: 4px solid purple;
+  }
+  #rightpanel{
+    padding:0px;
+    margin:0px;
+    border:2px solid green;
+    position:fixed;
+    width:24%;
+    right:0;
+    top:0;
+    bottom:6em;
+
+  }
+  #rightcontents{
+    position:fixed;
+    top:2em;
+    bottom:6em;
+    width:24%;
+    overflow-y:scroll;
+  }
+  #bottompanel{
+
+    padding-left:0px;
+    margin-left:2px;
+    border:2px solid blue;
+    position:fixed;
+    width:75%;
+    bottom:0;
+    height:24%;
+    overflow:scroll;
+  }
+  #controlbox{
+    padding-left: 1%;
+    border:2px solid purple;
+    position:fixed;
+    width:23%;
+    right:0;
+    bottom:0;
+    height:6em;
+
+  }
+  /* Positions the plus sign 5px from the right. Centers it using the transform property. */
+
+  .accordion .label::before {
+    content: '+';
+    color: white;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    font-size: 30px;
+    transform: translateY(-50%);
+  }
+
+  /* Hides the content (height: 0), decreases font size, justifies text and adds transition */
+
+  .accordion .content {
+    position: relative;
+    height:0;
+    text-align: justify;
+    padding:2px;
+    overflow: hidden;
+    transition: 0.5s;
+  }
+
+  /* Adds a horizontal line between the contents */
+
+  .accordion hr {
+    width: 98%;
+    margin-left: 0;
+    border: 1px solid grey;
+  }
+  .accordion .acontainer {
+    position: relative;
+
+    margin: 5px 5px;
+    background-color: #aaaaaa;
+  }
+
+  /* Positions the labels relative to the .container. Adds padding to the top and bottom and increases font size. Also makes its cursor a pointer */
+
+  .accordion .label {
+    position: relative;
+    padding: 5px 0;
+    color: white;
+    cursor: pointer;
+  }
+  /* Unhides the content part when active. Sets the height */
+
+  .accordion .acontainer.active .content {
+
+    height:2.5em;
+    background-color: #eeeeee;
+    overflow:scroll;
+    animation: fadeEffect 1s;
+
+  }
+
+  /* Changes from plus sign to negative sign once active */
+
+  .accordion .acontainer.active .label::before {
+    content: '-';
+    font-size: 30px;
+  }
+
+  /* Go from zero to full opacity */
+  @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+</style>
+</head>
+<body><div id="topbar">current region:
+  <select name="regionsel" onchange="{curregion = this.value;}">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+  </select> |
+  current door type:
+    <select name="doortypesel" onchange="{curdoortype = this.value;}">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+</div>
+  <div id="editorholder">
+  </div>
+  <div id="rightpanel">
+    <div id="righttitle"></div>
+    <div id="rightcontents">
+    </div>
+  </div>
+
+  <div id="bottompanel">
+  </div>
+  <div id="controlbox"><BR>
+    <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map json</button></a>
+    <HR>
+      <label for="ufile">upload map json:</label>
+      <input id="ufile" type="file" name="map upload" accept=".json"/>
+
+    </div>
+    <script>
+    const canvasholder = document.getElementById("editorholder");
+    const rpanel = document.getElementById("rightpanel");
+    const bpanel = document.getElementById("bottompanel");
+    var canv;
+    var accordion;
+    var ctx;
+    var grid_unit_width;
+    var grid_unit_height;
+
+    var roommode = true;
+    var curroom;
+    var curdoor;
+    var curregion = 0;
+    var curdoortype = 0;
+
+    var vw = window.innerWidth * .75;
+    var vh = window.innerHeight * .7;
+    var bigger = true;
+    var dsx,dsy,dex,dey = -1;
+
+    var regcols = ["#990000","#994c00","#999900","#009900","#009999","#004c99","#4c0099","#990099"];
+    var doorcols =["#ff9999","#ffcc99","#ffff99","#99ffc99","#99ffff","#99ccff","#cc99ff","#ff99ff"];
+    var map = null;
+
+    init();
+    drawmap();
+
+    function init(){
+
+      map = new Map();
+
+      for (var i = 0; i < map.grid_rows;i+=1){
+        var newrow = [];
+        for (var j=0;j < map.grid_cols;j+=1){
+          newrow.push(-1);
+        }
+        map.roomgrid.push(newrow);
+      }
+
+
+
+
+      if (vw>vh){
+        console.log("wide");
+      }
+      else{
+        console.log("tall");
+        bigger = false;
+      }
+      if (bigger){
+        //vh = .8 * vh;
+        //console.log(vw,vh);
+        grid_unit_height = vh/map.grid_rows;
+        grid_unit_width = vw/map.grid_cols;
+        //console.log(vw,vh);
+      }
+
+
+      canvasholder.innerHTML="<canvas id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas>";
+      canv = document.getElementById('mcanvas');
+
+
+      canv.addEventListener('mousedown', function(event) {
+        var rect = canv.getBoundingClientRect(), // abs. size of element
+              scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
+              scaleY = canv.height / rect.height;
+        var xval = (event.clientX - rect.left) * scaleX ,
+        yval = (event.clientY - rect.top) * scaleY;
+        mdown(xval,yval);
+      }, false);
+      canv.addEventListener('mouseup', function(event) {
+        var rect = canv.getBoundingClientRect(), // abs. size of element
+              scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
+              scaleY = canv.height / rect.height;
+        var xval = (event.clientX - rect.left) * scaleX ,
+        yval = (event.clientY - rect.top) * scaleY;
+        mup(xval,yval);
+      }, false);
+
+
+
+      ctx = canv.getContext('2d');
+    }
+
+
+    function mdown(xv,yv){
+      var gx = Math.floor(xv / grid_unit_width);
+      var gy = Math.floor(yv / grid_unit_height);
+      dsx = gx;
+      dsy = gy;
+
+      //console.log(gx, gy);
+    }
+
+    function mup(xv,yv){
+      if (dsx != -1 && dsy != -1){
+        var gx = Math.floor(xv / grid_unit_width);
+        var gy = Math.floor(yv / grid_unit_height);
+        dex = gx;
+        dey = gy;
+        var nl = Math.min(dsx,dex);
+        var nr = Math.max(dsx,dex);
+        var nt = Math.min(dsy,dey);
+        var nb = Math.max(dsy,dey);
+
+        var nw = nr-nl;
+        var nh = nb-nt;
+
+
+        //started click on an existing room
+        if (map.roomgrid[dsy][dsx] != -1){
+          //ended click on an existing room
+          if (map.roomgrid[gy][gx] != -1){
+            //they are the same room
+            if (map.roomgrid[dsy][dsx] == map.roomgrid[gy][gx]){
+              curroom = map.allrooms[map.roomgrid[gy][gx]];
+              roommode = true;
+              curdoor = null;
+              updateroomlist();
+              drawmap();
+            }
+            else{
+              //link rooms
+              TryDoor([dsx,dsy],[gx,gy]);
+            }
+          }
+          else{
+            //expand room?
+          }
+
+        }
+        else{
+          TryNewRoom([nl,nt],nw,nh);
+        }
+
+
+        dsx = -1;
+        dsy = -1;
+      }
+
+    }
+
+
+
+    function TryNewRoom(tl,w,h){
+      var allowed = true;
+      //console.log("trying");
+      //console.log(map.roomgrid);
+
+      var rm = new Room(tl,w,h);
+      for (let ru of rm.units){
+        //console.log(ru);
+        var check = map.roomgrid[ru[1]][ru[0]];
+        //console.log(check);
+        if (check != -1){
+          //console.log(check);
+          //console.log(ru , " is full");
+          allowed = false;
+        }
+      }
+
+      if (allowed){
+        map.allrooms.push(rm);
+
+        for (let ru of rm.units){
+          map.roomgrid[ru[1]][ru[0]] = rm.id;
+        }
+        roommode = true;
+        curdoor = null;
+        curroom = rm;
+        updateroomlist();
+        drawmap();
+      }
+
+
+    }
+
+
+
+    function Room(sunit, w=0,h=0){
+      this.id = map.nextroomnum;
+      map.nextroomnum+=1;
+      this.region = curregion;
+      this.name = "room " + this.id;
+      this.tlunit = sunit;
+      this.units = [];
+      this.gridwidth = w+1;
+      this.gridheight = h+1;
+      for (var j=0;j<this.gridheight;j+=1){
+        for (var i=0;i<this.gridwidth;i+=1){
+          var ru = [sunit[0]+i,sunit[1]+j]
+          this.units.push(ru);
+        }
+      }
+      this.doors = [];
+    }
+
+    function TryDoor(ufrom, uto){
+      var allowed = true;
+      if (map.allrooms[GetRoomIDByUnit(ufrom)] != null){
+        for (let od of map.allrooms[GetRoomIDByUnit(ufrom)].doors){
+          if (JSON.stringify(od.unitfrom) == JSON.stringify(uto) || JSON.stringify(od.unitto) == JSON.stringify(uto)){
+            allowed = false;
+            console.log("not allowed");
+          }
+          else{
+            //  console.log(od.unitfrom, od.unitto, uto);
+          }
+        }
+      }
+      else
+      {
+
+        allowed= false;
+      }
+
+      if (allowed){
+        var d = new Door(ufrom, uto);
+
+        map.allrooms[d.rfromid].doors.push(d);
+        map.allrooms[d.rtoid].doors.push(d);
+        map.alldoors.push(d);
+        roommode = false;
+        curdoor = d;
+        curroom = null;
+        updateroomlist();
+        drawmap();
+
+      }
+
+    }
+
+    function Door(ufrom,uto){
+      this.id = map.nextdoornum;
+      map.nextdoornum += 1;
+      //console.log(ufrom);
+      //  console.log(uto);
+      this.rfromid = GetRoomIDByUnit(ufrom);
+      //console.log(this.rfromid);
+      this.rtoid = GetRoomIDByUnit(uto);
+      //  console.log(this.rtoid);
+      this.unitfrom = ufrom;
+      this.unitto = uto;
+      this.oneway = false;
+      this.doortype = curdoortype;
+
+    }
+
+
+function removeDoor(dindex){
+  var dr = map.alldoors[dindex];
+  map.allrooms[dr.rtoid].doors.splice(map.allrooms[dr.rtoid].doors.indexOf(dr),1);
+  map.allrooms[dr.rfromid].doors.splice(map.allrooms[dr.rfromid].doors.indexOf(dr),1);
+  map.alldoors[dindex] = null;
+  curdoor = null;
+
+  updateroomlist();
+  drawmap();
+}
+
+
+function removeRoom(rindex){
+  var rr = map.allrooms[rindex];
+  while (rr.doors.length > 0){
+    removeDoor(rr.doors[0].id);
+  }
+  for (let ru of rr.units){
+    map.roomgrid[ru[1]][ru[0]] = -1;
+  }
+  map.allrooms[rindex] = null;
+  curroom = null;
+  updateroomlist();
+  drawmap();
+
+}
+
+
+    function GetRoomIDByUnit(unit){
+
+      return map.roomgrid[unit[1]][unit[0]];
+
+    }
+
+    //
+
+    function updatebottompanel(){
+
+      bpanel.innerHTML = "";
+      var htmlb = "";
+      if (roommode){
+        var rm = curroom;
+        if (rm != null){
+          htmlb += "<div class='bcontainer'>ROOM:&nbsp &nbsp";
+          htmlb += "<button type='button' onclick='{removeRoom(" + rm.id + ")}'>delete</button><BR>";
+
+          htmlb += "name: <input type='text' value='" + rm.name + "' onchange='{map.allrooms[" + rm.id + "].name=this.value;updateroomlist();}'><BR>";
+          htmlb += "id: " + rm.id + "&nbsp;&nbsp;&nbsp;&nbsp;";
+          htmlb += "region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
+
+          for (var r = 0; r < 8; r += 1){
+            htmlb += "<option value='"+r+"' ";
+            if (r == rm.region){
+              htmlb += "selected='selected'";
+            }
+            htmlb += ">"+r+"</option>"
+          }
+          htmlb += "</select><BR>";
+
+          htmlb += "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
+          htmlb += "units: " + JSON.stringify(rm.units) + "<BR>";
+          htmlb += "doors: ";
+          for (let dd of rm.doors){
+            htmlb += "<div class='doorlink' id='" + dd.id + "'>" + dd.id + "</div>";
+          }
+          htmlb +=  "<BR>";
+          htmlb += "</div>";
+        }
+
+
+
+      }
+      else{
+        var dr = curdoor;
+
+        if (dr != null){
+          htmlb += "<div class='bcontainer'>DOOR: &nbsp &nbsp";
+          htmlb += "<button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete</button><BR>";
+          htmlb += "id: " + dr.id + "&nbsp;&nbsp;&nbsp;&nbsp;door type: " + dr.doortype + "<BR>";
+          htmlb += "from: <div class='roomlink' id='" + dr.rfromid + "'>" + map.allrooms[dr.rfromid].name + "</div><BR>";
+          htmlb += "to: <div class='roomlink' id='" + dr.rtoid + "'>" + map.allrooms[dr.rtoid].name + "</div><BR>";
+          htmlb += "oneway: " + dr.oneway + "<BR>";
+          htmlb += "</div>";
+        }
+
+
+      }
+      bpanel.innerHTML = htmlb;
+
+
+
+
+
+    }
+
+    function updateroomlist(){
+
+
+var htmls = "&nbsp;";
+
+if (roommode){
+  htmls += "<B>rooms</b> | <a onclick='{roommode=false;curroom=null;updateroomlist();drawmap();}'>doors</a>";
+}
+else{
+  htmls += "<a onclick='{roommode=true;curdoor=null;updateroomlist();drawmap();}'>rooms</a> | <b>doors</b>";
+}
+rpanel.children[0].innerHTML = htmls;
+       htmls = "<div class='accordion'>";
+
+      if (roommode){
+        for (let rm of map.allrooms){
+          if (rm != null){
+            htmls +=  "<div class='acontainer";
+            if (curroom == rm){
+              htmls += " active";
+            }
+            htmls +="' id='" + rm.id + "'><div class='label' style='background-color:" + regcols[rm.region] + ";'>" + rm.name + " - [" + rm.tlunit + "]</div>";
+            htmls += "<div class='content'>";
+            htmls += "id: " + rm.id + "<BR>";
+            htmls +=  "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
+            htmls +=  "</div></div><hr>";
+          }
+
+        }
+      }
+      else{
+        for (let rm of map.alldoors){
+          if (rm != null){
+            htmls +=  "<div class='acontainer";
+            if (curdoor == rm){
+              htmls += " active";
+            }
+            htmls +="' id='" + rm.id + "'><div class='label' style='background-color:" + doorcols[rm.doortype] + "'>door " + rm.id +"</div>";
+            htmls += "<div class='content'>";
+            htmls += "id: " + rm.id + "<BR>";
+            htmls += "from: " + rm.rfromid + ", ";
+            htmls += "to: " + rm.rtoid + "<BR>";
+
+            htmls +=  "</div></div><hr>";
+          }
+
+        }
+
+      }
+
+      htmls += "</div>";
+      rpanel.children[1].innerHTML = htmls;
+      rpanel.children[1].scrollTop = rpanel.children[1].scrollHeight;
+      if (document.getElementsByClassName("active")[0] != null)
+      document.getElementsByClassName("active")[0].scrollIntoView();
+      updatebottompanel();
+      makecol();
+    }
+
+
+
+
+    function drawmap(){
+      ctx.clearRect(0, 0, canv.width, canv.height);
+      ctx.fillStyle = '#bbbbbb';
+      ctx.fillRect(0, 0, canv.width, canv.height);
+      drawgrid();
+      for (let rm of map.allrooms){
+        if (rm != null)
+        drawroom(rm);
+      }
+
+      if (curroom != null){
+        drawroom(curroom,true);
+      }
+      //  drawgrid();
+      //updateroomlist();
+      for (let dr of map.alldoors){
+        if (dr != null)
+        drawdoor(dr);
+      }
+      if (curdoor != null){
+        drawdoor(curdoor,true);
+      }
+
+
+
+
+    }
+
+    function drawroom(rm, highlight = false){
+      ctx.beginPath();
+      var rl = rm.tlunit[0] * grid_unit_width;
+      var rt = rm.tlunit[1] * grid_unit_height;
+      var rb = rt + (rm.gridheight * grid_unit_height);
+      var rr = rl + (rm.gridwidth * grid_unit_width);
+      ctx.moveTo(rl,rt);
+      ctx.lineTo(rr,rt);
+      ctx.lineTo(rr,rb);
+      ctx.lineTo(rl,rb);
+      ctx.lineTo(rl,rt);
+      ctx.closePath();
+      if (highlight){
+        ctx.fillStyle = "rgba(255,255,255,.5)";
+        ctx.strokeStyle = "white";
+      }
+      else{
+        ctx.fillStyle = regcols[rm.region];
+        ctx.strokeStyle = "black";
+      }
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawdoor(dr, highlight = false){
+
+      ctx.beginPath();
+      var rfcx = (dr.unitfrom[0]*grid_unit_width) + (grid_unit_width/2);
+      var rfcy = (dr.unitfrom[1]*grid_unit_height) + (grid_unit_height/2);
+      var rtcx = (dr.unitto[0]*grid_unit_width) + (grid_unit_width/2);
+      var rtcy = (dr.unitto[1]*grid_unit_height) + (grid_unit_height/2);
+      var cx = rfcx + (.5)*(rtcx-rfcx);
+      var cy = rfcy + (.5)*(rtcy - rfcy);
+      var dw = grid_unit_height / 5;
+
+      var dl = cx - dw;
+      var ndr = cx + dw;
+      var dt = cy - dw;
+      var db = cy + dw;
+
+      ctx.moveTo(dl,dt);
+      ctx.lineTo(dl,db);
+      ctx.lineTo(ndr,db);
+      ctx.lineTo(ndr,dt);
+      ctx.lineTo(dl,dt);
+      ctx.closePath();
+      ctx.fillStyle = doorcols[dr.doortype];
+      if (highlight){
+        ctx.fillStyle = "rgba(0,0,0,.5)";
+      }
+
+      ctx.fill();
+
+
+
+    }
+
+    function drawgrid(){
+      for (var i=0;i<map.grid_cols;i+=1){
+        ctx.beginPath();
+        ctx.moveTo(i*grid_unit_width, 0);
+        ctx.lineTo(i*grid_unit_width, vh);
+        ctx.closePath();
+        ctx.strokeStyle = "gray";
+        ctx.stroke();
+      }
+      for (var j=0; j<map.grid_rows;j+=1){
+        ctx.beginPath();
+        ctx.moveTo(0,j*grid_unit_height);
+        ctx.lineTo(vw,j*grid_unit_height);
+        ctx.closePath();
+        ctx.strokeStyle = "gray";
+        ctx.stroke();
+      }
+    }
+    function makecol(){
+      accordion = document.getElementsByClassName('acontainer');
+
+      for (i=0; i<accordion.length; i++) {
+
+        accordion[i].addEventListener('click', function () {
+
+          if (this.classList.contains('active')){
+            this.classList.remove('active');
+            curroom = null;
+            curdoor = null;
+          }
+          else{
+            for (j=0; j<accordion.length; j++) {
+              accordion[j].classList.remove('active');
+            }
+            this.classList.add('active');
+            if (roommode){
+              curdoor = null;
+              curroom = map.allrooms[this.id];
+            }
+            else{
+              curdoor = map.alldoors[this.id];
+              curroom = null;
+            }
+
+          }
+          updateroomlist();
+          drawmap();
+        })
+      }
+
+      var doorlinks = document.getElementsByClassName('doorlink');
+      for (i=0; i<doorlinks.length; i++) {
+        doorlinks[i].addEventListener('click', function () {
+          roommode = false;
+          curdoor = map.alldoors[this.id];
+          curroom = null;
+          //console.log("door clicked");
+          updateroomlist();
+          drawmap();
+
+        });
+      }
+
+      var roomlinks = document.getElementsByClassName('roomlink');
+      for (i=0; i<roomlinks.length; i++) {
+        roomlinks[i].addEventListener('click', function () {
+          roommode = true;
+          curdoor = null;
+          console.log(this.id);
+          curroom = map.allrooms[this.id];
+
+          //console.log("door clicked");
+          updateroomlist();
+          drawmap();
+
+        });
+      }
+
+
+
+
+    }
+
+    function exportJson(el) {
+
+      var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(map));
+      el.setAttribute("href", "data:"+data);
+      el.setAttribute("download", "map.json");
+    }
+
+
+    var filesInput = document.getElementById("ufile");
+    filesInput.addEventListener("change", function (event) {
+      var files = event.target.files;
+      var file = files[0];
+      var reader = new FileReader();
+      reader.addEventListener("load", function (event) {
+        var nfile = event.target.result;
+
+        map = JSON.parse(nfile);
+        if (map.maped_version <= maped_version){
+          curroom = null;
+          updateroomlist();
+          drawmap();
+        }
+        else{
+          if (map.maped_version > maped_version){
+            alert("unable to load map json file - map made with newer version of editor");
+          }
+          else{
+            alert("unable to load map json file - missing maped_version");
+          }
+          location.reload();
+        }
+
+
+      });
+      reader.readAsText(file);
+    });
+
+    </script>
+
+  </body>
+  </html>
