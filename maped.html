@@ -3,7 +3,7 @@
   <title>maped</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-  const maped_version = 0.65;
+  const maped_version = 0.75;
 
   function Map(){
     this.maped_version = maped_version;
@@ -31,6 +31,7 @@
     border:1px solid blue;
     padding:0px;
     display:inline;
+    cursor:pointer;
   }
   .tabbtn, .tabbtna{
     display:inline-block;
@@ -38,17 +39,15 @@
     text-align: center;
     background-color: #aaaaaa;
     border:1px solid black;
+
   }
   .tabbtna{
     background-color: #999999;
   }
-  #mcanvas{
-    padding: 0px;
-    margin:0px;
-
-    border: 1px solid black;
-
+  .tabbtn{
+    cursor:pointer;
   }
+
   #leftcontent{
     position:fixed;
     top:0;
@@ -66,12 +65,25 @@
   }
   #editorholder{
     display:block;
+    position:relative;
     padding: 0px;
     margin:0px;
     width:100%;
     height:69%;
     border: 4px solid purple;
     overflow:scroll;
+      background-color:#888888;
+  }
+  canvas{
+    position:absolute;
+    top:0;
+    padding: 0px;
+    margin:0px;
+    cursor:crosshair;
+    border: 1px solid black;
+
+
+
   }
   #bottompanel{
     display:block;
@@ -93,15 +105,19 @@
     top:0;
     bottom:3;
 
+
   }
   #rightcontents{
     position:fixed;
     top:2em;
-
     width:24%;
-    overflow-y:scroll;
+    overflow:scroll;
+    bottom:0;
   }
 
+.accordion{
+
+}
 
   /* Positions the plus sign 5px from the right. Centers it using the transform property. */
 
@@ -166,6 +182,17 @@
     font-size: 30px;
   }
 
+
+  input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+
+    display: inline-block;
+
+    cursor: pointer;
+}
+
   /* Go from zero to full opacity */
   @keyframes fadeEffect {
     from {opacity: 0;}
@@ -173,33 +200,16 @@
   }
 </style>
 </head>
-<body><div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map json</button></a>
-|  upload map json:  <input id="ufile" type="file" name="map upload" accept=".json"/>
+<body><div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map</button></a>
+|
+<label for="ufile" class="custom-file-upload">
+    <button onclick="{document.getElementById('ufile').click();}">upload map</button>
+</label>
+<input id="ufile" type="file" accept=".json"/>
+| <a id="clear" onclick="{localStorage.removeItem('map');location.reload()}" ><button type="button">clear map</button></a>
 
+<div style='display:inline;float:right' id='ttext'>
 
-    <div style='display:inline;float:right'>
-      current region:
-        <select name="regionsel" onchange="{curregion = this.value;}">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-        </select> |
-        current door type:
-          <select name="doortypesel" onchange="{curdoortype = this.value;}">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-          </select>
 </div>
 </div>
   <div id="editorholder">
@@ -234,12 +244,17 @@ var vw,vh;
 
     var bigger = true;
     var dsx,dsy,dex,dey = -1;
+    var csx,csy,cex,cey = -1;
 
     var regcols = ["#990000","#994c00","#999900","#009900","#009999","#004c99","#4c0099","#990099"];
     var doorcols =["#ff9999","#ffcc99","#ffff99","#99ff99","#99ffff","#99ccff","#cc99ff","#ff99ff"];
     var map = null;
 
     init();
+    if (localStorage.getItem("map")!=null){
+      map = JSON.parse(localStorage.getItem("map"));
+    }
+
     updateroomlist();
     drawmap();
 
@@ -277,11 +292,12 @@ var vw,vh;
       }
 
 
-      canvasholder.innerHTML="<canvas id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas>";
+      canvasholder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
       canv = document.getElementById('mcanvas');
+      uicanv = document.getElementById('uicanvas');
 
 
-      canv.addEventListener('mousedown', function(event) {
+      uicanv.addEventListener('mousedown', function(event) {
         var rect = canv.getBoundingClientRect(), // abs. size of element
               scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
               scaleY = canv.height / rect.height;
@@ -289,7 +305,8 @@ var vw,vh;
         yval = (event.clientY - rect.top) * scaleY;
         mdown(xval,yval);
       }, false);
-      canv.addEventListener('mouseup', function(event) {
+      uicanv.addEventListener('mouseup', function(event) {
+        uictx.clearRect(0,0,uicanv.width,uicanv.height);
         var rect = canv.getBoundingClientRect(), // abs. size of element
               scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
               scaleY = canv.height / rect.height;
@@ -297,39 +314,80 @@ var vw,vh;
         yval = (event.clientY - rect.top) * scaleY;
         mup(xval,yval);
       }, false);
-      canv.addEventListener('touchstart', function(event) {
-        document.addEventListener("touchstart",function(e) {
-          e.preventDefault();
-        },false);
+
+      uicanv.addEventListener('mousemove', function(event){
+        //console.log(event.offsetX,event.offsetY);
+
         var rect = canv.getBoundingClientRect(), // abs. size of element
               scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
               scaleY = canv.height / rect.height;
         var xval = (event.clientX - rect.left) * scaleX ,
         yval = (event.clientY - rect.top) * scaleY;
-        mdown(xval,yval);
-      }, false);
-      canv.addEventListener('touchend', function(event) {
-        document.removeEventListener("touchstart",function(e) {
-          e.preventDefault();
-        });
-        var rect = canv.getBoundingClientRect(), // abs. size of element
-              scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
-              scaleY = canv.height / rect.height;
-        var xval = (event.clientX - rect.left) * scaleX ,
-        yval = (event.clientY - rect.top) * scaleY;
-        mup(xval,yval);
+        highlightui(xval,yval);
+
 
       }, false);
+
 
 
 
       ctx = canv.getContext('2d');
+      uictx = uicanv.getContext('2d');
+      uictx.clearRect(0,0,uicanv.width,uicanv.height);
       ctx.textAlign="center";
     }
 
 
 
+function highlightui(xv,yv)
+{
+
+  uictx.clearRect(0,0,uicanv.width,uicanv.height);
+  var gx = Math.floor(xv / grid_unit_width);
+  var gy = Math.floor(yv / grid_unit_height);
+
+  uictx.beginPath();
+  var rl = gx*grid_unit_width;
+  var rt = gy*grid_unit_height;
+  var rb = rt + (grid_unit_height);
+  var rr = rl + (grid_unit_width);
+  var cx = rl + ((rr-rl)/2);
+  var cy = rt + ((rb-rt)/2);
+  uictx.moveTo(rl,rt);
+  uictx.lineTo(rr,rt);
+  uictx.lineTo(rr,rb);
+  uictx.lineTo(rl,rb);
+  uictx.lineTo(rl,rt);
+  uictx.closePath();
+
+    uictx.fillStyle = "rgba(255,255,255,.2)";
+
+    uictx.strokeStyle = "gray";
+
+  uictx.fill();
+
+
+if (csx != -1 && csy != -1 ){
+  uictx.setLineDash([3,3]);
+  uictx.beginPath();
+  uictx.moveTo(csx,csy);
+  //  uictx.lineTo(csx,yv);
+  uictx.lineTo(xv,yv);
+  //  uictx.lineTo(xv,csy);
+  //    uictx.lineTo(csx,csy);
+  uictx.closePath();
+  uictx.strokeStyle = "white";
+  uictx.stroke();
+  uictx.setLineDash([]);
+
+}
+
+
+
+}
     function mdown(xv,yv){
+      csx = xv;
+      csy = yv;
       var gx = Math.floor(xv / grid_unit_width);
       var gy = Math.floor(yv / grid_unit_height);
       dsx = gx;
@@ -340,6 +398,8 @@ var vw,vh;
 
     function mup(xv,yv){
       if (dsx != -1 && dsy != -1){
+        cex = xv;
+        cey = yv;
         var gx = Math.floor(xv / grid_unit_width);
         var gy = Math.floor(yv / grid_unit_height);
         dex = gx;
@@ -367,7 +427,8 @@ var vw,vh;
             }
             else{
               //link rooms
-              TryDoor([dsx,dsy],[gx,gy]);
+              DoorDrag([dsx,dsy],[gx,gy])
+              //TryDoor([dsx,dsy],[gx,gy]);
             }
           }
           else{
@@ -379,7 +440,9 @@ var vw,vh;
         else{
           TryNewRoom([nl,nt],nw,nh);
         }
-
+        csx = -1;
+        csy = -1;
+        cex,cey = -1;
 
         dsx = -1;
         dsy = -1;
@@ -423,7 +486,7 @@ var vw,vh;
     }
 
 function TryExpand(rm,exto){
-  console.log("trying expand");
+  //console.log("trying expand");
   var allowed = true;
   var nl = Math.min(rm.tlunit[0],exto[0]);
   var nr = Math.max(rm.tlunit[0]+ rm.gridwidth-1,exto[0]);
@@ -434,7 +497,7 @@ function TryExpand(rm,exto){
         if (map.roomgrid[j][i] != -1 && !(isArrayInArray(rm.units,[i,j]))){
           allowed = false;
 
-          console.log("collided at " + [i,j]);
+          //console.log("collided at " + [i,j]);
 
         }
     }
@@ -476,6 +539,41 @@ function TryExpand(rm,exto){
       this.doors = [];
     }
 
+function DoorDrag(ufrom, uto){
+  var dragcels = [ufrom];
+  var dx = uto[0]-ufrom[0];
+  var dy = uto[1]-ufrom[1];
+  var dxs = dx/16;
+  var dys = dy/16;
+  for (var i=0;i<16;i+=1){
+    var cs = [Math.round(ufrom[0] + (dxs*i)),Math.round(ufrom[1] + (dys*i))];
+    if(JSON.stringify(dragcels[dragcels.length-1]) !=JSON.stringify(cs)){
+      dragcels.push(cs);
+    }
+  }
+  //console.log(dragcels);
+  for (var j=0;j<dragcels.length-1;j+=1){
+    var ca = dragcels[j];
+    var cb = dragcels[j+1];
+
+    var rma = GetRoomIDByUnit(ca);
+    var rmb = GetRoomIDByUnit(cb);
+
+
+    var dist = ((Math.pow((cb[0]-ca[0]),2)) + Math.pow((cb[1]-ca[1]),2));
+
+    if ((dist < 1.2) && (rma!=rmb) && rma!=-1 && rmb!=-1){
+      TryDoor(ca,cb);
+      //break;
+    }
+
+  }
+
+
+}
+
+
+
     function TryDoor(ufrom, uto){
       var allowed = true;
       if (map.allrooms[GetRoomIDByUnit(ufrom)] != null){
@@ -497,11 +595,8 @@ function TryExpand(rm,exto){
 
       if (allowed){
 
-        var pfrs = JSON.parse(JSON.stringify(map.allrooms[GetRoomIDByUnit(ufrom)].units));
-        pfrs = findClosestUnit(pfrs,uto);
-        var ptrs = JSON.parse(JSON.stringify(map.allrooms[GetRoomIDByUnit(uto)].units));
-        ptrs = findClosestUnit(ptrs,ufrom);
-        var d = new Door(pfrs[0], ptrs[0]);
+
+        var d = new Door(ufrom, uto);
 
         map.allrooms[d.rfromid].doors.push(d);
         map.allrooms[d.rtoid].doors.push(d);
@@ -571,6 +666,35 @@ function removeRoom(rindex){
 
     function updatebottompanel(){
 
+      var htmlt = "";
+
+      htmlt += "<div style='display:inline;background-color:" + regcols[curregion] + ";color:white;'><label for='crt'>current region:</label> <select id='crt' onchange='{curregion = this.value;updateroomlist();drawmap();}'>";
+      for (var r = 0; r < 8; r += 1){
+        htmlt += "<option value='"+r+"' ";
+        if (r == curregion){
+          htmlt += "selected='selected'";
+        }
+        htmlt += ">"+r+"</option>"
+      }
+      htmlt += "</select></div> | ";
+
+      htmlt += "<div style='display:inline;background-color:" + doorcols[curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{curdoortype = this.value;updateroomlist();drawmap();}'>";
+      for (var r = 0; r < 8; r += 1){
+        htmlt += "<option value='"+r+"' ";
+        if (r == curdoortype){
+          htmlt += "selected='selected'";
+        }
+        htmlt += ">"+r+"</option>"
+      }
+      htmlt += "</select></div> ";
+      document.getElementById('ttext').innerHTML = htmlt;
+
+
+
+
+
+
+
       bpanel.innerHTML = "";
       var htmlb = "";
       if (roommode){
@@ -582,7 +706,6 @@ function removeRoom(rindex){
           htmlb += "name: <input type='text' value='" + rm.name + "' onchange='{map.allrooms[" + rm.id + "].name=this.value;updateroomlist();}'><BR>";
           htmlb += "id: " + rm.id + "&nbsp;&nbsp;&nbsp;&nbsp;";
           htmlb += "<div style='display:inline;background-color:" + regcols[rm.region] + ";color:white;'>region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
-
           for (var r = 0; r < 8; r += 1){
             htmlb += "<option value='"+r+"' ";
             if (r == rm.region){
@@ -611,7 +734,16 @@ function removeRoom(rindex){
         if (dr != null){
           htmlb += "<div class='bcontainer'>DOOR: &nbsp &nbsp";
           htmlb += "<button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete</button><BR>";
-          htmlb += "id: " + dr.id + "&nbsp;&nbsp;&nbsp;&nbsp;door type: " + dr.doortype + "<BR>";
+          htmlb += "id: " + dr.id + "<BR>";
+          htmlb += "<div style='display:inline;background-color:" + doorcols[dr.doortype] + ";color:black;'>door type: <select onchange='{map.alldoors[" + dr.id + "].doortype = this.value;updateroomlist();drawmap();}'>";
+          for (var r = 0; r < 8; r += 1){
+            htmlb += "<option value='"+r+"' ";
+            if (r == dr.doortype){
+              htmlb += "selected='selected'";
+            }
+            htmlb += ">"+r+"</option>"
+          }
+          htmlb += "</select></div><BR>";
           htmlb += "from: <div class='roomlink' id='" + dr.rfromid + "'>" + map.allrooms[dr.rfromid].name + "</div><BR>";
           htmlb += "to: <div class='roomlink' id='" + dr.rtoid + "'>" + map.allrooms[dr.rtoid].name + "</div><BR>";
           htmlb += "oneway: " + dr.oneway + "<BR>";
@@ -629,6 +761,16 @@ function removeRoom(rindex){
     }
 
     function updateroomlist(){
+
+
+if (roommode && curroom == null){
+
+  curroom = map.allrooms.filter( v => v !== null ).pop();
+}
+if (!roommode && curdoor == null){
+
+  curdoor = map.alldoors.filter( v => v !== null ).pop();
+}
 
 
 var htmls = "&nbsp;";
@@ -692,33 +834,38 @@ rpanel.children[0].innerHTML = htmls;
 
     function drawmap(){
       ctx.clearRect(0, 0, canv.width, canv.height);
-      ctx.fillStyle = '#bbbbbb';
-      ctx.fillRect(0, 0, canv.width, canv.height);
-      drawgrid();
+    //  ctx.fillStyle = '#bbbbbb';
+    //  ctx.fillRect(0, 0, canv.width, canv.height);
+
       for (let rm of map.allrooms){
         if (rm != null)
         drawroom(rm);
       }
-
       if (curroom != null){
         drawroom(curroom,true);
       }
-      //  drawgrid();
-      //updateroomlist();
+
       for (let dr of map.alldoors){
         if (dr != null)
         drawdoor(dr);
       }
+
+
+
+      //  drawgrid();
+      //updateroomlist();
+
       if (curdoor != null){
         drawdoor(curdoor,true);
       }
+  drawgrid();
 
-
-
+  var ms = JSON.stringify(map);
+  localStorage.setItem("map",ms);
 
     }
 
-    function drawroom(rm, highlight = false){
+    function drawroom(rm, highlight = false ){
       ctx.beginPath();
       var rl = rm.tlunit[0] * grid_unit_width;
       var rt = rm.tlunit[1] * grid_unit_height;
@@ -741,8 +888,9 @@ rpanel.children[0].innerHTML = htmls;
         ctx.strokeStyle = "black";
       }
       ctx.fill();
+      ctx.lineWidth=4;
       ctx.stroke();
-
+      ctx.lineWidth=1;
       ctx.fillStyle = "white";
       if (highlight){
         ctx.fillStyle="blue";
@@ -781,6 +929,7 @@ rpanel.children[0].innerHTML = htmls;
       }
 
       ctx.fill();
+
       ctx.stroke();
       ctx.fillStyle = "black";
       if (highlight){
@@ -793,12 +942,13 @@ rpanel.children[0].innerHTML = htmls;
     }
 
     function drawgrid(){
+      ctx.setLineDash([5,8]);
       for (var i=0;i<map.grid_cols;i+=1){
         ctx.beginPath();
         ctx.moveTo(i*grid_unit_width, 0);
         ctx.lineTo(i*grid_unit_width, vh);
         ctx.closePath();
-        ctx.strokeStyle = "gray";
+        ctx.strokeStyle = "rgba(200,200,200,.5)";
         ctx.stroke();
       }
       for (var j=0; j<map.grid_rows;j+=1){
@@ -806,9 +956,10 @@ rpanel.children[0].innerHTML = htmls;
         ctx.moveTo(0,j*grid_unit_height);
         ctx.lineTo(vw,j*grid_unit_height);
         ctx.closePath();
-        ctx.strokeStyle = "gray";
+        ctx.strokeStyle = "rgba(200,200,200,.5)";
         ctx.stroke();
       }
+      ctx.setLineDash([]);
     }
 
 
