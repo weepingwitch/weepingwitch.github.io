@@ -372,7 +372,7 @@ function init(){
     clientX: touch.clientX,
     clientY: touch.clientY
   });
-  canvas.dispatchEvent(mouseEvent);
+  uicanv.dispatchEvent(mouseEvent);
 }, false);
 
 
@@ -382,7 +382,7 @@ var mouseEvent = new MouseEvent("mousemove", {
   clientX: touch.clientX,
   clientY: touch.clientY
 });
-canvas.dispatchEvent(mouseEvent);
+uicanv.dispatchEvent(mouseEvent);
 }, false);
 
 uicanv.addEventListener("touchend", function (e) {
