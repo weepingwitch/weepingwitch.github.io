@@ -71,10 +71,32 @@
     width:100%;
     height:69%;
     border: 4px solid purple;
-    overflow-x:hidden;
-    overflow-y:hidden;
+    overflow-x:scroll;
+    overflow-y:scroll;
     background-color:#888888;
   }
+#scrollbarx, #scrollbary{
+  display:none;
+}
+
+
+@media screen and (max-width: 780px) {
+
+#editorholder{
+  overflow-x: hidden;
+  overflow-y:hidden;
+}
+#scrollbarx, #scrollbary{
+  display:block;
+}
+}
+
+
+
+
+
+
+
   canvas{
     position:absolute;
     top:0;
@@ -116,16 +138,6 @@
     overflow:scroll;
     bottom:0;
   }
-  #scrollbary{
-
-    position:absolute;
-    top:0;
-    transform: rotate(270deg);
-    z-index: 10;
-
-
-  }
-
   .accordion{
 
   }
@@ -212,10 +224,8 @@
 </style>
 </head>
 <body>
-  <div style="z-index:20;position:absolute;transform: rotate(90deg);"><input style="width:100%;" type="range" min="0" max="100" value="0" class="slider" id="scrollbaryinput" ></div>
-  <div id="scrollbary">
+  <div id="scrollbary" style="z-index:20;position:absolute;transform: rotate(90deg);"><input style="width:100%;" type="range" min="0" max="100" value="0" class="slider" id="scrollbaryinput" ></div>
 
-  </div>
 
   <div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map</button></a>
   |
@@ -345,6 +355,7 @@ function init(){
     mdown(xval,yval);
   }, false);
   uicanv.addEventListener('mouseup', function(event) {
+    console.log(event.clientX,event.clientY);
     uictx.clearRect(0,0,uicanv.width,uicanv.height);
     var rect = canv.getBoundingClientRect(), // abs. size of element
     scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
@@ -369,6 +380,7 @@ function init(){
 
   uicanv.addEventListener("touchstart", function (e) {
   var touch = e.touches[0];
+
   var mouseEvent = new MouseEvent("mousedown", {
     clientX: touch.clientX,
     clientY: touch.clientY
@@ -387,7 +399,11 @@ uicanv.dispatchEvent(mouseEvent);
 }, false);
 
 uicanv.addEventListener("touchend", function (e) {
-  var mouseEvent = new MouseEvent("mouseup", {});
+  var touch = e.changedTouches[0];
+  var mouseEvent = new MouseEvent("mouseup", {
+    clientX: touch.clientX,
+    clientY: touch.clientY
+  });
   uicanv.dispatchEvent(mouseEvent);
 }, false);
 
