@@ -366,7 +366,50 @@ function init(){
 
   }, false);
 
+  uicanv.addEventListener("touchstart", function (e) {
+  var touch = e.touches[0];
+  var mouseEvent = new MouseEvent("mousedown", {
+    clientX: touch.clientX,
+    clientY: touch.clientY
+  });
+  canvas.dispatchEvent(mouseEvent);
+}, false);
 
+
+uicanv.addEventListener("touchmove", function (e) {
+var touch = e.touches[0];
+var mouseEvent = new MouseEvent("mousemove", {
+  clientX: touch.clientX,
+  clientY: touch.clientY
+});
+canvas.dispatchEvent(mouseEvent);
+}, false);
+
+uicanv.addEventListener("touchend", function (e) {
+  var mouseEvent = new MouseEvent("mouseup", {});
+  uicanv.dispatchEvent(mouseEvent);
+}, false);
+
+
+
+
+
+
+  document.body.addEventListener("touchstart", function (e) {
+    if (e.target == uicanv) {
+      e.preventDefault();
+    }
+  }, false);
+  document.body.addEventListener("touchend", function (e) {
+    if (e.target == uicanv) {
+      e.preventDefault();
+    }
+  }, false);
+  document.body.addEventListener("touchmove", function (e) {
+    if (e.target == uicanv) {
+      e.preventDefault();
+    }
+  }, false);
 
 
   ctx = canv.getContext('2d');
