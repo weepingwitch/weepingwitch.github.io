@@ -87,7 +87,7 @@
   overflow-y:hidden;
 }
 #scrollbarx, #scrollbary{
-  display:block;
+  display:block;touch-action:none;
 }
 }
 
@@ -407,23 +407,26 @@ uicanv.addEventListener("touchend", function (e) {
   uicanv.dispatchEvent(mouseEvent);
 }, false);
 
+scrollbary.addEventListener('touchmove', function(event){
+    //event.preventDefault();
+});
 
 
 
 
 
   document.body.addEventListener("touchstart", function (e) {
-    if (e.target == uicanv) {
+    if (e.target == uicanv ) {
       e.preventDefault();
     }
   }, false);
   document.body.addEventListener("touchend", function (e) {
-    if (e.target == uicanv) {
+    if (e.target == uicanv ) {
       e.preventDefault();
     }
   }, false);
   document.body.addEventListener("touchmove", function (e) {
-    if (e.target == uicanv) {
+    if (e.target == uicanv ) {
       e.preventDefault();
     }
   }, false);
@@ -858,10 +861,11 @@ function updatebottompanel(){
 
     if (dr != null){
       htmlb += "<div class='bcontainer'>DOOR: &nbsp &nbsp";
+      htmlb += "id: " + dr.id + "<BR>";
       htmlb += "<button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete</button><BR>";
       htmlb += "<button type='button' onclick='{flipdoor(" + dr.id + ")}'>flip direction</button><BR>";
 
-      htmlb += "id: " + dr.id + "<BR>";
+
       htmlb += "<div style='display:inline;background-color:" + doorcols[dr.doortype] + ";color:black;'>door type: <select onchange='{map.alldoors[" + dr.id + "].doortype = this.value;updateroomlist();drawmap();}'>";
       for (var r = 0; r < 8; r += 1){
         htmlb += "<option value='"+r+"' ";
