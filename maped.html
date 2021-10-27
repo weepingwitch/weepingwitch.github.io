@@ -253,23 +253,18 @@ const canvasholder = document.getElementById("editorholder");
 const rpanel = document.getElementById("rightpanel");
 const bpanel = document.getElementById("bottompanel");
 canvasholder.style.height = bpanel.getBoundingClientRect().top - document.getElementById("topbar").getBoundingClientRect().bottom;
-var canv;
-var accordion;
-var ctx;
-var grid_unit_width;
-var grid_unit_height;
+var canv,accordion,ctx;
+var grid_unit_width,grid_unit_height;
 
 var roommode = true;
-var curroom;
-var curdoor;
+var curroom, curdoor;
 
 var vw,vh;
-var scrollx = 0;
-var scrolly = 0;
+var scrollx = 0, scrolly = 0;
 
 var bigger = true;
-var dsx,dsy,dex,dey = -1;
-var csx,csy,cex,cey = -1;
+var dsx = -1,dsy = -1,dex = -1,dey = -1;
+var csx = -1,csy = -1,cex = -1,cey = -1;
 
 var doorrects = [];
 
@@ -744,9 +739,7 @@ function updatebottompanel(){
     }
     htmlt += ">"+r+"</option>"
   }
-  htmlt += "</select></div> | ";
-
-  htmlt += "<div style='top:2px;padding:1px;display:inline;background-color:" + doorcols[map.curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{map.curdoortype = this.value;updateroomlist();drawmap();}'>";
+  htmlt += "</select></div> | <div style='top:2px;padding:1px;display:inline;background-color:" + doorcols[map.curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{map.curdoortype = this.value;updateroomlist();drawmap();}'>";
   for (var r = 0; r < 8; r += 1){
     htmlt += "<option value='"+r+"' ";
     if (r == map.curdoortype){
@@ -777,8 +770,7 @@ function updatebottompanel(){
       }
       htmlb += "</select></div>";
 
-      htmlb += "</td>";
-      htmlb += "<td align=right><button type='button' onclick='{removeRoom(" + rm.id + ")}'>delete room</button><BR></td></tr>";
+      htmlb += "</td><td align=right><button type='button' onclick='{removeRoom(" + rm.id + ")}'>delete room</button><BR></td></tr>";
 
       htmlb += "<TR><td><div class='scrolldiv'>";
 
@@ -788,11 +780,9 @@ function updatebottompanel(){
       for (let dd of rm.doors){
         htmlb += "<div class='doorlink' id='" + dd + "'>" + dd + "</div>&nbsp;";
       }
-      htmlb +=  "<BR></div></td><td><div class='scrolldiv'>";
-      htmlb += "<textarea style='width:100%;height:100%;' onchange='{map.allrooms[" + rm.id + "].notes=this.value;updateroomlist();}' >" + rm.notes + "</textarea>";
+      htmlb += "<BR></div></td><td><div class='scrolldiv'><textarea style='width:100%;height:100%;' onchange='{map.allrooms[" + rm.id + "].notes=this.value;updateroomlist();}' >" + rm.notes + "</textarea>";
 
-      htmlb += "</div></td></tr></table>";
-      htmlb += "</div>";
+      htmlb += "</div></td></tr></table></div>";
     }
 
   }
@@ -857,8 +847,7 @@ var htmls = "&nbsp;";
           htmls += " active";
         }
         htmls +="' id='" + rm.id + "'><div class='label' style='background-color:" + regcols[rm.region] + ";'>" + rm.name + " - [" + rm.tlunit + "]</div>";
-        htmls += "<div class='content'>";
-        htmls += "id: " + rm.id + "<BR>";
+        htmls += "<div class='content'>id: " + rm.id + "<BR>";
         htmls +=  "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
         htmls +=  "</div></div><hr>";
       }
@@ -874,11 +863,8 @@ var htmls = "&nbsp;";
         }
         htmls +="' id='" + rm.id + "'><div class='label' style='color:black;background-color:" + doorcols[rm.doortype] + "'>door " + rm.id +"</div>";
         htmls += "<div class='content'>";
-        htmls += "oneway: " + rm.oneway;
-        htmls += "<BR>from: " + rm.rfromid + ", ";
-        htmls += "to: " + rm.rtoid + "<BR>";
-
-        htmls +=  "</div></div><hr>";
+        htmls += "oneway: " + rm.oneway + "<BR>from: " + rm.rfromid + ", ";
+        htmls += "to: " + rm.rtoid + "<BR></div></div><hr>";
       }
 
     }
@@ -931,12 +917,10 @@ function drawmap(){
 
 function drawroom(rm, highlight = false ){
   ctx.beginPath();
-  var rl = rm.tlunit[0] * grid_unit_width;
-  var rt = rm.tlunit[1] * grid_unit_height;
+  var rl = rm.tlunit[0] * grid_unit_width, rt = rm.tlunit[1] * grid_unit_height;
   var rb = rt + (rm.gridheight * grid_unit_height);
   var rr = rl + (rm.gridwidth * grid_unit_width);
-  var cx = rl + ((rr-rl)/2);
-  var cy = rt + ((rb-rt)/2);
+  var cx = rl + ((rr-rl)/2), cy = rt + ((rb-rt)/2);
   ctx.moveTo(rl,rt);
   ctx.lineTo(rr,rt);
   ctx.lineTo(rr,rb);
@@ -974,12 +958,9 @@ function drawdoor(dr, highlight = false){
   var dw = grid_unit_height / 3;
   var dh = dw;
 
-  var dl = cx - dw;
-  var ndr = cx + dw;
-  var dt = cy - dh;
-  var db = cy + dh;
-  var txo=0
-  var tyo = 3;
+  var dl = cx - dw, ndr = cx + dw;
+  var dt = cy - dh, db = cy + dh;
+  var txo=0,tyo = 3;
 
   if (!highlight){
     doorrects.push([dl,dt,ndr,db,dr.id]);
