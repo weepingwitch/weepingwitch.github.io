@@ -1075,8 +1075,7 @@ function makecol(){
           curroom = null;
         }
       }
-      updateroomlist();
-      drawmap();
+      updateroomlist();drawmap();
     })
   }
 
@@ -1086,8 +1085,7 @@ function makecol(){
       roommode = false;
       curdoor = map.alldoors[this.id];
       curroom = null;
-      updateroomlist();
-      drawmap();
+      updateroomlist();drawmap();
     });
   }
 
@@ -1098,8 +1096,7 @@ function makecol(){
       curdoor = null;
       console.log(this.id);
       curroom = map.allrooms[this.id];
-      updateroomlist();
-      drawmap();
+      updateroomlist();drawmap();
     });
   }
 }
