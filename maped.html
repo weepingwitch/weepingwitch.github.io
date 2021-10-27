@@ -349,16 +349,14 @@ canvasholder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + 
     var touch = e.touches[0];
 
     var mouseEvent = new MouseEvent("mousedown", {
-      clientX: touch.clientX,
-      clientY: touch.clientY
+      clientX: touch.clientX,clientY: touch.clientY
     });
     uicanv.dispatchEvent(mouseEvent);
   }, false);
 uicanv.addEventListener("touchmove", function (e) {
     var touch = e.touches[0];
     var mouseEvent = new MouseEvent("mousemove", {
-      clientX: touch.clientX,
-      clientY: touch.clientY
+      clientX: touch.clientX, clientY: touch.clientY
     });
     uicanv.dispatchEvent(mouseEvent);
   }, false);
@@ -366,8 +364,7 @@ uicanv.addEventListener("touchmove", function (e) {
   uicanv.addEventListener("touchend", function (e) {
     var touch = e.changedTouches[0];
     var mouseEvent = new MouseEvent("mouseup", {
-      clientX: touch.clientX,
-      clientY: touch.clientY
+      clientX: touch.clientX,clientY: touch.clientY
     });
     uicanv.dispatchEvent(mouseEvent);
   }, false);
@@ -378,19 +375,19 @@ uicanv.addEventListener("touchmove", function (e) {
 **/
 
 document.body.addEventListener("touchstart", function (e) {
-  if (e.target == uicanv ) {
+  if (e.target == uicanv )
     e.preventDefault();
-  }
+
 }, false);
 document.body.addEventListener("touchend", function (e) {
-  if (e.target == uicanv ) {
+  if (e.target == uicanv )
     e.preventDefault();
-  }
+
 }, false);
 document.body.addEventListener("touchmove", function (e) {
-  if (e.target == uicanv ) {
+  if (e.target == uicanv )
     e.preventDefault();
-  }
+
 }, false);ctx = canv.getContext('2d');
 uictx = uicanv.getContext('2d');
 uictx.clearRect(0,0,uicanv.width,uicanv.height);
@@ -404,12 +401,10 @@ function highlightui(xv,yv)
   var gy = Math.floor(yv / grid_unit_height);
 
   uictx.beginPath();
-  var rl = gx*grid_unit_width;
-  var rt = gy*grid_unit_height;
+  var rl = gx*grid_unit_width, rt = gy*grid_unit_height;
   var rb = rt + (grid_unit_height);
   var rr = rl + (grid_unit_width);
-  var cx = rl + ((rr-rl)/2);
-  var cy = rt + ((rb-rt)/2);
+  var cx = rl + ((rr-rl)/2), cy = rt + ((rb-rt)/2);
   uictx.moveTo(rl,rt);
   uictx.lineTo(rr,rt);
   uictx.lineTo(rr,rb);
@@ -457,13 +452,10 @@ function mup(xv,yv){
     var gy = Math.floor(yv / grid_unit_height);
     dex = gx;
     dey = gy;
-    var nl = Math.min(dsx,dex);
-    var nr = Math.max(dsx,dex);
-    var nt = Math.min(dsy,dey);
-    var nb = Math.max(dsy,dey);
+    var nl = Math.min(dsx,dex), nr = Math.max(dsx,dex);
+    var nt = Math.min(dsy,dey), nb = Math.max(dsy,dey);
 
-    var nw = nr-nl;
-    var nh = nb-nt;
+    var nw = nr-nl, nh = nb-nt;
     var doorselected = false;
 
     for (let dr of doorrects){
@@ -553,10 +545,8 @@ function TryNewRoom(tl,w,h){
 function TryExpand(rm,exto){
   //console.log("trying expand");
   var allowed = true;
-  var nl = Math.min(rm.tlunit[0],exto[0]);
-  var nr = Math.max(rm.tlunit[0]+ rm.gridwidth-1,exto[0]);
-  var nt = Math.min(rm.tlunit[1] ,exto[1]);
-  var nb = Math.max(rm.tlunit[1] + rm.gridheight-1,exto[1]);
+  var nl = Math.min(rm.tlunit[0],exto[0]), nr = Math.max(rm.tlunit[0]+ rm.gridwidth-1,exto[0]);
+  var nt = Math.min(rm.tlunit[1] ,exto[1]), nb = Math.max(rm.tlunit[1] + rm.gridheight-1,exto[1]);
   for (var i = nl; i <= nr;i+=1){
     for (var j = nt; j <= nb;j+=1){
       if (map.roomgrid[j][i] != -1 && !(isArrayInArray(rm.units,[i,j]))){
@@ -602,10 +592,8 @@ function Room(sunit, w=0,h=0){
 
 function DoorDrag(ufrom, uto){
   var dragcels = [ufrom];
-  var dx = uto[0]-ufrom[0];
-  var dy = uto[1]-ufrom[1];
-  var dxs = dx/16;
-  var dys = dy/16;
+  var dx = uto[0]-ufrom[0],dy = uto[1]-ufrom[1];
+  var dxs = dx/16, dys = dy/16;
   for (var i=0;i<16;i+=1){
     var cs = [Math.round(ufrom[0] + (dxs*i)),Math.round(ufrom[1] + (dys*i))];
     if(JSON.stringify(dragcels[dragcels.length-1]) !=JSON.stringify(cs)){
@@ -614,11 +602,9 @@ function DoorDrag(ufrom, uto){
   }
   //console.log(dragcels);
   for (var j=0;j<dragcels.length-1;j+=1){
-    var ca = dragcels[j];
-    var cb = dragcels[j+1];
+    var ca = dragcels[j], cb = dragcels[j+1];
 
-    var rma = GetRoomIDByUnit(ca);
-    var rmb = GetRoomIDByUnit(cb);
+    var rma = GetRoomIDByUnit(ca), rmb = GetRoomIDByUnit(cb);
 
 
     var dist = ((Math.pow((cb[0]-ca[0]),2)) + Math.pow((cb[1]-ca[1]),2));
@@ -772,9 +758,7 @@ function updatebottompanel(){
 
       htmlb += "</td><td align=right><button type='button' onclick='{removeRoom(" + rm.id + ")}'>delete room</button><BR></td></tr>";
 
-      htmlb += "<TR><td><div class='scrolldiv'>";
-
-      htmlb += "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
+      htmlb += "<TR><td><div class='scrolldiv'>size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
       htmlb += "units: " + JSON.stringify(rm.units) + "</div></td><td><div class='scrolldiv'>";
       htmlb += "<BR>doors: ";
       for (let dd of rm.doors){
