@@ -28,12 +28,15 @@
   body{
     padding: 0px;
     margin:0px;
-    background-color: #aaaaaa;
+    background-color: #555555;
     color:black;
-    font-family:monospace;
+
   }
-  button{
-      font-family:monospace;
+  button, input, textarea, select, body{
+      font-family:tahoma;
+  }
+  button, input, textarea, select{
+    background-color:#eeeeee;
   }
   .doorlink, .roomlink{
     border:1px solid blue;
@@ -80,7 +83,8 @@
     top:0px;
     height:4%;
     width:100%;
-    border: 4px solid black;
+    background-color:#444444;
+    color:white;
   }
   #editorholder{
     display:block;
@@ -88,8 +92,8 @@
     padding: 0px;
     margin:0px;
     width:100%;
-    height:69%;
-    border: 4px solid purple;
+    height:20%;
+
     overflow-x:scroll;
     overflow-y:scroll;
     background-color:#888888;
@@ -113,9 +117,6 @@
 
 
 
-
-
-
   canvas{
     position:absolute;
     top:0;
@@ -130,12 +131,13 @@
   }
   #bottompanel{
     display:block;
-    position:relative;
+    position:absolute;
+    bottom:0px;
     height:23%;
     padding-left:0px;
     margin:0px;
-    border:4px solid black;
     width:100%;
+    background-color:#aaaaaa;
 
   }
   #rightpanel{
@@ -147,6 +149,7 @@
     right:0;
     top:0;
     bottom:3;
+    background-color: #777777;
 
 
   }
@@ -179,8 +182,9 @@
   .accordion .content {
     position: relative;
     height:0;
+    display:none;
     text-align: justify;
-    padding:2px;
+    padding:0px;
     overflow: hidden;
     transition: 0.5s;
   }
@@ -194,7 +198,6 @@
   }
   .accordion .acontainer {
     position: relative;
-
     margin: 5px 5px;
     background-color: #888888;
   }
@@ -203,14 +206,14 @@
 
   .accordion .label {
     position: relative;
-    padding: 5px 0;
+    padding: 5px 2px;
     color: white;
     cursor: pointer;
   }
   /* Unhides the content part when active. Sets the height */
 
   .accordion .acontainer.active .content {
-
+    display:block;
     height:2.5em;
     background-color: #cccccc;
 
@@ -275,6 +278,7 @@
 const canvasholder = document.getElementById("editorholder");
 const rpanel = document.getElementById("rightpanel");
 const bpanel = document.getElementById("bottompanel");
+canvasholder.style.height = bpanel.getBoundingClientRect().top - document.getElementById("topbar").getBoundingClientRect().bottom;
 var canv;
 var accordion;
 var ctx;
@@ -372,7 +376,7 @@ function init(){
     mdown(xval,yval);
   }, false);
   uicanv.addEventListener('mouseup', function(event) {
-    console.log(event.clientX,event.clientY);
+    //console.log(event.clientX,event.clientY);
     uictx.clearRect(0,0,uicanv.width,uicanv.height);
     var rect = canv.getBoundingClientRect(), // abs. size of element
     scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
@@ -712,9 +716,9 @@ function TryDoor(ufrom, uto){
   var allowed = true;
   if (map.allrooms[GetRoomIDByUnit(ufrom)] != null){
     for (let od of map.allrooms[GetRoomIDByUnit(ufrom)].doors){
-      if (JSON.stringify(od.unitfrom) == JSON.stringify(uto) || JSON.stringify(od.unitto) == JSON.stringify(uto)){
+      if (JSON.stringify(map.alldoors[od].unitfrom) == JSON.stringify(uto) || JSON.stringify(map.alldoors[od].unitto) == JSON.stringify(uto)){
         allowed = false;
-        console.log("not allowed");
+        //console.log("not allowed");
       }
       else{
         //  console.log(od.unitfrom, od.unitto, uto);
@@ -732,8 +736,8 @@ function TryDoor(ufrom, uto){
 
     var d = new Door(ufrom, uto);
 
-    map.allrooms[d.rfromid].doors.push(d);
-    map.allrooms[d.rtoid].doors.push(d);
+    map.allrooms[d.rfromid].doors.push(d.id);
+    map.allrooms[d.rtoid].doors.push(d.id);
     map.alldoors.push(d);
     roommode = false;
     curdoor = d;
@@ -776,10 +780,12 @@ drawmap();
 }
 
 
-function removeDoor(dindex){
+function removeDoor(dindex, rfrom=null){
   var dr = map.alldoors[dindex];
-  map.allrooms[dr.rtoid].doors.splice(map.allrooms[dr.rtoid].doors.indexOf(dr),1);
-  map.allrooms[dr.rfromid].doors.splice(map.allrooms[dr.rfromid].doors.indexOf(dr),1);
+  if (map.allrooms[dr.rtoid] != rfrom)
+  map.allrooms[dr.rtoid].doors.splice(map.allrooms[dr.rtoid].doors.indexOf(dindex),1);
+  if (map.allrooms[dr.rfromid] != rfrom)
+  map.allrooms[dr.rfromid].doors.splice(map.allrooms[dr.rfromid].doors.indexOf(dindex),1);
   map.alldoors[dindex] = null;
   curdoor = null;
 
@@ -790,8 +796,9 @@ function removeDoor(dindex){
 
 function removeRoom(rindex){
   var rr = map.allrooms[rindex];
-  while (rr.doors.length > 0){
-    removeDoor(rr.doors[0].id);
+
+  for (let dr of JSON.parse(JSON.stringify(rr.doors))){
+    removeDoor(dr,rindex);
   }
   for (let ru of rr.units){
     map.roomgrid[ru[1]][ru[0]] = -1;
@@ -816,7 +823,7 @@ function updatebottompanel(){
 
   var htmlt = "";
 
-  htmlt += "<div style='display:inline;background-color:" + regcols[map.curregion] + ";color:white;'><label for='crt'>current region:</label> <select id='crt' onchange='{map.curregion = this.value;updateroomlist();drawmap();}'>";
+  htmlt += "<div style='top:2px;padding:1px;display:inline;background-color:" + regcols[map.curregion] + ";color:white;'><label for='crt'>current region:</label> <select id='crt' onchange='{map.curregion = this.value;updateroomlist();drawmap();}'>";
   for (var r = 0; r < 8; r += 1){
     htmlt += "<option value='"+r+"' ";
     if (r == map.curregion){
@@ -826,7 +833,7 @@ function updatebottompanel(){
   }
   htmlt += "</select></div> | ";
 
-  htmlt += "<div style='display:inline;background-color:" + doorcols[map.curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{map.curdoortype = this.value;updateroomlist();drawmap();}'>";
+  htmlt += "<div style='top:2px;padding:1px;display:inline;background-color:" + doorcols[map.curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{map.curdoortype = this.value;updateroomlist();drawmap();}'>";
   for (var r = 0; r < 8; r += 1){
     htmlt += "<option value='"+r+"' ";
     if (r == map.curdoortype){
@@ -851,7 +858,7 @@ function updatebottompanel(){
       htmlb += "<div class='bcontainer' style='height:100%'><table class='btable' style='width:100%;height:100%'><tr style='height:3em;'><td>"
       htmlb += "<input type='text' value='" + rm.name + "' onchange='{map.allrooms[" + rm.id + "].name=this.value;updateroomlist();}'>";
       htmlb += "</td><TD>id: " + rm.id + "&nbsp;&nbsp;&nbsp;&nbsp;";
-      htmlb += "<div style='display:inline;background-color:" + regcols[rm.region] + ";color:white;'>region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
+      htmlb += "<div style='padding:3px;display:inline;background-color:" + regcols[rm.region] + ";color:white;'>region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
       for (var r = 0; r < 8; r += 1){
         htmlb += "<option value='"+r+"' ";
         if (r == rm.region){
@@ -870,7 +877,7 @@ function updatebottompanel(){
       htmlb += "units: " + JSON.stringify(rm.units) + "</div></td><td><div class='scrolldiv'>";
       htmlb += "<BR>doors: ";
       for (let dd of rm.doors){
-        htmlb += "<div class='doorlink' id='" + dd.id + "'>" + dd.id + "</div>&nbsp;";
+        htmlb += "<div class='doorlink' id='" + dd + "'>" + dd + "</div>&nbsp;";
       }
       htmlb +=  "<BR></div></td><td><div class='scrolldiv'>";
       htmlb += "<textarea style='width:100%;height:100%;' onchange='{map.allrooms[" + rm.id + "].notes=this.value;updateroomlist();}' >" + rm.notes + "</textarea>";
@@ -891,7 +898,7 @@ function updatebottompanel(){
       htmlb += "<td align=right><button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete door</button><BR></td></tr><td>";
 
 
-      htmlb += "<div style='display:inline;background-color:" + doorcols[dr.doortype] + ";color:black;'>door type: <select onchange='{map.alldoors[" + dr.id + "].doortype = this.value;updateroomlist();drawmap();}'>";
+      htmlb += "<div style='padding:3px;display:inline;background-color:" + doorcols[dr.doortype] + ";color:black;'>door type: <select onchange='{map.alldoors[" + dr.id + "].doortype = this.value;updateroomlist();drawmap();}'>";
       for (var r = 0; r < 8; r += 1){
         htmlb += "<option value='"+r+"' ";
         if (r == dr.doortype){
