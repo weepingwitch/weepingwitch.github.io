@@ -3,7 +3,7 @@
   <title>maped</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-  const maped_version = 0.78;
+  const maped_version = 0.8;
 
   function Map(){
     this.maped_version = maped_version;
@@ -17,6 +17,9 @@
     this.roomgrid = [];
     this.nextroomnum = 0;
     this.nextdoornum = 0;
+    this.startingroom = null;
+    this.curregion = 0;
+    this.curdoortype = 0;
   }
 
   </script>
@@ -25,7 +28,12 @@
   body{
     padding: 0px;
     margin:0px;
-    background-color: #bbbbbb;
+    background-color: #aaaaaa;
+    color:black;
+    font-family:monospace;
+  }
+  button{
+      font-family:monospace;
   }
   .doorlink, .roomlink{
     border:1px solid blue;
@@ -37,6 +45,7 @@
     display:inline-block;
     width:48%;
     text-align: center;
+    color:black;
     background-color: #aaaaaa;
     border:1px solid black;
 
@@ -48,6 +57,16 @@
     cursor:pointer;
   }
 
+  .btable td{
+    border:2px solid #333333;
+    width:30%;
+    overflow:scroll;
+  }
+  .scrolldiv{
+    position:relative;;
+    overflow:scroll;
+    height:80%;
+  }
   #leftcontent{
     position:fixed;
     top:0;
@@ -61,7 +80,7 @@
     top:0px;
     height:4%;
     width:100%;
-    border: 4px solid red;
+    border: 4px solid black;
   }
   #editorholder{
     display:block;
@@ -111,20 +130,20 @@
   }
   #bottompanel{
     display:block;
-    height:20%;
+    position:relative;
+    height:23%;
     padding-left:0px;
     margin:0px;
-    border:4px solid blue;
+    border:4px solid black;
     width:100%;
 
-    overflow:scroll;
   }
   #rightpanel{
     padding:0px;
     margin:0px;
-    border:4px solid green;
+    border:4px solid black;
     position:fixed;
-    width:22%;
+    width:24%;
     right:0;
     top:0;
     bottom:3;
@@ -134,12 +153,12 @@
   #rightcontents{
     position:fixed;
     top:2em;
-    width:22%;
+    width:24%;
     overflow:scroll;
     bottom:0;
   }
   .accordion{
-
+      color:black;
   }
 
   /* Positions the plus sign 5px from the right. Centers it using the transform property. */
@@ -147,6 +166,7 @@
   .accordion .label::before {
     content: '+';
     color: white;
+      -webkit-text-stroke: 1px gray;
     position: absolute;
     top: 50%;
     right: 5px;
@@ -176,7 +196,7 @@
     position: relative;
 
     margin: 5px 5px;
-    background-color: #aaaaaa;
+    background-color: #888888;
   }
 
   /* Positions the labels relative to the .container. Adds padding to the top and bottom and increases font size. Also makes its cursor a pointer */
@@ -192,9 +212,9 @@
   .accordion .acontainer.active .content {
 
     height:2.5em;
-    background-color: #eeeeee;
+    background-color: #cccccc;
 
-    animation: fadeEffect 1s;
+    animation: fadeEffect .5s;
 
   }
 
@@ -224,8 +244,6 @@
 </style>
 </head>
 <body>
-  <div id="scrollbary" style="z-index:20;position:absolute;transform: rotate(90deg);"><input style="width:100%;" type="range" min="0" max="100" value="0" class="slider" id="scrollbaryinput" ></div>
-
 
   <div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map</button></a>
   |
@@ -241,7 +259,6 @@
 </div>
 <div id="editorholder">
 </div>
-<div id="scrollbarx" style="width:100%;"><input style="width:100%;" type="range" min="0" max="100" value="0" class="slider" id="scrollbarxinput" ></div>
 
 <div id="bottompanel">
 </div>
@@ -267,8 +284,7 @@ var grid_unit_height;
 var roommode = true;
 var curroom;
 var curdoor;
-var curregion = 0;
-var curdoortype = 0;
+
 var vw,vh;
 var scrollx = 0;
 var scrolly = 0;
@@ -282,7 +298,7 @@ var doorrects = [];
 var regcols = ["#990000","#994c00","#999900","#009900","#009999","#004c99","#4c0099","#990099"];
 var doorcols =["#ff9999","#ffcc99","#ffff99","#99ff99","#99ffff","#99ccff","#cc99ff","#ff99ff"];
 var map = null;
-
+/**
 var scrollbarx = document.getElementById("scrollbarxinput");
 scrollbarx.oninput = function(){
   scrollx = -this.value;
@@ -293,7 +309,7 @@ scrollbary.oninput = function(){
   scrolly = -this.value;
   drawmap();
 }
-
+**/
 init();
 if (localStorage.getItem("map")!=null){
   map = JSON.parse(localStorage.getItem("map"));
@@ -339,13 +355,14 @@ function init(){
   canvasholder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
   canv = document.getElementById('mcanvas');
   uicanv = document.getElementById('uicanvas');
+  /**
   scrollbarx.max = canv.width - canvasholder.clientWidth;
 
   scrollbary.parentElement.style.width = canvasholder.clientHeight;
     scrollbary.parentElement.style.left = (-(canvasholder.clientHeight/2)) + canvasholder.getBoundingClientRect().right+6;
   scrollbary.parentElement.style.top = (canvasholder.clientHeight/2)  +canv.getBoundingClientRect().top/2
   scrollbary.max = canv.height - canvasholder.clientHeight;
-
+**/
   uicanv.addEventListener('mousedown', function(event) {
     var rect = canv.getBoundingClientRect(), // abs. size of element
     scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
@@ -406,11 +423,11 @@ uicanv.addEventListener("touchend", function (e) {
   });
   uicanv.dispatchEvent(mouseEvent);
 }, false);
-
+/**
 scrollbary.addEventListener('touchmove', function(event){
     //event.preventDefault();
 });
-
+**/
 
 
 
@@ -640,7 +657,7 @@ function TryExpand(rm,exto){
 function Room(sunit, w=0,h=0){
   this.id = map.nextroomnum;
   map.nextroomnum+=1;
-  this.region = curregion;
+  this.region = map.curregion;
   this.name = "room " + this.id;
   this.tlunit = sunit;
   this.units = [];
@@ -653,6 +670,7 @@ function Room(sunit, w=0,h=0){
     }
   }
   this.doors = [];
+  this.notes="room notes";
 }
 
 function DoorDrag(ufrom, uto){
@@ -740,7 +758,7 @@ function Door(ufrom,uto){
   this.unitto = uto;
   this.oneway = false;
   this.doordir = [uto[0]-ufrom[0],uto[1]-ufrom[1]];
-  this.doortype = curdoortype;
+  this.doortype = map.curdoortype;
 
 }
 
@@ -798,20 +816,20 @@ function updatebottompanel(){
 
   var htmlt = "";
 
-  htmlt += "<div style='display:inline;background-color:" + regcols[curregion] + ";color:white;'><label for='crt'>current region:</label> <select id='crt' onchange='{curregion = this.value;updateroomlist();drawmap();}'>";
+  htmlt += "<div style='display:inline;background-color:" + regcols[map.curregion] + ";color:white;'><label for='crt'>current region:</label> <select id='crt' onchange='{map.curregion = this.value;updateroomlist();drawmap();}'>";
   for (var r = 0; r < 8; r += 1){
     htmlt += "<option value='"+r+"' ";
-    if (r == curregion){
+    if (r == map.curregion){
       htmlt += "selected='selected'";
     }
     htmlt += ">"+r+"</option>"
   }
   htmlt += "</select></div> | ";
 
-  htmlt += "<div style='display:inline;background-color:" + doorcols[curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{curdoortype = this.value;updateroomlist();drawmap();}'>";
+  htmlt += "<div style='display:inline;background-color:" + doorcols[map.curdoortype] + ";color:black;'><label for='cdt'>current door type:</label> <select id='cdt' onchange='{map.curdoortype = this.value;updateroomlist();drawmap();}'>";
   for (var r = 0; r < 8; r += 1){
     htmlt += "<option value='"+r+"' ";
-    if (r == curdoortype){
+    if (r == map.curdoortype){
       htmlt += "selected='selected'";
     }
     htmlt += ">"+r+"</option>"
@@ -830,11 +848,9 @@ function updatebottompanel(){
   if (roommode){
     var rm = curroom;
     if (rm != null){
-      htmlb += "<div class='bcontainer'>ROOM:&nbsp &nbsp";
-      htmlb += "<button type='button' onclick='{removeRoom(" + rm.id + ")}'>delete</button><BR>";
-
-      htmlb += "name: <input type='text' value='" + rm.name + "' onchange='{map.allrooms[" + rm.id + "].name=this.value;updateroomlist();}'><BR>";
-      htmlb += "id: " + rm.id + "&nbsp;&nbsp;&nbsp;&nbsp;";
+      htmlb += "<div class='bcontainer' style='height:100%'><table class='btable' style='width:100%;height:100%'><tr style='height:3em;'><td>"
+      htmlb += "<input type='text' value='" + rm.name + "' onchange='{map.allrooms[" + rm.id + "].name=this.value;updateroomlist();}'>";
+      htmlb += "</td><TD>id: " + rm.id + "&nbsp;&nbsp;&nbsp;&nbsp;";
       htmlb += "<div style='display:inline;background-color:" + regcols[rm.region] + ";color:white;'>region: <select onchange='{map.allrooms[" + rm.id + "].region = this.value;updateroomlist();drawmap();}'>";
       for (var r = 0; r < 8; r += 1){
         htmlb += "<option value='"+r+"' ";
@@ -843,15 +859,23 @@ function updatebottompanel(){
         }
         htmlb += ">"+r+"</option>"
       }
-      htmlb += "</select></div><BR>";
+      htmlb += "</select></div>";
+
+      htmlb += "</td>";
+      htmlb += "<td align=right><button type='button' onclick='{removeRoom(" + rm.id + ")}'>delete room</button><BR></td></tr>";
+
+      htmlb += "<TR><td><div class='scrolldiv'>";
 
       htmlb += "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
-      htmlb += "units: " + JSON.stringify(rm.units) + "<BR>";
-      htmlb += "doors: ";
+      htmlb += "units: " + JSON.stringify(rm.units) + "</div></td><td><div class='scrolldiv'>";
+      htmlb += "<BR>doors: ";
       for (let dd of rm.doors){
-        htmlb += "<div class='doorlink' id='" + dd.id + "'>" + dd.id + "</div>";
+        htmlb += "<div class='doorlink' id='" + dd.id + "'>" + dd.id + "</div>&nbsp;";
       }
-      htmlb +=  "<BR>";
+      htmlb +=  "<BR></div></td><td><div class='scrolldiv'>";
+      htmlb += "<textarea style='width:100%;height:100%;' onchange='{map.allrooms[" + rm.id + "].notes=this.value;updateroomlist();}' >" + rm.notes + "</textarea>";
+
+      htmlb += "</div></td></tr></table>";
       htmlb += "</div>";
     }
 
@@ -860,10 +884,11 @@ function updatebottompanel(){
     var dr = curdoor;
 
     if (dr != null){
-      htmlb += "<div class='bcontainer'>DOOR: &nbsp &nbsp";
-      htmlb += "id: " + dr.id + "<BR>";
-      htmlb += "<button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete</button><BR>";
-      htmlb += "<button type='button' onclick='{flipdoor(" + dr.id + ")}'>flip direction</button><BR>";
+      htmlb += "<div class='bcontainer' style='height:100%'><table class='btable' style='width:100%;height:100%'><tr style='height:3em;'><td>"
+        htmlb += "door id: " + dr.id + "</td>";
+        htmlb += "<td><button type='button' onclick='{flipdoor(" + dr.id + ")}'>flip direction</button></td>";
+
+      htmlb += "<td align=right><button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete door</button><BR></td></tr><td>";
 
 
       htmlb += "<div style='display:inline;background-color:" + doorcols[dr.doortype] + ";color:black;'>door type: <select onchange='{map.alldoors[" + dr.id + "].doortype = this.value;updateroomlist();drawmap();}'>";
@@ -874,12 +899,12 @@ function updatebottompanel(){
         }
         htmlb += ">"+r+"</option>"
       }
-      htmlb += "</select></div><BR>";
+      htmlb += "</select></div></td><TD>";
       htmlb += "from: <div class='roomlink' id='" + dr.rfromid + "'>" + map.allrooms[dr.rfromid].name + "</div><BR>";
       htmlb += "to: <div class='roomlink' id='" + dr.rtoid + "'>" + map.allrooms[dr.rtoid].name + "</div><BR>";
-      htmlb += "direction: " + dr.doordir + "<BR>";
+      htmlb += "direction: " + dr.doordir + "</td><td>";
       htmlb += "<label for='onewaycheck'>oneway: </label><input onclick='{map.alldoors[" + dr.id + "].oneway = this.checked;updateroomlist();drawmap();}' type='checkbox' id='onewaycheck' name='onewaycheck' " + (dr.oneway ? "checked" : "") + "/><BR>";
-      htmlb += "</div>";
+      htmlb += "</td></tr></table></div>";
     }
 
 
@@ -944,8 +969,8 @@ function updateroomlist(){
         }
         htmls +="' id='" + rm.id + "'><div class='label' style='color:black;background-color:" + doorcols[rm.doortype] + "'>door " + rm.id +"</div>";
         htmls += "<div class='content'>";
-        htmls += "id: " + rm.id + "<BR>";
-        htmls += "from: " + rm.rfromid + ", ";
+        htmls += "oneway: " + rm.oneway;
+        htmls += "<BR>from: " + rm.rfromid + ", ";
         htmls += "to: " + rm.rtoid + "<BR>";
 
         htmls +=  "</div></div><hr>";
@@ -1254,18 +1279,15 @@ filesInput.addEventListener("change", function (event) {
     var nfile = event.target.result;
 
     map = JSON.parse(nfile);
-    if (map.maped_version <= maped_version){
+    if (map.maped_version >= maped_version){
       curroom = null;
       updateroomlist();
       drawmap();
     }
     else{
-      if (map.maped_version > maped_version){
-        alert("unable to load map json file - map made with newer version of editor");
-      }
-      else{
-        alert("unable to load map json file - missing maped_version");
-      }
+
+        alert("unable to load map json file - missing or incorrect maped_version");
+
       location.reload();
     }
 
