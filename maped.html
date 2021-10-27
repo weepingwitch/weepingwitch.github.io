@@ -21,7 +21,6 @@
     this.curregion = 0;
     this.curdoortype = 0;
   }
-
   </script>
 
   <style type="text/css">
@@ -33,7 +32,7 @@
 
   }
   button, input, textarea, select, body{
-      font-family:tahoma;
+    font-family:tahoma;
   }
   button, input, textarea, select{
     background-color:#eeeeee;
@@ -59,7 +58,6 @@
   .tabbtn{
     cursor:pointer;
   }
-
   .btable td{
     border:2px solid #333333;
     width:30%;
@@ -98,24 +96,19 @@
     overflow-y:scroll;
     background-color:#888888;
   }
-#scrollbarx, #scrollbary{
-  display:none;
-}
-
-
+  #scrollbarx, #scrollbary{
+    display:none;
+  }
 @media screen and (max-width: 780px) {
 
-#editorholder{
-  overflow-x: hidden;
-  overflow-y:hidden;
-}
-#scrollbarx, #scrollbary{
-  display:block;touch-action:none;
-}
-}
-
-
-
+    #editorholder{
+      overflow-x: hidden;
+      overflow-y:hidden;
+    }
+    #scrollbarx, #scrollbary{
+      display:block;touch-action:none;
+    }
+  }
 
   canvas{
     position:absolute;
@@ -125,8 +118,6 @@
     cursor:crosshair;
     border: 1px solid black;
     touch-action:none;
-
-
 
   }
   #bottompanel{
@@ -151,7 +142,6 @@
     bottom:3;
     background-color: #777777;
 
-
   }
   #rightcontents{
     position:fixed;
@@ -161,23 +151,19 @@
     bottom:0;
   }
   .accordion{
-      color:black;
+    color:black;
   }
-
-  /* Positions the plus sign 5px from the right. Centers it using the transform property. */
 
   .accordion .label::before {
     content: '+';
     color: white;
-      -webkit-text-stroke: 1px gray;
+    -webkit-text-stroke: 1px gray;
     position: absolute;
     top: 50%;
     right: 5px;
     font-size: 30px;
     transform: translateY(-50%);
   }
-
-  /* Hides the content (height: 0), decreases font size, justifies text and adds transition */
 
   .accordion .content {
     position: relative;
@@ -188,8 +174,6 @@
     overflow: hidden;
     transition: 0.5s;
   }
-
-  /* Adds a horizontal line between the contents */
 
   .accordion hr {
     width: 98%;
@@ -202,15 +186,12 @@
     background-color: #888888;
   }
 
-  /* Positions the labels relative to the .container. Adds padding to the top and bottom and increases font size. Also makes its cursor a pointer */
-
   .accordion .label {
     position: relative;
     padding: 5px 2px;
     color: white;
     cursor: pointer;
   }
-  /* Unhides the content part when active. Sets the height */
 
   .accordion .acontainer.active .content {
     display:block;
@@ -221,15 +202,11 @@
 
   }
 
-  /* Changes from plus sign to negative sign once active */
-
   .accordion .acontainer.active .label::before {
     content: '-';
     font-size: 30px;
   }
-
-
-  input[type="file"] {
+input[type="file"] {
     display: none;
   }
   .custom-file-upload {
@@ -249,31 +226,28 @@
 <body>
 
   <div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map</button></a>
-  |
-  <label for="ufile" class="custom-file-upload">
-    <button onclick="{document.getElementById('ufile').click();}">upload map</button>
-  </label>
-  <input id="ufile" type="file" accept=".json"/>
-  | <a id="clear" onclick="{localStorage.removeItem('map');location.reload()}" ><button type="button">clear map</button></a>
+    |
+    <label for="ufile" class="custom-file-upload">
+      <button onclick="{document.getElementById('ufile').click();}">upload map</button>
+    </label>
+    <input id="ufile" type="file" accept=".json"/>
+    | <a id="clear" onclick="{localStorage.removeItem('map');location.reload()}" ><button type="button">clear map</button></a>
 
-  <div style='display:inline;float:right' id='ttext'>
+    <div style='display:inline;float:right' id='ttext'>
 
+    </div>
   </div>
-</div>
-<div id="editorholder">
-</div>
+  <div id="editorholder">
+  </div>
 
-<div id="bottompanel">
-</div>
+  <div id="bottompanel">
+  </div>
 </div>
 <div id="rightpanel">
   <div id="righttitle"></div>
   <div id="rightcontents">
   </div>
 </div>
-
-
-
 <script>
 const canvasholder = document.getElementById("editorholder");
 const rpanel = document.getElementById("rightpanel");
@@ -302,18 +276,6 @@ var doorrects = [];
 var regcols = ["#990000","#994c00","#999900","#009900","#009999","#004c99","#4c0099","#990099"];
 var doorcols =["#ff9999","#ffcc99","#ffff99","#99ff99","#99ffff","#99ccff","#cc99ff","#ff99ff"];
 var map = null;
-/**
-var scrollbarx = document.getElementById("scrollbarxinput");
-scrollbarx.oninput = function(){
-  scrollx = -this.value;
-  drawmap();
-}
-var scrollbary = document.getElementById("scrollbaryinput");
-scrollbary.oninput = function(){
-  scrolly = -this.value;
-  drawmap();
-}
-**/
 init();
 if (localStorage.getItem("map")!=null){
   map = JSON.parse(localStorage.getItem("map"));
@@ -338,8 +300,6 @@ function init(){
   }
 
 
-
-
   if (vw>vh){
     console.log("wide");
   }
@@ -354,19 +314,10 @@ function init(){
     grid_unit_width = vw/map.grid_cols;
     //console.log(vw,vh);
   }
-
-
-  canvasholder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
+canvasholder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
   canv = document.getElementById('mcanvas');
   uicanv = document.getElementById('uicanvas');
-  /**
-  scrollbarx.max = canv.width - canvasholder.clientWidth;
 
-  scrollbary.parentElement.style.width = canvasholder.clientHeight;
-    scrollbary.parentElement.style.left = (-(canvasholder.clientHeight/2)) + canvasholder.getBoundingClientRect().right+6;
-  scrollbary.parentElement.style.top = (canvasholder.clientHeight/2)  +canv.getBoundingClientRect().top/2
-  scrollbary.max = canv.height - canvasholder.clientHeight;
-**/
   uicanv.addEventListener('mousedown', function(event) {
     var rect = canv.getBoundingClientRect(), // abs. size of element
     scaleX = canv.width / rect.width,    // relationship bitmap vs. element for X
@@ -400,67 +351,56 @@ function init(){
   }, false);
 
   uicanv.addEventListener("touchstart", function (e) {
-  var touch = e.touches[0];
+    var touch = e.touches[0];
 
-  var mouseEvent = new MouseEvent("mousedown", {
-    clientX: touch.clientX,
-    clientY: touch.clientY
-  });
-  uicanv.dispatchEvent(mouseEvent);
-}, false);
-
-
+    var mouseEvent = new MouseEvent("mousedown", {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    uicanv.dispatchEvent(mouseEvent);
+  }, false);
 uicanv.addEventListener("touchmove", function (e) {
-var touch = e.touches[0];
-var mouseEvent = new MouseEvent("mousemove", {
-  clientX: touch.clientX,
-  clientY: touch.clientY
-});
-uicanv.dispatchEvent(mouseEvent);
-}, false);
+    var touch = e.touches[0];
+    var mouseEvent = new MouseEvent("mousemove", {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    uicanv.dispatchEvent(mouseEvent);
+  }, false);
 
-uicanv.addEventListener("touchend", function (e) {
-  var touch = e.changedTouches[0];
-  var mouseEvent = new MouseEvent("mouseup", {
-    clientX: touch.clientX,
-    clientY: touch.clientY
-  });
-  uicanv.dispatchEvent(mouseEvent);
-}, false);
-/**
-scrollbary.addEventListener('touchmove', function(event){
-    //event.preventDefault();
+  uicanv.addEventListener("touchend", function (e) {
+    var touch = e.changedTouches[0];
+    var mouseEvent = new MouseEvent("mouseup", {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    uicanv.dispatchEvent(mouseEvent);
+  }, false);
+  /**
+  scrollbary.addEventListener('touchmove', function(event){
+  //event.preventDefault();
 });
 **/
 
-
-
-
-  document.body.addEventListener("touchstart", function (e) {
-    if (e.target == uicanv ) {
-      e.preventDefault();
-    }
-  }, false);
-  document.body.addEventListener("touchend", function (e) {
-    if (e.target == uicanv ) {
-      e.preventDefault();
-    }
-  }, false);
-  document.body.addEventListener("touchmove", function (e) {
-    if (e.target == uicanv ) {
-      e.preventDefault();
-    }
-  }, false);
-
-
-  ctx = canv.getContext('2d');
-  uictx = uicanv.getContext('2d');
-  uictx.clearRect(0,0,uicanv.width,uicanv.height);
-  ctx.textAlign="center";
+document.body.addEventListener("touchstart", function (e) {
+  if (e.target == uicanv ) {
+    e.preventDefault();
+  }
+}, false);
+document.body.addEventListener("touchend", function (e) {
+  if (e.target == uicanv ) {
+    e.preventDefault();
+  }
+}, false);
+document.body.addEventListener("touchmove", function (e) {
+  if (e.target == uicanv ) {
+    e.preventDefault();
+  }
+}, false);ctx = canv.getContext('2d');
+uictx = uicanv.getContext('2d');
+uictx.clearRect(0,0,uicanv.width,uicanv.height);
+ctx.textAlign="center";
 }
-
-
-
 function highlightui(xv,yv)
 {
 
@@ -487,9 +427,7 @@ function highlightui(xv,yv)
   uictx.strokeStyle = "gray";
 
   uictx.fill();
-
-
-  if (csx != -1 && csy != -1 ){
+if (csx != -1 && csy != -1 ){
     uictx.setLineDash([3,3]);
     uictx.beginPath();
     uictx.moveTo(csx,csy);
@@ -503,8 +441,6 @@ function highlightui(xv,yv)
     uictx.setLineDash([]);
 
   }
-
-
 
 }
 function mdown(xv,yv){
@@ -586,9 +522,6 @@ function mup(xv,yv){
   }
 
 }
-
-
-
 function TryNewRoom(tl,w,h){
   var allowed = true;
   //console.log("trying");
@@ -633,9 +566,6 @@ function TryExpand(rm,exto){
     for (var j = nt; j <= nb;j+=1){
       if (map.roomgrid[j][i] != -1 && !(isArrayInArray(rm.units,[i,j]))){
         allowed = false;
-
-        //console.log("collided at " + [i,j]);
-
       }
     }
   }
@@ -656,8 +586,6 @@ function TryExpand(rm,exto){
     drawmap();
   }
 }
-
-
 function Room(sunit, w=0,h=0){
   this.id = map.nextroomnum;
   map.nextroomnum+=1;
@@ -704,14 +632,8 @@ function DoorDrag(ufrom, uto){
       TryDoor(ca,cb);
       //break;
     }
-
   }
-
-
 }
-
-
-
 function TryDoor(ufrom, uto){
   var allowed = true;
   if (map.allrooms[GetRoomIDByUnit(ufrom)] != null){
@@ -744,7 +666,6 @@ function TryDoor(ufrom, uto){
     curroom = null;
     updateroomlist();
     drawmap();
-
   }
 
 }
@@ -765,8 +686,6 @@ function Door(ufrom,uto){
   this.doortype = map.curdoortype;
 
 }
-
-
 function flipdoor(dr){
   dr = map.alldoors[dr];
   var tmpfr = dr.unitfrom;
@@ -776,10 +695,8 @@ function flipdoor(dr){
   dr.rtoid = GetRoomIDByUnit(dr.unitto);
   dr.doordir = [dr.unitto[0]-dr.unitfrom[0],dr.unitto[1]-dr.unitfrom[1]];
   updateroomlist();
-drawmap();
+  drawmap();
 }
-
-
 function removeDoor(dindex, rfrom=null){
   var dr = map.alldoors[dindex];
   if (map.allrooms[dr.rtoid] != rfrom)
@@ -792,8 +709,6 @@ function removeDoor(dindex, rfrom=null){
   updateroomlist();
   drawmap();
 }
-
-
 function removeRoom(rindex){
   var rr = map.allrooms[rindex];
 
@@ -809,8 +724,6 @@ function removeRoom(rindex){
   drawmap();
 
 }
-
-
 function GetRoomIDByUnit(unit){
 
   return map.roomgrid[unit[1]][unit[0]];
@@ -843,10 +756,6 @@ function updatebottompanel(){
   }
   htmlt += "</select></div> ";
   document.getElementById('ttext').innerHTML = htmlt;
-
-
-
-
 
 
 
@@ -892,8 +801,8 @@ function updatebottompanel(){
 
     if (dr != null){
       htmlb += "<div class='bcontainer' style='height:100%'><table class='btable' style='width:100%;height:100%'><tr style='height:3em;'><td>"
-        htmlb += "door id: " + dr.id + "</td>";
-        htmlb += "<td><button type='button' onclick='{flipdoor(" + dr.id + ")}'>flip direction</button></td>";
+      htmlb += "door id: " + dr.id + "</td>";
+      htmlb += "<td><button type='button' onclick='{flipdoor(" + dr.id + ")}'>flip direction</button></td>";
 
       htmlb += "<td align=right><button type='button' onclick='{removeDoor(" + dr.id + ")}'>delete door</button><BR></td></tr><td>";
 
@@ -917,20 +826,11 @@ function updatebottompanel(){
 
   }
   bpanel.innerHTML = htmlb;
-
-
-
-
-
 }
 
 function updateroomlist(){
 
-
-
-
-
-  if (roommode && curroom == null){
+if (roommode && curroom == null){
 
     curroom = map.allrooms.filter( v => v !== null ).pop();
   }
@@ -938,9 +838,7 @@ function updateroomlist(){
 
     curdoor = map.alldoors.filter( v => v !== null ).pop();
   }
-
-
-  var htmls = "&nbsp;";
+var htmls = "&nbsp;";
 
   if (roommode){
     htmls += "<div class='tabbtna'><B>rooms</b> </div><div class='tabbtn' onclick='{roommode=false;curroom=null;updateroomlist();drawmap();}'>doors</div>";
@@ -995,11 +893,6 @@ function updateroomlist(){
   updatebottompanel();
   makecol();
 }
-
-
-
-
-
 function drawmap(){
   //ctx.translate(scrollx,scrolly);
   //uictx.translate(scrollx,scrolly);
@@ -1022,8 +915,6 @@ function drawmap(){
     if (dr != null)
     drawdoor(dr);
   }
-
-
 
   //  drawgrid();
   //updateroomlist();
@@ -1104,51 +995,49 @@ function drawdoor(dr, highlight = false){
   else{
     switch(JSON.stringify(dr.doordir)){
       case "[1,0]":
-        ctx.moveTo(dl,dt);
-        ctx.lineTo(dl,db);
-        ctx.lineTo(ndr,cy);
-        ctx.lineTo(dl,dt);
-        ctx.closePath();
-        txo = -3;
-        break;
+      ctx.moveTo(dl,dt);
+      ctx.lineTo(dl,db);
+      ctx.lineTo(ndr,cy);
+      ctx.lineTo(dl,dt);
+      ctx.closePath();
+      txo = -3;
+      break;
       case "[-1,0]":
-        ctx.moveTo(ndr,dt);
-        ctx.lineTo(dl,cy);
-        ctx.lineTo(ndr,db);
-        ctx.lineTo(ndr,dt);
-        ctx.closePath();
-        txo = 3;
-        break;
+      ctx.moveTo(ndr,dt);
+      ctx.lineTo(dl,cy);
+      ctx.lineTo(ndr,db);
+      ctx.lineTo(ndr,dt);
+      ctx.closePath();
+      txo = 3;
+      break;
       case "[0,1]":
-        ctx.moveTo(dl,dt);
-        ctx.lineTo(cx,db);
-        ctx.lineTo(ndr,dt);
-        ctx.lineTo(dl,dt);
-        ctx.closePath();
-        txo = 0;
-        tyo = 0;
-        break;
+      ctx.moveTo(dl,dt);
+      ctx.lineTo(cx,db);
+      ctx.lineTo(ndr,dt);
+      ctx.lineTo(dl,dt);
+      ctx.closePath();
+      txo = 0;
+      tyo = 0;
+      break;
       case "[0,-1]":
-        ctx.moveTo(dl,db);
-        ctx.lineTo(cx,dt);
-        ctx.lineTo(ndr,db);
-        ctx.lineTo(dl,db);
-        ctx.closePath();
-        txo = 0;
-        tyo = 6;
-        break;
+      ctx.moveTo(dl,db);
+      ctx.lineTo(cx,dt);
+      ctx.lineTo(ndr,db);
+      ctx.lineTo(dl,db);
+      ctx.closePath();
+      txo = 0;
+      tyo = 6;
+      break;
 
       default:
-        break;
+      break;
     }
 
 
 
 
   }
-
-
-  ctx.strokeStyle="black";
+ctx.strokeStyle="black";
   ctx.fillStyle = doorcols[dr.doortype];
   if (highlight){
     ctx.fillStyle = "rgba(255,255,255,.9)";
@@ -1163,8 +1052,6 @@ function drawdoor(dr, highlight = false){
     ctx.fillStyle="blue";
   }
   ctx.fillText(dr.id,cx+txo,cy+tyo);
-
-
 
 }
 
@@ -1188,8 +1075,6 @@ function drawgrid(){
   }
   ctx.setLineDash([]);
 }
-
-
 function findClosestUnit(cunits, nunit) {
   return cunits.sort(function (a, b) {
     if ((Math.pow(a[0]-nunit[0],2) + Math.pow(a[1]-nunit[1],2)) < (Math.pow(b[0]-nunit[0],2) + Math.pow(b[1]-nunit[1],2)))
@@ -1199,11 +1084,6 @@ function findClosestUnit(cunits, nunit) {
     return 0;
   });
 }
-
-
-
-
-
 function makecol(){
   accordion = document.getElementsByClassName('acontainer');
 
@@ -1229,7 +1109,6 @@ function makecol(){
           curdoor = map.alldoors[this.id];
           curroom = null;
         }
-
       }
       updateroomlist();
       drawmap();
@@ -1242,10 +1121,8 @@ function makecol(){
       roommode = false;
       curdoor = map.alldoors[this.id];
       curroom = null;
-      //console.log("door clicked");
       updateroomlist();
       drawmap();
-
     });
   }
 
@@ -1256,17 +1133,10 @@ function makecol(){
       curdoor = null;
       console.log(this.id);
       curroom = map.allrooms[this.id];
-
-      //console.log("door clicked");
       updateroomlist();
       drawmap();
-
     });
   }
-
-
-
-
 }
 
 function exportJson(el) {
@@ -1274,10 +1144,7 @@ function exportJson(el) {
   var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(map));
   el.setAttribute("href", "data:"+data);
   el.setAttribute("download", "map.json");
-}
-
-
-var filesInput = document.getElementById("ufile");
+}var filesInput = document.getElementById("ufile");
 filesInput.addEventListener("change", function (event) {
   var files = event.target.files;
   var file = files[0];
@@ -1292,13 +1159,9 @@ filesInput.addEventListener("change", function (event) {
       drawmap();
     }
     else{
-
-        alert("unable to load map json file - missing or incorrect maped_version");
-
+      alert("unable to load map json file - missing or incorrect maped_version");
       location.reload();
     }
-
-
   });
   reader.readAsText(file);
 });
@@ -1311,6 +1174,5 @@ function isArrayInArray(arr, item){
   return contains;
 }
 </script>
-
 </body>
 </html>
