@@ -226,27 +226,21 @@ input[type="file"] {
 <body>
 
   <div id="leftcontent"><div id="topbar">  <a id="exportJSON" onclick="exportJson(this);" ><button type="button">export map</button></a>
-    |
-    <label for="ufile" class="custom-file-upload">
-      <button onclick="{document.getElementById('ufile').click();}">upload map</button>
-    </label>
-    <input id="ufile" type="file" accept=".json"/>
+    |<label for="ufile" class="custom-file-upload"><button onclick="{document.getElementById('ufile').click();}">upload map</button>
+    </label><input id="ufile" type="file" accept=".json"/>
     | <a id="clear" onclick="{localStorage.removeItem('map');location.reload()}" ><button type="button">clear map</button></a>
 
-    <div style='display:inline;float:right' id='ttext'>
+    <div style='display:inline;float:right;' id='ttext'>
 
     </div>
   </div>
-  <div id="editorholder">
-  </div>
+  <div id="editorholder"></div>
 
-  <div id="bottompanel">
-  </div>
+  <div id="bottompanel"></div>
 </div>
 <div id="rightpanel">
   <div id="righttitle"></div>
-  <div id="rightcontents">
-  </div>
+  <div id="rightcontents"></div>
 </div>
 <script>
 const canvasholder = document.getElementById("editorholder");
@@ -715,7 +709,7 @@ function GetRoomIDByUnit(unit){
 
 function updatebottompanel(){
 
-  var htmlt = "";
+  var htmlt = "<input type='text' value='" + map.name + "' onchange='{map.name=this.value;updateroomlist();}' style='width:30%;'> &nbsp; | &nbsp;";
 
   htmlt += "<div style='top:2px;padding:1px;display:inline;background-color:" + regcols[map.curregion] + ";color:white;'><label for='crt'>current region:</label> <select id='crt' onchange='{map.curregion = this.value;updateroomlist();drawmap();}'>";
   for (var r = 0; r < 8; r += 1){
@@ -1105,7 +1099,9 @@ function exportJson(el) {
 
   var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(map));
   el.setAttribute("href", "data:"+data);
-  el.setAttribute("download", "map.json");
+  var filename = map.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  filename = filename + ".json";
+  el.setAttribute("download", filename);
 }var filesInput = document.getElementById("ufile");
 filesInput.addEventListener("change", function (event) {
   var files = event.target.files;
