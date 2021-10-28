@@ -406,7 +406,7 @@ uictx.font = uictx.font.replace(/\d+px/, "16px");
 
   uictx.beginPath();
   var rl = gx*grid_unit_width, rt = gy*grid_unit_height;
-  var rb = rt + (grid_unit_height),rl + (grid_unit_width);
+  var rb = rt + (grid_unit_height), rr=rl + (grid_unit_width);
   var cx = rl + ((rr-rl)/2), cy = rt + ((rb-rt)/2);
   uictx.moveTo(rl,rt);
   uictx.lineTo(rr,rt);uictx.lineTo(rr,rb);
@@ -1006,6 +1006,9 @@ function drawdoor(dr, highlight = false){
       break;
 
     }
+
+
+
 
   }
 ctx.strokeStyle="black";
