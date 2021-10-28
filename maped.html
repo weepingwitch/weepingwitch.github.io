@@ -234,7 +234,7 @@ input[type="file"] {
 
     </div>
   </div>
-  <div id="editorholder"></div>
+  <div id="editorholder" onscroll="  uictx.clearRect(0,0,uicanv.width,uicanv.height);"></div>
 
   <div id="bottompanel"></div>
 </div>
@@ -387,23 +387,30 @@ uictx = uicanv.getContext('2d');
 uictx.clearRect(0,0,uicanv.width,uicanv.height);
 ctx.textAlign="center";
 }
+
+
+
+
 function highlightui(xv,yv)
 {
 
   uictx.clearRect(0,0,uicanv.width,uicanv.height);
-  var gx = Math.floor(xv / grid_unit_width);
-  var gy = Math.floor(yv / grid_unit_height);
+  uictx.fillStyle = "white";
+  uictx.textAlign = "left";
+uictx.font = uictx.font.replace(/\d+px/, "16px");
+
+
+  var gx = Math.floor(xv / grid_unit_width),gy = Math.floor(yv / grid_unit_height);
+  uictx.fillText("" + gx + "," + gy,14 + canvasholder.scrollLeft,20 + canvasholder.scrollTop);
+
 
   uictx.beginPath();
   var rl = gx*grid_unit_width, rt = gy*grid_unit_height;
-  var rb = rt + (grid_unit_height);
-  var rr = rl + (grid_unit_width);
+  var rb = rt + (grid_unit_height),rl + (grid_unit_width);
   var cx = rl + ((rr-rl)/2), cy = rt + ((rb-rt)/2);
   uictx.moveTo(rl,rt);
-  uictx.lineTo(rr,rt);
-  uictx.lineTo(rr,rb);
-  uictx.lineTo(rl,rb);
-  uictx.lineTo(rl,rt);
+  uictx.lineTo(rr,rt);uictx.lineTo(rr,rb);
+  uictx.lineTo(rl,rb);uictx.lineTo(rl,rt);
   uictx.closePath();
 
   uictx.fillStyle = "rgba(255,255,255,.2)";
@@ -440,12 +447,10 @@ function mdown(xv,yv){
 
 function mup(xv,yv){
   if (dsx != -1 && dsy != -1){
-    cex = xv;
-    cey = yv;
+    cex = xv;cey = yv;
     var gx = Math.floor(xv / grid_unit_width);
     var gy = Math.floor(yv / grid_unit_height);
-    dex = gx;
-    dey = gy;
+    dex = gx; dey = gy;
     var nl = Math.min(dsx,dex), nr = Math.max(dsx,dex);
     var nt = Math.min(dsy,dey), nb = Math.max(dsy,dey);
 
@@ -496,7 +501,7 @@ function mup(xv,yv){
 
     csx = -1;
     csy = -1;
-    cex,cey = -1;
+    cex = -1,cey = -1;
 
     dsx = -1;
     dsy = -1;
@@ -825,8 +830,7 @@ var htmls = "&nbsp;";
           htmls += " active";
         }
         htmls +="' id='" + rm.id + "'><div class='label' style='background-color:" + regcols[rm.region] + ";'>" + rm.name + " - [" + rm.tlunit + "]</div>";
-        htmls += "<div class='content'>id: " + rm.id + "<BR>";
-        htmls +=  "size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
+        htmls += "<div class='content'>id: " + rm.id + "<BR>size: " + rm.gridwidth + "," + rm.gridheight+ "<BR>";
         htmls +=  "</div></div><hr>";
       }
 
@@ -840,8 +844,7 @@ var htmls = "&nbsp;";
           htmls += " active";
         }
         htmls +="' id='" + rm.id + "'><div class='label' style='color:black;background-color:" + doorcols[rm.doortype] + "'>door " + rm.id +"</div>";
-        htmls += "<div class='content'>";
-        htmls += "oneway: " + rm.oneway + "<BR>from: " + rm.rfromid + ", ";
+        htmls += "<div class='content'>oneway: " + rm.oneway + "<BR>from: " + rm.rfromid + ", ";
         htmls += "to: " + rm.rtoid + "<BR></div></div><hr>";
       }
 
@@ -873,6 +876,12 @@ function drawmap(){
   }
   if (curroom != null){
     drawroom(curroom,true);
+    var rl = curroom.tlunit[0] * grid_unit_width, rt = curroom.tlunit[1] * grid_unit_height;
+
+    var rb = rt + (curroom.gridheight * grid_unit_height),rr = rl + (curroom.gridwidth * grid_unit_width);
+    var cx = rl + ((rr-rl)/2), cy = rt + ((rb-rt)/2);
+    canvasholder.scrollLeft =cx - canvasholder.clientWidth/2;
+    canvasholder.scrollTop = cy -canvasholder.clientHeight/2;
   }
 
   for (let dr of map.alldoors){
@@ -885,6 +894,14 @@ function drawmap(){
 
   if (curdoor != null){
     drawdoor(curdoor,true);
+    var rfcx = (curdoor.unitfrom[0]*grid_unit_width) + (grid_unit_width/2);
+    var rfcy = (curdoor.unitfrom[1]*grid_unit_height) + (grid_unit_height/2);
+    var rtcx = (curdoor.unitto[0]*grid_unit_width) + (grid_unit_width/2);
+    var rtcy = (curdoor.unitto[1]*grid_unit_height) + (grid_unit_height/2);
+    var cx = rfcx + (.5)*(rtcx-rfcx);
+    var cy = rfcy + (.5)*(rtcy - rfcy);
+    canvasholder.scrollLeft =cx - canvasholder.clientWidth/2;
+    canvasholder.scrollTop = cy -canvasholder.clientHeight/2;
   }
   drawgrid();
 
@@ -988,12 +1005,7 @@ function drawdoor(dr, highlight = false){
       tyo = 6;
       break;
 
-      default:
-      break;
     }
-
-
-
 
   }
 ctx.strokeStyle="black";
@@ -1105,8 +1117,7 @@ function exportJson(el) {
 }var filesInput = document.getElementById("ufile");
 filesInput.addEventListener("change", function (event) {
   var files = event.target.files;
-  var file = files[0];
-  var reader = new FileReader();
+  var file = files[0], reader = new FileReader();
   reader.addEventListener("load", function (event) {
     var nfile = event.target.result;
 
