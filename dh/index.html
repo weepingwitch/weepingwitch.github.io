@@ -119,10 +119,14 @@ makeepisode();
       }
 
       var actors = [];
-      for (var p = 0; p < ((Math.random() * 2)+2); p += 1){
-        actors.push(randfrom(posactors));
-
+      var numact = randintinc(2,4);
+      while (actors.length < numact){
+        var pa = randfrom(posactors);
+        if (!actors.includes(pa)){
+          actors.push(pa);
+        }
       }
+      numact = 0;
       //console.log(actors);
       var highk = 10;
       if (maryalice)
@@ -137,7 +141,9 @@ makeepisode();
       }
 
       else{
-        var act = randfrom(actors);
+        var act = actors[numact];
+        numact+=1;
+        if (numact >= actors.length) {numact =0;if (Math.random() > 0.5)huffle(actors);}
         sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
 
       }
@@ -148,8 +154,10 @@ makeepisode();
           sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
           sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
         }
-        if (Math.random() > 0.5){
-          var act = randfrom(actors);
+        if (Math.random() > 0.4){
+          var act = actors[numact];
+          numact+=1;
+          if (numact >= actors.length) {numact =0;if (Math.random() > 0.5)shuffle(actors);}
           sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
         }
         else{
@@ -384,7 +392,12 @@ makeepisode();
         return Math.floor(Math.random() * (max - min + 1) ) + min;
       }
 
-
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          let j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
 
       function randfrom(arr) {
         return arr[Math.floor(Math.random() * arr.length)]
