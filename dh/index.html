@@ -54,6 +54,7 @@ var singlemode = false;
     //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
     //console.log(bs);
     //document.body.innerHTML += makeSentence();
+    var dht = loadFile("https://weepingwitch.github.io/dh/dh.txt");
 
 
     if (localStorage.getItem("wisteria")!=null){
@@ -62,7 +63,6 @@ var singlemode = false;
 
     }
     else{
-      var dht = loadFile("https://weepingwitch.github.io/dh/dh.txt");
 
       parseText(dht);
       for (var key in wisteria.actors) {
@@ -90,7 +90,7 @@ makeepisode();
 
 
 
-  
+
 
 
     function makeScene(maryalice = false){
@@ -343,14 +343,18 @@ makeepisode();
       }
 
       function loadFile(filePath) {
-        var result = null;
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", filePath, false);
-        xmlhttp.send();
-        if (xmlhttp.status==200) {
-          result = xmlhttp.responseText;
-        }
-        return result;
+        // read text from URL location
+          var request = new XMLHttpRequest();
+          request.open('GET', filePath, true);
+          request.send(null);
+          request.onreadystatechange = function () {
+              if (request.readyState === 4 && request.status === 200) {
+                  var type = request.getResponseHeader('Content-Type');
+                  if (type.indexOf("text") !== 1) {
+                      return request.responseText;
+                  }
+              }
+          }
       }
 
       function randfrom(arr) {
