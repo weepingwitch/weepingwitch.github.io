@@ -1,0 +1,380 @@
+<html>
+<head>
+  <title>desperate housewives generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+  input[type="file"] {
+    display: none;
+  }
+  .custom-file-upload {
+
+    display: inline-block;
+
+    cursor: pointer;
+  }
+  </style>
+</head>
+<body>
+  <a id="clear" onclick="{localStorage.removeItem('wisteria');location.reload()}" ><button type="button">clear model</button></a>
+
+  <label for="ufile" class="custom-file-upload"><button onclick="{document.getElementById('ufile').click();}">upload text</button>
+  </label><input id="ufile" type="file" />
+  <BR><BR><HR>
+
+
+    <script>
+
+
+    function Brain(){
+      this.pairs = {};
+      this.starts = [];
+      this.name = "chatbot";
+      this.d = 2;
+    }
+
+
+    function WisteriaLane(){
+      this.actors = {};
+      this.stagedirect = new Brain();
+      this.maryalice = new Brain();
+      this.sources = [];
+    }
+
+    const seps = /[.!?]/
+
+
+var singlemode = false;
+    var alls = new Brain();
+
+    var wisteria = new WisteriaLane();
+
+
+
+    //parseText(starttext);
+
+    //var bs = JSON.stringify(mybrain);
+    //localStorage.setItem("brain",bs);
+    //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
+    //console.log(bs);
+    //document.body.innerHTML += makeSentence();
+
+
+    if (localStorage.getItem("wisteria")!=null){
+      wisteria = JSON.parse(localStorage.getItem("wisteria"));
+      makeepisode();
+
+    }
+
+
+
+
+
+    var filesInput = document.getElementById("ufile");
+    filesInput.addEventListener("change", function (event) {
+      var files = event.target.files;
+      var file = files[0], reader = new FileReader();
+      reader.addEventListener("load", function (event) {
+        var filetext = event.target.result;
+
+        parseText(filetext);
+        wisteria.sources.push(file.name);
+        //  document.body.innerHTML += makeSentence(wisteria.maryalice);
+        //  document.body.innerHTML += makeSentence(wisteria.stagedirect);
+        //  document.body.innerHTML += makeSentence(wisteria.stagedirect);
+
+        //makeepisode();
+
+        for (var key in wisteria.actors) {
+            // check if the property/key is defined in the object itself, not in parent
+            if (wisteria.actors.hasOwnProperty(key) ) {
+              if( wisteria.actors[key].starts.length > 50){
+                document.body.innerHTML += wisteria.actors[key].name + " - " + wisteria.actors[key].starts.length + "<BR>";
+              }
+              else{
+                delete wisteria.actors[key];
+              }
+
+            }
+        }
+
+        var bs = JSON.stringify(wisteria);
+        document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
+
+        localStorage.setItem("wisteria",bs);
+
+
+
+      });
+      reader.readAsText(file);
+    });
+
+
+
+
+    function makeScene(maryalice = false){
+      var sct = "";
+      var act = "";
+
+      var posactors = [];
+      for (var act in wisteria.actors) {
+        if (wisteria.actors.hasOwnProperty(act)) {
+          posactors.push(act);
+        }
+      }
+
+      var actors = [];
+      for (var p = 0; p < ((Math.random() * 2)+2); p += 1){
+        actors.push(randfrom(posactors));
+
+      }
+      //console.log(actors);
+      var highk = 10;
+      if (maryalice)
+      {
+        highk = 6;
+      }
+
+      else{
+        var act = randfrom(actors);
+        sct += act.toUpperCase() + ': "' + makeSentence(wisteria.actors[act]) + '"<BR><BR>';
+
+      }
+
+      for (var k=0;k<highk;k+=1){
+        if (maryalice){
+
+          sct += "<i>" + makeSentence(wisteria.maryalice) + "</i><BR><BR>";
+          sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
+        }
+        if (Math.random() > 0.5){
+          var act = randfrom(actors);
+          sct += act.toUpperCase() + ': "' + makeSentence(wisteria.actors[act]) + '"<BR><BR>';
+        }
+        else{
+          sct += makeSentence(wisteria.stagedirect) + "<BR><BR>";
+        }
+
+
+      }
+      return sct + "<BR><HR><BR>";
+
+
+
+    }
+
+    function makeepisode(){
+      var bs = JSON.stringify(wisteria);
+      //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
+
+      var ept = "";
+
+
+      for (var k=0;k<10;k+=1){
+        ept += makeScene((k==0 || k==9));
+
+      }
+      ept += ""
+
+      document.body.innerHTML += ept;
+
+
+
+
+
+
+    }
+
+
+
+
+    function parseText(inp){
+
+      var lines = inp.split(/\r?\n/).filter(s => s !== "");
+
+
+      //var sents = String(inp).replace(/\n/g, " ").toLowerCase().split(seps).filter(s => s !== "");
+
+      for (let l of lines) {
+
+
+        if (l.charAt(0) == '"'){
+          //  console.log("mary alice line");
+          //console.log(l);
+          parseSentence(wisteria.maryalice, l);
+        }
+        else{
+
+
+          var lineparts = l.split(":");
+          if (lineparts.length>1){
+
+            //console.log("dialog line");
+            var speaker = lineparts[0];
+
+            speaker = speaker.replace(/ *\([^)]*\) */g, "");
+            if (speaker.split(" ").length <3){
+
+
+                          var dialine = lineparts.slice(1).join(":");
+                          //console.log(speaker);
+
+                          var sbrain;
+                          if (wisteria.actors.hasOwnProperty(speaker)){
+                            sbrain = wisteria.actors[speaker];
+                          }
+                          else{
+                            sbrain = new Brain();
+                            sbrain.name = speaker;
+                            wisteria.actors[speaker] = sbrain;
+
+                          }
+
+                          //console.log(dialine);
+                          parseSentence(sbrain, dialine);
+            }
+            else{
+
+            }
+
+
+
+          }
+          else{
+            //  console.log("stage direction");
+            if (l.split('"').length == 1)
+            parseSentence(wisteria.stagedirect, l);
+          }
+
+
+
+          //  parseSentence(brain, l);
+
+
+
+
+        }
+
+
+      }
+    }
+
+
+
+
+
+      function parseSentence(brain, sent){
+        var words = sent.replace(/"/g, '').split(" ").filter(s => s !== "'").filter(s => s !== " ").filter(s => s !== "");
+        if (words.length <= brain.d) {
+          return;
+        }
+        brain.starts.push(words.slice(0, brain.d));
+
+        var buf = [];
+        for (let word of words) {
+          buf.push(word)
+          if (buf.length === brain.d + 1) {
+
+            var key = `${buf[0]} ${buf[buf.length - 2]}`
+            if (singlemode){
+              key = `${buf[0]}`
+            }
+
+            if (brain.pairs.hasOwnProperty(key)) {
+              brain.pairs[key].push(buf[buf.length - 1])
+            } else {
+              brain.pairs[key] = [buf[buf.length - 1]]
+            }
+            buf.splice(0, 1)
+          }
+        }
+
+      }
+
+
+
+      function nextWord(brain, words){
+
+        var [a, b] = words ;
+        var key ;
+        if (singlemode){
+            key = words
+        }else{
+          [a, b] = words;
+          key = `${a} ${b}`;
+        }
+
+        var pos = [];
+
+
+        if (brain.pairs.hasOwnProperty(key)) {
+          pos = brain.pairs[key];
+        }
+
+
+        if (pos.length>0) {
+          return {
+            word: randfrom(pos),
+            done: false,
+          }
+        } else {
+          return {
+            done: true,
+          }
+        }
+      }
+
+
+      function makeSentence(brain){
+        var sentlength = 2;
+        //console.log(brain.name);
+        var sentence = randfrom(brain.starts).slice();
+        var terminal = randfrom([".", "!", "?"]);
+        var done = false
+
+        while (!done) {
+          // Pick the two most recent words
+          var words = [
+            sentence[sentence.length - 2],
+            sentence[sentence.length - 1],
+          ]
+          if (singlemode){
+            words = sentence[sentence.length - 1];
+          }
+
+          // Grab the next word following the previous two
+          var nw = nextWord(brain, words);
+
+          if (!nw.done) {
+            // If the sentence isn't finished, push the result to the end of the sentence
+            sentence.push(nw.word);
+            sentlength +=1;
+
+          } else {
+            // Otherwise, we're finished!
+            done = true;
+          }
+        }
+        //console.log(sentlength);
+        // Return the completed sentence.
+        return sentence.join(" ");
+
+      }
+
+      function loadFile(filePath) {
+        var result = null;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", filePath, false);
+        xmlhttp.send();
+        if (xmlhttp.status==200) {
+          result = xmlhttp.responseText;
+        }
+        return result;
+      }
+
+      function randfrom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)]
+      }
+
+      </script>
+      </body>
+      </html>
