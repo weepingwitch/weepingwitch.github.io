@@ -16,7 +16,6 @@
 </head>
 <body>
 
-  <BR><BR><HR>
 
 
     <script>
@@ -148,7 +147,7 @@ makeepisode();
       var bs = JSON.stringify(wisteria);
       //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
 
-      var ept = "";
+      var ept = "Desperate Housewives - Season " + randintinc(9,20) + " Episode " + randintinc(1,23);
 
 
       for (var k=0;k<10;k+=1){
@@ -352,6 +351,11 @@ makeepisode();
         }
         return result;
       }
+      function randintinc(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
+      }
+
+
 
       function randfrom(arr) {
         return arr[Math.floor(Math.random() * arr.length)]
