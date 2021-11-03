@@ -70,6 +70,7 @@ var singlemode = false;
 
     if (localStorage.getItem("wisteria")!=null){
       wisteria = JSON.parse(localStorage.getItem("wisteria"));
+
       makeepisode();
 
     }
@@ -80,7 +81,7 @@ var singlemode = false;
       for (var key in wisteria.actors) {
           // check if the property/key is defined in the object itself, not in parent
           if (wisteria.actors.hasOwnProperty(key) ) {
-            if( wisteria.actors[key].starts.length > 50){
+            if( wisteria.actors[key].starts.length > 100){
             //  document.body.innerHTML += wisteria.actors[key].name + " - " + wisteria.actors[key].starts.length + "<BR>";
             }
             else{
