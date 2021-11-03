@@ -68,15 +68,6 @@ var singlemode = false;
     //document.body.innerHTML += makeSentence();
 
 
-    if (localStorage.getItem("wisteria")!=null){
-      wisteria = JSON.parse(localStorage.getItem("wisteria"));
-      
-
-
-      makeepisode();
-
-    }
-    else{
       var dht = loadFile("https://weepingwitch.github.io/dh/dh.txt");
 
       parseText(dht);
@@ -99,7 +90,7 @@ var singlemode = false;
       localStorage.setItem("wisteria",bs);
 
 makeepisode();
-    }
+    
 
 
 
