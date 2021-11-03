@@ -131,7 +131,7 @@ makeepisode();
           sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
 
           sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
-sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
+          sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
 
       }
 
@@ -242,8 +242,16 @@ sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
           }
           else{
             //  console.log("stage direction");
-            if (l.split('"').length == 1)
-            parseSentence(wisteria.stagedirect, l);
+            if (l.split('"').length == 1){
+              if (l.split(" ").length< 8 && (l.includes("house") || l.includes("outside")) ){
+
+              }
+              else{
+                parseSentence(wisteria.stagedirect, l);
+              }
+
+            }
+
           }
 
 
