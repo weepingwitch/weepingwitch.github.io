@@ -15,10 +15,7 @@
   </style>
 </head>
 <body>
-  <a id="clear" onclick="{localStorage.removeItem('wisteria');location.reload()}" ><button type="button">clear model</button></a>
 
-  <label for="ufile" class="custom-file-upload"><button onclick="{document.getElementById('ufile').click();}">upload text</button>
-  </label><input id="ufile" type="file" />
   <BR><BR><HR>
 
 
@@ -64,51 +61,36 @@ var singlemode = false;
       makeepisode();
 
     }
+    else{
+      var dht = loadFile("https://weepingwitch.github.io/dh/dh.txt");
 
-
-
-
-
-    var filesInput = document.getElementById("ufile");
-    filesInput.addEventListener("change", function (event) {
-      var files = event.target.files;
-      var file = files[0], reader = new FileReader();
-      reader.addEventListener("load", function (event) {
-        var filetext = event.target.result;
-
-        parseText(filetext);
-        wisteria.sources.push(file.name);
-        //  document.body.innerHTML += makeSentence(wisteria.maryalice);
-        //  document.body.innerHTML += makeSentence(wisteria.stagedirect);
-        //  document.body.innerHTML += makeSentence(wisteria.stagedirect);
-
-        //makeepisode();
-
-        for (var key in wisteria.actors) {
-            // check if the property/key is defined in the object itself, not in parent
-            if (wisteria.actors.hasOwnProperty(key) ) {
-              if( wisteria.actors[key].starts.length > 50){
-                document.body.innerHTML += wisteria.actors[key].name + " - " + wisteria.actors[key].starts.length + "<BR>";
-              }
-              else{
-                delete wisteria.actors[key];
-              }
-
+      parseText(dht);
+      for (var key in wisteria.actors) {
+          // check if the property/key is defined in the object itself, not in parent
+          if (wisteria.actors.hasOwnProperty(key) ) {
+            if( wisteria.actors[key].starts.length > 50){
+            //  document.body.innerHTML += wisteria.actors[key].name + " - " + wisteria.actors[key].starts.length + "<BR>";
             }
-        }
+            else{
+              delete wisteria.actors[key];
+            }
 
-        var bs = JSON.stringify(wisteria);
-        document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
+          }
+      }
 
-        localStorage.setItem("wisteria",bs);
+      var bs = JSON.stringify(wisteria);
+      //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
+
+      localStorage.setItem("wisteria",bs);
+
+makeepisode();
+    }
 
 
 
-      });
-      reader.readAsText(file);
-    });
 
 
+  
 
 
     function makeScene(maryalice = false){
