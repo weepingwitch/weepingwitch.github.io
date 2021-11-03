@@ -6,7 +6,16 @@
 body{
   margin:6px;
   padding:6px;
-  font-family:serif;
+  font-family:monospace;
+}
+.dia{
+  width:60%;margin:0 auto;
+}
+.script{
+  width:60%;margin:0 auto;
+  padding:25px;
+  border: 1px solid black;
+  font-size:16px;
 }
   </style>
 </head>
@@ -113,19 +122,19 @@ makeepisode();
 
       else{
         var act = randfrom(actors);
-        sct += act.toUpperCase() + ': "' + makeSentence(wisteria.actors[act]) + '"<BR><BR>';
+        sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
 
       }
 
       for (var k=0;k<highk;k+=1){
         if (maryalice){
 
-          sct += "<i>" + makeSentence(wisteria.maryalice) + "</i><BR><BR>";
+          sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
           sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
         }
         if (Math.random() > 0.5){
           var act = randfrom(actors);
-          sct += act.toUpperCase() + ': "' + makeSentence(wisteria.actors[act]) + '"<BR><BR>';
+          sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
         }
         else{
           sct += makeSentence(wisteria.stagedirect) + "<BR><BR>";
@@ -141,15 +150,16 @@ makeepisode();
 
     function makeepisode(){
 
+      var ept = "<div class='script'>"
+      ept += "<center><h1>Desperate Housewives - Season " + randintinc(9,40) + " Episode " + randintinc(1,23) + "</h1></center><BR><HR><BR>";
 
-      var ept = "Desperate Housewives - Season " + randintinc(9,40) + " Episode " + randintinc(1,23) + "<BR><HR><BR>";
 
 
       for (var k=0;k<10;k+=1){
         ept += makeScene((k==0 || k==9));
 
       }
-      ept += ""
+      ept += "</div>"
 
       document.body.innerHTML += ept;
 
