@@ -1,5 +1,6 @@
 <html>
 <head>
+  <script src="desperate.js"></script>
   <title>desperate housewives generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style type="text/css">
@@ -34,60 +35,8 @@ body{
     <script>
 
 
-    function Brain(){
-      this.pairs = {};
-      this.starts = [];
-      this.name = "chatbot";
-      this.d = 2;
-    }
+    wisteria = JSON.parse(loadFile("https://weepingwitch.github.io/dh/wisteria.json"));
 
-
-    function WisteriaLane(){
-      this.actors = {};
-      this.stagedirect = new Brain();
-      this.maryalice = new Brain();
-      this.sources = [];
-    }
-
-    const seps = /[.!?]/
-
-
-var singlemode = false;
-    var alls = new Brain();
-
-    var wisteria = new WisteriaLane();
-
-
-
-    //parseText(starttext);
-
-    //var bs = JSON.stringify(mybrain);
-    //localStorage.setItem("brain",bs);
-    //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
-    //console.log(bs);
-    //document.body.innerHTML += makeSentence();
-
-
-      var dht = loadFile("https://weepingwitch.github.io/dh/dh.txt");
-
-      parseText(dht);
-      for (var key in wisteria.actors) {
-          // check if the property/key is defined in the object itself, not in parent
-          if (wisteria.actors.hasOwnProperty(key) ) {
-            if( wisteria.actors[key].starts.length > 260){
-            //  document.body.innerHTML += wisteria.actors[key].name + " - " + wisteria.actors[key].starts.length + "<BR>";
-            }
-            else{
-              delete wisteria.actors[key];
-            }
-
-          }
-      }
-
-      var bs = JSON.stringify(wisteria);
-      //document.body.innerHTML += (new TextEncoder().encode(bs)).length + "<BR>";
-
-      localStorage.setItem("wisteria",bs);
 
 makeepisode();
 
@@ -189,117 +138,6 @@ makeepisode();
 
 
 
-    function parseText(inp){
-
-      var lines = inp.split(/\r?\n/).filter(s => s !== "");
-
-
-      //var sents = String(inp).replace(/\n/g, " ").toLowerCase().split(seps).filter(s => s !== "");
-
-      for (let l of lines) {
-
-
-        if (l.charAt(0) == '"'){
-          //  console.log("mary alice line");
-          //console.log(l);
-          parseSentence(wisteria.maryalice, l);
-        }
-        else{
-
-
-          var lineparts = l.split(":");
-          if (lineparts.length>1){
-
-            //console.log("dialog line");
-            var speaker = lineparts[0];
-
-            speaker = speaker.replace(/ *\([^)]*\) */g, "");
-            if (speaker.split(" ").length <3){
-
-
-                          var dialine = lineparts.slice(1).join(":");
-                          //console.log(speaker);
-
-                          var sbrain;
-                          if (wisteria.actors.hasOwnProperty(speaker)){
-                            sbrain = wisteria.actors[speaker];
-                          }
-                          else{
-                            sbrain = new Brain();
-                            sbrain.name = speaker;
-                            wisteria.actors[speaker] = sbrain;
-
-                          }
-
-                          //console.log(dialine);
-                          parseSentence(sbrain, dialine);
-            }
-            else{
-
-            }
-
-
-
-          }
-          else{
-            //  console.log("stage direction");
-            if (l.split('"').length == 1){
-              if (l.split(" ").length< 8 && (l.toLowerCase().includes("house") || l.toLowerCase().includes("outside") || l.toLowerCase().includes("nighttime")) ){
-
-              }
-              else{
-                parseSentence(wisteria.stagedirect, l);
-              }
-
-            }
-
-          }
-
-
-
-          //  parseSentence(brain, l);
-
-
-
-
-        }
-
-
-      }
-    }
-
-
-
-
-
-      function parseSentence(brain, sent){
-        var words = sent.replace(/"/g, '').split(" ").filter(s => s !== "'").filter(s => s !== " ").filter(s => s !== "");
-        if (words.length <= brain.d) {
-          return;
-        }
-        brain.starts.push(words.slice(0, brain.d));
-
-        var buf = [];
-        for (let word of words) {
-          buf.push(word)
-          if (buf.length === brain.d + 1) {
-
-            var key = `${buf[0]} ${buf[buf.length - 2]}`
-            if (singlemode){
-              key = `${buf[0]}`
-            }
-
-            if (brain.pairs.hasOwnProperty(key)) {
-              brain.pairs[key].push(buf[buf.length - 1])
-            } else {
-              brain.pairs[key] = [buf[buf.length - 1]]
-            }
-            buf.splice(0, 1)
-          }
-        }
-
-      }
-
 
 
       function nextWord(brain, words){
@@ -370,30 +208,6 @@ makeepisode();
 
       }
 
-      function loadFile(filePath) {
-        var result = null;
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", filePath, false);
-        xmlhttp.send();
-        if (xmlhttp.status==200) {
-          result = xmlhttp.responseText;
-        }
-        return result;
-      }
-      function randintinc(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) ) + min;
-      }
-
-      function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          let j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-      }
-
-      function randfrom(arr) {
-        return arr[Math.floor(Math.random() * arr.length)]
-      }
 
       </script>
       </body>
