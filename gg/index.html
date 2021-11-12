@@ -23,7 +23,7 @@ canvas{
   @media screen and (min-width: 781px) {
   #main{
 
-      width:50%;
+      width:60%;
 
     }
   }
@@ -32,6 +32,7 @@ canvas{
     width:100%;
     height:60%;
     border:2px solid purple;
+    background-color:black;
   }
 
   #log{
@@ -101,8 +102,8 @@ var log = document.getElementById("log");
     var aw = screendiv.clientWidth;
     console.log(aw/vw);
     var sf = aw/vw;
-    var uw = aw / cw;
-    var ah = uw*ch;
+    var uw = Math.floor(aw / cw);
+    var ah = Math.floor(uw*ch);
 screendiv.innerHTML="<canvas style='z-index:1;position:absolute;top:0' id='bgcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
 "<canvas style='z-index:2;position:absolute;top:0' id='mcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
 "<canvas style='z-index:3;position:absolute;top:0;'  id='uicanvas' width='" + aw + "' height='" + ah + "'></canvas>";
@@ -117,6 +118,8 @@ ctx.scale(sf,sf);
 uictx.scale(sf,sf);
 bgctx.scale(sf,sf);
 const facingdirs = [[0,1],[0,-1],[1,0],[-1,0]];
+var bgcols = ["blueviolet","royalblue","slateblue","mediumpurple","darkviolet"];
+var girlx = 3, girly = 3;
 
 clearcanv(ctx);
 
@@ -125,17 +128,41 @@ var projs = [];
 var dps = [];
 var enems = [];
 var dens = [];
-var obs = [];
+var aobs = [];
 var tnum = -1;
 
-
+initroom();
 makebg();
+
+var e = new enem(6,6,[1,0]);
+
+
 nextturn();
 
 
 function clearcanv(cx){
-  cx.clearRect(0,0,cx.canvas.width,cx.canvas.height);
+  cx.clearRect(0,0,vw,vh);
   //cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
+}
+
+function initroom(){
+
+  for (var i=0;i<cw;i+=1){
+    for (var j=0;j<ch;j+=1){
+      if (i==0 || j==0 || i==cw-1 || j == ch-1){
+          var o = new obs(i,j);
+      }
+    }
+  }
+
+  for (var k=0; k < 10; k += 1){
+        var nx = randintinc(1,cw-2);
+        var ny = randintinc(1,ch-2);
+        if (nx != girlx && ny != girly){
+          var o = new obs(nx,ny);
+        }
+
+  }
 }
 
 
@@ -147,7 +174,6 @@ function makebg(){
   bgctx.fillRect(0,0,bgcanv.width,bgcanv.height);
   var res = 16;
   bgctx.globalAlpha = .2;
-  var bgcols = ["blueviolet","royalblue","slateblue","mediumpurple","darkviolet"];
   for (var i=0;i*res<vw+res;i+=1){
     for (var j=0;j*res<vh+res;j+=1){
       var grd = ctx.createRadialGradient(vw/2,vh/2,vh/8,vw/2,vh/2,vh/4);
@@ -165,16 +191,9 @@ function makebg(){
     }
   }
 
-
-for (var i=0;i<cw;i+=1){
-  for (var j=0;j<ch;j+=1){
-    if (i==0 || j==0 || i==cw-1 || j == ch-1){
-      bgctx.globalAlpha = .6;
-      bgctx.fillStyle = randfrom(bgcols);
-       bgctx.fillRect(i*32,j*32,32,32);
-    }
+  for (let o of aobs){
+    o.draw();
   }
-}
 
 
 }
@@ -310,16 +329,16 @@ window.addEventListener('keyup', function (e) {
 
 function moveup(){
 console.log("up");
-me.y -=1;me.facing = [0,-1];nextturn();;
+me.facing = [0,-1];trymove();nextturn();;
 }
 function movedown(){
-me.y+=1;me.facing = [0,1];nextturn();;
+me.facing = [0,1];trymove();nextturn();;
 }
 function moveleft(){
-me.x -=1;me.facing = [-1,0];nextturn();;
+me.facing = [-1,0];trymove();nextturn();;
 }
 function moveright(){
-me.x +=1;me.facing = [1,0];nextturn();
+me.facing = [1,0];trymove();nextturn();
 }
 function mainbutton(){
 var p = new proj(me.x ,me.y,me.facing);
@@ -328,6 +347,26 @@ nextturn();
 function secbutton(){
   //var p = new proj(me.x ,me.y,me.facing, false);
 nextturn();
+}
+
+function trymove(){
+  var nx = me.x + me.facing[0];
+  var ny = me.y + me.facing[1];
+
+  var blocked = false;
+  for (let o of aobs){
+    if (o.x == nx && o.y == ny){
+      blocked = true;
+      console.log("collision");
+    }
+  }
+  if (!blocked){
+    me.x = nx;
+    me.y = ny;
+  }
+
+
+
 }
 
 
@@ -345,14 +384,22 @@ function nextturn(){
   dps = [];
   for (let p of projs){
     p.update();
-
     if (!p.tbd){
         p.draw();
       dps.push(p);
     }
-
   }
   projs = dps;
+  dens = [];
+  for (let p of enems){
+    p.update();
+    p.draw();
+    if (!p.tbd){
+
+      dens.push(p);
+    }
+  }
+  enems = dens;
 
 
   log.innerHTML = me.health + " - " + me.x + "," + me.y;
@@ -365,12 +412,24 @@ function hurtme(amt){
 }
 
 function girl() {
-  this.x = 3;
-  this.y =3;
+  this.x = girlx;
+  this.y = girly;
   this.health = 10;
 this.facing = [1,0];
 }
 
+function obs(x,y)
+{
+  this.x = x;
+  this.y = y;
+  this.type = 0;
+  aobs.push(this);
+  this.draw = function(){
+    bgctx.globalAlpha = .6;
+    bgctx.fillStyle = randfrom(bgcols);
+     bgctx.fillRect(this.x*32,this.y*32,32,32);
+  }
+}
 function proj(x,y,dir, good=true){
   this.good = good;
   this.x = x;
@@ -381,9 +440,12 @@ function proj(x,y,dir, good=true){
   this.update = function(){
     this.x += dir[0];
     this.y += dir[1];
-    if (this.x <= 0 || this.y <= 0 || this.x >= cw-1 || this.y >= ch-1){
-      this.tbd = true;
+    for (let o of aobs){
+      if (this.x == o.x && this.y == o.y){
+        this.tbd = true;
+      }
     }
+
     if (!this.good){
       if (this.x == me.x && this.y == me.y){
         this.tbd = true;
@@ -401,15 +463,45 @@ this.draw = function(){
 function enem(x,y,dir){
   this.x = x;
   this.y = y;
+  this.good = false;
   this.dir = dir;
   this.tbd = false;
-  projs.push(this);
+  enems.push(this);
+  this.step = 0;
+  this.flip = -1;
   this.update = function(){
-    this.x += dir[0];
-    this.y += dir[1];
-    if (this.x < 0 || this.y < 0 || this.x >cw || this.y > ch){
-      this.tbd = true;
+    var ox = this.x;
+    var oy = this.y;
+    var nx = this.x + this.dir[0];
+    var ny = this.y + this.dir[1];
+    var blocked = false;
+    for (let o of aobs){
+      if (o.x == nx && o.y == ny){
+        blocked = true;
+        this.dir = randfrom(facingdirs);
+      }
     }
+    if (!blocked){
+      this.x = nx;
+      this.y = ny;
+    }
+
+    this.step += 1;
+
+    if (this.step > 1){
+      this.step = 0;
+      var n = new proj(this.x,this.y,[this.dir[1]*this.flip,this.dir[0]*this.flip],false)
+      this.flip = -this.flip;
+
+    }
+    for (let o of projs){
+      if ((this.x == o.x || this.ox == o.x) && (this.y == o.y || this.oy == o.y) && o.good){
+        this.tbd = true;
+      }
+    }
+  }
+  this.draw = function(){
+    drawenem(this);
   }
 }
 
