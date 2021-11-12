@@ -23,7 +23,7 @@ canvas{
   @media screen and (min-width: 781px) {
   #main{
 
-      width:60%;
+      width:50%;
 
     }
   }
@@ -158,10 +158,23 @@ function makebg(){
       bgctx.arc(i*res , j*res, res *.6, Math.random() * Math.PI, Math.random()*(2 * Math.PI),Math.random() > 0.5);
       bgctx.fill();
 
-    //  bgctx.fillRect(i*res,j*res,res,res);
+
+
+
+
     }
   }
 
+
+for (var i=0;i<cw;i+=1){
+  for (var j=0;j<ch;j+=1){
+    if (i==0 || j==0 || i==cw-1 || j == ch-1){
+      bgctx.globalAlpha = .6;
+      bgctx.fillStyle = randfrom(bgcols);
+       bgctx.fillRect(i*32,j*32,32,32);
+    }
+  }
+}
 
 
 }
@@ -225,12 +238,7 @@ function drawproj(t){
 
 
 
-  /*
-  ctx.beginPath();
-  ctx.moveTo(t.x*32+16,t.y*32+16);
-  ctx.lineTo(t.x*32+16 + -t.dir[0]*16,t.y*32+16 + -t.dir[1]*16);
-  ctx.stroke();
-  */
+
 }
 
 
@@ -325,7 +333,7 @@ nextturn();
 
 
 function nextturn(){
-var b = new proj(randintinc(0,cw),randintinc(0,ch),randfrom(facingdirs),false);
+//var b = new proj(randintinc(0,cw),randintinc(0,ch),randfrom(facingdirs),false);
 
 
   tnum += 1;
@@ -337,8 +345,9 @@ var b = new proj(randintinc(0,cw),randintinc(0,ch),randfrom(facingdirs),false);
   dps = [];
   for (let p of projs){
     p.update();
-    drawproj(p);
+
     if (!p.tbd){
+        p.draw();
       dps.push(p);
     }
 
@@ -372,7 +381,7 @@ function proj(x,y,dir, good=true){
   this.update = function(){
     this.x += dir[0];
     this.y += dir[1];
-    if (this.x < 0 || this.y < 0 || this.x >= cw || this.y >= ch){
+    if (this.x <= 0 || this.y <= 0 || this.x >= cw-1 || this.y >= ch-1){
       this.tbd = true;
     }
     if (!this.good){
@@ -382,6 +391,9 @@ function proj(x,y,dir, good=true){
       }
     }
   }
+this.draw = function(){
+  drawproj(this);
+}
 }
 
 
