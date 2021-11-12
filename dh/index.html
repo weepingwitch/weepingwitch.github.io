@@ -4,211 +4,311 @@
   <title>desperate housewives generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style type="text/css">
-body{
-  margin:4px;
-  padding:4px;
-  font-family:monospace;
-}
-.dia{
-  width:60%;margin:0 auto;
-}
-.script{
-  width:60%;margin:0 auto;
-  padding:25px;
-  border: 1px solid black;
-  font-size:15px;
-}
-
-@media screen and (max-width: 780px) {
+  body{
+    margin:4px;
+    padding:4px;
+    font-family:monospace;
+  }
+  .dia{
+    width:60%;margin:0 auto;
+  }
   .script{
-    width:90%;
+    width:60%;margin:0 auto;
+    padding:25px;
+    border: 1px solid black;
+    font-size:15px;
+  }
+
+  @media screen and (max-width: 780px) {
+    .script{
+      width:90%;
 
 
-}
-}
+    }
+  }
   </style>
 </head>
 <body>
 
 
 
-    <script>
+  <script>
 
 
-    wisteria = JSON.parse(loadFile("https://weepingwitch.github.io/dh/wisteria.json?"));
+  wisteria = JSON.parse(loadFile("https://weepingwitch.github.io/dh/wisteria.json?"));
 
-
-makeepisode();
-
-
-
-
-
-
+  var stagedirects = {"none":[]};
+  var alldirects = [];
+  var posactors = [];
+  prebakeepisode();
+  makeepisode();
 
 
 
-    function makeScene(maryalice = false){
-      var sct = "";
-      var act = "";
+  function prebakeepisode(){
 
-      var posactors = [];
-      for (var act in wisteria.actors) {
-        if (wisteria.actors.hasOwnProperty(act)) {
-          posactors.push(act);
-        }
+    for (var act in wisteria.actors) {
+      if (wisteria.actors.hasOwnProperty(act)) {
+        posactors.push(act);
+
+        stagedirects[act] = [];
       }
+    }
 
-      var actors = [];
-      var numact = randintinc(2,4);
-      while (actors.length < numact){
-        var pa = randfrom(posactors);
-        if (!actors.includes(pa)){
-          actors.push(pa);
-        }
-      }
-      numact = 0;
-      //console.log(actors);
-      var highk = 10;
-      if (maryalice)
-      {
-        highk = 3;
+    for (var i=0;i<2;i=i+1){
+      makeStageDirect();
 
-          sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
+    }
 
-          sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
-          sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
 
-      }
+  }
 
-      else{
-        var act = actors[numact];
-        numact+=1;
-        if (numact >= actors.length) {numact =0;if (Math.random() > 0.5)huffle(actors);}
-        sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
 
-      }
 
-      for (var k=0;k<highk;k+=1){
-        if (maryalice){
 
-          sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
-          sct += makeSentence(wisteria.stagedirect) + "<BR><Br>";
-        }
-        if (Math.random() > 0.4){
-          var act = actors[numact];
-          numact+=1;
-          if (numact >= actors.length) {numact =0;if (Math.random() > 0.5)shuffle(actors);}
-          sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
+function makeStageDirect(){
+  var newsd = [makeSentence(wisteria.stagedirect),[]];
+  var tagged=false;
+
+  shuffle(posactors);
+
+
+  for (let ac of posactors){
+    //console.log(ac);
+    if (newsd[0].toLowerCase().replace(",","").replace("'s","").split(" ").includes(ac.toLowerCase())){
+      //console.log("success!");
+      if (!tagged){
+
+        if (stagedirects.hasOwnProperty(ac)) {
+          stagedirects[ac].push(newsd[0]);
+
         }
         else{
-          sct += makeSentence(wisteria.stagedirect) + "<BR><BR>";
+          stagedirects[ac] = [newsd[0]];
         }
-
-
       }
-      return sct + "<BR><HR><BR>";
 
+      newsd[1].push(ac);
+      tagged=true;
+
+    }
+    else{
+
+    }
+  }
+
+  if (!tagged){
+    stagedirects["none"].push(newsd[0]);
+  }
+  alldirects.push(newsd)
+  //console.log(newsd);
+  return newsd;
+}
+
+
+
+
+function newsdlineforscene(actors){
+console.log("trying new sdline");
+  var ready = false;
+  while (!ready){
+    var matched = false;
+    var problems = false;
+    var newsdline = "";
+
+      var newsd = makeStageDirect();
+      for (let ra of newsd[1]){
+        if (ra != null){
+          //console.log(ra);
+            if (!actors.includes(ra)){
+              problems = true;
+            }
+            else{
+              matched = true;
+            }
+        }
+      }
+
+      if (!problems && matched){
+        ready = true;
+      }
+      newsdline = newsd[0];
+  }
+
+
+
+  return newsdline;
+}
+
+  function makeScene(maryalice = false){
+    console.log("starting new scene");
+    var sct = "";
+    var act = "";
+
+
+
+
+    var actors = [];
+    var numact = randintinc(2,3);
+    while (actors.length < numact){
+      var pa = randfrom(posactors);
+      if (!actors.includes(pa)){
+        actors.push(pa);
+      }
+    }
+
+
+
+    numact = 0;
+    //console.log(actors);
+    var highk = 10;
+
+    if (maryalice)
+    {
+      highk = 3;
+
+      sct += newsdlineforscene(actors) + "<BR><Br>";
+
+      sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
+      sct += newsdlineforscene(actors) + "<BR><Br>";
+
+    }
+
+    else{
+      var act = actors[numact];
+      numact+=1;
+      if (numact >= actors.length) {numact =0;}
+      sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
+
+    }
+
+    for (var k=0;k<highk;k+=1){
+      if (maryalice){
+
+        sct += "<center>MARY ALICE (voice-over)</center><BR><div class='dia'><i>" + makeSentence(wisteria.maryalice) + "</i></div><BR><BR>";
+        sct += newsdlineforscene(actors) + "<BR><Br>";
+      }
+      if (Math.random() > 0.4){
+        var act = actors[numact];
+        numact+=1;
+        if (numact >= actors.length) {numact =0;}
+        sct +="<center>" + act.toUpperCase() + '</center><BR><div class="dia">' + makeSentence(wisteria.actors[act]) + '</div><BR><BR>';
+      }
+      else{
+        sct += newsdlineforscene(actors) + "<BR><BR>";
+      }
 
 
     }
 
-    function makeepisode(){
-
-      var ept = "<div class='script'>"
-      ept += "<center><h1>Desperate Housewives - Season " + randintinc(9,40) + " Episode " + randintinc(1,23) + "</h1></center><BR><HR><BR>";
+    return sct + "<BR><HR><BR>";
 
 
 
-      for (var k=0;k<10;k+=1){
-        ept += makeScene((k==0 || k==9));
+  }
 
-      }
-      ept += "</div>"
+  function makeepisode(){
+    console.log("starting episode");
 
-      document.body.innerHTML += ept;
-
-
+    var ept = "<div class='script'>"
+    ept += "<center><h1>Desperate Housewives - Season " + randintinc(9,99) + " Episode " + randintinc(1,23) + "</h1></center><BR><HR><BR>";
 
 
 
+    for (var k=0;k<10;k+=1){
+      ept += makeScene((k==0 || k==9));
 
+    }
+    ept += "</div>"
+
+    document.body.innerHTML += ept;
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+  function nextWord(brain, words){
+
+    var [a, b] = words ;
+    var key ;
+    if (singlemode){
+      key = words
+    }else{
+      [a, b] = words;
+      key = `${a} ${b}`;
+    }
+
+    var pos = [];
+
+
+    if (brain.pairs.hasOwnProperty(key)) {
+      pos = brain.pairs[key];
     }
 
 
+    if (pos.length>0) {
+      return {
+        word: randfrom(pos),
+        done: false,
+      }
+    } else {
+      return {
+        done: true,
+      }
+    }
+  }
 
 
+  function makeSentence(brain){
+    var sentlength = 2;
+    //console.log(brain.name);
+    var sentence = randfrom(brain.starts).slice();
+    var terminal = randfrom([".", "!", "?"]);
+    var done = false
 
-
-      function nextWord(brain, words){
-
-        var [a, b] = words ;
-        var key ;
-        if (singlemode){
-            key = words
-        }else{
-          [a, b] = words;
-          key = `${a} ${b}`;
-        }
-
-        var pos = [];
-
-
-        if (brain.pairs.hasOwnProperty(key)) {
-          pos = brain.pairs[key];
-        }
-
-
-        if (pos.length>0) {
-          return {
-            word: randfrom(pos),
-            done: false,
-          }
-        } else {
-          return {
-            done: true,
-          }
-        }
+    while (!done) {
+      // Pick the two most recent words
+      var words = [
+        sentence[sentence.length - 2],
+        sentence[sentence.length - 1],
+      ]
+      if (singlemode){
+        words = sentence[sentence.length - 1];
       }
 
+      // Grab the next word following the previous two
+      var nw = nextWord(brain, words);
 
-      function makeSentence(brain){
-        var sentlength = 2;
-        //console.log(brain.name);
-        var sentence = randfrom(brain.starts).slice();
-        var terminal = randfrom([".", "!", "?"]);
-        var done = false
+      if (!nw.done) {
+        // If the sentence isn't finished, push the result to the end of the sentence
+        sentence.push(nw.word);
+        sentlength +=1;
 
-        while (!done) {
-          // Pick the two most recent words
-          var words = [
-            sentence[sentence.length - 2],
-            sentence[sentence.length - 1],
-          ]
-          if (singlemode){
-            words = sentence[sentence.length - 1];
-          }
-
-          // Grab the next word following the previous two
-          var nw = nextWord(brain, words);
-
-          if (!nw.done) {
-            // If the sentence isn't finished, push the result to the end of the sentence
-            sentence.push(nw.word);
-            sentlength +=1;
-
-          } else {
-            // Otherwise, we're finished!
-            done = true;
-          }
+        if (sentlength > 25 && sentence[sentence.length-1].slice(-1) == '.'){
+          if (Math.random() > 0.4)
+          done = true;
         }
-        //console.log(sentlength);
-        // Return the completed sentence.
-        return sentence.join(" ");
 
+      } else {
+        // Otherwise, we're finished!
+        done = true;
       }
+    }
+    //console.log(sentlength);
+    // Return the completed sentence.
+    return sentence.join(" ");
+
+  }
 
 
-      </script>
-      </body>
-      </html>
+  </script>
+</body>
+</html>
