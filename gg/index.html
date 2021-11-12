@@ -1,0 +1,414 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+<title>gamegirl</title>
+<style type="text/css">
+body{
+  background-color:black;
+}
+canvas{
+  margin: 0 auto;
+}
+
+  #main{
+    width:100%;
+    height:100%;
+    border:2px solid black;
+        position:relative;
+        margin: 0 auto;
+        background-color:purple;
+  }
+
+  @media screen and (min-width: 781px) {
+  #main{
+
+      width:60%;
+
+    }
+  }
+  #screen{
+        position:relative;
+    width:100%;
+    height:60%;
+    border:2px solid purple;
+  }
+
+  #log{
+    position:relative;
+    width:100%;
+    height:8%;
+    border:2px solid blue;
+    background-color:blue;
+  }
+  #controls{
+    display:block;
+    position:relative;
+    width:100%;
+    height:30%;
+    border:2px solid green;
+    background-color:green;
+  }
+  #dpad{
+    position:absolute;
+    text-align:center;
+    width:30%;
+    border: 1px solid black;
+
+  }
+  #buttons{
+    position:absolute;
+    text-align:left;
+    width:30%;
+    border: 1px solid black;
+
+    right:0;
+  }
+</style>
+
+</head>
+<body>
+
+  <div id="main">
+    <div id="screen">
+
+      </div>
+      <div id="log">
+
+        </div>
+        <div id="controls">
+          <div id="dpad">
+          <button onmousedown="moveup()">UP</button><br><br>
+            <button onmousedown="moveleft()">LEFT</button>
+            <button onmousedown="moveright()">RIGHT</button><br><br>
+            <button onmousedown="movedown()">DOWN</button>
+            </div>
+            <div id="buttons">
+              <button onmousedown="mainbutton()">main</button><BR><BR>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button onmousedown="secbutton()">secondary</button>
+              </div>
+          </div>
+
+  </div>
+
+
+  <script>
+var cw = 18; var ch = 12;
+var screendiv = document.getElementById("screen");
+var log = document.getElementById("log");
+    var vw = 32*cw, vh = 32*ch;
+    var aw = screendiv.clientWidth;
+    console.log(aw/vw);
+    var sf = aw/vw;
+    var uw = aw / cw;
+    var ah = uw*ch;
+screendiv.innerHTML="<canvas style='z-index:1;position:absolute;top:0' id='bgcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+"<canvas style='z-index:2;position:absolute;top:0' id='mcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+"<canvas style='z-index:3;position:absolute;top:0;'  id='uicanvas' width='" + aw + "' height='" + ah + "'></canvas>";
+screendiv.style.height = ah;
+var canv = document.getElementById('mcanvas');
+var uicanv = document.getElementById('uicanvas');
+var bgcanv = document.getElementById("bgcanvas");
+var ctx = canv.getContext('2d');
+var uictx = uicanv.getContext('2d');
+var bgctx = bgcanv.getContext('2d');
+ctx.scale(sf,sf);
+uictx.scale(sf,sf);
+bgctx.scale(sf,sf);
+const facingdirs = [[0,1],[0,-1],[1,0],[-1,0]];
+
+clearcanv(ctx);
+
+var me = new girl();
+var projs = [];
+var dps = [];
+var enems = [];
+var dens = [];
+var obs = [];
+var tnum = -1;
+
+
+makebg();
+nextturn();
+
+
+function clearcanv(cx){
+  cx.clearRect(0,0,cx.canvas.width,cx.canvas.height);
+  //cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
+}
+
+
+
+function makebg(){
+  clearcanv(bgctx);
+  bgctx.globalAlpha = 1;
+  bgctx.fillStyle = "black";
+  bgctx.fillRect(0,0,bgcanv.width,bgcanv.height);
+  var res = 16;
+  bgctx.globalAlpha = .2;
+  var bgcols = ["blueviolet","royalblue","slateblue","mediumpurple","darkviolet"];
+  for (var i=0;i*res<vw+res;i+=1){
+    for (var j=0;j*res<vh+res;j+=1){
+      var grd = ctx.createRadialGradient(vw/2,vh/2,vh/8,vw/2,vh/2,vh/4);
+      grd.addColorStop(0,randfrom(bgcols));
+      grd.addColorStop(1,randfrom(bgcols));
+      bgctx.fillStyle = grd;
+      bgctx.beginPath();
+      bgctx.arc(i*res , j*res, res *.6, Math.random() * Math.PI, Math.random()*(2 * Math.PI),Math.random() > 0.5);
+      bgctx.fill();
+
+    //  bgctx.fillRect(i*res,j*res,res,res);
+    }
+  }
+
+
+
+}
+
+
+
+function drawchar(){
+  ctx.fillStyle = "blue";
+  ctx.globalAlpha = 1;
+  ctx.beginPath();
+  ctx.arc(me.x*32 + 16,me.y*32+ 16,10,0,2*Math.PI);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(me.x*32 + 16 + -me.facing[0]*10,me.y*32+ 16 + -me.facing[1]*10,8,0,2*Math.PI);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(me.x*32 + 16 + -me.facing[0]*14+ (-me.facing[1])*10,me.y*32+ 16 + -me.facing[1]*14 + (-me.facing[0])*10,6,0,2*Math.PI);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(me.x*32 + 16+ -me.facing[0]*14 + (me.facing[1])*10,me.y*32+ 16 + -me.facing[1]*14 + (me.facing[0])*10,6,0,2*Math.PI);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(me.x*32 + 16 + me.facing[0]*6,me.y*32+ 16 + me.facing[1]*6,12,0,2*Math.PI);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+}
+
+
+function drawproj(t){
+  var of = [randintinc(-6,6),randintinc(-6,6)];
+  if (t.good){
+    ctx.fillStyle = "cyan";
+  }
+  else {
+    ctx.fillStyle = "red";
+  }
+  ctx.strokeStyle = "white";
+  ctx.globalAlpha = .6;
+  ctx.beginPath();
+  ctx.arc(t.x*32 + 16 + of[0],t.y*32+ 16 + of[1],10,0,2*Math.PI);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(t.x*32 + 16 + of[0] + -t.dir[0]*16 + t.dir[1]*8,t.y*32+ 16 + of[1] + -t.dir[1]*16 + t.dir[0]*8,4,0,2*Math.PI);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(t.x*32 + 16 + of[0] + -t.dir[0]*20 + -t.dir[1]*8,t.y*32+ 16 + of[1] + -t.dir[1]*20 + -t.dir[0]*8,4,0,2*Math.PI);
+  ctx.fill();
+
+
+  ctx.fillStyle = "white";
+  ctx.globalAlpha = .6;
+  ctx.beginPath();
+  ctx.arc(t.x*32 + 13 + of[0],t.y*32+ 13 + of[1],4,0,2*Math.PI);
+  ctx.fill();
+
+
+
+
+  /*
+  ctx.beginPath();
+  ctx.moveTo(t.x*32+16,t.y*32+16);
+  ctx.lineTo(t.x*32+16 + -t.dir[0]*16,t.y*32+16 + -t.dir[1]*16);
+  ctx.stroke();
+  */
+}
+
+
+
+function drawenem(t){
+  ctx.fillStyle = "red";
+  ctx.globalAlpha = .6;
+  ctx.beginPath();
+  ctx.arc(t.x*32 + 16,t.y*32+ 16,10,0,2*Math.PI);
+  ctx.fill();
+
+}
+
+
+function drawmain(){
+  clearcanv(ctx);
+
+
+  //draw char
+  drawchar();
+
+//draw focusspot
+clearcanv(uictx);
+uictx.globalAlpha = .4;
+uictx.fillStyle = "green";
+//uictx.fillRect(me.x*32 + me.facing[0]*32, me.y*32 + me.facing[1]*32, 32, 32);
+uictx.globalAlpha = 1;
+
+
+
+}
+var keyspressed = [];
+window.addEventListener('keydown', function (e) {
+      if (keyspressed.includes(e.keyCode )){
+
+      }
+      else{
+        keyspressed.push(e.keyCode);
+        switch(e.keyCode){
+          case 87:
+            moveup();
+            break;
+          case 83:
+            movedown();
+            break;
+          case 65:
+            moveleft();
+            break;
+          case 68:
+            moveright();
+            break;
+          case 74:
+            mainbutton();
+            break;
+          case 75:
+            secbutton();
+            break;
+          default:
+            break;
+        }
+      }
+      });
+window.addEventListener('keyup', function (e) {
+
+  keyspressed = keyspressed.filter(item => item != e.keyCode);
+
+    });
+
+
+function moveup(){
+console.log("up");
+me.y -=1;me.facing = [0,-1];nextturn();;
+}
+function movedown(){
+me.y+=1;me.facing = [0,1];nextturn();;
+}
+function moveleft(){
+me.x -=1;me.facing = [-1,0];nextturn();;
+}
+function moveright(){
+me.x +=1;me.facing = [1,0];nextturn();
+}
+function mainbutton(){
+var p = new proj(me.x ,me.y,me.facing);
+nextturn();
+}
+function secbutton(){
+  //var p = new proj(me.x ,me.y,me.facing, false);
+nextturn();
+}
+
+
+
+function nextturn(){
+var b = new proj(randintinc(0,cw),randintinc(0,ch),randfrom(facingdirs),false);
+
+
+  tnum += 1;
+  if (tnum > 3){
+    makebg();
+    tnum = 0;
+  }
+  drawmain();
+  dps = [];
+  for (let p of projs){
+    p.update();
+    drawproj(p);
+    if (!p.tbd){
+      dps.push(p);
+    }
+
+  }
+  projs = dps;
+
+
+  log.innerHTML = me.health + " - " + me.x + "," + me.y;
+
+}
+
+
+function hurtme(amt){
+  me.health -= amt;
+}
+
+function girl() {
+  this.x = 3;
+  this.y =3;
+  this.health = 10;
+this.facing = [1,0];
+}
+
+function proj(x,y,dir, good=true){
+  this.good = good;
+  this.x = x;
+  this.y = y;
+  this.dir = dir;
+  this.tbd = false;
+  projs.push(this);
+  this.update = function(){
+    this.x += dir[0];
+    this.y += dir[1];
+    if (this.x < 0 || this.y < 0 || this.x >= cw || this.y >= ch){
+      this.tbd = true;
+    }
+    if (!this.good){
+      if (this.x == me.x && this.y == me.y){
+        this.tbd = true;
+        hurtme(1);
+      }
+    }
+  }
+}
+
+
+
+function enem(x,y,dir){
+  this.x = x;
+  this.y = y;
+  this.dir = dir;
+  this.tbd = false;
+  projs.push(this);
+  this.update = function(){
+    this.x += dir[0];
+    this.y += dir[1];
+    if (this.x < 0 || this.y < 0 || this.x >cw || this.y > ch){
+      this.tbd = true;
+    }
+  }
+}
+
+function randfrom(myarray){
+  return myarray[Math.floor(Math.random() * myarray.length)];
+}
+
+function randintinc(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+    </script>
+</body>
+</html>
