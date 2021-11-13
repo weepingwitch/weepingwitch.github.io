@@ -148,7 +148,7 @@ window.requestAnimationFrame(drawmain);
 function clearcanv(cx){
   //cx.clearRect(0,0,vw,vh);
   cx.globalCompositeOperation = "source-in";
-  cx.fillStyle = 'rgba(150,0,150,0.05)';
+  cx.fillStyle = 'rgba(75,0,150,0.99)';
   cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
   cx.globalCompositeOperation = "source-over";
 }
@@ -517,12 +517,12 @@ function enem(x,y,dir){
 
     if (this.step > 1){
       this.step = 0;
-      var n = new proj(this.x,this.y,[this.dir[1]*this.flip,this.dir[0]*this.flip],false)
+      var n = new proj(ox,oy,[this.dir[1]*this.flip,this.dir[0]*this.flip],false)
       this.flip = -this.flip;
 
     }
     for (let o of projs){
-      if ((this.x == o.x || this.ox == o.x) && (this.y == o.y || this.oy == o.y) && o.good){
+      if ((this.x == o.x || ox == o.x) && (this.y == o.y || oy == o.y) && o.good){
         this.tbd = true;
       }
     }
