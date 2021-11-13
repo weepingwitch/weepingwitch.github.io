@@ -146,11 +146,11 @@ window.requestAnimationFrame(drawmain);
 
 
 function clearcanv(cx){
-  //cx.clearRect(0,0,vw,vh);
-  cx.globalCompositeOperation = "source-in";
-  cx.fillStyle = 'rgba(75,0,150,0.99)';
-  cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
-  cx.globalCompositeOperation = "source-over";
+  cx.clearRect(0,0,vw,vh);
+//  cx.globalCompositeOperation = "source-in";
+//  cx.fillStyle = 'rgba(75,0,150,0.99)';
+//  cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
+//  cx.globalCompositeOperation = "source-over";
 }
 
 function initroom(){
@@ -210,8 +210,8 @@ function makebg(){
 
 function drawchar(){
 
-  me.dx = lerp(me.dx,me.x,.1);
-  me.dy = lerp(me.dy,me.y,.1);
+  me.dx = lerp(me.dx,me.x,.09);
+  me.dy = lerp(me.dy,me.y,.09);
   ctx.fillStyle = "blue";
   ctx.globalAlpha = 1;
   ctx.beginPath();
@@ -274,10 +274,10 @@ function drawproj(t){
 
 
 function drawenem(t){
-  ctx.fillStyle = "red";
+  ctx.fillStyle = "orange";
   ctx.globalAlpha = .6;
   ctx.beginPath();
-  ctx.arc(t.dx*32 + 16,t.dy*32+ 16,10,0,2*Math.PI);
+  ctx.arc(t.dx*32 + 16,t.dy*32+ 16,18,0,2*Math.PI);
   ctx.fill();
 
 }
@@ -369,6 +369,8 @@ nextturn();
 }
 
 function trymove(){
+  me.ox = me.x;
+  me.oy = me.y;
   var nx = me.x + me.facing[0];
   var ny = me.y + me.facing[1];
 
@@ -428,6 +430,7 @@ function nextturn(){
 
 function hurtme(amt){
   me.health -= amt;
+  //alert("ow");
 }
 
 function girl() {
@@ -461,6 +464,8 @@ function proj(x,y,dir, good=true){
   this.tbd = false;
   projs.push(this);
   this.update = function(){
+    this.ox = x;
+    this.oy = y;
     this.x += dir[0];
     this.y += dir[1];
     for (let o of aobs){
@@ -470,15 +475,15 @@ function proj(x,y,dir, good=true){
     }
 
     if (!this.good){
-      if (this.x == me.x && this.y == me.y){
+      if ((this.x == me.x && this.y == me.y)|| (this.x == me.ox && this.y == me.oy && this.ox == me.x && this.oy == me.y)){
         this.tbd = true;
         hurtme(1);
       }
     }
   }
 this.draw = function(){
-  this.dx = lerp(this.dx,this.x,.1);
-  this.dy = lerp(this.dy,this.y,.1);
+  this.dx = lerp(this.dx,this.x,.09);
+  this.dy = lerp(this.dy,this.y,.09);
   drawproj(this);
 }
 }
@@ -497,8 +502,8 @@ function enem(x,y,dir){
   this.step = 0;
   this.flip = -1;
   this.update = function(){
-    var ox = this.x;
-    var oy = this.y;
+    this.ox = this.x;
+    this.oy = this.y;
     var nx = this.x + this.dir[0];
     var ny = this.y + this.dir[1];
     var blocked = false;
@@ -517,19 +522,19 @@ function enem(x,y,dir){
 
     if (this.step > 1){
       this.step = 0;
-      var n = new proj(ox,oy,[this.dir[1]*this.flip,this.dir[0]*this.flip],false)
+      var n = new proj(this.ox,this.oy,[this.dir[1]*this.flip,this.dir[0]*this.flip],false)
       this.flip = -this.flip;
 
     }
     for (let o of projs){
-      if ((this.x == o.x || ox == o.x) && (this.y == o.y || oy == o.y) && o.good){
+      if ((this.x == o.x || (this.ox == o.x && this.x==o.ox)) && (this.y == o.y || (this.oy == o.y && this.y == o.oy)) && o.good){
         this.tbd = true;
       }
     }
   }
   this.draw = function(){
-    this.dx = lerp(this.dx,this.x,.1);
-    this.dy = lerp(this.dy,this.y,.1);
+    this.dx = lerp(this.dx,this.x,.09);
+    this.dy = lerp(this.dy,this.y,.09);
     drawenem(this);
   }
 }
