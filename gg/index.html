@@ -10,7 +10,10 @@ body{
 canvas{
   margin: 0 auto;
 }
-
+button{
+  width:4em;
+  height:4em;
+}
   #main{
     width:100%;
     height:100%;
@@ -79,15 +82,16 @@ canvas{
         </div>
         <div id="controls">
           <div id="dpad">
-          <button onmousedown="moveup()">UP</button><br><br>
-            <button onmousedown="moveleft()">LEFT</button>
-            <button onmousedown="moveright()">RIGHT</button><br><br>
+          <button onmousedown="moveup()">UP</button><br>
+            <button onmousedown="moveleft()">LEFT</button>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onmousedown="moveright()">RIGHT</button><br>
             <button onmousedown="movedown()">DOWN</button>
             </div>
             <div id="buttons">
-              <button onmousedown="mainbutton()">main</button><BR><BR>
+              <button onmousedown="mainbutton()">A</button><BR><BR>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button onmousedown="secbutton()">secondary</button>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+                <button onmousedown="secbutton()">B</button>
               </div>
           </div>
 
@@ -138,11 +142,15 @@ var e = new enem(6,6,[1,0]);
 
 
 nextturn();
+window.requestAnimationFrame(drawmain);
 
 
 function clearcanv(cx){
-  cx.clearRect(0,0,vw,vh);
-  //cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
+  //cx.clearRect(0,0,vw,vh);
+  cx.globalCompositeOperation = "source-in";
+  cx.fillStyle = 'rgba(150,0,150,0.05)';
+  cx.fillRect(0,0,cx.canvas.width,cx.canvas.height);
+  cx.globalCompositeOperation = "source-over";
 }
 
 function initroom(){
@@ -201,24 +209,27 @@ function makebg(){
 
 
 function drawchar(){
+
+  me.dx = lerp(me.dx,me.x,.1);
+  me.dy = lerp(me.dy,me.y,.1);
   ctx.fillStyle = "blue";
   ctx.globalAlpha = 1;
   ctx.beginPath();
-  ctx.arc(me.x*32 + 16,me.y*32+ 16,10,0,2*Math.PI);
+  ctx.arc(me.dx*32 + 16,me.dy*32+ 16,10,0,2*Math.PI);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(me.x*32 + 16 + -me.facing[0]*10,me.y*32+ 16 + -me.facing[1]*10,8,0,2*Math.PI);
+  ctx.arc(me.dx*32 + 16 + -me.facing[0]*10,me.dy*32+ 16 + -me.facing[1]*10,8,0,2*Math.PI);
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(me.x*32 + 16 + -me.facing[0]*14+ (-me.facing[1])*10,me.y*32+ 16 + -me.facing[1]*14 + (-me.facing[0])*10,6,0,2*Math.PI);
+  ctx.arc(me.dx*32 + 16 + -me.facing[0]*14+ (-me.facing[1])*10,me.dy*32+ 16 + -me.facing[1]*14 + (-me.facing[0])*10,6,0,2*Math.PI);
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(me.x*32 + 16+ -me.facing[0]*14 + (me.facing[1])*10,me.y*32+ 16 + -me.facing[1]*14 + (me.facing[0])*10,6,0,2*Math.PI);
+  ctx.arc(me.dx*32 + 16+ -me.facing[0]*14 + (me.facing[1])*10,me.dy*32+ 16 + -me.facing[1]*14 + (me.facing[0])*10,6,0,2*Math.PI);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(me.x*32 + 16 + me.facing[0]*6,me.y*32+ 16 + me.facing[1]*6,12,0,2*Math.PI);
+  ctx.arc(me.dx*32 + 16 + me.facing[0]*6,me.dy*32+ 16 + me.facing[1]*6,12,0,2*Math.PI);
   ctx.fill();
   ctx.globalAlpha = 1;
 
@@ -226,7 +237,7 @@ function drawchar(){
 
 
 function drawproj(t){
-  var of = [randintinc(-6,6),randintinc(-6,6)];
+  var of = [0,0];
   if (t.good){
     ctx.fillStyle = "cyan";
   }
@@ -236,22 +247,22 @@ function drawproj(t){
   ctx.strokeStyle = "white";
   ctx.globalAlpha = .6;
   ctx.beginPath();
-  ctx.arc(t.x*32 + 16 + of[0],t.y*32+ 16 + of[1],10,0,2*Math.PI);
+  ctx.arc(t.dx*32 + 16 + of[0],t.dy*32+ 16 + of[1],10,0,2*Math.PI);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(t.x*32 + 16 + of[0] + -t.dir[0]*16 + t.dir[1]*8,t.y*32+ 16 + of[1] + -t.dir[1]*16 + t.dir[0]*8,4,0,2*Math.PI);
+  ctx.arc(t.dx*32 + 16 + of[0] + -t.dir[0]*16 + t.dir[1]*8,t.dy*32+ 16 + of[1] + -t.dir[1]*16 + t.dir[0]*8,4,0,2*Math.PI);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(t.x*32 + 16 + of[0] + -t.dir[0]*20 + -t.dir[1]*8,t.y*32+ 16 + of[1] + -t.dir[1]*20 + -t.dir[0]*8,4,0,2*Math.PI);
+  ctx.arc(t.dx*32 + 16 + of[0] + -t.dir[0]*20 + -t.dir[1]*8,t.dy*32+ 16 + of[1] + -t.dir[1]*20 + -t.dir[0]*8,4,0,2*Math.PI);
   ctx.fill();
 
 
   ctx.fillStyle = "white";
   ctx.globalAlpha = .6;
   ctx.beginPath();
-  ctx.arc(t.x*32 + 13 + of[0],t.y*32+ 13 + of[1],4,0,2*Math.PI);
+  ctx.arc(t.dx*32 + 13 + of[0],t.dy*32+ 13 + of[1],4,0,2*Math.PI);
   ctx.fill();
 
 
@@ -266,7 +277,7 @@ function drawenem(t){
   ctx.fillStyle = "red";
   ctx.globalAlpha = .6;
   ctx.beginPath();
-  ctx.arc(t.x*32 + 16,t.y*32+ 16,10,0,2*Math.PI);
+  ctx.arc(t.dx*32 + 16,t.dy*32+ 16,10,0,2*Math.PI);
   ctx.fill();
 
 }
@@ -280,13 +291,21 @@ function drawmain(){
   drawchar();
 
 //draw focusspot
-clearcanv(uictx);
-uictx.globalAlpha = .4;
-uictx.fillStyle = "green";
+//clearcanv(uictx);
+//uictx.globalAlpha = .4;
+//uictx.fillStyle = "green";
 //uictx.fillRect(me.x*32 + me.facing[0]*32, me.y*32 + me.facing[1]*32, 32, 32);
-uictx.globalAlpha = 1;
+//uictx.globalAlpha = 1;
+
+for (let p of projs){
+  p.draw();
+}
+for (let p of enems){
+  p.draw();
+}
 
 
+window.requestAnimationFrame(drawmain);
 
 }
 var keyspressed = [];
@@ -380,12 +399,12 @@ function nextturn(){
     makebg();
     tnum = 0;
   }
-  drawmain();
+//  drawmain();
   dps = [];
   for (let p of projs){
     p.update();
     if (!p.tbd){
-        p.draw();
+      //  p.draw();
       dps.push(p);
     }
   }
@@ -393,7 +412,7 @@ function nextturn(){
   dens = [];
   for (let p of enems){
     p.update();
-    p.draw();
+  //  p.draw();
     if (!p.tbd){
 
       dens.push(p);
@@ -414,6 +433,8 @@ function hurtme(amt){
 function girl() {
   this.x = girlx;
   this.y = girly;
+  this.dx = girlx;
+  this.dy = girly;
   this.health = 10;
 this.facing = [1,0];
 }
@@ -434,6 +455,8 @@ function proj(x,y,dir, good=true){
   this.good = good;
   this.x = x;
   this.y = y;
+  this.dx = x;
+  this.dy = y;
   this.dir = dir;
   this.tbd = false;
   projs.push(this);
@@ -454,6 +477,8 @@ function proj(x,y,dir, good=true){
     }
   }
 this.draw = function(){
+  this.dx = lerp(this.dx,this.x,.1);
+  this.dy = lerp(this.dy,this.y,.1);
   drawproj(this);
 }
 }
@@ -463,6 +488,8 @@ this.draw = function(){
 function enem(x,y,dir){
   this.x = x;
   this.y = y;
+  this.dx = x;
+  this.dy = y;
   this.good = false;
   this.dir = dir;
   this.tbd = false;
@@ -501,6 +528,8 @@ function enem(x,y,dir){
     }
   }
   this.draw = function(){
+    this.dx = lerp(this.dx,this.x,.1);
+    this.dy = lerp(this.dy,this.y,.1);
     drawenem(this);
   }
 }
@@ -511,6 +540,10 @@ function randfrom(myarray){
 
 function randintinc(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function lerp(v0, v1, t) {
+    return v0*(1-t)+v1*t;
 }
 
     </script>
