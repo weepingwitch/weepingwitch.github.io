@@ -8,11 +8,14 @@
 
   var running = true;
 
+  var combomax = 50;
+  var datlen = 60;
+
 
 </script>
 
 <head>
-  <title>rg</title>
+  <title>gamegirl</title>
   <style type="text/css">
     body{
       background-color:black;
@@ -32,12 +35,22 @@
       margin: 0 auto;
       background-color:black;
     }
-
+    #controls{
+      display:block;
+      position:relative;
+      width:100%;
+      height:30%;
+      border:2px solid green;
+      background-color:green;
+    }
     @media screen and (min-width: 781px) {
       #main{
 
         width:60%;
 
+      }
+      #controls{
+        display:none;
       }
     }
     #screen{
@@ -55,14 +68,7 @@
       border:2px solid blue;
       background-color:blue;
     }
-    #controls{
-      display:block;
-      position:relative;
-      width:100%;
-      height:30%;
-      border:2px solid green;
-      background-color:green;
-    }
+
     #dpad{
       position:absolute;
       text-align:center;
@@ -112,16 +118,13 @@
   <script>
     //init code
 
-    var cw = 18; var ch = 12;
     var screendiv = document.getElementById("screen");
     var log = document.getElementById("log");
-        var vw = 32*cw, vh = 32*ch;
+
         var aw = screendiv.clientWidth;
-        console.log(aw/vw);
-        var sf = aw/vw;
-        var uw = Math.floor(aw / cw);
-        var ah = Math.floor(uw*ch);
-    var gu = aw  / 120;
+
+        var ah = aw * .8;
+    var gu = aw  / datlen;
     screendiv.innerHTML="<canvas style='z-index:1;position:absolute;top:0' id='bgcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
     "<canvas style='z-index:2;position:absolute;top:0' id='mcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
     "<canvas style='z-index:3;position:absolute;top:0;'  id='uicanvas' width='" + aw + "' height='" + ah + "'></canvas>";
@@ -132,9 +135,7 @@
     var ctx = canv.getContext('2d');
     var uictx = uicanv.getContext('2d');
     var bgctx = bgcanv.getContext('2d');
-    ctx.scale(sf,sf);
-    uictx.scale(sf,sf);
-    bgctx.scale(sf,sf);
+
 
 
     bgctx.fillStyle = "gray";
@@ -153,17 +154,17 @@
     bgctx.stroke();
 
     bgctx.beginPath();
-    bgctx.moveTo(0,ah-10-33);
-    bgctx.lineTo(aw,ah-10-33);
+    bgctx.moveTo(0,ah-10-33*2);
+    bgctx.lineTo(aw,ah-10-33*2);
     bgctx.stroke();
         bgctx.strokeStyle = "gray";
     bgctx.beginPath();
-    bgctx.moveTo(0,ah-10-50);
-    bgctx.lineTo(aw,ah-10-50);
+    bgctx.moveTo(0,ah-10-50*2);
+    bgctx.lineTo(aw,ah-10-50*2);
     bgctx.stroke();
     bgctx.beginPath();
-    bgctx.moveTo(0,ah-10-100);
-    bgctx.lineTo(aw,ah-10-100);
+    bgctx.moveTo(0,ah-10-100*2);
+    bgctx.lineTo(aw,ah-10-100*2);
     bgctx.stroke();
     uictx.strokeStyle = "green";
 
@@ -174,13 +175,16 @@
 
 
     //game loop
-
+    var ct = "press buttons in a steady beat";
+    var combocount = 0;
+    var keycombo = 0;
     let start, previousTimeStamp, dt, telapsed, tdt;
     var lastpress = performance.now();
     var lofs,dofs;
     var curbpm, lastbpm, curdif, lastdif, avgbpm, avgdif;
     var sincelastpress;
-    var datarray = new Array(120); for (let i=0; i<120; ++i) datarray[i] = 0;
+    var datarray = new Array(datlen); for (let i=0; i<datlen; ++i) datarray[i] = 0;
+    var keys = new Array(3); for (let i=0; i<3; ++i) datarray[i] = 0;
     tdt = 0;
 
     function step(timestamp)
@@ -210,16 +214,6 @@
       clearcanv(ctx);
 
       ctx.fillRect((aw/4) + ((sincelastpress/curbpm)*aw)/2,10,32,32);
-
-      //ui graph
-      clearcanv(uictx);
-      uictx.beginPath();
-      uictx.moveTo(0,ah-10);
-      for (let k=0; k<120; ++k){
-        uictx.lineTo(k*gu,ah - datarray[k] - 10);
-
-      }
-      uictx.stroke();
 
 
       previousTimeStamp = timestamp;
@@ -296,12 +290,58 @@
       addtograph(curdif);
       curbpm = ofs;
 
+      //ui graph
+      clearcanv(uictx);
+      uictx.beginPath();
+      uictx.moveTo(0,ah-10);
+      for (let k=0; k<datlen; ++k){
+        uictx.lineTo(k*gu,ah - datarray[k]*2 - 10);
+
+      }
+      uictx.stroke();
+
+
+
+      if (curdif > combomax){
+        combocount = 0;
+        ct = "off beat";
+
+      }
+      else{
+        combocount += 1;
+        if (keys.includes(key)){
+          keycombo = 0;
+          ct = "used stale key - switch it up";
+        }
+        else{
+          keycombo += 1;
+          ct = "combo!";
+        }
+
+      }
+
+            addkey(key);
+
+
+                  uictx.fillStyle = "green";
+                  uictx.font = "30px Arial";
+                  uictx.fillText(ct,50,100);
+                  uictx.fillText(keycombo * combocount,50,150);
+                  uictx.fillStyle = "gray";
+                  uictx.font = "25px Arial";
+                    uictx.fillText("stale keys: ",50,200);
+                    uictx.fillText(keys,75,225);
+
+
+
+
 
       //console.log(curdif + " - " + curbpm);
 
 
       switch(key){
         case "w":
+
         break;
         case "a":
         break;
@@ -333,10 +373,16 @@ datarray.push(ofs);
 datarray.shift();
 }
 
+function addkey(nk){
+
+keys.push(nk);
+keys.shift();
+}
+
 //utility functions
 
 function clearcanv(cx){
-  cx.clearRect(0,0,vw,vh);
+  cx.clearRect(0,0,aw,ah);
 }
 
 function randfrom(myarray){
