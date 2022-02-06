@@ -15,7 +15,7 @@
 </script>
 
 <head>
-  <title>gamegirl r</title>
+  <title>gamegirl</title>
   <style type="text/css">
     body{
       background-color:black;
@@ -24,8 +24,8 @@
       margin: 0 auto;
     }
     button{
-      width:4em;
-      height:4em;
+      width:45%;
+      height:50%;
     }
     #main{
       width:100%;
@@ -67,19 +67,22 @@
       height:8%;
       border:2px solid blue;
       background-color:blue;
+      display: none;
     }
 
     #dpad{
       position:absolute;
       text-align:center;
-
+      width: 50%;
+        height:100%;
       border: 1px solid black;
 
     }
     #buttons{
       position:absolute;
       text-align:center;
-
+      width: 50%;
+      height:100%;
       border: 1px solid black;
 
       right:0;
@@ -99,16 +102,16 @@
     </div>
     <div id="controls">
       <div id="dpad">
-        <button onmousedown="inpkey('w')">W</button><br>
-        <button onmousedown="inpkey('a')">A</button>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button onmousedown="inpkey('d')">D</button><br>
+        <button onmousedown="inpkey('a')">A</button>
+        <button onmousedown="inpkey('w')">W</button>  <BR>
         <button onmousedown="inpkey('s')">S</button>
+        <button onmousedown="inpkey('d')">D</button>
       </div>
       <div id="buttons">
-        <button onmousedown="inpkey('i')">I</button><br>
-        <button onmousedown="inpkey('j')">J</button>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button onmousedown="inpkey('l')">L</button><br>
+        <button onmousedown="inpkey('j')">J</button>
+        <button onmousedown="inpkey('i')">I</button>  <BR>
         <button onmousedown="inpkey('k')">K</button>
+        <button onmousedown="inpkey('l')">L</button>
       </div>
     </div>
 
@@ -175,6 +178,7 @@
 
 
     //game loop
+    var score = 0;
     var ct = "press buttons in a steady beat";
     var combocount = 0;
     var keycombo = 0;
@@ -183,6 +187,8 @@
     var lofs,dofs;
     var curbpm, lastbpm, curdif, lastdif, avgbpm, avgdif;
     var sincelastpress;
+    var lastlet;
+    var varcomb = false;
     var datarray = new Array(datlen); for (let i=0; i<datlen; ++i) datarray[i] = 0;
     var keys = new Array(3); for (let i=0; i<3; ++i) datarray[i] = 0;
     tdt = 0;
@@ -304,39 +310,62 @@
 
       if (curdif > combomax){
         combocount = 0;
+        keycombo = 0;
+          uictx.fillStyle = "gray";
         ct = "off beat";
+        varcomb = false;
 
       }
       else{
+          uictx.fillStyle = "green";
+        ct = "combo!";
         combocount += 1;
-        if (keys.includes(key)){
+        if (key == lastlet){
           keycombo = 0;
-          ct = "used stale key - switch it up";
+            uictx.fillStyle = "gray";
+          ct = "key repeated";
+
+          varcomb = false;
         }
         else{
           keycombo += 1;
-          ct = "combo!";
+          if (keys.includes(key)){
+            varcomb = false;
+          }
+          else{
+            varcomb = true;
+              uictx.fillStyle = "blue";
+            ct = "variety combo!"
+            keycombo +=1;
+          }
+
         }
 
       }
 
             addkey(key);
 
+      score += (keycombo + combocount);
 
-                  uictx.fillStyle = "green";
                   uictx.font = "30px Arial";
                   uictx.fillText(ct,50,100);
-                  uictx.fillText(keycombo * combocount,50,150);
+                  uictx.fillText("+ " + (keycombo + combocount),50,150);
                   uictx.fillStyle = "gray";
                   uictx.font = "25px Arial";
-                    uictx.fillText("stale keys: ",50,200);
-                    uictx.fillText(keys,75,225);
+                    uictx.fillText("stale keys: ",400,100);
+                    uictx.fillText(keys,400,150);
+                  uictx.fillStyle = "purple";
+                  uictx.font = "50px Arial";
+                  uictx.fillText(score, 200,200);
+
 
 
 
 
 
       //console.log(curdif + " - " + curbpm);
+
+      lastlet = key;
 
 
       switch(key){
