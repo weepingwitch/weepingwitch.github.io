@@ -4,15 +4,19 @@
 <script>
   //global vars
 
+
+
   var running = true;
 
   var combomax = 50;
+  var sametempomax = 100;
   var datlen = 60;
+
 
 </script>
 
 <head>
-  <title>gamegirl rg</title>
+  <title>gamegirl</title>
   <style type="text/css">
     body{
       background-color:black;
@@ -117,7 +121,7 @@
 
   <script>
     //init code
-
+    var firstkey = true;
     var screendiv = document.getElementById("screen");
     var log = document.getElementById("log");
 
@@ -138,9 +142,9 @@
 
 
 
-    bgctx.fillStyle = "gray";
-    bgctx.fillRect((aw/4),10,32,32);
     bgctx.fillStyle = "blue";
+    bgctx.fillRect((aw/4),10,32,32);
+
     bgctx.fillRect(3*(aw/4),10,32,32);
 
 
@@ -149,22 +153,35 @@
 
     bgctx.strokeStyle = "white";
     bgctx.beginPath();
-    bgctx.moveTo(0,ah-10);
-    bgctx.lineTo(aw,ah-10);
+    bgctx.moveTo(0,ah/2);
+    bgctx.lineTo(aw,ah/2);
     bgctx.stroke();
-
+bgctx.strokeStyle = "white";
     bgctx.beginPath();
-    bgctx.moveTo(0,ah-10-33*2);
-    bgctx.lineTo(aw,ah-10-33*2);
-    bgctx.stroke();
-        bgctx.strokeStyle = "gray";
-    bgctx.beginPath();
-    bgctx.moveTo(0,ah-10-50*2);
-    bgctx.lineTo(aw,ah-10-50*2);
+    bgctx.moveTo(0,ah/2-33);
+    bgctx.lineTo(aw,ah/2-33);
     bgctx.stroke();
     bgctx.beginPath();
-    bgctx.moveTo(0,ah-10-100*2);
-    bgctx.lineTo(aw,ah-10-100*2);
+    bgctx.moveTo(0,ah/2+33);
+    bgctx.lineTo(aw,ah/2+33);
+    bgctx.stroke();
+        bgctx.strokeStyle = "red";
+    bgctx.beginPath();
+    bgctx.moveTo(0,ah/2-50);
+    bgctx.lineTo(aw,ah/2-50);
+    bgctx.stroke();
+    bgctx.beginPath();
+    bgctx.moveTo(0,ah/2+50);
+    bgctx.lineTo(aw,ah/2+50);
+    bgctx.stroke();
+      bgctx.strokeStyle = "gray";
+    bgctx.beginPath();
+    bgctx.moveTo(0,ah/2-100);
+    bgctx.lineTo(aw,ah/2-100);
+    bgctx.stroke();
+    bgctx.beginPath();
+    bgctx.moveTo(0,ah/2+100);
+    bgctx.lineTo(aw,ah/2+100);
     bgctx.stroke();
     uictx.strokeStyle = "green";
 
@@ -185,6 +202,7 @@
     var curbpm, lastbpm, curdif, lastdif, avgbpm, avgdif;
     var sincelastpress;
     var lastlet;
+    var goright = true;
     var varcomb = false;
     var datarray = new Array(datlen); for (let i=0; i<datlen; ++i) datarray[i] = 0;
     var keys = new Array(3); for (let i=0; i<3; ++i) datarray[i] = 0;
@@ -193,18 +211,9 @@
     function step(timestamp)
     {
 
-      if (start === undefined)
-      {
-        start = timestamp;
-        previousTimeStamp = timestamp;
-      }
-      if (previousTimeStamp !== timestamp)
-      {
-        dt = timestamp-previousTimeStamp;
-        tdt = tdt + dt;
-      }
+
       //console.log("step time " + dt);
-      telapsed = timestamp - start;
+
       sincelastpress = timestamp - lastpress;
 
       //console.log(telapsed + " vs " + tdt);
@@ -214,9 +223,14 @@
 
       //game elements
 
-      clearcanv(ctx);
+        ctx.clearRect(0,0,aw,42);
 
-      ctx.fillRect((aw/4) + ((sincelastpress/curbpm)*aw)/2,10,32,32);
+      var xpos = (aw/4) + ((sincelastpress/curbpm)*aw)/2;
+      if (!goright){
+        xpos = (3*(aw/4)) - ((sincelastpress/curbpm)*aw)/2;
+      }
+
+      ctx.fillRect(xpos,10,32,32);
 
 
       previousTimeStamp = timestamp;
@@ -290,18 +304,28 @@
       lofs = ofs;
 
       curdif = Math.abs(dofs);
-      addtograph(curdif);
+      addtograph(dofs);
       curbpm = ofs;
 
       //ui graph
       clearcanv(uictx);
       uictx.beginPath();
-      uictx.moveTo(0,ah-10);
+      uictx.moveTo(0,ah/2);
       for (let k=0; k<datlen; ++k){
-        uictx.lineTo(k*gu,ah - datarray[k]*2 - 10);
+        uictx.lineTo(k*gu,ah/2 - datarray[k]);
 
       }
       uictx.stroke();
+
+
+
+      if (curdif > sametempomax){
+        goright = true;
+        score = 0;
+      }
+      else{
+        goright = !goright;
+      }
 
       if (curdif > combomax){
         combocount = 0;
@@ -342,16 +366,23 @@
 
       score += (keycombo + combocount);
 
-                  uictx.font = "30px Arial";
-                  uictx.fillText(ct,50,100);
-                  uictx.fillText("+ " + (keycombo + combocount),50,150);
-                  uictx.fillStyle = "gray";
-                  uictx.font = "25px Arial";
-                    uictx.fillText("stale keys: ",350,100);
-                    uictx.fillText(keys,350,150);
-                  uictx.fillStyle = "purple";
-                  uictx.font = "50px Arial";
-                  uictx.fillText(score, 200,200);
+if (!firstkey){
+  uictx.font = "30px Arial";
+  uictx.fillText(ct,50,100);
+  uictx.fillText("+ " + (keycombo + combocount),50,150);
+  uictx.fillStyle = "gray";
+  uictx.font = "25px Arial";
+    uictx.fillText("stale keys: ",400,100);
+    uictx.fillText(keys,400,150);
+  uictx.fillStyle = "purple";
+  uictx.font = "50px Arial";
+  uictx.fillText(score, 200,200);
+}
+
+if (firstkey){
+  firstkey = false;
+
+}
 
 
 
