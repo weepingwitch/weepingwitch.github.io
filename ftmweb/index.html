@@ -1,0 +1,123 @@
+<html>
+<head>
+  <title>feed the monster</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    const vw = 360;
+    const vh = 600;
+  </script>
+
+  <style type="text/css">
+  body{
+    padding: 0px;
+    margin:0px;
+    background-color: #555555;
+    color:black;
+
+  }
+
+  canvas{
+    position:absolute;
+    top:0;
+    padding: 0px;
+    margin:0px;
+    cursor:crosshair;
+    border: 1px solid black;
+    touch-action:none;
+
+  }
+</style>
+</head>
+<body>
+<div id="gameHolder"></div>
+
+ <script>
+   //build canvases
+  const gHolder = document.getElementById("gameHolder");
+  gHolder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
+  canv = document.getElementById('mcanvas');
+  uicanv = document.getElementById('uicanvas');
+  uctx = uicanv.getContext('2d');
+  //attach mouse handlers
+  uicanv.addEventListener('mousedown', function(event) {
+    mdown(scaleInput(event.clientX,event.clientY));
+  }, false);
+  uicanv.addEventListener('mouseup', function(event) {
+      mup(scaleInput(event.clientX,event.clientY));
+  }, false);
+  uicanv.addEventListener('mousemove', function(event){
+    mmove(scaleInput(event.clientX,event.clientY));
+}, false);
+//treat touches as clicks
+uicanv.addEventListener("touchstart", function (e) {
+  var touch = e.touches[0];
+  var mouseEvent = new MouseEvent("mousedown", {
+    clientX: touch.clientX,clientY: touch.clientY
+  });
+  uicanv.dispatchEvent(mouseEvent);
+}, false);
+uicanv.addEventListener("touchmove", function (e) {
+  var touch = e.touches[0];
+  var mouseEvent = new MouseEvent("mousemove", {
+    clientX: touch.clientX, clientY: touch.clientY
+  });
+  uicanv.dispatchEvent(mouseEvent);
+}, false);
+uicanv.addEventListener("touchend", function (e) {
+  var touch = e.changedTouches[0];
+  var mouseEvent = new MouseEvent("mouseup", {
+    clientX: touch.clientX,clientY: touch.clientY
+  });
+  uicanv.dispatchEvent(mouseEvent);
+}, false);
+//keep mobile touches from being treated as scrolls
+document.body.addEventListener("touchstart", function (e) {
+  if (e.target == uicanv )
+    e.preventDefault();
+
+}, false);
+document.body.addEventListener("touchend", function (e) {
+  if (e.target == uicanv )
+    e.preventDefault();
+
+}, false);
+document.body.addEventListener("touchmove", function (e) {
+  if (e.target == uicanv )
+    e.preventDefault();
+
+}, false);
+
+
+
+//account for canvas positioning and scaling
+function scaleInput(xv, yv){
+  var rect = canv.getBoundingClientRect(),
+  scaleX = canv.width / rect.width,
+  scaleY = canv.height / rect.height;
+  var xval = (xv - rect.left ) * scaleX ,
+  yval = (yv - rect.top ) * scaleY;
+  return [xval,yval];
+}
+
+
+//input functions
+function mdown(mpos){
+  console.log("touch started at " + mpos[0] + "," + mpos[1]);
+  uctx.fillStyle = "rgba(255,255,255,.9)";
+  uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
+}
+
+function mup(mpos){
+  console.log("touch ended at " + mpos[0] + "," + mpos[1]);
+  uctx.fillStyle = "rgba(0,0,0,.9)";
+  uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
+}
+
+function mmove(mpos){
+
+}
+
+   </script>
+
+  </body>
+  </html>
