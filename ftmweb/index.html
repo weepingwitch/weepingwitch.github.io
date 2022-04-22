@@ -37,7 +37,21 @@
   gHolder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
   canv = document.getElementById('mcanvas');
   uicanv = document.getElementById('uicanvas');
+  mctx = canv.getContext('2d');
   uctx = uicanv.getContext('2d');
+
+
+  var bgimg = new Image();
+  bgimg.src = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/bg_v01.jpg";
+  bgimg.onload = function(e){
+    mctx.drawImage(bgimg,0,0,vw,vh);
+  }
+  var gimg = new Image();
+  gimg.src = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/hill_v01.png";
+  gimg.onload = function(e){
+    mctx.drawImage(gimg,-vw*.25,vh-(vh/2),vw*1.5,vh/2);
+  }
+
   //attach mouse handlers
   uicanv.addEventListener('mousedown', function(event) {
     mdown(scaleInput(event.clientX,event.clientY));
@@ -86,8 +100,43 @@ document.body.addEventListener("touchmove", function (e) {
     e.preventDefault();
 
 }, false);
+stones = [];
+curstone = null;
+init();
 
 
+
+
+function init(){
+  console.log("starting game");
+
+  var t = new stone("t",105,105);
+  var m = new stone("m",205,305);
+  var e = new stone("e",155,405);
+  window.requestAnimationFrame(draw);
+
+}
+
+
+
+//draw loop
+function draw(){
+  clearcanv(uctx);
+
+  for (let s of stones){
+
+    s.draw();
+  }
+
+
+  window.requestAnimationFrame(draw);
+}
+
+
+//clear a canvas
+function clearcanv(cx){
+  cx.clearRect(0,0,vw,vh);
+}
 
 //account for canvas positioning and scaling
 function scaleInput(xv, yv){
@@ -103,19 +152,103 @@ function scaleInput(xv, yv){
 //input functions
 function mdown(mpos){
   console.log("touch started at " + mpos[0] + "," + mpos[1]);
-  uctx.fillStyle = "rgba(255,255,255,.9)";
-  uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
+  //uctx.fillStyle = "rgba(255,255,255,.9)";
+  //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
+  for (let s of stones){
+    if (sqrmag(s.x,s.y,mpos[0],mpos[1]) < (32 * 32)){
+      curstone = s;
+      console.log("picked up " + s.text);
+    }
+  }
 }
 
 function mup(mpos){
   console.log("touch ended at " + mpos[0] + "," + mpos[1]);
-  uctx.fillStyle = "rgba(0,0,0,.9)";
-  uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
+  if (curstone != null){
+    console.log("dropped " + curstone.text);
+    curstone = null;
+  }
 }
 
 function mmove(mpos){
+  if (curstone != null){
+    curstone.x = mpos[0];
+    curstone.y = mpos[1];
+  }
 
 }
+
+
+
+//letter stone object
+function stone(txt,x=-1,y=-1){
+  this.x = x;
+  this.y = y;
+  this.drawready = false;
+  this.text = txt;
+  this.img = new Image();
+  this.img.src = 'https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Game%20Objects/Stones/Stone_pink_new_01.png';
+
+  this.draw = function(){
+
+    uctx.drawImage(this.img,this.x-32,this.y-32,64,64);
+    uctx.fillStyle = "white";
+    uctx.font = "20px Arial";
+  uctx.fillText(this.text,this.x - 9,this.y + 8);
+  }
+  stones.push(this);
+}
+
+
+
+//gamestate
+function gamestate(){
+  this.levelnum = 0;
+  this.puzzlenum = 0;
+  this.targettext = "m";
+}
+
+
+
+
+
+
+//animation routines
+
+var img_obj = {
+    'source': null,
+    'current': 0,
+    'total_frames': 16,
+    'width': 16,
+    'height': 16
+};
+
+var img = new Image();
+img.onload = function () { // Triggered when image has finished loading.
+    img_obj.source = img;  // we set the image source for our object.
+}
+//img.src = 'img/filename.png';
+
+
+function draw_anim(context, x, y, iobj) { // context is the canvas 2d context.
+    if (iobj.source != null)
+        context.drawImage(iobj.source, iobj.current * iobj.width, 0,
+                          iobj.width, iobj.height,
+                          x, y, iobj.width, iobj.height);
+    iobj.current = (iobj.current + 1) % iobj.total_frames;
+                   // incrementing the current frame and assuring animation loop
+}
+
+
+//funcs
+
+function sqrmag(x1, y1, x2, y2){
+    let y = x2 - x1;
+    let x = y2 - y1;
+
+    return (x * x + y * y);
+}
+
 
    </script>
 
