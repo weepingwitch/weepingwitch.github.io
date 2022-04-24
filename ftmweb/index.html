@@ -1,10 +1,12 @@
 <html>
 <head>
-  <title>feed the monster web</title>
+  <title>feed the monster</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
     const vw = 360;
     const vh = 600;
+
+
   </script>
 
   <style type="text/css">
@@ -34,23 +36,48 @@
  <script>
    //build canvases
   const gHolder = document.getElementById("gameHolder");
-  gHolder.innerHTML="<canvas style='z-index:1;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
-  canv = document.getElementById('mcanvas');
+  gHolder.innerHTML="<canvas style='z-index:1;' id='bcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:3;position:absolute;top:0;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
+  canv = document.getElementById('bcanvas');
+  mcanv = document.getElementById('mcanvas');
   uicanv = document.getElementById('uicanvas');
-  mctx = canv.getContext('2d');
+  bctx = canv.getContext('2d');
+  mctx = mcanv.getContext('2d');
   uctx = uicanv.getContext('2d');
 
 
   var bgimg = new Image();
   bgimg.src = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/bg_v01.jpg";
   bgimg.onload = function(e){
-    mctx.drawImage(bgimg,0,0,vw,vh);
+    bgdraw();
   }
   var gimg = new Image();
   gimg.src = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/hill_v01.png";
   gimg.onload = function(e){
-    mctx.drawImage(gimg,-vw*.25,vh-(vh/2),vw*1.5,vh/2);
+    bgdraw();
   }
+
+  var mobj = {
+      'source': null,
+      'current': 0,
+      'total_frames': 7,
+      'width': 768,
+      'height': 632,
+      'fcount':0,
+      'flen':100,
+      'anim':true
+  };
+  var lastt = 0;
+  var dt = 0;
+
+  var mspr = new Image();
+  mspr.src = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/idle.png"
+  mspr.onload = function (e){
+    mobj.source = mspr;
+  }
+
+
+  var meat = new Image();
+  meat.src = "https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/eat3.png"
 
   //attach mouse handlers
   uicanv.addEventListener('mousedown', function(event) {
@@ -84,6 +111,8 @@ uicanv.addEventListener("touchend", function (e) {
   });
   uicanv.dispatchEvent(mouseEvent);
 }, false);
+
+
 //keep mobile touches from being treated as scrolls
 document.body.addEventListener("touchstart", function (e) {
   if (e.target == uicanv )
@@ -100,6 +129,8 @@ document.body.addEventListener("touchmove", function (e) {
     e.preventDefault();
 
 }, false);
+
+
 stones = [];
 curstone = null;
 init();
@@ -110,18 +141,33 @@ init();
 function init(){
   console.log("starting game");
 
-  var t = new stone("t",105,105);
-  var m = new stone("m",205,305);
-  var e = new stone("e",155,405);
+  var t = new stone("t",85,505);
+  var m = new stone("m",250,450);
+  var e = new stone("e",155,485);
   window.requestAnimationFrame(draw);
+
+}
+
+function bgdraw(){
+  //background sky and grass
+  bctx.drawImage(bgimg,0,0,vw,vh);
+  bctx.drawImage(gimg,-vw*.25,vh-(vh/2),vw*1.5,vh/2);
+
+
+
 
 }
 
 
 
+
 //draw loop
-function draw(){
+function draw(timepast){
   clearcanv(uctx);
+  dt = (timepast-lastt);
+  lastt = timepast;
+
+  draw_anim(dt);
 
   for (let s of stones){
 
@@ -164,14 +210,48 @@ function mdown(mpos){
 
 function mup(mpos){
   console.log("touch ended at " + mpos[0] + "," + mpos[1]);
+  trydrop(mpos[0],mpos[1]);
+}
+
+function trydrop(x,y){
   if (curstone != null){
     console.log("dropped " + curstone.text);
-    curstone = null;
+
+    if (sqrmag(x,y,vw/2,vh/2) < (4000)){
+
+      console.log("dropped on monster " + curstone.text);
+      tryeat();
+
+      curstone = null;
+
+    }
+    else{
+      console.log(curstone.text + " snapped back to original position");
+      curstone.x = curstone.origx;
+      curstone.y = curstone.origy;
+      curstone = null;
+
+      mobj.source = mspr;
+      mobj.current = 1;
+      mobj.anim = true;
+    }
+
+
   }
+}
+
+function tryeat(){
+  console.log("trying to eat " + curstone.text);
+  mobj.source = meat;
+  mobj.current = 0;
+  mobj.anim = true;
 }
 
 function mmove(mpos){
   if (curstone != null){
+    mobj.source = meat;
+    mobj.current = 3;
+    mobj.anim = false;
     curstone.x = mpos[0];
     curstone.y = mpos[1];
   }
@@ -184,6 +264,8 @@ function mmove(mpos){
 function stone(txt,x=-1,y=-1){
   this.x = x;
   this.y = y;
+  this.origx = x;
+  this.origy = y;
   this.drawready = false;
   this.text = txt;
   this.img = new Image();
@@ -215,13 +297,7 @@ function gamestate(){
 
 //animation routines
 
-var img_obj = {
-    'source': null,
-    'current': 0,
-    'total_frames': 16,
-    'width': 16,
-    'height': 16
-};
+
 
 var img = new Image();
 img.onload = function () { // Triggered when image has finished loading.
@@ -230,14 +306,21 @@ img.onload = function () { // Triggered when image has finished loading.
 //img.src = 'img/filename.png';
 
 
-function draw_anim(context, x, y, iobj) { // context is the canvas 2d context.
-    if (iobj.source != null)
-        context.drawImage(iobj.source, iobj.current * iobj.width, 0,
-                          iobj.width, iobj.height,
-                          x, y, iobj.width, iobj.height);
-    iobj.current = (iobj.current + 1) % iobj.total_frames;
-                   // incrementing the current frame and assuring animation loop
+function draw_anim(dt) { // context is the canvas 2d context.
+  clearcanv(mctx);
+    if (mobj.source != null)
+        mctx.drawImage(mobj.source, mobj.current * mobj.width, 0,
+                          mobj.width, mobj.height,
+                          vw/5,vh/3,vw*(3/5),vh/3);
+    mobj.fcount += dt;
+    if (mobj.anim && mobj.fcount > mobj.flen){
+      mobj.current = (mobj.current + 1) % mobj.total_frames;
+      mobj.fcount = 0;
+                     // incrementing the current frame and assuring animation loop
+    }
+
 }
+
 
 
 //funcs
