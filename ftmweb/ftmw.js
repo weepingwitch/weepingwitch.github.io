@@ -16,11 +16,16 @@ stonepos = [
 ];
 
 //add external resources to cache
-filesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/bg_v01.jpg');
-filesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/hill_v01.png');
-filesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/idle.png');
-filesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/eat3.png');
-filesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/spit.png');
+var newfilesToCache = [];
+newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/bg_v01.jpg');
+newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/hill_v01.png');
+newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/idle.png');
+newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/eat3.png');
+newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/spit.png');
+caches.open(cacheName).then(function(cache) {
+  console.log('sw: writing files into cache');
+  return cache.addAll(newfilesToCache);
+});
 
 gs.puzzle = {
   'puzzlenum':0,
