@@ -3,7 +3,7 @@ var cacheName = 'ftmpwa';
 var filesToCache = [
 
   // infrastructure files ----------------------------------------------------------------------------------------------
-  '/',
+
   'index.html',
   'ftmw.js',
   'sw.js',
@@ -72,3 +72,10 @@ self.addEventListener('fetch', function(event) {
     })
   )
 });
+
+function cacheNewFiles(ftc){
+  caches.open(cacheName).then(function(cache) {
+    console.log("caching " + ftc);
+    return cache.addAll(ftc);
+  }
+}
