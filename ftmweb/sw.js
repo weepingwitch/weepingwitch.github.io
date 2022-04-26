@@ -2,18 +2,17 @@ var cacheName = 'ftmpwa';
 
 var filesToCache = [
 
-  // infrastructure files ---------------------------------------------------------------------------------------------
+  // infrastructure files ----------------------------------------------------------------------------------------------
+
   'index.html',
+  'ftmw.js',
   'sw.js',
   'manifest.json',
   'favicon.png',
   //--------------------------------------------------------------------------------------------------------------------
 
   // app files ---------------------------------------------------------------------------------------------------------
-  'https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/bg_v01.jpg',
-  'https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Backgrounds/summer/hill_v01.png',
-  'https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/idle.png',
-  'https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/eat3.png'
+  'https://raw.githubusercontent.com/curiouslearning/FeedTheMonster/master/Feed%20the%20Monster/Assets/Art/Game%20Objects/CallOut/CallOut_magnet_v01.png'
   // -------------------------------------------------------------------------------------------------------------------
 ];
 
