@@ -75,7 +75,7 @@ self.addEventListener('fetch', function(event) {
 
 function cacheNewFiles(ftc){
   caches.open(cacheName).then(function(cache) {
-    console.log("caching " + ftc);
+    console.log("sw: adding new files");
     return cache.addAll(ftc);
-  }
+  });
 }
