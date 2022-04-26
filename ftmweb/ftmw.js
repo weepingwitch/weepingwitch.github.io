@@ -22,10 +22,7 @@ newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheM
 newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/idle.png');
 newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/eat3.png');
 newfilesToCache.push('https://raw.githubusercontent.com/curiouslearning/FeedTheMonsterH5P/main/assets/images/spit.png');
-caches.open(cacheName).then(function(cache) {
-  console.log('sw: writing files into cache');
-  return cache.addAll(newfilesToCache);
-});
+cacheNewFiles(newfilesToCache);
 
 gs.puzzle = {
   'puzzlenum':0,
