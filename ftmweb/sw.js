@@ -3,7 +3,7 @@ var cacheName = 'ftmpwa';
 var filesToCache = [
 
   // infrastructure files ----------------------------------------------------------------------------------------------
-
+  '/',
   'index.html',
   'ftmw.js',
   'sw.js',
