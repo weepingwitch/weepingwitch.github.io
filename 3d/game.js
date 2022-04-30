@@ -172,7 +172,7 @@ makePointy(new BABYLON.Vector3(3,-1,-3));
 makePointy(new BABYLON.Vector3(-3,-1,3));
 makePointy(new BABYLON.Vector3(-3,-1,-3));
 
-   mera.Position = new BABYLON.Vector3(0, 0, 0);
+   mera.Position = new BABYLON.Vector3(0, 0, -20);
 
     // Calling the HTML5 rendering loop
    requestAnimationFrame(drawingLoop);
