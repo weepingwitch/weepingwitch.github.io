@@ -169,7 +169,7 @@ makeCube(new BABYLON.Vector3(-3,-3.1,-3),2);
 for (var i=0; i < 2*Math.PI;i += Math.PI/8){
   makeCube(new BABYLON.Vector3(10*Math.cos(i),4,10*Math.sin(i)),.7,true,(Math.sin(i)+.2));
 }
-makeFlatGround(new BABYLON.Vector3(0,-1,0));
+//makeFlatGround(new BABYLON.Vector3(0,-1,0));
 makeFlatGround(new BABYLON.Vector3(4,-1,0));
 makeFlatGround(new BABYLON.Vector3(0,-1,4));
 makeFlatGround(new BABYLON.Vector3(-4,-1,0));
