@@ -110,6 +110,7 @@ function mdown(mpos){
 console.log("touch started at " + mpos[0] + "," + mpos[1]);
 mcls = mpos;
 uctx.fillStyle = "rgba(0,255,0,.9)";
+drawblines = true;
 //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
 
 }
@@ -118,6 +119,7 @@ function mup(mpos){
   clicking = false;
 console.log("touch ended at " + mpos[0] + "," + mpos[1]);
 uctx.fillStyle = "rgba(0,0,255,.9)";
+drawblines = false;
 //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
 }
 
@@ -156,18 +158,26 @@ function ginit() {
     //  var m1 =      makeCube(new BABYLON.Vector3(2,0,20));
   // var m2 = makeCube(new BABYLON.Vector3(-2,0,20),false);
 
-//makeCube(new BABYLON.Vector3(-20,0,2),false);
-//makeCube(new BABYLON.Vector3(-20,0,-2),false);
+makeCube(new BABYLON.Vector3(0,.7,0),.6,true,2);
+makeCube(new BABYLON.Vector3(0,2.2,0),.5,true,-3);
 
-//for (var i=0; i < 2*Math.PI;i += Math.PI/16){
-//  makeCube(new BABYLON.Vector3(20*Math.cos(i),0,20*Math.sin(i)));
-//}
+makeCube(new BABYLON.Vector3(3,-3.1,3),2);
+makeCube(new BABYLON.Vector3(-3,-3.1,3),2);
+makeCube(new BABYLON.Vector3(3,-3.1,-3),2);
+makeCube(new BABYLON.Vector3(-3,-3.1,-3),2);
+
+for (var i=0; i < 2*Math.PI;i += Math.PI/8){
+  makeCube(new BABYLON.Vector3(10*Math.cos(i),4,10*Math.sin(i)),.7,true,(Math.sin(i)+.2));
+}
 makeFlatGround(new BABYLON.Vector3(0,-1,0));
 makeFlatGround(new BABYLON.Vector3(4,-1,0));
 makeFlatGround(new BABYLON.Vector3(0,-1,4));
 makeFlatGround(new BABYLON.Vector3(-4,-1,0));
 makeFlatGround(new BABYLON.Vector3(0,-1,-4));
 makePointy(new BABYLON.Vector3(3,-1,3));
+makePointy(new BABYLON.Vector3(0,-2,0));
+makePointy(new BABYLON.Vector3(0,-5,0));
+
 makePointy(new BABYLON.Vector3(3,-1,-3));
 makePointy(new BABYLON.Vector3(-3,-1,3));
 makePointy(new BABYLON.Vector3(-3,-1,-3));
@@ -205,9 +215,9 @@ if (clicking && mdir != null){
 
       if (cMesh.doesrotate){
         // rotating slightly the cube during each frame rendered
-      cMesh.Rotation.x += 0.01;
+      cMesh.Rotation.x += 0.01 * cMesh.rf;
 
-      cMesh.Rotation.y += 0.01;
+      cMesh.Rotation.y += 0.01 * cMesh.rf;
       }
 
 
