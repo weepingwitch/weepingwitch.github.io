@@ -1,7 +1,7 @@
 var viewMatrix;
-var drawverts = true;
+var drawverts = false;
 
-var drawblines = true;
+var drawblines = false;
 var drawfaces = true;
 var pcolor = new BABYLON.Color4(1, 1, 0, 1);
 var dcolor = new BABYLON.Color4(1, 0, 1, 1);
@@ -266,7 +266,7 @@ var SoftEngine;
     // Returns a value between 0 and 1
     var lightDirection;
     Device.prototype.computeNDotL = function (vertex, normal, lightPosition) {
-         lightDirection = new BABYLON.Vector3(0, 1.0, 0);
+         lightDirection = new BABYLON.Vector3(.3, 1.0, -.6);
 
         normal.normalize();
         lightDirection.normalize();
@@ -468,7 +468,7 @@ var SoftEngine;
               //  console.log(zax);
                 var ez = BABYLON.Vector3.Dot(zax,camera.Position.subtract(cMesh.Position));
                //console.log(ez);
-               if (ez < -2){
+               if (ez < -4){
                 // draw faces
                 if (drawfaces){
                   for (var indexFaces = 0; indexFaces < cMesh.Faces.length; indexFaces++) {
