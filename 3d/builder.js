@@ -1,17 +1,18 @@
-function makeCube( initpos, doesrotate = true){
+function makeCube( initpos, sfactor = 1, doesrotate = false, rf = 1){
   mesh = new SoftEngine.Mesh("Cube", 8,12);
   meshes.push(mesh);
   mesh.doesrotate = doesrotate;
+  mesh.rf = rf;
   mesh.Position = initpos;
   mesh.Vertices[0] =
-  makeVertex(new BABYLON.Vector3(-1, 1, 1),mesh.Position);
-  mesh.Vertices[1] = makeVertex(new BABYLON.Vector3(1, 1, 1),mesh.Position);
-  mesh.Vertices[2] = makeVertex(new BABYLON.Vector3(-1, -1, 1),mesh.Position);
-  mesh.Vertices[3] = makeVertex(new BABYLON.Vector3(1, -1, 1),mesh.Position);
-  mesh.Vertices[4] = makeVertex(new BABYLON.Vector3(-1, 1, -1),mesh.Position);
-  mesh.Vertices[5] = makeVertex(new BABYLON.Vector3(1, 1, -1),mesh.Position);
-  mesh.Vertices[6] = makeVertex(new BABYLON.Vector3(1, -1, -1),mesh.Position);
-  mesh.Vertices[7] = makeVertex(new BABYLON.Vector3(-1, -1, -1),mesh.Position);
+  makeVertex(new BABYLON.Vector3(sfactor *-1, sfactor *1,sfactor * 1),mesh.Position);
+  mesh.Vertices[1] = makeVertex(new BABYLON.Vector3(sfactor *1, sfactor * 1,sfactor * 1),mesh.Position);
+  mesh.Vertices[2] = makeVertex(new BABYLON.Vector3(sfactor* -1, sfactor* -1, sfactor*1),mesh.Position);
+  mesh.Vertices[3] = makeVertex(new BABYLON.Vector3(sfactor*1, sfactor*-1,sfactor* 1),mesh.Position);
+  mesh.Vertices[4] = makeVertex(new BABYLON.Vector3(sfactor* -1,sfactor* 1,sfactor* -1),mesh.Position);
+  mesh.Vertices[5] = makeVertex(new BABYLON.Vector3(sfactor*1,sfactor* 1, sfactor* -1),mesh.Position);
+  mesh.Vertices[6] = makeVertex(new BABYLON.Vector3(sfactor*1, sfactor*-1, sfactor*-1),mesh.Position);
+  mesh.Vertices[7] = makeVertex(new BABYLON.Vector3(sfactor* -1, sfactor*-1,sfactor* -1),mesh.Position);
 
   mesh.Faces[0] = { A:0, B:1, C:2 ,N: new BABYLON.Vector3(0,0,1)};
   mesh.Faces[1] = { A:1, B:2, C:3,N: new BABYLON.Vector3(0,0,1) };
