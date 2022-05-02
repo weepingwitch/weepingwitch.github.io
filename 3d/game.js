@@ -109,6 +109,7 @@ function mdown(mpos){
   clicking = true;
 console.log("touch started at " + mpos[0] + "," + mpos[1]);
 mcls = mpos;
+mdir = [0,0];
 uctx.fillStyle = "rgba(0,255,0,.9)";
 drawblines = true;
 //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
@@ -120,6 +121,7 @@ function mup(mpos){
 console.log("touch ended at " + mpos[0] + "," + mpos[1]);
 uctx.fillStyle = "rgba(0,0,255,.9)";
 drawblines = false;
+mdir = [mpos[0] - mcls[0],-(mpos[1]-mcls[1])];
 //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
 }
 
@@ -161,28 +163,46 @@ function ginit() {
 makeCube(new BABYLON.Vector3(0,.7,0),.6,true,2);
 makeCube(new BABYLON.Vector3(0,2.2,0),.5,true,-3);
 
-makeCube(new BABYLON.Vector3(3,-3.1,3),2);
-makeCube(new BABYLON.Vector3(-3,-3.1,3),2);
-makeCube(new BABYLON.Vector3(3,-3.1,-3),2);
-makeCube(new BABYLON.Vector3(-3,-3.1,-3),2);
+makeCube(new BABYLON.Vector3(3,-4,3),1);
+makeCube(new BABYLON.Vector3(-3,-4,3),1);
+makeCube(new BABYLON.Vector3(3,-4,-3),1);
+makeCube(new BABYLON.Vector3(-3,-4,-3),1);
 
+makeCube(new BABYLON.Vector3(5,-6,0),1);
+makeCube(new BABYLON.Vector3(-5,-6,0),1);
+makeCube(new BABYLON.Vector3(5,-8,0),1);
+makeCube(new BABYLON.Vector3(-5,-8,0),1);
+makeCube(new BABYLON.Vector3(0,-8,5),1);
+makeCube(new BABYLON.Vector3(0,-8,-5),1);
+
+makeCube(new BABYLON.Vector3(3,-7,3),2);
+makeCube(new BABYLON.Vector3(-3,-7,3),2);
+makeCube(new BABYLON.Vector3(3,-7,-3),2);
+makeCube(new BABYLON.Vector3(-3,-7,-3),2);
+var posneg = -1;
 for (var i=0; i < 2*Math.PI;i += Math.PI/8){
-  makeCube(new BABYLON.Vector3(10*Math.cos(i),4,10*Math.sin(i)),.7,true,(Math.sin(i)+.2));
+  makeCube(new BABYLON.Vector3(10*Math.cos(i)+2*Math.cos(i),6*Math.cos(i) + 4 + Math.sin(i),10*Math.sin(i)+2*Math.sin(i)),.7,true,(Math.sin(i)+.5+i*posneg));
+  posneg = -posneg;
 }
 //makeFlatGround(new BABYLON.Vector3(0,-1,0));
-makeFlatGround(new BABYLON.Vector3(4,-1,0));
-makeFlatGround(new BABYLON.Vector3(0,-1,4));
-makeFlatGround(new BABYLON.Vector3(-4,-1,0));
-makeFlatGround(new BABYLON.Vector3(0,-1,-4));
-makePointy(new BABYLON.Vector3(3,-1,3));
-makePointy(new BABYLON.Vector3(0,-2,0));
-makePointy(new BABYLON.Vector3(0,-5,0));
+//makeFlatGround(new BABYLON.Vector3(4,-1,0));
+//makeFlatGround(new BABYLON.Vector3(0,-1,4));
+//makeFlatGround(new BABYLON.Vector3(-4,-1,0));
+//makeFlatGround(new BABYLON.Vector3(0,-1,-4));
 
-makePointy(new BABYLON.Vector3(3,-1,-3));
-makePointy(new BABYLON.Vector3(-3,-1,3));
-makePointy(new BABYLON.Vector3(-3,-1,-3));
+makePointy(new BABYLON.Vector3(0,-3,0) );
+makePointy(new BABYLON.Vector3(1,-5,1));
+makePointy(new BABYLON.Vector3(-1,-5,1));
+makePointy(new BABYLON.Vector3(-1,-5,-1));
+makePointy(new BABYLON.Vector3(1,-5,-1));
+makeCube(new BABYLON.Vector3(0,-4,0));
+makeCube(new BABYLON.Vector3(0,-7,0),2);
+makePointy(new BABYLON.Vector3(3,-3,3));
+makePointy(new BABYLON.Vector3(3,-3,-3));
+makePointy(new BABYLON.Vector3(-3,-3,3));
+makePointy(new BABYLON.Vector3(-3,-3,-3));
 
-   mera.Position = new BABYLON.Vector3(0, 0, -20);
+   mera.Position = new BABYLON.Vector3(0, -1, -60);
 
     // Calling the HTML5 rendering loop
    requestAnimationFrame(drawingLoop);
@@ -221,6 +241,11 @@ if (clicking && mdir != null){
       cMesh.Rotation.x += 0.01 * cMesh.rf;
 
       cMesh.Rotation.y += 0.01 * cMesh.rf;
+
+
+      cMesh.Position.x = Math.sin(cMesh.rf*tt/4000 + cMesh.rf *4)*cMesh.rdist;
+      cMesh.Position.z = Math.cos(cMesh.rf*tt/4000+ cMesh.rf*4)*cMesh.rdist;
+
       }
 
 
