@@ -5,10 +5,10 @@ var gs = {
   'levelnum':0,
 
 }
-
+var lastt;
 //build canvases
 const gHolder = document.getElementById("gameHolder");
-gHolder.innerHTML="<canvas style='z-index:1;width:" + 2*vw + "px;height:" + 2*vh + "px;' id='bcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;width:" + 2*vw + "px;height:" + 2*vh + "px;' id='mcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:3;position:absolute;top:0;width:" + 2*vw + "px;height:" + 2*vh + "px;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
+gHolder.innerHTML="<canvas style='z-index:1;width:" + 2*vw + "px;height:" + 2*vh + "px;' id='bcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;width:" + 2*vw + "px;height:" + 2*vh + "px;' id='mcanvas'  width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:3;position:absolute;top:0;width:" + 2*vw + "px;height:" + 2*vh + "px;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
 canv = document.getElementById('bcanvas');
 mcanv = document.getElementById('mcanvas');
 uicanv = document.getElementById('uicanvas');
@@ -187,22 +187,25 @@ makePointy(new BABYLON.Vector3(-3,-1,-3));
     // Calling the HTML5 rendering loop
    requestAnimationFrame(drawingLoop);
 }
+var dt;
 // Rendering loop handler
 function drawingLoop(tt) {
+  dt = tt - lastt;
+  lastt = tt;
    device.clear();
 
 if (clicking && mdir != null){
-  if (mdir[1] > 10){
-    mera.Position = mera.Position.add(mera.Forward.scale(.3))
+  if (mdir[1] > 5){
+    mera.Position = mera.Position.add(mera.Forward.scale(.003* Math.abs(mdir[1])*.5*dt))
   }
-  if (mdir[1] < -10){
-      mera.Position = mera.Position.subtract(mera.Forward.scale(.3))
+  if (mdir[1] < -5){
+      mera.Position = mera.Position.subtract(mera.Forward.scale(.003* Math.abs(mdir[1])%.5*dt))
   }
-  if (mdir[0] > 10){
-      mera.Rotation.y += 0.005;
+  if (mdir[0] > 5){
+      mera.Rotation.y += .00002 * Math.abs(mdir[0]) * dt;
   }
-  if (mdir[0] < -10){
-      mera.Rotation.y -= 0.005;
+  if (mdir[0] < -5){
+      mera.Rotation.y -= .00002 * Math.abs(mdir[0])* dt;
   }
 }
 
