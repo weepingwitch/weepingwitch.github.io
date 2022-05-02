@@ -4,6 +4,7 @@ function makeCube( initpos, sfactor = 1, doesrotate = false, rf = 1){
   mesh.doesrotate = doesrotate;
   mesh.rf = rf;
   mesh.Position = initpos;
+  mesh.rdist = Math.sqrt(initpos.x * initpos.x + initpos.z * initpos.z)
   mesh.Vertices[0] =
   makeVertex(new BABYLON.Vector3(sfactor *-1, sfactor *1,sfactor * 1),mesh.Position);
   mesh.Vertices[1] = makeVertex(new BABYLON.Vector3(sfactor *1, sfactor * 1,sfactor * 1),mesh.Position);
@@ -51,10 +52,10 @@ function makeFlatGround(centerbit){
 //
 //
 
-function makePointy(centerbit){
+function makePointy(centerbit, dr = false){
   mesh = new SoftEngine.Mesh("pointy", 9,8);
   meshes.push(mesh);
-  mesh.doesrotate = false;
+
   mesh.Position = centerbit;
   mesh.Vertices[0] = makeVertex(new BABYLON.Vector3(-1, 0, 1),mesh.Position);
   mesh.Vertices[1] = makeVertex(new BABYLON.Vector3(0, 0, 1),mesh.Position);
