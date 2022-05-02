@@ -160,8 +160,10 @@ function ginit() {
     //  var m1 =      makeCube(new BABYLON.Vector3(2,0,20));
   // var m2 = makeCube(new BABYLON.Vector3(-2,0,20),false);
 
-makeCube(new BABYLON.Vector3(0,.7,0),.6,true,2);
-makeCube(new BABYLON.Vector3(0,2.2,0),.5,true,-3);
+makeCube(new BABYLON.Vector3(0,1.5,0),.9,true,7);
+makeCube(new BABYLON.Vector3(0,4,0),.7,true,-3);
+makeCube(new BABYLON.Vector3(0,6,0),.5,true,1);
+makeCube(new BABYLON.Vector3(0,7.5,0),.3,true,-5);
 
 makeCube(new BABYLON.Vector3(3,-4,3),1);
 makeCube(new BABYLON.Vector3(-3,-4,3),1);
@@ -172,8 +174,14 @@ makeCube(new BABYLON.Vector3(5,-6,0),1);
 makeCube(new BABYLON.Vector3(-5,-6,0),1);
 makeCube(new BABYLON.Vector3(5,-8,0),1);
 makeCube(new BABYLON.Vector3(-5,-8,0),1);
+makeCube(new BABYLON.Vector3(7,-8,0),1);
+makeCube(new BABYLON.Vector3(-7,-8,0),1);
 makeCube(new BABYLON.Vector3(0,-8,5),1);
 makeCube(new BABYLON.Vector3(0,-8,-5),1);
+makePointy(new BABYLON.Vector3(7,-7,0));
+makePointy(new BABYLON.Vector3(-7,-7,0));
+makePointy(new BABYLON.Vector3(0,-7,5));
+makePointy(new BABYLON.Vector3(0,-7,-5));
 
 makeCube(new BABYLON.Vector3(3,-7,3),2);
 makeCube(new BABYLON.Vector3(-3,-7,3),2);
@@ -181,7 +189,7 @@ makeCube(new BABYLON.Vector3(3,-7,-3),2);
 makeCube(new BABYLON.Vector3(-3,-7,-3),2);
 var posneg = -1;
 for (var i=0; i < 2*Math.PI;i += Math.PI/8){
-  makeCube(new BABYLON.Vector3(10*Math.cos(i)+2*Math.cos(i),6*Math.cos(i) + 4 + Math.sin(i),10*Math.sin(i)+2*Math.sin(i)),.7,true,(Math.sin(i)+.5+i*posneg));
+  makeCube(new BABYLON.Vector3(10*Math.cos(i)+8*Math.cos(i),6*Math.cos(i) + 4 + Math.sin(i),10*Math.sin(i)+8*Math.sin(i)),.7,true,(Math.sin(i)+.5+i*posneg));
   posneg = -posneg;
 }
 //makeFlatGround(new BABYLON.Vector3(0,-1,0));
