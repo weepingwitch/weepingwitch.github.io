@@ -7,7 +7,11 @@ var pcolor = new BABYLON.Color4(1, 1, 0, 1);
 var dcolor = new BABYLON.Color4(1, 0, 1, 1);
 
 var lightPos = new BABYLON.Vector3(0 , 20, 0);
-
+var slofs;
+       var projectionMatrix;
+var tang;
+var dheight;
+var dwidth;
 function makeVertex(vp,oc){
   var res = {
         Coordinates: new BABYLON.Vector3(vp.x, vp.y, vp.z),
@@ -21,55 +25,7 @@ function makeVertex(vp,oc){
 
 var SoftEngine;
   (function (SoftEngine) {
-    var Texture = (function () {
-      // Working with a fix sized texture (512x512, 1024x1024, etc.).
-      function Texture(filename, width, height) {
-          this.width = width;
-          this.height = height;
-          this.load(filename);
-      }
 
-      Texture.prototype.load = function (filename) {
-          var _this = this;
-          var imageTexture = new Image();
-          imageTexture.height = this.height;
-          imageTexture.width = this.width;
-          imageTexture.onload = function () {
-              var internalCanvas = document.createElement("canvas");
-              internalCanvas.width = _this.width;
-              internalCanvas.height = _this.height;
-              var internalContext = internalCanvas.getContext("2d");
-              internalContext.drawImage(imageTexture, 0, 0);
-              _this.internalBuffer = internalContext.getImageData(0, 0, _this.width, _this.height);
-          };
-          imageTexture.src = filename;
-      };
-
-      // Takes the U & V coordinates exported by Blender
-      // and return the corresponding pixel color in the texture
-      Texture.prototype.map = function (tu, tv) {
-          if (this.internalBuffer) {
-              // using a % operator to cycle/repeat the texture if needed
-              var u = Math.abs(((tu * this.width) % this.width)) >> 0;
-              var v = Math.abs(((tv * this.height) % this.height)) >> 0;
-
-              var pos = (u + v * this.width) * 4;
-
-              var r = this.internalBuffer.data[pos];
-              var g = this.internalBuffer.data[pos + 1];
-              var b = this.internalBuffer.data[pos + 2];
-              var a = this.internalBuffer.data[pos + 3];
-
-              return new BABYLON.Color4(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
-          }
-          // Image is not loaded yet
-          else {
-              return new BABYLON.Color4(1, 1, 1, 1);
-          }
-      };
-      return Texture;
-  })();
-  SoftEngine.Texture = Texture;
 
    var Camera = (function () {
        function Camera() {
@@ -106,6 +62,15 @@ var SoftEngine;
            this.workingHeight = canvas.height;
            this.workingContext = this.workingCanvas.getContext("2d");
            this.depthbuffer = new Array(this.workingWidth * this.workingHeight);
+
+           projectionMatrix = BABYLON.Matrix.PerspectiveFovLH(0.7,
+             this.workingWidth / this.workingHeight, 0.1, 1.0);
+
+             // compute width and height of the near section
+           tang = Math.tan(Math.PI * 0.3   * 0.5) ;
+           dheight = .2 * tang;
+           dwidth = dheight * (this.workingWidth / this.workingHeight);
+
        }
         // This function is called to clear the back buffer with a specific color
        Device.prototype.clear = function () {
@@ -249,9 +214,9 @@ var SoftEngine;
         // drawing a line from left (sx) to right (
         for (var x = sx; x < ex; x++) {
             var gradient = (x - sx) / (ex - sx);
-
+          //  slofs = (Math.random()-.5)/8;
             var z = this.interpolate(z1, z2, gradient);
-            var ndotl = data.ndotla;
+            var ndotl = data.ndotla ;
             //ndotl *= 1.1;
             // changing the color value using the cosine of the angle
             // between the light vector and the normal vector
@@ -426,7 +391,7 @@ var SoftEngine;
           };
         // The main method of the engine that re-compute each vertex projection
        // during each frame
-       var projectionMatrix;
+
        var worldMatrix;
        var transformMatrix;
        var worldView;
@@ -445,6 +410,8 @@ var SoftEngine;
                   camera.Forward.z = viewMatrix.m[10];
                   camera.Forward.normalize();
                   var zax = camera.Forward;
+                  var xax = BABYLON.Vector3.Cross(zax,BABYLON.Vector3.Up());
+                  var yax = BABYLON.Vector3.Cross(xax, zax);
                   viewMatrix.invert();
 
 
@@ -452,8 +419,7 @@ var SoftEngine;
 
           //  console.log(viewMatrix.toArray());
 
-            projectionMatrix = BABYLON.Matrix.PerspectiveFovLH(0.7,
-              this.workingWidth / this.workingHeight, 0.1, 1.0);
+
             for (var index = 0; index < meshes.length; index++) {
                // current mesh to work on
                 cMesh = meshes[index];
@@ -466,9 +432,23 @@ var SoftEngine;
 
                  worldView = worldMatrix.multiply(viewMatrix);
               //  console.log(zax);
-                var ez = BABYLON.Vector3.Dot(zax,camera.Position.subtract(cMesh.Position));
+                var ez = -BABYLON.Vector3.Dot(zax,camera.Position.subtract(cMesh.Position));
                //console.log(ez);
-               if (ez < -4){
+               var ex = -BABYLON.Vector3.Dot(xax,camera.Position.subtract(cMesh.Position));
+               var ey = -BABYLON.Vector3.Dot(yax,camera.Position.subtract(cMesh.Position));
+
+               var dothedraw = true;
+              	var aux = ez * tang;
+
+              	if (ey > aux || ey < -aux){
+                  dothedraw = false;
+                }
+                aux = aux * (this.workingWidth / this.workingHeight);
+            	if (ex > aux || ex < -aux){
+                dothedraw = false;
+              }
+
+               if (dothedraw && ez > 4.5  ){
                 // draw faces
                 if (drawfaces){
                   for (var indexFaces = 0; indexFaces < cMesh.Faces.length; indexFaces++) {
@@ -489,6 +469,7 @@ var SoftEngine;
                         dfcolor = currentFace.CR;
                       }
                       numdrew += 1;
+
                       this.drawTriangle(pixelA, pixelB, pixelC, dfcolor, transformedNormal, worldMatrix);
                   }}
                 }
@@ -529,7 +510,7 @@ var SoftEngine;
 
 
            }
-
+//console.log(numdrew);
        };
        return Device;
    })();
