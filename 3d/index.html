@@ -1,10 +1,10 @@
 <html>
 <head>
   <title>3d test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=640, initial-scale=1.0">
     <script>
       const vw = 320;
-      const vh = 240;
+      const vh = 200;
 
 
     </script>
@@ -12,8 +12,7 @@
 
 
   <style type="text/css">
-    
-    
+
 #mcanvas {
   -webkit-animation: mcanvas 60s infinite;
 }
@@ -22,7 +21,6 @@
   0%, 100%  { -webkit-filter: hue-rotate(0deg); }
   50% { -webkit-filter: hue-rotate(360deg); }
 }
-    
   body{
     padding: 0px;
     margin:0px;
@@ -41,10 +39,26 @@
     touch-action:none;
 
   }
+
+  #icanv{
+    position:absolute;
+    top:420px;
+
+  }
+  #ircanv{
+    position:absolute;
+    top:420px;
+    left:440px;
+  }
 </style>
 </head>
 <body>
 <div id="gameHolder"></div>
+  <div id="inputholder">
+
+    <canvas id="icanv" width=200 height=200 style="outline:1px solid black;"></canvas>
+  <canvas id="ircanv" width=200 height=200 style="outline:1px solid black;"></canvas>
+
 <script src="babylon.math.js" type="text/javascript"></script>
 <script src="builder.js" type="text/javascript"></script>
 <script src="render.js" type="text/javascript"></script>
