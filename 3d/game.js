@@ -6,64 +6,101 @@ var gs = {
 
 }
 var lastt;
+var icanv;
 //build canvases
 const gHolder = document.getElementById("gameHolder");
 gHolder.innerHTML="<canvas style='z-index:1;width:" + 2*vw + "px;height:" + 2*vh + "px;' id='bcanvas' width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:2;width:" + 2*vw + "px;height:" + 2*vh + "px;' id='mcanvas'  width='" + vw + "' height='" + vh + "'></canvas><canvas style='z-index:3;position:absolute;top:0;width:" + 2*vw + "px;height:" + 2*vh + "px;'  id='uicanvas' width='" + vw + "' height='" + vh + "'></canvas>";
 canv = document.getElementById('bcanvas');
 mcanv = document.getElementById('mcanvas');
 uicanv = document.getElementById('uicanvas');
+icanv = document.getElementById('icanv');
+var ircanv = document.getElementById('ircanv');
+var ictx = icanv.getContext('2d');
+var irctx = ircanv.getContext('2d');
 bctx = canv.getContext('2d');
 mctx = mcanv.getContext('2d');
 
 uctx = uicanv.getContext('2d');
 
-//attach mouse handlers
-uicanv.addEventListener('mousedown', function(event) {
- mdown(scaleInput(event.clientX,event.clientY));
+//attach mouse handlers to left
+icanv.addEventListener('mousedown', function(event) {
+ mdown(scaleInput(event.clientX,event.clientY,icanv));
 }, false);
-uicanv.addEventListener('mouseup', function(event) {
-   mup(scaleInput(event.clientX,event.clientY));
+icanv.addEventListener('mouseup', function(event) {
+   mup(scaleInput(event.clientX,event.clientY,icanv));
 }, false);
-uicanv.addEventListener('mousemove', function(event){
- mmove(scaleInput(event.clientX,event.clientY));
+icanv.addEventListener('mousemove', function(event){
+ mmove(scaleInput(event.clientX,event.clientY,icanv));
+}, false);
+//attach to the right side
+ircanv.addEventListener('mousedown', function(event) {
+ mdown(scaleInput(event.clientX,event.clientY,ircanv),false);
+}, false);
+ircanv.addEventListener('mouseup', function(event) {
+   mup(scaleInput(event.clientX,event.clientY,ircanv),false);
+}, false);
+ircanv.addEventListener('mousemove', function(event){
+ mmove(scaleInput(event.clientX,event.clientY,ircanv),false);
 }, false);
 //treat touches as clicks
-uicanv.addEventListener("touchstart", function (e) {
+icanv.addEventListener("touchstart", function (e) {
 var touch = e.touches[0];
 var mouseEvent = new MouseEvent("mousedown", {
  clientX: touch.clientX,clientY: touch.clientY
 });
-uicanv.dispatchEvent(mouseEvent);
+icanv.dispatchEvent(mouseEvent);
 }, false);
-uicanv.addEventListener("touchmove", function (e) {
+icanv.addEventListener("touchmove", function (e) {
 var touch = e.touches[0];
 var mouseEvent = new MouseEvent("mousemove", {
  clientX: touch.clientX, clientY: touch.clientY
 });
-uicanv.dispatchEvent(mouseEvent);
+icanv.dispatchEvent(mouseEvent);
 }, false);
-uicanv.addEventListener("touchend", function (e) {
+icanv.addEventListener("touchend", function (e) {
 var touch = e.changedTouches[0];
 var mouseEvent = new MouseEvent("mouseup", {
  clientX: touch.clientX,clientY: touch.clientY
 });
-uicanv.dispatchEvent(mouseEvent);
+icanv.dispatchEvent(mouseEvent);
+}, false);
+//for right side
+ircanv.addEventListener("touchstart", function (e) {
+var touch = e.touches[0];
+var mouseEvent = new MouseEvent("mousedown", {
+ clientX: touch.clientX,clientY: touch.clientY
+});
+ircanv.dispatchEvent(mouseEvent);
+}, false);
+ircanv.addEventListener("touchmove", function (e) {
+var touch = e.touches[0];
+var mouseEvent = new MouseEvent("mousemove", {
+ clientX: touch.clientX, clientY: touch.clientY
+});
+ircanv.dispatchEvent(mouseEvent);
+}, false);
+ircanv.addEventListener("touchend", function (e) {
+var touch = e.changedTouches[0];
+var mouseEvent = new MouseEvent("mouseup", {
+ clientX: touch.clientX,clientY: touch.clientY
+});
+ircanv.dispatchEvent(mouseEvent);
 }, false);
 
 
 //keep mobile touches from being treated as scrolls
 document.body.addEventListener("touchstart", function (e) {
-if (e.target == uicanv )
+if (e.target == icanv || e.target == ircanv)
  e.preventDefault();
 
 }, false);
 document.body.addEventListener("touchend", function (e) {
-if (e.target == uicanv )
+if (e.target == icanv || e.target == ircanv)
  e.preventDefault();
 
 }, false);
 document.body.addEventListener("touchmove", function (e) {
-if (e.target == uicanv )
+if (e.target == icanv || e.target == ircanv)
  e.preventDefault();
 
 }, false);
@@ -71,7 +108,14 @@ if (e.target == uicanv )
 
 init();
 
-
+ictx.fillStyle="black";
+irctx.fillStyle="black";
+ictx.beginPath();
+ictx.arc(100,100,20,0,2*Math.PI);
+ictx.fill();
+irctx.beginPath();
+irctx.arc(100,100,20,0,2*Math.PI);
+irctx.fill();
 
 
 function init(){
@@ -92,10 +136,10 @@ cx.clearRect(0,0,vw,vh);
 }
 
 //account for canvas positioning and scaling
-function scaleInput(xv, yv){
-var rect = canv.getBoundingClientRect(),
-scaleX = canv.width / rect.width,
-scaleY = canv.height / rect.height;
+function scaleInput(xv, yv, sca){
+var rect = sca.getBoundingClientRect(),
+scaleX = sca.width / rect.width,
+scaleY = sca.height / rect.height;
 var xval = (xv - rect.left ) * scaleX ,
 yval = (yv - rect.top ) * scaleY;
 return [xval,yval];
@@ -103,37 +147,100 @@ return [xval,yval];
 
 var mcls;
 var mdir;
+var mdirr;
 var clicking = false;
+var clickingr = false;
+
+
+
+
 //input functions
-function mdown(mpos){
-  clicking = true;
+function mdown(mpos, isleft = true){
+
+  if (isleft){
+    clicking = true;
+    mdir = [mpos[0] - 100,-(mpos[1]-100)];
+
+  clearcanv(ictx);
+
+  ictx.beginPath();
+  ictx.arc(mpos[0],mpos[1],20,0,2*Math.PI);
+  ictx.fill();
+  }
+  else{
+    clickingr = true;
+mdirr = [mpos[0] - 100,-(mpos[1]-100)];
+  clearcanv(irctx);
+
+  irctx.beginPath();
+  irctx.arc(mpos[0],mpos[1],20,0,2*Math.PI);
+  irctx.fill();
+  }
+
 console.log("touch started at " + mpos[0] + "," + mpos[1]);
 mcls = mpos;
-mdir = [0,0];
-uctx.fillStyle = "rgba(0,255,0,.9)";
-drawblines = true;
+
+
 //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
 
 }
 
-function mup(mpos){
+function mup(mpos, isleft = true){
+
+
+if (isleft){
+  clearcanv(ictx);
+  ictx.beginPath();
+  ictx.arc(100,100,20,0,2*Math.PI);
+  ictx.fill();
   clicking = false;
+}
+else{
+  clearcanv(irctx);
+  irctx.beginPath();
+  irctx.arc(100,100,20,0,2*Math.PI);
+  irctx.fill();
+  clickingr = false;
+}
+
 console.log("touch ended at " + mpos[0] + "," + mpos[1]);
-uctx.fillStyle = "rgba(0,0,255,.9)";
-drawblines = false;
-mdir = [mpos[0] - mcls[0],-(mpos[1]-mcls[1])];
+
+
+
 //uctx.fillRect(mpos[0]-5,mpos[1]-5,10,10);
 }
 
 
-function mmove(mpos){
-  if (clicking){
-    mdir = [mpos[0] - mcls[0],-(mpos[1]-mcls[1])];
+function mmove(mpos, isleft = true){
+  if (isleft){
+    if (clicking){
+      mdir = [mpos[0] - 100,-(mpos[1]-100)];
+
+      clearcanv(ictx);
+
+      ictx.beginPath();
+      ictx.arc(mpos[0],mpos[1],20,0,2*Math.PI);
+      ictx.fill();
 
 
-
-  //  console.log(mdir);
+    //  console.log(mdir);
+    }
   }
+  else{
+    if (clickingr){
+      mdirr = [mpos[0] - 100,-(mpos[1]-100)];
+
+      clearcanv(irctx);
+
+      irctx.beginPath();
+      irctx.arc(mpos[0],mpos[1],20,0,2*Math.PI);
+      irctx.fill();
+
+
+    //  console.log(mdir);
+    }
+  }
+
 
 //  uctx.fillStyle = "rgba(255,255,0,.9)";
 //  uctx.fillRect(mpos[0]-2,mpos[1]-2,4,4);
@@ -223,17 +330,37 @@ function drawingLoop(tt) {
    device.clear();
 
 if (clicking && mdir != null){
-  if (mdir[1] > 5){
-    mera.Position = mera.Position.add(mera.Forward.scale(.003* Math.abs(mdir[1])*.5*dt))
+  if (mdir[1] > 10){
+    mera.Position = mera.Position.add(mera.Forward.scale(.003* Math.abs(mdir[1])*.25*dt))
   }
-  if (mdir[1] < -5){
-      mera.Position = mera.Position.subtract(mera.Forward.scale(.003* Math.abs(mdir[1])%.5*dt))
+  if (mdir[1] < -10){
+      mera.Position = mera.Position.subtract(mera.Forward.scale(.003* Math.abs(mdir[1])%.25*dt))
   }
-  if (mdir[0] > 5){
-      mera.Rotation.y += .00002 * Math.abs(mdir[0]) * dt;
+  if (mdir[0] > 10){
+    var newdirec = new BABYLON.Vector3(mera.Forward.z,mera.Forward.y,-mera.Forward.x);
+    newdirec.normalize()
+    mera.Position = mera.Position.add(newdirec.scale(.003* Math.abs(mdir[1])*.25*dt))
   }
-  if (mdir[0] < -5){
-      mera.Rotation.y -= .00002 * Math.abs(mdir[0])* dt;
+  if (mdir[0] < -10){
+    var newdirec = new BABYLON.Vector3(mera.Forward.z,mera.Forward.y,-mera.Forward.x);
+    newdirec.normalize()
+    mera.Position = mera.Position.subtract(newdirec.scale(.003* Math.abs(mdir[1])*.25*dt))
+
+  }
+}
+
+if (clickingr && mdirr != null){
+  if (mdirr[1] > 10){
+    mera.Rotation.x -= .00002 * Math.abs(mdirr[1]) * dt;
+      }
+  if (mdirr[1] < -10){
+    mera.Rotation.x += .00002 * Math.abs(mdirr[1])* dt;
+      }
+  if (mdirr[0] > 10){
+      mera.Rotation.y += .00002 * Math.abs(mdirr[0]) * dt;
+  }
+  if (mdirr[0] < -10){
+      mera.Rotation.y -= .00002 * Math.abs(mdirr[0])* dt;
   }
 }
 
