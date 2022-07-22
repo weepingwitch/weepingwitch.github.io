@@ -70,13 +70,17 @@
 		//doclick(scaleInput(event.clientX,event.clientY));
 	}, false);
 
-	tc.addEventListener('mousedmove', function(event){
+	tc.addEventListener('mousemove', function(event){
 	 dotouch(scaleInput(event.clientX,event.clientY));
 	}, false);
+	tc.addEventListener('mouseleave', function(event){
+		ttx = -1;
+		tty = -1;
+	}, false)
 
 	tc.addEventListener("touchmove", function (e) {
 	var touch = e.touches[0];
-	var mouseEvent = new MouseEvent("mousedmove", {
+	var mouseEvent = new MouseEvent("mousemove", {
 	 clientX: touch.clientX, clientY: touch.clientY
 	});
 	uicanv.dispatchEvent(mouseEvent);
