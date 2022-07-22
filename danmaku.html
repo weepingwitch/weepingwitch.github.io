@@ -63,6 +63,7 @@
 	var tctx = tc.getContext('2d');
 	var bctx = bc.getContext('2d');
 
+	var mmode = false;
 
 	var elemLeft = tc.offsetLeft;
 	var   elemTop = tc.offsetTop;
@@ -72,10 +73,12 @@
 
 	tc.addEventListener('mousemove', function(event){
 	 dotouch(scaleInput(event.clientX,event.clientY));
+	 mmode = true;
 	}, false);
 	tc.addEventListener('mouseleave', function(event){
 		ttx = -1;
 		tty = -1;
+		mmode = false;
 	}, false)
 
 	tc.addEventListener("touchmove", function (e) {
@@ -90,14 +93,18 @@
 	var cdirs = [[-1,0],[1,0],[0,-1],[0,1]];
 
 
-  var player = {x:220,y:350,speed:3,vel:[0,0]}
+  var player = {x:220,y:350,speed:2,vel:[0,0]}
   var middirt, topdirt, botdirt = false;
 var life = 80;
 
+var emits = [];
 
+emits.push({'x':200,'y':20,'tick':0,'rate':200});
+emits.push({'x':100,'y':40,'tick':0,'rate':200});
+emits.push({'x':300,'y':40,'tick':0,'rate':200});
   var bulls = [];
 	for (var i = 0; i < 100; i += 1){
-		bulls.push({'x':randintinc(10,410),'y':randintinc(-600,0),'size':randintinc(5,15)});
+	//	bulls.push({'x':randintinc(10,410),'y':randintinc(-600,0),'size':randintinc(5,15),'age':0});
 	}
 
 clearcanv(mctx);
@@ -105,6 +112,7 @@ clearcanv(tctx);
 clearcanv(bctx);
 
 bctx.fillStyle = "green";
+bctx.strokeStyle="lightgreen";
   mctx.fillStyle = "cyan";
 	tctx.fillStyle = "purple";
 
@@ -145,12 +153,27 @@ function drawloop(tt){
   if(middirt)
     drawmid();
 
+
+
+	emitterloop();
+
   movebulls();
   if (botdirt)
     drawbot();
 
 
+
 	drawtop();
+
+
+
+	var newbs = [];
+	for (let bb of bulls){
+		if (bb.alive){
+			newbs.push(bb);
+		}
+	}
+	bulls = newbs;
 
 
 	if (life >= 0){
@@ -165,24 +188,75 @@ function drawloop(tt){
 
 }
 
+function emitterloop(){
+	for (let em of emits){
+			em.tick += dt;
+
+			moveemitter(em);
+
+
+
+			if (em.tick >= em.rate){
+				em.tick = 0;
+				pulseemitter(em);
+
+			}
+	}
+}
+
+function moveemitter(em){
+em.x += Math.sin(lastt/550)*dt/16;
+em.y += Math.cos(lastt/600)*dt/16;
+}
+
+function pulseemitter(em){
+	for (var i = 0; i < 1; i += 1){
+		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'type':0});
+		var bdir = normarray([player.x-em.x,player.y-em.y],1.5);
+		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'type':1,'dx':bdir[0],'dy':bdir[1]})
+	}
+}
+
+
 
 function movebulls(){
   for (let bb of bulls){
+		if (!bb.alive){
+			continue;
+		}
+		bb.lastx = bb.x;
+		bb.lasty = bb.y;
 
 
-    bb.y += 1.5;
+switch (bb.type){
+	default:
+	case 0:
+	  bb.y += 1.5 * dt/16;
+		break;
+	case 1:
+		bb.x += bb.dx * dt/16;
+		bb.y += bb.dy * dt/16;
+		break;
+}
 
 
-		if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= (bb.size * bb.size) ){
+
+
+
+
+
+
+		if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= bb.size ){
 			life = life-20;
-			bb.y = randintinc(-30,-1);
-			bb.x = randintinc(0,420);
+		bb.alive = false;
 		}
 
+		bb.age += dt;
+	//	console.log(bb.age/1000);
 
-    if (bb.y > 420){
-      bb.y = randintinc(-30,-1);
-      bb.x = randintinc(0,420);
+
+    if (bb.age > 6000){
+			bb.alive = false;
     }
 
   }
@@ -229,30 +303,33 @@ function move() {
   }
 
 
-if (!comparrays([ttx,tty],[-1,-1])){
-	var dvel = [ttx-player.x, tty - player.y];
-	if (Math.abs(dvel[0]) < .1 && Math.abs(dvel[1]) < .1){
-		player.vel = [0,0];
-	}
-	else{
+if (mmode){
+	if (!comparrays([ttx,tty],[-1,-1])){
+		var dvel = [ttx-player.x, tty - player.y];
+		if (Math.abs(dvel[0]) < .1 && Math.abs(dvel[1]) < .1){
+			player.vel = [0,0];
+		}
+		else{
 
-		player.vel = normarray(dvel,player.speed)
-	}
+			player.vel = normarray(dvel,player.speed)
+		}
 
+	}
 }
+
+
 
 
 if (!comparrays(player.vel,[0,0])){
   player.vel = normarray(player.vel,player.speed);
   player.x += player.vel[0] * dt / 16;
   player.y += player.vel[1] * dt / 16;
-  player.x = Math.floor(player.x);
-  player.y = Math.floor(player.y);
 
-	player.x = Math.max(player.x,5);
-	player.y = Math.max(player.y,5);
-	player.x = Math.min(player.x,415);
-	player.y = Math.min(player.y,415);
+
+	player.x = Math.max(player.x,15);
+	player.y = Math.max(player.y,15);
+	player.x = Math.min(player.x,405);
+	player.y = Math.min(player.y,405);
   middirt = true;
 }
 else{
@@ -264,6 +341,7 @@ else{
 }
 
 document.onkeydown = function(e) {
+	mmode = false;
 	if(e.keyCode == 37 || e.keyCode == 65) LEFT = true;
   if(e.keyCode == 38  || e.keyCode == 87) UP = true;
 	if(e.keyCode == 39 || e.keyCode == 68) RIGHT = true;
@@ -290,7 +368,6 @@ function dotouch(cp){
 
 	var ccx = cp[0];
 	var ccy = cp[1];
-	console.log(ccx,ccy);
 	ttx = ccx;
 	tty = ccy;
 
@@ -312,10 +389,17 @@ function drawtop(){
 function drawbot(){
 		clearcanv(bctx);
 
-
+		bctx.fillStyle="green";
    for (let bb of bulls){
+		 if (!bb.alive){
+			 continue;
+		 }
      drawbull(bb);
    }
+	 bctx.fillStyle="brown";
+	 for (let em of emits){
+		 drawemit(em);
+	 }
 
 }
 
@@ -328,15 +412,28 @@ function drawmid(){
 }
 
 function drawbull(bb){
+
+	//bctx.beginPath();
+	//bctx.moveTo(Math.floor(bb.x),Math.floor(bb.y));
+	//bctx.lineTo(Math.floor(bb.x+((bb.lastx-bb.x)*16)),Math.floor(bb.y+((bb.lasty-bb.y)*16)));
+	//bctx.stroke();
+
   bctx.beginPath();
   bctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size,0,2*Math.PI);
   bctx.fill();
+
+
 }
 
+function drawemit(bb){
+  bctx.beginPath();
+  bctx.arc(Math.floor(bb.x),Math.floor(bb.y),3,0,2*Math.PI);
+  bctx.fill();
+}
 function drawplayer(){
 
   mctx.beginPath();
-  mctx.arc(player.x,player.y,5,0,2*Math.PI);
+  mctx.arc(Math.floor(player.x),Math.floor(player.y),5,0,2*Math.PI);
   mctx.fill();
 
 }
