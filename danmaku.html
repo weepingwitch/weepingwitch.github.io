@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>danmaku</title>
+	<style type="text/css">
+	body{
+		background-color:black;
+	}
+	canvas{
+		margin: 0 auto;
+	}
+	#main{
+		width:420px;
+		height:420px;
+		border:0px solid white;
+		position:absolute;
+		margin: 0 auto;
+		background-color:black;
+	}
+
+
+	#screen{
+		position:relative;
+		width:420px;
+		height:420px;
+		border:0px;
+		background-color:black;
+	}
+
+
+
+
+	</style>
+</head>
+<body>
+
+	<div id="main">
+		<div id="screen">
+
+		</div>
+	</div>
+
+
+
+
+
+	<script>
+
+	var screendiv = document.getElementById("screen");
+	var aw = screendiv.clientWidth;
+	var ah = screendiv.clientHeight;
+	screendiv.innerHTML="" +
+	"<canvas style='z-index:1;position:absolute;top:0;left:0' id='bcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+	"<canvas style='z-index:2;position:absolute;top:0;left:0' id='mcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+	"<canvas style='z-index:3;position:absolute;top:0;left:0' id='tcanvas' width='" + aw + "' height='" + ah + "'></canvas>";
+
+	var mc = document.getElementById('mcanvas');
+	var tc = document.getElementById('tcanvas');
+	var bc = document.getElementById("bcanvas");
+	var mctx = mc.getContext('2d');
+	var tctx = tc.getContext('2d');
+	var bctx = bc.getContext('2d');
+
+
+	var elemLeft = tc.offsetLeft;
+	var   elemTop = tc.offsetTop;
+	tc.addEventListener('click', function(event) {
+		doclick(scaleInput(event.clientX,event.clientY));
+	}, false);
+
+
+	var cdirs = [[-1,0],[1,0],[0,-1],[0,1]];
+
+
+  var player = {x:220,y:350,speed:3,vel:[0,0]}
+  var middirt, topdirt, botdirt = false;
+var life = 80;
+
+
+  var bulls = [];
+	for (var i = 0; i < 100; i += 1){
+		bulls.push({'x':randintinc(10,410),'y':randintinc(-600,0),'size':randintinc(5,15)});
+	}
+
+clearcanv(mctx);
+clearcanv(tctx);
+clearcanv(bctx);
+
+bctx.fillStyle = "white";
+  mctx.fillStyle = "pink";
+	tctx.fillStyle = "purple";
+
+
+drawbot();
+drawmid();
+drawtop();
+
+requestAnimationFrame(drawloop);
+
+
+
+var offs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]];
+
+
+
+
+//main loop
+
+var dt;
+var lastt = -1;
+
+
+
+
+
+function drawloop(tt){
+	//console.log("drawloop");
+	dt = tt - lastt;
+	if (lastt == -1){
+		dt = 0;
+	}
+	lastt = tt;
+
+	life = Math.min(life+(dt/160),100);
+
+  move();
+  if(middirt)
+    drawmid();
+
+  movebulls();
+  if (botdirt)
+    drawbot();
+
+
+	drawtop();
+
+
+	if (life >= 0){
+		requestAnimationFrame(drawloop);
+	}
+	else{
+		console.log(tt/1000);
+		tctx.font = "42px Arial";
+		tctx.fillText(tt/1000,100,200);
+	}
+
+
+}
+
+
+function movebulls(){
+  for (let bb of bulls){
+
+
+    bb.y += 1.5;
+
+
+		if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= (bb.size * bb.size) ){
+			life = life-20;
+			bb.y = randintinc(-30,-1);
+			bb.x = randintinc(0,420);
+		}
+
+
+    if (bb.y > 420){
+      bb.y = randintinc(-30,-1);
+      bb.x = randintinc(0,420);
+    }
+
+  }
+botdirt = true;
+}
+
+
+
+
+
+var LEFT = false;
+var RIGHT = false;
+var UP = false;
+var DOWN = false;
+
+
+
+////// Arrow keys //////
+
+function move() {
+
+	if(LEFT && !RIGHT) {
+		player.vel[0] = -player.speed;
+	}
+	else if(RIGHT && !LEFT) {
+			player.vel[0] = player.speed;
+
+	}
+  else{
+    player.vel[0] = 0;
+  }
+
+  if (DOWN && !UP){
+    	player.vel[1] = player.speed;
+
+
+  }
+  else if (UP && !DOWN){
+    player.vel[1] = -player.speed;
+  }
+  else{
+    player.vel[1] = 0;
+  }
+
+
+if (!comparrays(player.vel,[0,0])){
+  player.vel = normarray(player.vel,player.speed);
+  player.x += player.vel[0] * dt / 16;
+  player.y += player.vel[1] * dt / 16;
+  player.x = Math.floor(player.x);
+  player.y = Math.floor(player.y);
+  middirt = true;
+}
+else{
+  middirt = false;
+}
+
+
+
+}
+
+document.onkeydown = function(e) {
+	if(e.keyCode == 37 || e.keyCode == 65) LEFT = true;
+  if(e.keyCode == 38  || e.keyCode == 87) UP = true;
+	if(e.keyCode == 39 || e.keyCode == 68) RIGHT = true;
+  if(e.keyCode == 40  || e.keyCode == 83) DOWN = true;
+}
+
+document.onkeyup = function(e) {
+	if(e.keyCode == 37 || e.keyCode == 65) LEFT = false;
+  if(e.keyCode == 38 || e.keyCode == 87) UP = false;
+	if(e.keyCode == 39  || e.keyCode == 68) RIGHT = false;
+  if(e.keyCode == 40  || e.keyCode == 83) DOWN = false;
+}
+
+
+
+// wooo functions
+function clearcanv(cx){
+	cx.clearRect(0,0,aw,ah);
+}
+
+
+
+function doclick(cp){
+
+	var ccx = cp[0];
+	var ccy = cp[1];
+	console.log(ccx,ccy);
+
+}
+
+function drawtop(){
+	clearcanv(tctx);
+	tctx.clearRect(0,0,420,5);
+	tctx.clearRect(0,0,5,420);
+	tctx.clearRect(0,415,420,5);
+	tctx.clearRect(415,0,5,420);
+	tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),0,Math.floor(420*(life/100)),5);
+	tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),415,Math.floor(420*(life/100)),5);
+	tctx.fillRect(0,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
+	tctx.fillRect(415,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
+
+}
+
+function drawbot(){
+		clearcanv(bctx);
+
+
+   for (let bb of bulls){
+     drawbull(bb);
+   }
+
+}
+
+
+
+function drawmid(){
+	clearcanv(mctx);
+  drawplayer();
+
+}
+
+function drawbull(bb){
+  bctx.beginPath();
+  bctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size,0,2*Math.PI);
+  bctx.fill();
+}
+
+function drawplayer(){
+
+  mctx.beginPath();
+  mctx.arc(player.x,player.y,5,0,2*Math.PI);
+  mctx.fill();
+
+}
+
+
+function sqrmag(p1,p2){
+	var dx = p2[0] - p1[0];
+	var dy = p2[1] - p1[1];
+	var res = (dx * dx + dy*dy);
+	return res;
+}
+
+function arrinarr(smal, larg){
+	res = false;
+	for (let ara of larg){
+		res = res || comparrays(ara,smal)
+	}
+	return res;
+}
+
+function comparrays(array_a, array_b) {
+	var rtn = true,
+	i, l;
+	if (array_a.length === array_b.length) {
+		for (i = 0, l = array_a.length; (i < l) && rtn; i += 1) {
+			rtn = array_a[i] === array_b[i];
+		}
+	} else {
+		rtn = false;
+	}
+	return rtn;
+}
+
+
+function randfrom(myarray){
+	return myarray[Math.floor(Math.random() * myarray.length)];
+}
+
+function randintinc(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+//account for canvas positioning and scaling
+function scaleInput(xv, yv){
+	var rect = tc.getBoundingClientRect(),
+	scaleX = tc.width / rect.width,
+	scaleY = tc.height / rect.height;
+	var xval = (xv - rect.left ) * scaleX ,
+	yval = (yv - rect.top ) * scaleY;
+	return [xval,yval];
+}
+
+
+
+function normarray(arr, scf=1){
+  var armag = Math.sqrt((arr[0] * arr[0]) + (arr[1] * arr[1]));
+  var res = [0,0];
+  res[0] = (arr[0]/armag) * scf;
+  res[1] = (arr[1]/armag) * scf;
+
+  return res;
+}
+
+
+function clonearray(array){
+	newarray = [];
+	for (i = 0; i < array.length; i++) {
+		newarray.push(array[i]);
+	}
+}
+function zClone(thing){
+	return JSON.parse(JSON.stringify(thing));
+}
+
+function zWrapCoord(x, maxx, min=0){
+	var res = x;
+	if (x<min)
+	res =  x + maxx;
+	if (x >= maxx)
+	res = x - maxx;
+	return res;
+}
+
+
+
+</script>
+
+</body>
+</html>
