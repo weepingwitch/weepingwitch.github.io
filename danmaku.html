@@ -67,7 +67,19 @@
 	var elemLeft = tc.offsetLeft;
 	var   elemTop = tc.offsetTop;
 	tc.addEventListener('click', function(event) {
-		doclick(scaleInput(event.clientX,event.clientY));
+		//doclick(scaleInput(event.clientX,event.clientY));
+	}, false);
+
+	tc.addEventListener('mousedmove', function(event){
+	 dotouch(scaleInput(event.clientX,event.clientY));
+	}, false);
+
+	tc.addEventListener("touchmove", function (e) {
+	var touch = e.touches[0];
+	var mouseEvent = new MouseEvent("mousedmove", {
+	 clientX: touch.clientX, clientY: touch.clientY
+	});
+	uicanv.dispatchEvent(mouseEvent);
 	}, false);
 
 
@@ -175,7 +187,8 @@ botdirt = true;
 
 
 
-
+var ttx=-1;
+var tty=-1;
 
 var LEFT = false;
 var RIGHT = false;
@@ -210,6 +223,19 @@ function move() {
   else{
     player.vel[1] = 0;
   }
+
+
+if (!comparrays([ttx,tty],[-1,-1])){
+	var dvel = [ttx-player.x, tty - player.y];
+	if (Math.abs(dvel[0]) < .1 && Math.abs(dvel[1]) < .1){
+		player.vel = [0,0];
+	}
+	else{
+
+		player.vel = normarray(dvel,player.speed)
+	}
+
+}
 
 
 if (!comparrays(player.vel,[0,0])){
@@ -256,11 +282,13 @@ function clearcanv(cx){
 
 
 
-function doclick(cp){
+function dotouch(cp){
 
 	var ccx = cp[0];
 	var ccy = cp[1];
 	console.log(ccx,ccy);
+	ttx = ccx;
+	tty = ccy;
 
 }
 
