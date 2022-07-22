@@ -218,6 +218,11 @@ if (!comparrays(player.vel,[0,0])){
   player.y += player.vel[1] * dt / 16;
   player.x = Math.floor(player.x);
   player.y = Math.floor(player.y);
+
+	player.x = Math.max(player.x,5);
+	player.y = Math.max(player.y,5);
+	player.x = Math.min(player.x,415);
+	player.y = Math.min(player.y,415);
   middirt = true;
 }
 else{
