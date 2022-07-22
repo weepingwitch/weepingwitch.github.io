@@ -413,13 +413,13 @@ function drawmid(){
 
 function drawbull(bb){
 
-	//bctx.beginPath();
-	//bctx.moveTo(Math.floor(bb.x),Math.floor(bb.y));
-	//bctx.lineTo(Math.floor(bb.x+((bb.lastx-bb.x)*16)),Math.floor(bb.y+((bb.lasty-bb.y)*16)));
-	//bctx.stroke();
+	bctx.beginPath();
+
+	bctx.arc(bb.x+((bb.lastx-bb.x)*3),bb.y+((bb.lasty-bb.y)*3),bb.size/2,0,2*Math.PI);
+	bctx.fill();
 
   bctx.beginPath();
-  bctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size,0,2*Math.PI);
+  bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
   bctx.fill();
 
 
@@ -433,7 +433,7 @@ function drawemit(bb){
 function drawplayer(){
 
   mctx.beginPath();
-  mctx.arc(Math.floor(player.x),Math.floor(player.y),5,0,2*Math.PI);
+  mctx.arc(player.x,player.y,5,0,2*Math.PI);
   mctx.fill();
 
 }
