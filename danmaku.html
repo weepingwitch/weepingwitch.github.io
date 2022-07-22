@@ -20,6 +20,14 @@
 		background-color:black;
 	}
 
+	canvas {
+	  -webkit-animation: canvas 60s infinite;
+	}
+
+	@-webkit-keyframes canvas {
+	  0%, 100%  { -webkit-filter: hue-rotate(0deg); }
+	  50% { -webkit-filter: hue-rotate(360deg); }
+	}
 
 	#screen{
 		position:relative;
@@ -52,16 +60,19 @@
 	var aw = screendiv.clientWidth;
 	var ah = screendiv.clientHeight;
 	screendiv.innerHTML="" +
-	"<canvas style='z-index:1;position:absolute;top:0;left:0' id='bcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
-	"<canvas style='z-index:2;position:absolute;top:0;left:0' id='mcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
-	"<canvas style='z-index:3;position:absolute;top:0;left:0' id='tcanvas' width='" + aw + "' height='" + ah + "'></canvas>";
+	"<canvas style='z-index:1;position:absolute;top:0;left:0' id='bbcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+	"<canvas style='z-index:2;position:absolute;top:0;left:0' id='bcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+	"<canvas style='z-index:3;position:absolute;top:0;left:0' id='mcanvas' width='" + aw + "' height='" + ah + "'></canvas>" +
+	"<canvas style='z-index:4;position:absolute;top:0;left:0' id='tcanvas' width='" + aw + "' height='" + ah + "'></canvas>";
 
 	var mc = document.getElementById('mcanvas');
 	var tc = document.getElementById('tcanvas');
 	var bc = document.getElementById("bcanvas");
+	var bbc = document.getElementById("bbcanvas");
 	var mctx = mc.getContext('2d');
 	var tctx = tc.getContext('2d');
 	var bctx = bc.getContext('2d');
+	var bbctx = bbc.getContext('2d');
 
 	var mmode = false;
 
@@ -99,9 +110,9 @@ var life = 80;
 
 var emits = [];
 
-emits.push({'x':200,'y':20,'tick':0,'rate':200});
-emits.push({'x':100,'y':40,'tick':0,'rate':200});
-emits.push({'x':300,'y':40,'tick':0,'rate':200});
+emits.push({'x':200,'y':20,'tick':0,'rate':300,'step':0});
+emits.push({'x':100,'y':40,'tick':0,'rate':300,'step':1});
+emits.push({'x':300,'y':40,'tick':0,'rate':300,'step':2});
   var bulls = [];
 	for (var i = 0; i < 100; i += 1){
 	//	bulls.push({'x':randintinc(10,410),'y':randintinc(-600,0),'size':randintinc(5,15),'age':0});
@@ -111,11 +122,11 @@ clearcanv(mctx);
 clearcanv(tctx);
 clearcanv(bctx);
 
-bctx.fillStyle = "green";
-bctx.strokeStyle="lightgreen";
+bctx.fillStyle = "brown";
+bctx.strokeStyle="white";
   mctx.fillStyle = "cyan";
-	tctx.fillStyle = "purple";
-
+	tctx.fillStyle = "cyan";
+	bbctx.strokeStyle = "rgba(255,100,100,.2)";
 
 drawbot();
 drawmid();
@@ -141,6 +152,7 @@ var lastt = -1;
 
 function drawloop(tt){
 	//console.log("drawloop");
+
 	dt = tt - lastt;
 	if (lastt == -1){
 		dt = 0;
@@ -148,6 +160,9 @@ function drawloop(tt){
 	lastt = tt;
 
 	life = Math.min(life+(dt/160),100);
+
+
+
 
   move();
   if(middirt)
@@ -165,6 +180,7 @@ function drawloop(tt){
 
 	drawtop();
 
+	drawbbg();
 
 
 	var newbs = [];
@@ -180,6 +196,8 @@ function drawloop(tt){
 		requestAnimationFrame(drawloop);
 	}
 	else{
+		life = 0;
+		drawtop();
 		console.log(tt/1000);
 		tctx.font = "42px Arial";
 		tctx.fillText(tt/1000,100,200);
@@ -211,11 +229,24 @@ em.y += Math.cos(lastt/600)*dt/16;
 
 function pulseemitter(em){
 	for (var i = 0; i < 1; i += 1){
-		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'type':0});
+		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=5),'type':0});
 		var bdir = normarray([player.x-em.x,player.y-em.y],1.5);
-		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'type':1,'dx':bdir[0],'dy':bdir[1]})
+		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
+
+	}
+	emitcircle(em);
+}
+
+
+function emitcircle(em, emsteps = 9){
+
+	for (var o = 0; o < 2*Math.PI; o += ((2*Math.PI)/emsteps) ){
+		var bdir = normarray([Math.cos(o),Math.sin(o)],1.5);
+		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
+
 	}
 }
+
 
 
 
@@ -247,8 +278,17 @@ switch (bb.type){
 
 
 		if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= bb.size ){
-			life = life-20;
-		bb.alive = false;
+			if (!bb.bomb){
+				life = life-25;
+				bb.alive = false;
+			}
+
+		}
+		if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= bb.size * bb.size  + (42)){
+			if (bb.bomb){
+				dobomb(bb.x,bb.y);
+				bb.alive = false;
+			}
 		}
 
 		bb.age += dt;
@@ -258,9 +298,32 @@ switch (bb.type){
     if (bb.age > 6000){
 			bb.alive = false;
     }
+		if (bb.x < 0 || bb.y < 0 || bb.x > 420 || bb.y > 420){
+			bb.alive = false;
+		}
 
   }
 botdirt = true;
+}
+
+
+
+function dobomb(bx,by){
+	console.log("boom");
+	bbctx.beginPath();
+	bbctx.arc(bx,by,200,0,2*Math.PI);
+	bbctx.fill();
+
+	for (let bbb of bulls){
+		if (!bbb.alive){
+			continue;
+		}
+		if (sqrmag([bbb.x,bbb.y],[bx,by]) <= 200*200){
+			bbb.alive = false;
+
+		}
+
+	}
 }
 
 
@@ -389,14 +452,14 @@ function drawtop(){
 function drawbot(){
 		clearcanv(bctx);
 
-		bctx.fillStyle="green";
+		//bctx.fillStyle="red";
    for (let bb of bulls){
 		 if (!bb.alive){
 			 continue;
 		 }
      drawbull(bb);
    }
-	 bctx.fillStyle="brown";
+	 //bctx.fillStyle="brown";
 	 for (let em of emits){
 		 drawemit(em);
 	 }
@@ -411,6 +474,14 @@ function drawmid(){
 
 }
 
+
+
+function drawbbg(){
+	bbctx.fillStyle = "rgba(0,0,0,.05)";
+	bbctx.fillRect(0,0,420,420);
+	bbctx.fillStyle = "rgba(100,255,255,0.6)";
+}
+
 function drawbull(bb){
 
 //	bctx.beginPath();
@@ -418,9 +489,36 @@ function drawbull(bb){
 //	bctx.arc(bb.x+((bb.lastx-bb.x)*3),bb.y+((bb.lasty-bb.y)*3),bb.size/2,0,2*Math.PI);
 //	bctx.fill();
 
-  bctx.beginPath();
-  bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
-  bctx.fill();
+
+	bbctx.beginPath();
+	bbctx.arc(bb.x,bb.y,bb.size-1,0,2*Math.PI);
+	bbctx.stroke();
+
+	if (bb.bomb){
+		bctx.fillStyle = "white";
+
+		bctx.beginPath();
+		bctx.arc(bb.x,bb.y,bb.size+4,0,2*Math.PI);
+		bctx.stroke();
+		bctx.beginPath();
+		bctx.moveTo(bb.x+8,bb.y+8);
+		bctx.lineTo(bb.x-8,bb.y-8);
+		bctx.stroke();
+		bctx.beginPath();
+		bctx.moveTo(bb.x+8,bb.y-8);
+		bctx.lineTo(bb.x-8,bb.y+8);
+		bctx.stroke();
+
+}
+		bctx.beginPath();
+	  bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
+	  bctx.fill();
+		bctx.stroke();
+	
+
+	if (bb.bomb){
+		bctx.fillStyle = "red";
+	}
 
 
 }
@@ -432,9 +530,10 @@ function drawemit(bb){
 }
 function drawplayer(){
 
-  mctx.beginPath();
-  mctx.arc(player.x,player.y,5,0,2*Math.PI);
-  mctx.fill();
+  //mctx.beginPath();
+  //mctx.arc(player.x,player.y,5,0,2*Math.PI);
+  //mctx.fill();
+	mctx.fillRect(player.x-2.5,player.y-2.5,5,5);
 
 }
 
