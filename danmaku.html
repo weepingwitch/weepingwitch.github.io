@@ -55,7 +55,7 @@
 		</div>
 		<div id="scoretext" >score:</div><BR>
 			wasd/arrow keys/mouse/touch to move.<BR>
-			avoid bullets, but hit the bombs.<BR>
+			avoid bullets, but do hit the bombs.<BR>
 			(ﾉ>ω<)ﾉ :｡･:*:･ﾟ’★,｡･:*:･ﾟ’☆
 
 	</div>
@@ -207,7 +207,7 @@ function drawloop(tt){
 	lastt = tt;
 	ptime = (Math.floor(tt/10)/100).toFixed(2);
 
-	life = Math.min(life+(dt/160),100);
+	life = Math.min(life+(dt/260),100);
 
 	bgtick += dt;
 	if (bgtick >= 75){
@@ -273,7 +273,7 @@ function gameover(tt){
     function() {
       deadmode = true;
     },
-    200
+    500
   );
 }
 
@@ -686,7 +686,7 @@ function drawbot(){
 
 	 bctx.beginPath();
 	 bctx.moveTo(emits[0].x,emits[0].y);
-	 bctx.strokeStyle = "rgba(255,255,255,0.5)";
+	 bctx.strokeStyle = "rgba(255,255,255,0.9)";
 	 for (let em of emits){
 		 bctx.arc(em.x,em.y,10,.5*Math.PI,3.5*Math.PI);
 
