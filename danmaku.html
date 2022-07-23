@@ -3,25 +3,29 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>danmaku</title>
+	<title>d.a.n.m.a.k.u</title>
 	<style type="text/css">
 	body{
 		background-color:black;
+		color:cyan;
+		-webkit-animation: canvas 60s infinite;
 	}
 	canvas{
 		margin: 0 auto;
+		  touch-action:none;
 	}
 	#main{
 		width:420px;
-		height:420px;
+		font-family:monospace;
 		border:0px solid white;
+		text-align:center;
 		position:absolute;
 		margin: 0 auto;
 		background-color:black;
 	}
 
 	canvas {
-	  -webkit-animation: canvas 60s infinite;
+
 	}
 
 	@-webkit-keyframes canvas {
@@ -45,9 +49,11 @@
 <body>
 
 	<div id="main">
+		dead.angel.neon.moon.armageddon.kiss.ultra
 		<div id="screen">
 
 		</div>
+		<div id="scoretext" >score:</div>
 	</div>
 
 
@@ -69,6 +75,7 @@
 	var tc = document.getElementById('tcanvas');
 	var bc = document.getElementById("bcanvas");
 	var bbc = document.getElementById("bbcanvas");
+	var sdv = document.getElementById("scoretext");
 	var mctx = mc.getContext('2d');
 	var tctx = tc.getContext('2d');
 	var bctx = bc.getContext('2d');
@@ -107,6 +114,7 @@
   var player = {x:220,y:350,speed:2,vel:[0,0]}
   var middirt, topdirt, botdirt = false;
 var life = 80;
+var score = 0;
 
 var emits = [];
 
@@ -127,7 +135,7 @@ bctx.strokeStyle="white";
   mctx.fillStyle = "cyan";
 	tctx.fillStyle = "cyan";
 	bbctx.strokeStyle = "rgba(255,100,100,.2)";
-
+tctx.font = "40px monospace";
 drawbot();
 drawmid();
 drawtop();
@@ -147,26 +155,29 @@ var dt;
 var lastt = -1;
 
 
-
-
-
+var bgtick = 0;
+var grazing = false;
+var ptime;
 function drawloop(tt){
 	//console.log("drawloop");
-
+	grazing = false;
 	dt = tt - lastt;
 	if (lastt == -1){
 		dt = 0;
 	}
 	lastt = tt;
+	ptime = (Math.floor(tt/10)/100).toFixed(2);
 
 	life = Math.min(life+(dt/160),100);
 
+	bgtick += dt;
+	if (bgtick >= 125){
+		bgtick = 0;
+		drawbbg();
+	}
 
+	//score = score + dt *10;
 
-
-  move();
-  if(middirt)
-    drawmid();
 
 
 
@@ -176,11 +187,15 @@ function drawloop(tt){
   if (botdirt)
     drawbot();
 
+		move();
+
+	    drawmid();
+
 
 
 	drawtop();
 
-	drawbbg();
+
 
 
 	var newbs = [];
@@ -191,6 +206,8 @@ function drawloop(tt){
 	}
 	bulls = newbs;
 
+	sdv.innerHTML = "time: " + ptime + "<BR>score: " + Math.floor(score);
+
 
 	if (life >= 0){
 		requestAnimationFrame(drawloop);
@@ -199,8 +216,10 @@ function drawloop(tt){
 		life = 0;
 		drawtop();
 		console.log(tt/1000);
-		tctx.font = "42px Arial";
-		tctx.fillText(tt/1000,100,200);
+
+		tctx.fillText("(×_×)⌒☆",50,100);
+		tctx.fillText("YOU DIED",100,200);
+		tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,300);
 	}
 
 
@@ -289,6 +308,12 @@ switch (bb.type){
 				dobomb(bb.x,bb.y);
 				bb.alive = false;
 			}
+			else{
+				if (bb.alive){
+					score += dt*10;
+					grazing = true;
+				}
+			}
 		}
 
 		bb.age += dt;
@@ -310,6 +335,7 @@ botdirt = true;
 
 function dobomb(bx,by){
 	console.log("boom");
+	score += 9999;
 	bbctx.beginPath();
 	bbctx.arc(bx,by,200,0,2*Math.PI);
 	bbctx.fill();
@@ -369,7 +395,7 @@ function move() {
 if (mmode){
 	if (!comparrays([ttx,tty],[-1,-1])){
 		var dvel = [ttx-player.x, tty - player.y];
-		if (Math.abs(dvel[0]) < .1 && Math.abs(dvel[1]) < .1){
+		if (Math.abs(dvel[0]) < 1 && Math.abs(dvel[1]) < 1){
 			player.vel = [0,0];
 		}
 		else{
@@ -438,15 +464,13 @@ function dotouch(cp){
 
 function drawtop(){
 	clearcanv(tctx);
-	tctx.clearRect(0,0,420,5);
-	tctx.clearRect(0,0,5,420);
-	tctx.clearRect(0,415,420,5);
-	tctx.clearRect(415,0,5,420);
+
 	tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),0,Math.floor(420*(life/100)),5);
 	tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),415,Math.floor(420*(life/100)),5);
 	tctx.fillRect(0,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
 	tctx.fillRect(415,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
-
+	//tctx.font = "20px Arial";
+	//tctx.fillText(Math.floor(score),12,28)
 }
 
 function drawbot(){
@@ -477,7 +501,7 @@ function drawmid(){
 
 
 function drawbbg(){
-	bbctx.fillStyle = "rgba(0,0,0,.05)";
+	bbctx.fillStyle = "rgba(0,0,0,.2)";
 	bbctx.fillRect(0,0,420,420);
 	bbctx.fillStyle = "rgba(100,255,255,0.6)";
 }
@@ -514,7 +538,7 @@ function drawbull(bb){
 	  bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
 	  bctx.fill();
 		bctx.stroke();
-	
+
 
 	if (bb.bomb){
 		bctx.fillStyle = "red";
@@ -530,9 +554,14 @@ function drawemit(bb){
 }
 function drawplayer(){
 
-  //mctx.beginPath();
-  //mctx.arc(player.x,player.y,5,0,2*Math.PI);
-  //mctx.fill();
+	if (grazing){
+		mctx.fillStyle = "rgba(100,255,255,.3)";
+		mctx.beginPath();
+	  mctx.arc(player.x,player.y,10,0,2*Math.PI);
+	  mctx.fill();
+		mctx.fillStyle = "cyan";
+	}
+
 	mctx.fillRect(player.x-2.5,player.y-2.5,5,5);
 
 }
