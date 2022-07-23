@@ -151,9 +151,12 @@ var score = 0;
 
 var emits = [];
 
-emits.push({'x':200,'y':20,'tick':0,'rate':300,'etick':0,'phase':3});
-emits.push({'x':100,'y':40,'tick':0,'rate':300,'etick':0,'phase':0});
-emits.push({'x':300,'y':40,'tick':0,'rate':300,'etick':0,'phase':0});
+emits.push({'x':(420/6)*3,'y':40,'mr':3,'tick':0,'rate':300,'etick':0,'phase':3});
+emits.push({'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0});
+emits.push({'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0});
+emits.push({'x':(420/6)*2,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7});
+emits.push({'x':(420/6)*4,'y':80,'mr':1,'tick':0,'rate':300,'etick':0,'phase':7});
+
   var bulls = [];
 	for (var i = 0; i < 100; i += 1){
 	//	bulls.push({'x':randintinc(10,410),'y':randintinc(-600,0),'size':randintinc(5,15),'age':0});
@@ -280,7 +283,7 @@ function emitterloop(){
 
 			if (em.etick >= 5000){
 				em.etick = 0;
-				em.phase = randintinc(0,20);
+				em.phase = randintinc(0,23);
 			}
 
 
@@ -288,12 +291,16 @@ function emitterloop(){
 }
 
 function moveemitter(em){
-em.x += Math.sin(lastt/550)*dt/16;
-em.y += Math.cos(lastt/600)*dt/16;
+em.x += Math.sin(lastt/550 * em.mr)*dt/16;
+em.y += Math.cos(lastt/600 * em.mr)*dt/16;
 }
 
 function pulseemitter(em){
 	switch (em.phase) {
+		case 23:
+		case 22:
+		case 21:
+			break;
 		case 20:
 			em.rate = 150;
 			emitdown(em);
@@ -310,7 +317,7 @@ function pulseemitter(em){
 			break;
 		case 16:
 			em.rate = 500;
-			emitaim(em);
+			emitaim(em, 6);
 			emitdown(em);
 			break;
 		case 15:
@@ -347,7 +354,7 @@ function pulseemitter(em){
 			em.rate = 600;
 			emitcircle(em);
 			emitdown(em);
-			emitaim(em);
+			emitaim(em, 6);
 			break;
 		case 8:
 			em.rate = 200;
@@ -363,7 +370,7 @@ function pulseemitter(em){
 			break;
 		case 5:
 		case 4:
-			emitaim(em);
+			emitaim(em, 10);
 		case 3:
 			em.rate = 100;
 			emitcircle(em,15);
@@ -383,7 +390,7 @@ function pulseemitter(em){
 		case 0:
 			em.rate = 200;
 			emitdown(em);
-			emitaim(em);
+			emitaim(em, 6);
 			em.phase = 1;
 			break;
 	}
@@ -392,30 +399,30 @@ function pulseemitter(em){
 	//
 }
 
-function emitaim(em){
+function emitaim(em,bs=4){
 	var bdir = normarray([player.x-em.x,player.y-em.y],1.5);
-	bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
+	bulls.push({'x':em.x,'y':em.y,'size':8,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
 
 }
 
-function emitdown(em){
-	bulls.push({'x':em.x + 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
-	bulls.push({'x':em.x - 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+function emitdown(em, bs=5){
+	bulls.push({'x':em.x + 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+	bulls.push({'x':em.x - 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
 
 }
 
-function emitline(em){
-	bulls.push({'x':em.x + 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
-	bulls.push({'x':em.x - 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
-	bulls.push({'x':em.x + 18,'y':em.y - 3,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
-	bulls.push({'x':em.x - 18,'y':em.y - 3,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
-	bulls.push({'x':em.x + 30,'y':em.y - 6,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
-	bulls.push({'x':em.x - 30,'y':em.y - 6,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
+function emitline(em, bs=4){
+	bulls.push({'x':em.x + 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+	bulls.push({'x':em.x - 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+	bulls.push({'x':em.x + 18,'y':em.y - 3,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
+	bulls.push({'x':em.x - 18,'y':em.y - 3,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
+	bulls.push({'x':em.x + 30,'y':em.y - 6,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
+	bulls.push({'x':em.x - 30,'y':em.y - 6,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
 
 }
 
 
-function emitcircle(em, emsteps = 9){
+function emitcircle(em, emsteps = 9, bs  = 4){
 
 	for (var o = 0; o < 2*Math.PI; o += ((2*Math.PI)/emsteps) ){
 		var bdir = normarray([Math.cos(o),Math.sin(o)],1.5);
@@ -483,7 +490,7 @@ switch (bb.type){
     if (bb.age > 6000){
 			bb.alive = false;
     }
-		if (bb.x < 0  || bb.x > 420 || bb.y > 420){
+		if (bb.x < 0 || bb.y < -10 || bb.x > 420 || bb.y > 420){
 			bb.alive = false;
 		}
 
@@ -656,9 +663,21 @@ function drawbot(){
      drawbull(bb);
    }
 	 //bctx.fillStyle="brown";
+
+	 bctx.beginPath();
+	 bctx.moveTo(emits[0].x,emits[0].y);
+	 bctx.strokeStyle = "rgba(255,255,255,0.5)";
 	 for (let em of emits){
-		 drawemit(em);
+		 bctx.arc(em.x,em.y,10,.5*Math.PI,3.5*Math.PI);
+
+
+		 bctx.lineTo(em.x,em.y);
+		 bctx.lineTo(emits[0].x,emits[0].y);
+		 bctx.lineTo(em.x,em.y);
 	 }
+	 bctx.lineTo(emits[0].x,emits[0].y);
+	 bctx.stroke();
+	 bctx.strokeStyle = "white";
 
 }
 
