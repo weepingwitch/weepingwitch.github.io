@@ -118,9 +118,9 @@ var score = 0;
 
 var emits = [];
 
-emits.push({'x':200,'y':20,'tick':0,'rate':300,'step':0});
-emits.push({'x':100,'y':40,'tick':0,'rate':300,'step':1});
-emits.push({'x':300,'y':40,'tick':0,'rate':300,'step':2});
+emits.push({'x':200,'y':20,'tick':0,'rate':300,'etick':0,'phase':3});
+emits.push({'x':100,'y':40,'tick':0,'rate':300,'etick':0,'phase':0});
+emits.push({'x':300,'y':40,'tick':0,'rate':300,'etick':0,'phase':0});
   var bulls = [];
 	for (var i = 0; i < 100; i += 1){
 	//	bulls.push({'x':randintinc(10,410),'y':randintinc(-600,0),'size':randintinc(5,15),'age':0});
@@ -154,7 +154,7 @@ var offs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]];
 var dt;
 var lastt = -1;
 
-
+var bgpulse = 0;
 var bgtick = 0;
 var grazing = false;
 var ptime;
@@ -171,7 +171,7 @@ function drawloop(tt){
 	life = Math.min(life+(dt/160),100);
 
 	bgtick += dt;
-	if (bgtick >= 125){
+	if (bgtick >= 75){
 		bgtick = 0;
 		drawbbg();
 	}
@@ -213,21 +213,27 @@ function drawloop(tt){
 		requestAnimationFrame(drawloop);
 	}
 	else{
-		life = 0;
-		drawtop();
-		console.log(tt/1000);
-
-		tctx.fillText("(×_×)⌒☆",50,100);
-		tctx.fillText("YOU DIED",100,200);
-		tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,300);
+		gameover(tt);
 	}
 
 
 }
 
+
+function gameover(tt){
+	life = 0;
+	drawtop();
+	console.log(tt/1000);
+
+	tctx.fillText("(×_×)⌒☆",50,100);
+	tctx.fillText("YOU DIED",100,200);
+	tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,300);
+}
+
 function emitterloop(){
 	for (let em of emits){
 			em.tick += dt;
+			em.etick += dt;
 
 			moveemitter(em);
 
@@ -238,6 +244,13 @@ function emitterloop(){
 				pulseemitter(em);
 
 			}
+
+			if (em.etick >= 5000){
+				em.etick = 0;
+				em.phase = randintinc(0,20);
+			}
+
+
 	}
 }
 
@@ -247,13 +260,125 @@ em.y += Math.cos(lastt/600)*dt/16;
 }
 
 function pulseemitter(em){
-	for (var i = 0; i < 1; i += 1){
-		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=5),'type':0});
-		var bdir = normarray([player.x-em.x,player.y-em.y],1.5);
-		bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
-
+	switch (em.phase) {
+		case 20:
+			em.rate = 150;
+			emitdown(em);
+			break;
+		case 19:
+			em.rate = 600;
+			em.phase = 17;
+			break;
+		case 18:
+		case 17:
+			em.rate = 200;
+			emitline(em);
+			em.phase += 1;
+			break;
+		case 16:
+			em.rate = 500;
+			emitaim(em);
+			emitdown(em);
+			break;
+		case 15:
+			em.rate = 900;
+			emitcircle(em,41);
+			emitaim(em);
+			em.phase = 14;
+			break;
+		case 14:
+			em.rate = 100;
+			emitcircle(em,20)
+			em.phase = 15;
+			break;
+		case 13:
+			em.rate = 300;
+			emitcircle(em,21);
+			em.phase = 11;
+			break;
+		case 12:
+			em.rate = 300;
+			emitaim(em);
+			em.phase = 13;
+			break;
+		case 11:
+			em.rate = 300;
+			emitline(em);
+			em.phase = 12;
+			break;
+		case 10:
+			em.rate = 400;
+			emitaim(em);
+			break;
+		case 9:
+			em.rate = 600;
+			emitcircle(em);
+			emitdown(em);
+			emitaim(em);
+			break;
+		case 8:
+			em.rate = 200;
+			emitcircle(em,69);
+			em.phase = 0;
+		case 7:
+			em.rate = 400;
+			emitcircle(em);
+			break;
+		case 6:
+			em.rate = 600;
+			em.phase = 3;
+			break;
+		case 5:
+		case 4:
+			emitaim(em);
+		case 3:
+			em.rate = 100;
+			emitcircle(em,15);
+			em.phase += 1;
+			break;
+		case 2:
+			em.rate = 600;
+			emitdown(em);
+			em.phase = 0;
+			break;
+		case 1:
+			em.rate = 200;
+			emitdown(em);
+			em.phase = 2;
+			break;
+		default:
+		case 0:
+			em.rate = 200;
+			emitdown(em);
+			emitaim(em);
+			em.phase = 1;
+			break;
 	}
-	emitcircle(em);
+
+	//emitcircle(em);
+	//
+}
+
+function emitaim(em){
+	var bdir = normarray([player.x-em.x,player.y-em.y],1.5);
+	bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
+
+}
+
+function emitdown(em){
+	bulls.push({'x':em.x + 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+	bulls.push({'x':em.x - 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+
+}
+
+function emitline(em){
+	bulls.push({'x':em.x + 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+	bulls.push({'x':em.x - 6,'y':em.y,'size':4,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+	bulls.push({'x':em.x + 18,'y':em.y - 3,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
+	bulls.push({'x':em.x - 18,'y':em.y - 3,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
+	bulls.push({'x':em.x + 30,'y':em.y - 6,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
+	bulls.push({'x':em.x - 30,'y':em.y - 6,'size':4,'age':0,'alive':true,'bomb':false,'type':0});
+
 }
 
 
@@ -299,6 +424,8 @@ switch (bb.type){
 		if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= bb.size ){
 			if (!bb.bomb){
 				life = life-25;
+
+				dohurt(bb.x,bb.y);
 				bb.alive = false;
 			}
 
@@ -323,7 +450,7 @@ switch (bb.type){
     if (bb.age > 6000){
 			bb.alive = false;
     }
-		if (bb.x < 0 || bb.y < 0 || bb.x > 420 || bb.y > 420){
+		if (bb.x < 0  || bb.x > 420 || bb.y > 420){
 			bb.alive = false;
 		}
 
@@ -352,6 +479,18 @@ function dobomb(bx,by){
 	}
 }
 
+
+function dohurt(hx,hy){
+	bbctx.strokeStyle = "rgba(255,255,255,.8)";
+	bbctx.beginPath();
+	bbctx.moveTo(hx-6,hy-6);
+	bbctx.lineTo(hx+6,hy+6);
+	bbctx.moveTo(hx-6,hy+6);
+	bbctx.lineTo(hx+6,hy-6);
+
+	bbctx.stroke();
+	bbctx.strokeStyle = "rgba(255,100,100,.2)";
+}
 
 
 var ttx=-1;
@@ -501,9 +640,26 @@ function drawmid(){
 
 
 function drawbbg(){
+	bbctx.strokeStyle = "rgba(200,200,200,.5)";
+	bbctx.beginPath();
+	bbctx.moveTo(bgpulse*10,-1);
+	bbctx.lineTo(bgpulse*10,421);
+	bbctx.moveTo((42-bgpulse)*10,-1);
+	bbctx.lineTo((42-bgpulse)*10,421);
+	bbctx.moveTo(-1,bgpulse*10);
+	bbctx.lineTo(421,bgpulse*10);
+	bbctx.moveTo(-1,(42-bgpulse)*10);
+	bbctx.lineTo(421,(42-bgpulse)*10);
+	bbctx.stroke();
 	bbctx.fillStyle = "rgba(0,0,0,.2)";
 	bbctx.fillRect(0,0,420,420);
 	bbctx.fillStyle = "rgba(100,255,255,0.6)";
+	bbctx.strokeStyle  = "rgba(255,100,100,.2)";
+
+	bgpulse += 1;
+	if (bgpulse >= 42){
+		bgpulse = 0;
+	}
 }
 
 function drawbull(bb){
