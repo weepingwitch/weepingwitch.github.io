@@ -151,11 +151,10 @@ var score = 0;
 
 var emits = [];
 
-emits.push({'x':(420/6)*3,'y':40,'mr':3,'tick':0,'rate':300,'etick':0,'phase':3});
+emits.push({'x':(420/6)*2.5,'y':40,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3});
 emits.push({'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0});
 emits.push({'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0});
-emits.push({'x':(420/6)*2,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7});
-emits.push({'x':(420/6)*4,'y':80,'mr':1,'tick':0,'rate':300,'etick':0,'phase':7});
+emits.push({'x':(420/6)*3.5,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7});
 
   var bulls = [];
 	for (var i = 0; i < 100; i += 1){
@@ -169,6 +168,7 @@ clearcanv(bctx);
 bctx.fillStyle = "brown";
 bctx.strokeStyle="white";
   mctx.fillStyle = "cyan";
+	mctx.strokeStyle = "rgba(100,255,255,.5)";
 	tctx.fillStyle = "cyan";
 	bbctx.strokeStyle = "rgba(255,100,100,.2)";
 tctx.font = "40px monospace";
@@ -283,7 +283,7 @@ function emitterloop(){
 
 			if (em.etick >= 5000){
 				em.etick = 0;
-				em.phase = randintinc(0,23);
+				em.phase = randintinc(0,25);
 			}
 
 
@@ -297,6 +297,8 @@ em.y += Math.cos(lastt/600 * em.mr)*dt/16;
 
 function pulseemitter(em){
 	switch (em.phase) {
+		case 25:
+		case 24:
 		case 23:
 		case 22:
 		case 21:
@@ -527,8 +529,12 @@ function dohurt(hx,hy){
 	bbctx.lineTo(hx+6,hy+6);
 	bbctx.moveTo(hx-6,hy+6);
 	bbctx.lineTo(hx+6,hy-6);
-
+bbctx.fillStyle = "white";
 	bbctx.stroke();
+	bbctx.beginPath();
+	bbctx.arc(player.x,player.y,10,0,2*Math.PI);
+	bbctx.fill();
+	bbctx.fillStyle = "cyan";
 	bbctx.strokeStyle = "rgba(255,100,100,.2)";
 }
 
@@ -673,9 +679,9 @@ function drawbot(){
 
 		 bctx.lineTo(em.x,em.y);
 		 bctx.lineTo(emits[0].x,emits[0].y);
-		 bctx.lineTo(em.x,em.y);
+		// bctx.lineTo(em.x,em.y);
 	 }
-	 bctx.lineTo(emits[0].x,emits[0].y);
+	 //bctx.lineTo(emits[0].x,emits[0].y);
 	 bctx.stroke();
 	 bctx.strokeStyle = "white";
 
@@ -764,13 +770,22 @@ function drawplayer(){
 
 	if (grazing){
 		mctx.fillStyle = "rgba(100,255,255,.3)";
-		mctx.beginPath();
-	  mctx.arc(player.x,player.y,10,0,2*Math.PI);
-	  mctx.fill();
+	//	mctx.beginPath();
+	 // mctx.arc(player.x,player.y,10,0,2*Math.PI);
+	 // mctx.fill();
 		mctx.fillStyle = "cyan";
+
+			mctx.beginPath();
+			mctx.moveTo(0,420);
+			mctx.lineTo(player.x/2 + randintinc(-15,15), player.y+((420-player.y)/2) + randintinc(-15,15))
+			mctx.lineTo(player.x,player.y);
+			mctx.lineTo((420-player.x)/2+player.x + randintinc(-15,15), player.y+((420-player.y)/2) + randintinc(-15,15))
+			mctx.lineTo(420,420);
+			mctx.stroke();
 	}
 
 	mctx.fillRect(player.x-2.5,player.y-2.5,5,5);
+
 
 }
 
