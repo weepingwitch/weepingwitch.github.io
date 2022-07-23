@@ -61,6 +61,8 @@
 
 
 	<script>
+	//var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+
 
 	var screendiv = document.getElementById("screen");
 	var aw = screendiv.clientWidth;
@@ -105,6 +107,26 @@
 	 clientX: touch.clientX, clientY: touch.clientY
 	});
 	uicanv.dispatchEvent(mouseEvent);
+	}, false);
+
+
+
+
+	//keep mobile touches from being treated as scrolls
+	document.body.addEventListener("touchstart", function (e) {
+	if (e.target == uicanv )
+	 e.preventDefault();
+
+	}, false);
+	document.body.addEventListener("touchend", function (e) {
+	if (e.target == uicanv )
+	 e.preventDefault();
+
+	}, false);
+	document.body.addEventListener("touchmove", function (e) {
+	if (e.target == uicanv )
+	 e.preventDefault();
+
 	}, false);
 
 
@@ -206,7 +228,7 @@ function drawloop(tt){
 	}
 	bulls = newbs;
 
-	sdv.innerHTML = "time: " + ptime + "<BR>score: " + Math.floor(score);
+	sdv.innerHTML = "time: " + ptime + " seconds<BR>score: " + Math.floor(score)+"<BR>	(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧";
 
 
 	if (life >= 0){
