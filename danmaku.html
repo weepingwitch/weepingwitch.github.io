@@ -85,7 +85,7 @@
 	var tctx = tc.getContext('2d');
 	var bctx = bc.getContext('2d');
 	var bbctx = bbc.getContext('2d');
-
+	var deadmode = false;
 	var mmode = false;
 
 	var elemLeft = tc.offsetLeft;
@@ -97,6 +97,9 @@
 	tc.addEventListener('mousemove', function(event){
 	 dotouch(scaleInput(event.clientX,event.clientY));
 	 mmode = true;
+	 if (deadmode){
+		 location.reload();
+	 }
 	}, false);
 	tc.addEventListener('mouseleave', function(event){
 		ttx = -1;
@@ -260,10 +263,18 @@ function gameover(tt){
 	life = 0;
 	drawtop();
 	console.log(tt/1000);
-
+	tctx.fillStyle = "rgba(0,0,0,.5)";
+	tctx.fillRect(0,00,420,420);
+	tctx.fillStyle = "cyan";
 	tctx.fillText("(×_×)⌒☆",50,100);
 	tctx.fillText("YOU DIED",100,200);
 	tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,300);
+	setTimeout(
+    function() {
+      deadmode = true;
+    },
+    200
+  );
 }
 
 function emitterloop(){
@@ -616,6 +627,9 @@ else{
 
 document.onkeydown = function(e) {
 	mmode = false;
+	if (deadmode){
+		location.reload();
+	}
 	if(e.keyCode == 37 || e.keyCode == 65) LEFT = true;
   if(e.keyCode == 38  || e.keyCode == 87) UP = true;
 	if(e.keyCode == 39 || e.keyCode == 68) RIGHT = true;
