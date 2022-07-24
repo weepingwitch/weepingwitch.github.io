@@ -88,16 +88,19 @@
 
 
 	var oc = document.createElement('canvas');
-	oc.width = 16;
-	oc.height = 16;
+	oc.width = 19;
+	oc.height = 19;
 	var occ = oc.getContext('2d');
-	occ.font = "20px monospace";
+	occ.textBaseline = "top";
+	occ.textAlign="center";
+	occ.font = "24px monospace";
 	occ.fillStyle = "red";
 	occ.strokeStyle = "white";
 
 
-		occ.fillText("♥",2,16);
-			occ.strokeText("♥",2,16);
+	//console.log(occ.measureText("♥").width);
+		occ.fillText("♥",10,0);
+			occ.strokeText("♥",10,0);
 
 
 
