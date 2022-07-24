@@ -77,10 +77,10 @@
 				var bc = document.getElementById("bcanvas");
 				var bbc = document.getElementById("bbcanvas");
 				var sdv = document.getElementById("scoretext");
-				var mctx = mc.getContext('2d');
-				var tctx = tc.getContext('2d');
-				var bctx = bc.getContext('2d');
-				var bbctx = bbc.getContext('2d');
+				var mcx = mc.getContext('2d');
+				var tcx = tc.getContext('2d');
+				var bcx = bc.getContext('2d');
+				var bbcx = bbc.getContext('2d');
 
 
 
@@ -159,52 +159,52 @@
 				var lngsft = 0;
 				var finalscore = 0;
 
-				var emits = [];
+				var emts = [];
 
 
 
-				var emitstarts = [
+				var emtstarts = [
 					[
-						{'x':(420/2),'y':60,'mr':1,'tick':0,'rate':300,'etick':0,'phase':9},
+						{'x':(420/2),'y':60,'mr':1,'tick':0,'rate':300,'etk':0,'phase':9},
 					],
 					[
-						{'x':(420/4),'y':60,'mr':1,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/4)*3,'y':60,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
-
-					],
-					[
-						{'x':(420/6)*3,'y':40,'mr':2,'tick':0,'rate':300,'etick':0,'phase':3},
-						{'x':(420/6),'y':60,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*5,'y':60,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
+						{'x':(420/4),'y':60,'mr':1,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/4)*3,'y':60,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':0},
 
 					],
 					[
-						{'x':(420/6)*2.5,'y':40,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3},
-						{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*3.5,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7}
-					],
-					[
-						{'x':(420/6)*3,'y':40,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3},
-						{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*4,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7},
-						{'x':(420/6)*2,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7}
+						{'x':(420/6)*3,'y':40,'mr':2,'tick':0,'rate':300,'etk':0,'phase':3},
+						{'x':(420/6),'y':60,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*5,'y':60,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':0},
 
 					],
 					[
-						{'x':(420/6)*3,'y':80,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3},
-						{'x':(420/6)*3,'y':40,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':3},
-						{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0},
-						{'x':(420/6)*4,'y':100,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7},
-						{'x':(420/6)*2,'y':100,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7}
+						{'x':(420/6)*2.5,'y':40,'mr':1,'tick':0,'rate':300,'etk':0,'phase':3},
+						{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*3.5,'y':80,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':7}
+					],
+					[
+						{'x':(420/6)*3,'y':40,'mr':1,'tick':0,'rate':300,'etk':0,'phase':3},
+						{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*4,'y':80,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':7},
+						{'x':(420/6)*2,'y':80,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':7}
+
+					],
+					[
+						{'x':(420/6)*3,'y':80,'mr':1,'tick':0,'rate':300,'etk':0,'phase':3},
+						{'x':(420/6)*3,'y':40,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':3},
+						{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etk':0,'phase':0},
+						{'x':(420/6)*4,'y':100,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':7},
+						{'x':(420/6)*2,'y':100,'mr':-1,'tick':0,'rate':300,'etk':0,'phase':7}
 
 					]
 
 				];
 
-				emits = emitstarts[0];
+				emts = emtstarts[0];
 				leveltick = 0;
 				levelnum = 0;
 				levelcount = 15000;
@@ -214,17 +214,17 @@
 					//
 				}
 
-				clearcanv(mctx);
-				clearcanv(tctx);
-				clearcanv(bctx);
+				clearcanv(mcx);
+				clearcanv(tcx);
+				clearcanv(bcx);
 
-				bctx.fillStyle = "brown";
-				bctx.strokeStyle="white";
-				mctx.fillStyle = "cyan";
-				mctx.strokeStyle = "rgba(100,255,255,.5)";
-				tctx.fillStyle = "cyan";
-				bbctx.strokeStyle = "rgba(255,100,100,.2)";
-				tctx.font = "40px monospace";
+				bcx.fillStyle = "brown";
+				bcx.strokeStyle="white";
+				mcx.fillStyle = "cyan";
+				mcx.strokeStyle = "rgba(100,255,255,.5)";
+				tcx.fillStyle = "cyan";
+				bbcx.strokeStyle = "rgba(255,100,100,.2)";
+				tcx.font = "40px monospace";
 				drawbot();
 				drawmid();
 				drawtop();
@@ -273,9 +273,9 @@
 					leveltick += dt;
 					if (leveltick >= levelcount){
 						leveltick = 0;
-						emits = [];
+						emts = [];
 						levelnum = Math.min(levelnum + 1, 5);
-						emits = emitstarts[levelnum];
+						emts = emtstarts[levelnum];
 						levelcount = levelcount * 2;
 					}
 
@@ -307,7 +307,7 @@
 
 					var newbs = [];
 					for (let bb of bulls){
-						if (bb.alive){
+						if (bb.alv){
 							newbs.push(bb);
 						}
 					}
@@ -331,33 +331,33 @@
 					life = 0;
 					drawtop();
 					console.log(tt/1000);
-					tctx.fillStyle = "rgba(0,0,0,.5)";
-					tctx.fillRect(0,00,420,420);
-					tctx.fillStyle = "cyan";
-					tctx.textBaseline = "top";
-					tctx.fillText("(×_×)⌒☆",50,20);
+					tcx.fillStyle = "rgba(0,0,0,.5)";
+					tcx.fillRect(0,00,420,420);
+					tcx.fillStyle = "cyan";
+					tcx.textBaseline = "top";
+					tcx.fillText("(×_×)⌒☆",50,20);
 
-					tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,380);
-					tctx.font = "24px monospace";
-					tctx.fillText("kisses:",50,100);
-					tctx.fillText("time bonus:",50,150);
-					tctx.fillText("bombs:",50,200);
-					tctx.fillText("longest safe time:",50,250);
-					tctx.fillText("FINAL SCORE:",50,300);
+					tcx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,380);
+					tcx.font = "24px monospace";
+					tcx.fillText("kisses:",50,100);
+					tcx.fillText("time bonus:",50,150);
+					tcx.fillText("bombs:",50,200);
+					tcx.fillText("longest safe time:",50,250);
+					tcx.fillText("FINAL SCORE:",50,300);
 					//sdv.inne
 					//sdv.inne
 					//sdv.inn
 
 					finalscore = Math.floor(score) + Math.floor(tt) + (nmbmb * 7777) + Math.floor(lngsft);
-					tctx.font = "18px monospace";
-					tctx.textAlign = "right";
-					tctx.fillText(Math.floor(score).toLocaleString("en-US"),400,120);
-					tctx.fillText(Math.floor(tt).toLocaleString("en-US"),400,170);
-					tctx.fillText(nmbmb + " x 7777",400,220);
-					tctx.fillText(Math.floor(lngsft).toLocaleString("en-US"),400,270);
-					tctx.font = "26px monospace";
-					tctx.fillStyle = "white";
-					tctx.fillText(Math.floor(finalscore).toLocaleString("en-US"),400,320);
+					tcx.font = "18px monospace";
+					tcx.textAlign = "right";
+					tcx.fillText(Math.floor(score).toLocaleString("en-US"),400,120);
+					tcx.fillText(Math.floor(tt).toLocaleString("en-US"),400,170);
+					tcx.fillText(nmbmb + " x 7777",400,220);
+					tcx.fillText(Math.floor(lngsft).toLocaleString("en-US"),400,270);
+					tcx.font = "26px monospace";
+					tcx.fillStyle = "white";
+					tcx.fillText(Math.floor(finalscore).toLocaleString("en-US"),400,320);
 					setTimeout(
 						function() {
 							deadmode = true;
@@ -367,9 +367,9 @@
 				}
 
 				function emitterloop(){
-					for (let em of emits){
+					for (let em of emts){
 						em.tick += dt;
-						em.etick += dt;
+						em.etk += dt;
 
 						moveemitter(em);
 
@@ -381,9 +381,9 @@
 
 						}
 
-						if (em.etick >= 5000){
-							em.etick = 0;
-							em.phase = randintinc(0,33);
+						if (em.etk >= 5000){
+							em.etk = 0;
+							em.phase = riinc(0,33);
 						}
 
 
@@ -407,7 +407,7 @@
 						case 27:
 						case 26:
 						em.rate = 150;
-						emitcircle(em, em.phase);
+						emcirc(em, em.phase);
 						em.phase += 1;
 						break;
 
@@ -440,18 +440,18 @@
 						break;
 						case 15:
 						em.rate = 900;
-						emitcircle(em,41);
+						emcirc(em,41);
 						emitaim(em);
 						em.phase = 14;
 						break;
 						case 14:
 						em.rate = 100;
-						emitcircle(em,20)
+						emcirc(em,20)
 						em.phase = 15;
 						break;
 						case 13:
 						em.rate = 300;
-						emitcircle(em,21);
+						emcirc(em,21);
 						em.phase = 11;
 						break;
 						case 12:
@@ -470,17 +470,17 @@
 						break;
 						case 9:
 						em.rate = 600;
-						emitcircle(em);
+						emcirc(em);
 						emitdown(em);
 						emitaim(em, 6);
 						break;
 						case 8:
 						em.rate = 200;
-						emitcircle(em,69);
+						emcirc(em,69);
 						em.phase = 0;
 						case 7:
 						em.rate = 400;
-						emitcircle(em);
+						emcirc(em);
 						break;
 						case 6:
 						em.rate = 600;
@@ -491,7 +491,7 @@
 						emitaim(em, 10);
 						case 3:
 						em.rate = 100;
-						emitcircle(em,15);
+						emcirc(em,15);
 						em.phase += 1;
 						break;
 						case 2:
@@ -517,33 +517,33 @@
 				}
 
 				function emitaim(em,bs=4){
-					var bdir = normarray([grl.x-em.x,grl.y-em.y],1.5);
-					bulls.push({'x':em.x,'y':em.y,'size':8,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
+					var bdir = nrmarr([grl.x-em.x,grl.y-em.y],1.5);
+					bulls.push({'x':em.x,'y':em.y,'size':8,'age':0,'alv':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
 
 				}
 
 				function emitdown(em, bs=5){
-					bulls.push({'x':em.x + 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
-					bulls.push({'x':em.x - 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
+					bulls.push({'x':em.x + 6,'y':em.y,'size':bs,'age':0,'alv':true,'bomb':(riinc(0,100)<=3),'type':0});
+					bulls.push({'x':em.x - 6,'y':em.y,'size':bs,'age':0,'alv':true,'bomb':(riinc(0,100)<=3),'type':0});
 
 				}
 
 				function emitline(em, bs=4){
-					bulls.push({'x':em.x + 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
-					bulls.push({'x':em.x - 6,'y':em.y,'size':bs,'age':0,'alive':true,'bomb':(randintinc(0,100)<=3),'type':0});
-					bulls.push({'x':em.x + 18,'y':em.y - 3,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
-					bulls.push({'x':em.x - 18,'y':em.y - 3,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
-					bulls.push({'x':em.x + 30,'y':em.y - 6,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
-					bulls.push({'x':em.x - 30,'y':em.y - 6,'size':bs,'age':0,'alive':true,'bomb':false,'type':0});
+					bulls.push({'x':em.x + 6,'y':em.y,'size':bs,'age':0,'alv':true,'bomb':(riinc(0,100)<=3),'type':0});
+					bulls.push({'x':em.x - 6,'y':em.y,'size':bs,'age':0,'alv':true,'bomb':(riinc(0,100)<=3),'type':0});
+					bulls.push({'x':em.x + 18,'y':em.y - 3,'size':bs,'age':0,'alv':true,'bomb':false,'type':0});
+					bulls.push({'x':em.x - 18,'y':em.y - 3,'size':bs,'age':0,'alv':true,'bomb':false,'type':0});
+					bulls.push({'x':em.x + 30,'y':em.y - 6,'size':bs,'age':0,'alv':true,'bomb':false,'type':0});
+					bulls.push({'x':em.x - 30,'y':em.y - 6,'size':bs,'age':0,'alv':true,'bomb':false,'type':0});
 
 				}
 
 
-				function emitcircle(em, emsteps = 9, bs  = 4){
+				function emcirc(em, emsteps = 9, bs  = 4){
 
 					for (var o = 0; o < 2*Math.PI; o += ((2*Math.PI)/emsteps) ){
-						var bdir = normarray([Math.cos(o),Math.sin(o)],1.5);
-						bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
+						var bdir = nrmarr([Math.cos(o),Math.sin(o)],1.5);
+						bulls.push({'x':em.x,'y':em.y,'size':4,'age':0,'alv':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
 
 					}
 				}
@@ -553,7 +553,7 @@
 
 				function movebulls(){
 					for (let bb of bulls){
-						if (!bb.alive){
+						if (!bb.alv){
 							continue;
 						}
 						bb.lastx = bb.x;
@@ -582,17 +582,17 @@
 								life = life-25;
 
 								dohurt(bb.x,bb.y);
-								bb.alive = false;
+								bb.alv = false;
 							}
 
 						}
 						if (sqrmag([bb.x,bb.y],[grl.x,grl.y]) <= bb.size * bb.size  + (42)){
 							if (bb.bomb){
 								dobomb(bb.x,bb.y);
-								bb.alive = false;
+								bb.alv = false;
 							}
 							else{
-								if (bb.alive){
+								if (bb.alv){
 									score += dt*10;
 									grazing = true;
 								}
@@ -604,10 +604,10 @@
 
 
 						if (bb.age > 6000){
-							bb.alive = false;
+							bb.alv = false;
 						}
 						if (bb.x < 0 || bb.y < -10 || bb.x > 420 || bb.y > 420){
-							bb.alive = false;
+							bb.alv = false;
 						}
 
 					}
@@ -619,16 +619,16 @@
 				function dobomb(bx,by){
 					console.log("boom");
 					nmbmb += 1;
-					bbctx.beginPath();
-					bbctx.arc(bx,by,200,0,2*Math.PI);
-					bbctx.fill();
+					bbcx.beginPath();
+					bbcx.arc(bx,by,200,0,2*Math.PI);
+					bbcx.fill();
 
 					for (let bbb of bulls){
-						if (!bbb.alive){
+						if (!bbb.alv){
 							continue;
 						}
 						if (sqrmag([bbb.x,bbb.y],[bx,by]) <= 200*200){
-							bbb.alive = false;
+							bbb.alv = false;
 
 						}
 
@@ -644,19 +644,19 @@
 					safetime = 0;
 
 
-					bbctx.strokeStyle = "rgba(255,255,255,.8)";
-					bbctx.beginPath();
-					bbctx.moveTo(hx-6,hy-6);
-					bbctx.lineTo(hx+6,hy+6);
-					bbctx.moveTo(hx-6,hy+6);
-					bbctx.lineTo(hx+6,hy-6);
-					bbctx.fillStyle = "white";
-					bbctx.stroke();
-					bbctx.beginPath();
-					bbctx.arc(grl.x,grl.y,10,0,2*Math.PI);
-					bbctx.fill();
-					bbctx.fillStyle = "cyan";
-					bbctx.strokeStyle = "rgba(255,100,100,.2)";
+					bbcx.strokeStyle = "rgba(255,255,255,.8)";
+					bbcx.beginPath();
+					bbcx.moveTo(hx-6,hy-6);
+					bbcx.lineTo(hx+6,hy+6);
+					bbcx.moveTo(hx-6,hy+6);
+					bbcx.lineTo(hx+6,hy-6);
+					bbcx.fillStyle = "white";
+					bbcx.stroke();
+					bbcx.beginPath();
+					bbcx.arc(grl.x,grl.y,10,0,2*Math.PI);
+					bbcx.fill();
+					bbcx.fillStyle = "cyan";
+					bbcx.strokeStyle = "rgba(255,100,100,.2)";
 				}
 
 
@@ -706,7 +706,7 @@
 							}
 							else{
 
-								grl.vel = normarray(dvel,grl.speed)
+								grl.vel = nrmarr(dvel,grl.speed)
 							}
 
 						}
@@ -716,7 +716,7 @@
 
 
 					if (!comparrays(grl.vel,[0,0])){
-						grl.vel = normarray(grl.vel,grl.speed);
+						grl.vel = nrmarr(grl.vel,grl.speed);
 						grl.x += grl.vel[0] * dt / 16;
 						grl.y += grl.vel[1] * dt / 16;
 
@@ -772,49 +772,49 @@
 				}
 
 				function drawtop(){
-					clearcanv(tctx);
+					clearcanv(tcx);
 
-					tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),0,Math.floor(420*(life/100)),5);
-					tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),415,Math.floor(420*(life/100)),5);
-					tctx.fillRect(0,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
-					tctx.fillRect(415,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
+					tcx.fillRect(Math.floor(420/2)*(1 -(life/100)),0,Math.floor(420*(life/100)),5);
+					tcx.fillRect(Math.floor(420/2)*(1 -(life/100)),415,Math.floor(420*(life/100)),5);
+					tcx.fillRect(0,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
+					tcx.fillRect(415,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
 					//tct
 					//
 				}
 
 				function drawbot(){
-					clearcanv(bctx);
+					clearcanv(bcx);
 
-					//bctx
+					//bcx
 					for (let bb of bulls){
-						if (!bb.alive){
+						if (!bb.alv){
 							continue;
 						}
 						drawbull(bb);
 					}
 					//bct
 
-					bctx.beginPath();
-					bctx.moveTo(emits[0].x,emits[0].y);
-					bctx.strokeStyle = "rgba(255,255,255,0.9)";
-					for (let em of emits){
-						bctx.arc(em.x,em.y,10,.5*Math.PI,3.5*Math.PI);
+					bcx.beginPath();
+					bcx.moveTo(emts[0].x,emts[0].y);
+					bcx.strokeStyle = "rgba(255,255,255,0.9)";
+					for (let em of emts){
+						bcx.arc(em.x,em.y,10,.5*Math.PI,3.5*Math.PI);
 
 
-						bctx.lineTo(em.x,em.y);
-						bctx.lineTo(emits[0].x,emits[0].y);
-						// bctx.lineTo(em.x,em.y);
+						bcx.lineTo(em.x,em.y);
+						bcx.lineTo(emts[0].x,emts[0].y);
+						// bcx.lineTo(em.x,em.y);
 					}
-					//bctx.``
-					bctx.stroke();
-					bctx.strokeStyle = "white";
+					//bcx.``
+					bcx.stroke();
+					bcx.strokeStyle = "white";
 
 				}
 
 
 
 				function drawmid(){
-					clearcanv(mctx);
+					clearcanv(mcx);
 					drawgrl();
 
 				}
@@ -822,21 +822,21 @@
 
 
 				function drawbbg(){
-					bbctx.strokeStyle = "rgba(100,200,200,.4)";
-					bbctx.beginPath();
-					bbctx.moveTo(bgpulse*10,-1);
-					bbctx.lineTo(bgpulse*10,421);
-					bbctx.moveTo((42-bgpulse)*10,-1);
-					bbctx.lineTo((42-bgpulse)*10,421);
-					bbctx.moveTo(-1,bgpulse*10);
-					bbctx.lineTo(421,bgpulse*10);
-					bbctx.moveTo(-1,(42-bgpulse)*10);
-					bbctx.lineTo(421,(42-bgpulse)*10);
-					bbctx.stroke();
-					bbctx.fillStyle = "rgba(0,0,0,.2)";
-					bbctx.fillRect(0,0,420,420);
-					bbctx.fillStyle = "rgba(100,255,255,0.6)";
-					bbctx.strokeStyle  = "rgba(255,100,100,.2)";
+					bbcx.strokeStyle = "rgba(100,200,200,.4)";
+					bbcx.beginPath();
+					bbcx.moveTo(bgpulse*10,-1);
+					bbcx.lineTo(bgpulse*10,421);
+					bbcx.moveTo((42-bgpulse)*10,-1);
+					bbcx.lineTo((42-bgpulse)*10,421);
+					bbcx.moveTo(-1,bgpulse*10);
+					bbcx.lineTo(421,bgpulse*10);
+					bbcx.moveTo(-1,(42-bgpulse)*10);
+					bbcx.lineTo(421,(42-bgpulse)*10);
+					bbcx.stroke();
+					bbcx.fillStyle = "rgba(0,0,0,.2)";
+					bbcx.fillRect(0,0,420,420);
+					bbcx.fillStyle = "rgba(100,255,255,0.6)";
+					bbcx.strokeStyle  = "rgba(255,100,100,.2)";
 
 					bgpulse += 1;
 					if (bgpulse >= 42){
@@ -846,77 +846,77 @@
 
 				function drawbull(bb){
 
-					//	bctx
+					//	bcx
 					//
-					//	bctx
+					//	bcx
 
-					bbctx.beginPath();
-					bbctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size-2,0,2*Math.PI);
-					bbctx.stroke();
+					bbcx.beginPath();
+					bbcx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size-2,0,2*Math.PI);
+					bbcx.stroke();
 
 					if (bb.bomb){
-						bctx.fillStyle = "white";
+						bcx.fillStyle = "white";
 
-						bctx.beginPath();
-						bctx.arc(bb.x,bb.y,bb.size+4,0,2*Math.PI);
-						bctx.stroke();
-						bctx.beginPath();
-						bctx.moveTo(bb.x+8,bb.y+8);
-						bctx.lineTo(bb.x-8,bb.y-8);
-						bctx.stroke();
-						bctx.beginPath();
-						bctx.moveTo(bb.x+8,bb.y-8);
-						bctx.lineTo(bb.x-8,bb.y+8);
-						bctx.stroke();
-						bctx.beginPath();
+						bcx.beginPath();
+						bcx.arc(bb.x,bb.y,bb.size+4,0,2*Math.PI);
+						bcx.stroke();
+						bcx.beginPath();
+						bcx.moveTo(bb.x+8,bb.y+8);
+						bcx.lineTo(bb.x-8,bb.y-8);
+						bcx.stroke();
+						bcx.beginPath();
+						bcx.moveTo(bb.x+8,bb.y-8);
+						bcx.lineTo(bb.x-8,bb.y+8);
+						bcx.stroke();
+						bcx.beginPath();
 
-						bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
-						bctx.fill();
-						bctx.stroke();
+						bcx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
+						bcx.fill();
+						bcx.stroke();
 
 					}
 					else{
-						bctx.drawImage(ocimg,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
-						//	bctx
+						bcx.drawImage(ocimg,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
+						//	bcx
 
 						//b
 						//	bc
-						//	bctx.
+						//	bcx.
 						//
-						//		bctx.
+						//		bcx.
 
 					}
 
 					if (bb.bomb){
-						bctx.fillStyle = "red";
+						bcx.fillStyle = "red";
 					}
 
 				}
 
 				function drawemit(bb){
-					bctx.beginPath();
-					bctx.arc(Math.floor(bb.x),Math.floor(bb.y),3,0,2*Math.PI);
-					bctx.fill();
+					bcx.beginPath();
+					bcx.arc(Math.floor(bb.x),Math.floor(bb.y),3,0,2*Math.PI);
+					bcx.fill();
 				}
 				function drawgrl(){
 
 					if (grazing){
-						mctx.fillStyle = "rgba(100,255,255,.3)";
-						//	mctx
-						// mctx.
-						// mctx.fill();
-						mctx.fillStyle = "cyan";
+						mcx.fillStyle = "rgba(100,255,255,.3)";
+						//	mcx
+						// mcx.
+						//
+						mcx.fillStyle = "cyan";
 
-						mctx.beginPath();
-						mctx.moveTo(0,420);
-						mctx.lineTo(grl.x/2 + randintinc(-15,15), grl.y+((420-grl.y)/2) + randintinc(-15,15))
-						mctx.lineTo(grl.x,grl.y);
-						mctx.lineTo((420-grl.x)/2+grl.x + randintinc(-15,15), grl.y+((420-grl.y)/2) + randintinc(-15,15))
-						mctx.lineTo(420,420);
-						mctx.stroke();
+						mcx.beginPath();
+						mcx.moveTo(0,420);
+						mcx.lineTo(grl.x/2 + riinc(-15,15), grl.y+((420-grl.y)/2) + riinc(-15,15))
+						mcx.lineTo(grl.x,grl.y);
+						mcx.lineTo((420-grl.x)/2+grl.x + riinc(-15,15), grl.y+((420-grl.y)/2) + riinc(-15,15))
+						mcx.lineTo(420,420);
+						mcx.stroke();
 					}
 
-					mctx.fillRect(Math.floor(grl.x-2.5),Math.floor(grl.y-2.5),5,5);
+					mcx.fillRect(Math.floor(grl.x-2.5),Math.floor(grl.y-2.5),5,5);
 
 
 				}
@@ -954,7 +954,7 @@
 					return myarray[Math.floor(Math.random() * myarray.length)];
 				}
 
-				function randintinc(min, max) {
+				function riinc(min, max) {
 					return Math.floor(Math.random() * (max - min + 1) ) + min;
 				}
 
@@ -968,7 +968,7 @@
 					return [xval,yval];
 				}
 
-				function normarray(arr, scf=1){
+				function nrmarr(arr, scf=1){
 					var armag = Math.sqrt((arr[0] * arr[0]) + (arr[1] * arr[1]));
 					var res = [0,0];
 					res[0] = (arr[0]/armag) * scf;
