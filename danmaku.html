@@ -513,7 +513,7 @@
 						break;
 					}
 
-				
+
 				}
 
 				function emitaim(em,bs=4){
@@ -570,7 +570,6 @@
 							bb.y += bb.dy * dt/16;
 							break;
 						}
-
 
 
 
@@ -848,10 +847,8 @@
 				function drawbull(bb){
 
 					//	bctx.beginPath();
-
 					//	bctx.arc(bb.x+((bb.lastx-bb.x)*3),bb.y+((bb.lasty-bb.y)*3),bb.size/2,0,2*Math.PI);
 					//	bctx.fill();
-
 
 					bbctx.beginPath();
 					bbctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size-2,0,2*Math.PI);
@@ -890,12 +887,9 @@
 
 					}
 
-
-
 					if (bb.bomb){
 						bctx.fillStyle = "red";
 					}
-
 
 				}
 
