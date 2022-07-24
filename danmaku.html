@@ -85,6 +85,23 @@
 	var tctx = tc.getContext('2d');
 	var bctx = bc.getContext('2d');
 	var bbctx = bbc.getContext('2d');
+
+
+	var oc = document.createElement('canvas');
+	oc.width = 16;
+	oc.height = 16;
+	var occ = oc.getContext('2d');
+	occ.font = "20px monospace";
+	occ.fillStyle = "red";
+	occ.strokeStyle = "white";
+
+
+		occ.fillText("♥",2,16);
+			occ.strokeText("♥",2,16);
+
+
+
+
 	var deadmode = false;
 	var mmode = false;
 
@@ -154,10 +171,53 @@ var score = 0;
 
 var emits = [];
 
-emits.push({'x':(420/6)*2.5,'y':40,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3});
-emits.push({'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0});
-emits.push({'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0});
-emits.push({'x':(420/6)*3.5,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7});
+
+
+var emitstarts = [
+	[
+		{'x':(420/2),'y':60,'mr':1,'tick':0,'rate':300,'etick':0,'phase':9},
+	],
+	[
+		{'x':(420/4),'y':50,'mr':1,'tick':0,'rate':300,'etick':0,'phase':0},
+		{'x':(420/4)*3,'y':50,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
+
+	],
+	[
+		{'x':(420/6)*3,'y':40,'mr':2,'tick':0,'rate':300,'etick':0,'phase':3},
+		{'x':(420/6),'y':60,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
+		{'x':(420/6)*5,'y':60,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
+
+	],
+	[
+	{'x':(420/6)*2.5,'y':40,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3},
+	{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0},
+	{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0},
+	{'x':(420/6)*3.5,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7}
+],
+[
+	{'x':(420/6)*3,'y':40,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3},
+	{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0},
+	{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0},
+	{'x':(420/6)*4,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7},
+	{'x':(420/6)*2,'y':80,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7}
+
+],
+[
+	{'x':(420/6)*3,'y':80,'mr':1,'tick':0,'rate':300,'etick':0,'phase':3},
+		{'x':(420/6)*3,'y':40,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':3},
+	{'x':(420/6),'y':60,'mr':2,'tick':0,'rate':300,'etick':0,'phase':0},
+	{'x':(420/6)*5,'y':60,'mr':-2,'tick':0,'rate':300,'etick':0,'phase':0},
+	{'x':(420/6)*4,'y':100,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7},
+	{'x':(420/6)*2,'y':100,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':7}
+
+]
+
+];
+
+emits = emitstarts[0];
+leveltick = 0;
+levelnum = 0;
+levelcount = 15000;
 
   var bulls = [];
 	for (var i = 0; i < 100; i += 1){
@@ -197,12 +257,17 @@ var bgpulse = 0;
 var bgtick = 0;
 var grazing = false;
 var ptime;
+var moontick = 0;
 function drawloop(tt){
 	//console.log("drawloop");
 	grazing = false;
 	dt = tt - lastt;
 	if (lastt == -1){
 		dt = 0;
+	}
+
+	if (dt > 3333){
+		location.reload();
 	}
 	lastt = tt;
 	ptime = (Math.floor(tt/10)/100).toFixed(2);
@@ -215,8 +280,22 @@ function drawloop(tt){
 		drawbbg();
 	}
 
+	leveltick += dt;
+	if (leveltick >= levelcount){
+		leveltick = 0;
+		emits = [];
+		levelnum = Math.min(levelnum + 1, 5);
+		emits = emitstarts[levelnum];
+		levelcount = levelcount * 2;
+	}
+
 	//score = score + dt *10;
 
+
+	moontick += (dt / 1660);
+	if (moontick >= (3)){
+		moontick = 0;
+	}
 
 
 
@@ -294,7 +373,7 @@ function emitterloop(){
 
 			if (em.etick >= 5000){
 				em.etick = 0;
-				em.phase = randintinc(0,25);
+				em.phase = randintinc(0,33);
 			}
 
 
@@ -308,12 +387,28 @@ em.y += Math.cos(lastt/600 * em.mr)*dt/16;
 
 function pulseemitter(em){
 	switch (em.phase) {
+		case 31:
+		em.rate = 600;
+		em.phase = 26;
+			break;
+		case 30:
+		case 29:
+		case 28:
+		case 27:
+		case 26:
+			em.rate = 150;
+			emitcircle(em, em.phase);
+			em.phase += 1;
+			break;
+
 		case 25:
 		case 24:
 		case 23:
 		case 22:
 		case 21:
 			break;
+		case 32:
+		case 33:
 		case 20:
 			em.rate = 150;
 			emitdown(em);
@@ -743,7 +838,7 @@ function drawbull(bb){
 
 
 	bbctx.beginPath();
-	bbctx.arc(bb.x,bb.y,bb.size-1,0,2*Math.PI);
+	bbctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size-2,0,2*Math.PI);
 	bbctx.stroke();
 
 	if (bb.bomb){
@@ -760,12 +855,25 @@ function drawbull(bb){
 		bctx.moveTo(bb.x+8,bb.y-8);
 		bctx.lineTo(bb.x-8,bb.y+8);
 		bctx.stroke();
+		bctx.beginPath();
+
+		 bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
+			bctx.fill();
+			bctx.stroke();
 
 }
-		bctx.beginPath();
-	  bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
-	  bctx.fill();
-		bctx.stroke();
+	else{
+		bctx.drawImage(oc,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
+	//	bctx.beginPath();
+
+		 //bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
+		//	bctx.fill();
+		//	bctx.beginPath();
+	//		bctx.arc(bb.x,bb.y,bb.size*.666,0,2*Math.PI);
+	//		bctx.stroke();
+
+	}
+
 
 
 	if (bb.bomb){
@@ -798,7 +906,7 @@ function drawplayer(){
 			mctx.stroke();
 	}
 
-	mctx.fillRect(player.x-2.5,player.y-2.5,5,5);
+	mctx.fillRect(Math.floor(player.x-2.5),Math.floor(player.y-2.5),5,5);
 
 
 }
