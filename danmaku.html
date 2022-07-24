@@ -8,7 +8,7 @@
 	body{
 		background-color:black;
 		color:cyan;
-		-webkit-animation: canvas 60s infinite;
+		-webkit-animation: ccs 60s infinite;
 	}
 	canvas{
 
@@ -25,7 +25,7 @@
 	}
 
 
-	@-webkit-keyframes canvas {
+	@-webkit-keyframes ccs {
 		0%, 100%  { -webkit-filter: hue-rotate(0deg); }
 		50% { -webkit-filter: hue-rotate(360deg); }
 	}
@@ -150,13 +150,13 @@
 				var cdirs = [[-1,0],[1,0],[0,-1],[0,1]];
 
 
-				var player = {x:220,y:350,speed:2,vel:[0,0]}
+				var grl = {x:220,y:350,speed:2,vel:[0,0]}
 				var middirt, topdirt, botdirt = false;
 				var life = 80;
 				var score = 0;
-				var numbombs = 0;
+				var nmbmb = 0;
 				var safetime = 0;
-				var longestsafe = 0;
+				var lngsft = 0;
 				var finalscore = 0;
 
 				var emits = [];
@@ -344,17 +344,17 @@
 					tctx.fillText("bombs:",50,200);
 					tctx.fillText("longest safe time:",50,250);
 					tctx.fillText("FINAL SCORE:",50,300);
-					//sdv.innerHTML += "<BR> kisses:<BR>" + score + "<BR>time bonus:";
-					//sdv.innerHTML += "<BR>" + tt + "<BR>bombs (x7777):<BR>" + numbombs;
-					//sdv.innerHTML += "<BR>longest safe time:<BR>" + longestsafe
+					//sdv.inne
+					//sdv.inne
+					//sdv.inn
 
-					finalscore = Math.floor(score) + Math.floor(tt) + (numbombs * 7777) + Math.floor(longestsafe);
+					finalscore = Math.floor(score) + Math.floor(tt) + (nmbmb * 7777) + Math.floor(lngsft);
 					tctx.font = "18px monospace";
 					tctx.textAlign = "right";
 					tctx.fillText(Math.floor(score).toLocaleString("en-US"),400,120);
 					tctx.fillText(Math.floor(tt).toLocaleString("en-US"),400,170);
-					tctx.fillText(numbombs + " x 7777",400,220);
-					tctx.fillText(Math.floor(longestsafe).toLocaleString("en-US"),400,270);
+					tctx.fillText(nmbmb + " x 7777",400,220);
+					tctx.fillText(Math.floor(lngsft).toLocaleString("en-US"),400,270);
 					tctx.font = "26px monospace";
 					tctx.fillStyle = "white";
 					tctx.fillText(Math.floor(finalscore).toLocaleString("en-US"),400,320);
@@ -517,7 +517,7 @@
 				}
 
 				function emitaim(em,bs=4){
-					var bdir = normarray([player.x-em.x,player.y-em.y],1.5);
+					var bdir = normarray([grl.x-em.x,grl.y-em.y],1.5);
 					bulls.push({'x':em.x,'y':em.y,'size':8,'age':0,'alive':true,'bomb':false,'type':1,'dx':bdir[0],'dy':bdir[1]})
 
 				}
@@ -577,7 +577,7 @@
 
 
 
-						if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= bb.size ){
+						if (sqrmag([bb.x,bb.y],[grl.x,grl.y]) <= bb.size ){
 							if (!bb.bomb){
 								life = life-25;
 
@@ -586,7 +586,7 @@
 							}
 
 						}
-						if (sqrmag([bb.x,bb.y],[player.x,player.y]) <= bb.size * bb.size  + (42)){
+						if (sqrmag([bb.x,bb.y],[grl.x,grl.y]) <= bb.size * bb.size  + (42)){
 							if (bb.bomb){
 								dobomb(bb.x,bb.y);
 								bb.alive = false;
@@ -618,7 +618,7 @@
 
 				function dobomb(bx,by){
 					console.log("boom");
-					numbombs += 1;
+					nmbmb += 1;
 					bbctx.beginPath();
 					bbctx.arc(bx,by,200,0,2*Math.PI);
 					bbctx.fill();
@@ -638,8 +638,8 @@
 
 				function dohurt(hx,hy){
 
-					if (safetime > longestsafe){
-						longestsafe = safetime;
+					if (safetime > lngsft){
+						lngsft = safetime;
 					}
 					safetime = 0;
 
@@ -653,7 +653,7 @@
 					bbctx.fillStyle = "white";
 					bbctx.stroke();
 					bbctx.beginPath();
-					bbctx.arc(player.x,player.y,10,0,2*Math.PI);
+					bbctx.arc(grl.x,grl.y,10,0,2*Math.PI);
 					bbctx.fill();
 					bbctx.fillStyle = "cyan";
 					bbctx.strokeStyle = "rgba(255,100,100,.2)";
@@ -675,38 +675,38 @@
 				function move() {
 
 					if(LEFT && !RIGHT) {
-						player.vel[0] = -player.speed;
+						grl.vel[0] = -grl.speed;
 					}
 					else if(RIGHT && !LEFT) {
-						player.vel[0] = player.speed;
+						grl.vel[0] = grl.speed;
 
 					}
 					else{
-						player.vel[0] = 0;
+						grl.vel[0] = 0;
 					}
 
 					if (DOWN && !UP){
-						player.vel[1] = player.speed;
+						grl.vel[1] = grl.speed;
 
 
 					}
 					else if (UP && !DOWN){
-						player.vel[1] = -player.speed;
+						grl.vel[1] = -grl.speed;
 					}
 					else{
-						player.vel[1] = 0;
+						grl.vel[1] = 0;
 					}
 
 
 					if (mmode){
 						if (!comparrays([ttx,tty],[-1,-1])){
-							var dvel = [ttx-player.x, tty - player.y];
+							var dvel = [ttx-grl.x, tty - grl.y];
 							if (Math.abs(dvel[0]) < 1 && Math.abs(dvel[1]) < 1){
-								player.vel = [0,0];
+								grl.vel = [0,0];
 							}
 							else{
 
-								player.vel = normarray(dvel,player.speed)
+								grl.vel = normarray(dvel,grl.speed)
 							}
 
 						}
@@ -715,16 +715,16 @@
 
 
 
-					if (!comparrays(player.vel,[0,0])){
-						player.vel = normarray(player.vel,player.speed);
-						player.x += player.vel[0] * dt / 16;
-						player.y += player.vel[1] * dt / 16;
+					if (!comparrays(grl.vel,[0,0])){
+						grl.vel = normarray(grl.vel,grl.speed);
+						grl.x += grl.vel[0] * dt / 16;
+						grl.y += grl.vel[1] * dt / 16;
 
 
-						player.x = Math.max(player.x,15);
-						player.y = Math.max(player.y,15);
-						player.x = Math.min(player.x,405);
-						player.y = Math.min(player.y,405);
+						grl.x = Math.max(grl.x,15);
+						grl.y = Math.max(grl.y,15);
+						grl.x = Math.min(grl.x,405);
+						grl.y = Math.min(grl.y,405);
 						middirt = true;
 					}
 					else{
@@ -778,21 +778,21 @@
 					tctx.fillRect(Math.floor(420/2)*(1 -(life/100)),415,Math.floor(420*(life/100)),5);
 					tctx.fillRect(0,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
 					tctx.fillRect(415,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
-					//tctx.font = "20px Arial";
+					//tct
 					//
 				}
 
 				function drawbot(){
 					clearcanv(bctx);
 
-					//bctx.fillStyle="red";
+					//bctx
 					for (let bb of bulls){
 						if (!bb.alive){
 							continue;
 						}
 						drawbull(bb);
 					}
-					//bctx.fillStyle="brown";
+					//bct
 
 					bctx.beginPath();
 					bctx.moveTo(emits[0].x,emits[0].y);
@@ -805,7 +805,7 @@
 						bctx.lineTo(emits[0].x,emits[0].y);
 						// bctx.lineTo(em.x,em.y);
 					}
-					//bctx.lineTo(emits[0].x,emits[0].y);
+					//bctx.``
 					bctx.stroke();
 					bctx.strokeStyle = "white";
 
@@ -815,7 +815,7 @@
 
 				function drawmid(){
 					clearcanv(mctx);
-					drawplayer();
+					drawgrl();
 
 				}
 
@@ -846,9 +846,9 @@
 
 				function drawbull(bb){
 
-					//	bctx.beginPath();
+					//	bctx
 					//
-					//	bctx.fill();
+					//	bctx
 
 					bbctx.beginPath();
 					bbctx.arc(Math.floor(bb.x),Math.floor(bb.y),bb.size-2,0,2*Math.PI);
@@ -877,13 +877,13 @@
 					}
 					else{
 						bctx.drawImage(ocimg,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
-						//	bctx.beginPath();
+						//	bctx
 
-						//bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
-						//	bctx.fill();
-						//	bctx.beginPath();
-						//		
-						//		bctx.stroke();
+						//b
+						//	bc
+						//	bctx.
+						//
+						//		bctx.
 
 					}
 
@@ -898,25 +898,25 @@
 					bctx.arc(Math.floor(bb.x),Math.floor(bb.y),3,0,2*Math.PI);
 					bctx.fill();
 				}
-				function drawplayer(){
+				function drawgrl(){
 
 					if (grazing){
 						mctx.fillStyle = "rgba(100,255,255,.3)";
-						//	mctx.beginPath();
-						// mctx.arc(player.x,player.y,10,0,2*Math.PI);
+						//	mctx
+						// mctx.
 						// mctx.fill();
 						mctx.fillStyle = "cyan";
 
 						mctx.beginPath();
 						mctx.moveTo(0,420);
-						mctx.lineTo(player.x/2 + randintinc(-15,15), player.y+((420-player.y)/2) + randintinc(-15,15))
-						mctx.lineTo(player.x,player.y);
-						mctx.lineTo((420-player.x)/2+player.x + randintinc(-15,15), player.y+((420-player.y)/2) + randintinc(-15,15))
+						mctx.lineTo(grl.x/2 + randintinc(-15,15), grl.y+((420-grl.y)/2) + randintinc(-15,15))
+						mctx.lineTo(grl.x,grl.y);
+						mctx.lineTo((420-grl.x)/2+grl.x + randintinc(-15,15), grl.y+((420-grl.y)/2) + randintinc(-15,15))
 						mctx.lineTo(420,420);
 						mctx.stroke();
 					}
 
-					mctx.fillRect(Math.floor(player.x-2.5),Math.floor(player.y-2.5),5,5);
+					mctx.fillRect(Math.floor(grl.x-2.5),Math.floor(grl.y-2.5),5,5);
 
 
 				}
@@ -958,7 +958,7 @@
 					return Math.floor(Math.random() * (max - min + 1) ) + min;
 				}
 
-				//account for canvas positioning and scaling
+				//ac
 				function scaleInput(xv, yv){
 					var rect = tc.getBoundingClientRect(),
 					scaleX = tc.width / rect.width,
