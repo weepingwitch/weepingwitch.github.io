@@ -87,20 +87,6 @@
 	var bbctx = bbc.getContext('2d');
 
 
-	var oc = document.createElement('canvas');
-	oc.width = 20;
-	oc.height = 20;
-	var occ = oc.getContext('2d');
-	occ.textBaseline = "top";
-	occ.textAlign="center";
-	occ.font = "24px monospace";
-	occ.fillStyle = "red";
-	occ.strokeStyle = "white";
-
-
-		occ.fillText("♥",10,1);
-			occ.strokeText("♥",10,1);
-console.log(oc.toDataURL());
 
 var ocimg = new Image;
 ocimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAqNJREFUOE+1lEtI1FEUxn/H0fGFNoJCSqgD+SaRSAxsYxjqJqgwCUTNAosiQg10IAQVhMhHmIiCIwlK5EYjW0hCuJEW0SyUNISRoZlMBfGZOuqNvznOiCYWdZf38eOe7zvfEf7xkn/M4/8DlVK+zMycw+FIJSnpPT4+oyKyqVWilNJjtaZgt58nOfkDwcEWEVn3rHLvh0opYXX1LA5HH4uLp5ichIyMbWZnR0hMvAbosVhe4++fwvg4pKYq1tftGI3ZIjLmgnoCTzM29o7m5ig6O2FjA8LCoKkJ0tP7AF96e3OoroalJfDzg9JSyM//QkLCRRGxa9AdoFJKx/LyHczm55hMsLLiriIxEQYGfuB0OsnKCsZqdZ8ZDFBfD3l5xQQGvhCRbRfQj8+fW2hsLMZshq0t9yPtJ7W1sLYGNTWw7iGZTgf37sH9+83ExJSLyIYLqGd6upa6uke0tOwHenlBRMQvCWZm9neZtzeUl4PJZCIo6ImIbLmAXsB1urrMPHjgz8LC8dozJATa2ubJzb0JvBYR5WmKkcnJfu7ePcPQkCbs0VARyM7WTPtEbOxlEfm6Z8qeMU5nPiMjzygsPMHU1NHA6Gjo7p4jLe0hOt1Lrdx9wF1oAHb7UwYHb1NW5sP8/OHQ0FBoaHCSmdlKeHiliKwe6EPXhlIqDJutm/b2SzstobnruQICoLISCgreEhlZKCJzhybFc1MpFYfV2k9VVRw9PW7XNVeLi6GiwoLReEVEDuhy6HDYiSFcYGLiFSUlJxkeBs2EnBxobLQRE3NVRD4epsdvp81OelZWbjA62kxRkYHAQOjomCM+/ha+vm+0VPwRcNckP75/f4zNVo5ev0lUVAUGQ6tr+vwxcBdqwOFoQ+Qb4eEmT0f/Cni8yLhv/QQe1AAkqqcvsQAAAABJRU5ErkJggg==";
@@ -112,14 +98,15 @@ ocimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NA
 	var   elemTop = tc.offsetTop;
 	tc.addEventListener('click', function(event) {
 		//doclick(scaleInput(event.clientX,event.clientY));
+		if (deadmode){
+			location.reload();
+		}
 	}, false);
 
 	tc.addEventListener('mousemove', function(event){
 	 dotouch(scaleInput(event.clientX,event.clientY));
 	 mmode = true;
-	 if (deadmode){
-		 location.reload();
-	 }
+
 	}, false);
 	tc.addEventListener('mouseleave', function(event){
 		ttx = -1;
@@ -171,6 +158,10 @@ ocimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NA
   var middirt, topdirt, botdirt = false;
 var life = 80;
 var score = 0;
+var numbombs = 0;
+var safetime = 0;
+var longestsafe = 0;
+var finalscore = 0;
 
 var emits = [];
 
@@ -181,8 +172,8 @@ var emitstarts = [
 		{'x':(420/2),'y':60,'mr':1,'tick':0,'rate':300,'etick':0,'phase':9},
 	],
 	[
-		{'x':(420/4),'y':50,'mr':1,'tick':0,'rate':300,'etick':0,'phase':0},
-		{'x':(420/4)*3,'y':50,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
+		{'x':(420/4),'y':60,'mr':1,'tick':0,'rate':300,'etick':0,'phase':0},
+		{'x':(420/4)*3,'y':60,'mr':-1,'tick':0,'rate':300,'etick':0,'phase':0},
 
 	],
 	[
@@ -301,6 +292,7 @@ function drawloop(tt){
 	}
 
 
+safetime += dt;
 
 	emitterloop();
 
@@ -327,7 +319,7 @@ function drawloop(tt){
 	}
 	bulls = newbs;
 
-	sdv.innerHTML = "time: " + ptime + " seconds<BR>score: " + Math.floor(score)+" kisses<BR>*:･ﾟ✧\\(◕ヮ◕\\)";
+	sdv.innerHTML = "" + ptime + " seconds<BR>" + Math.floor(score).toLocaleString("en-US") +" kisses<BR>*:･ﾟ✧\\(◕ヮ◕\\)";
 
 
 	if (life >= 0){
@@ -348,9 +340,30 @@ function gameover(tt){
 	tctx.fillStyle = "rgba(0,0,0,.5)";
 	tctx.fillRect(0,00,420,420);
 	tctx.fillStyle = "cyan";
-	tctx.fillText("(×_×)⌒☆",50,100);
-	tctx.fillText("YOU DIED",100,200);
-	tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,300);
+	tctx.textBaseline = "top";
+	tctx.fillText("(×_×)⌒☆",50,20);
+
+	tctx.fillText(".｡･ﾟﾟ･(＞_＜)･ﾟﾟ･｡.",10,380);
+		tctx.font = "24px monospace";
+		tctx.fillText("kisses:",50,100);
+		tctx.fillText("time bonus:",50,150);
+		tctx.fillText("bombs:",50,200);
+		tctx.fillText("longest safe time:",50,250);
+			tctx.fillText("FINAL SCORE:",50,300);
+	//sdv.innerHTML += "<BR> kisses:<BR>" + score + "<BR>time bonus:";
+	//sdv.innerHTML += "<BR>" + tt + "<BR>bombs (x7777):<BR>" + numbombs;
+	//sdv.innerHTML += "<BR>longest safe time:<BR>" + longestsafe
+
+	finalscore = Math.floor(score) + Math.floor(tt) + (numbombs * 7777) + Math.floor(longestsafe);
+	tctx.font = "18px monospace";
+	tctx.textAlign = "right";
+		tctx.fillText(Math.floor(score).toLocaleString("en-US"),400,120);
+			tctx.fillText(Math.floor(tt).toLocaleString("en-US"),400,170);
+				tctx.fillText(numbombs + " x 7777",400,220);
+					tctx.fillText(Math.floor(longestsafe).toLocaleString("en-US"),400,270);
+					tctx.font = "26px monospace";
+					tctx.fillStyle = "white";
+	tctx.fillText(Math.floor(finalscore).toLocaleString("en-US"),400,320);
 	setTimeout(
     function() {
       deadmode = true;
@@ -613,7 +626,7 @@ botdirt = true;
 
 function dobomb(bx,by){
 	console.log("boom");
-	score += 9999;
+	numbombs += 1;
 	bbctx.beginPath();
 	bbctx.arc(bx,by,200,0,2*Math.PI);
 	bbctx.fill();
@@ -632,6 +645,13 @@ function dobomb(bx,by){
 
 
 function dohurt(hx,hy){
+
+if (safetime > longestsafe){
+	longestsafe = safetime;
+}
+safetime = 0;
+
+
 	bbctx.strokeStyle = "rgba(255,255,255,.8)";
 	bbctx.beginPath();
 	bbctx.moveTo(hx-6,hy-6);
@@ -994,6 +1014,8 @@ function zWrapCoord(x, maxx, min=0){
 }
 
 
+
 </script>
+
 </body>
 </html>
