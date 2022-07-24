@@ -88,21 +88,22 @@
 
 
 	var oc = document.createElement('canvas');
-	oc.width = 19;
-	oc.height = 19;
+	oc.width = 20;
+	oc.height = 20;
 	var occ = oc.getContext('2d');
 	occ.textBaseline = "top";
 	occ.textAlign="center";
-	occ.font = "19px Helvetica";
+	occ.font = "24px monospace";
 	occ.fillStyle = "red";
 	occ.strokeStyle = "white";
 
 
 		occ.fillText("♥",10,1);
 			occ.strokeText("♥",10,1);
+console.log(oc.toDataURL());
 
-
-
+var ocimg = new Image;
+ocimg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAqNJREFUOE+1lEtI1FEUxn/H0fGFNoJCSqgD+SaRSAxsYxjqJqgwCUTNAosiQg10IAQVhMhHmIiCIwlK5EYjW0hCuJEW0SyUNISRoZlMBfGZOuqNvznOiCYWdZf38eOe7zvfEf7xkn/M4/8DlVK+zMycw+FIJSnpPT4+oyKyqVWilNJjtaZgt58nOfkDwcEWEVn3rHLvh0opYXX1LA5HH4uLp5ichIyMbWZnR0hMvAbosVhe4++fwvg4pKYq1tftGI3ZIjLmgnoCTzM29o7m5ig6O2FjA8LCoKkJ0tP7AF96e3OoroalJfDzg9JSyM//QkLCRRGxa9AdoFJKx/LyHczm55hMsLLiriIxEQYGfuB0OsnKCsZqdZ8ZDFBfD3l5xQQGvhCRbRfQj8+fW2hsLMZshq0t9yPtJ7W1sLYGNTWw7iGZTgf37sH9+83ExJSLyIYLqGd6upa6uke0tOwHenlBRMQvCWZm9neZtzeUl4PJZCIo6ImIbLmAXsB1urrMPHjgz8LC8dozJATa2ubJzb0JvBYR5WmKkcnJfu7ePcPQkCbs0VARyM7WTPtEbOxlEfm6Z8qeMU5nPiMjzygsPMHU1NHA6Gjo7p4jLe0hOt1Lrdx9wF1oAHb7UwYHb1NW5sP8/OHQ0FBoaHCSmdlKeHiliKwe6EPXhlIqDJutm/b2SzstobnruQICoLISCgreEhlZKCJzhybFc1MpFYfV2k9VVRw9PW7XNVeLi6GiwoLReEVEDuhy6HDYiSFcYGLiFSUlJxkeBs2EnBxobLQRE3NVRD4epsdvp81OelZWbjA62kxRkYHAQOjomCM+/ha+vm+0VPwRcNckP75/f4zNVo5ev0lUVAUGQ6tr+vwxcBdqwOFoQ+Qb4eEmT0f/Cni8yLhv/QQe1AAkqqcvsQAAAABJRU5ErkJggg==";
 
 	var deadmode = false;
 	var mmode = false;
@@ -865,7 +866,7 @@ function drawbull(bb){
 
 }
 	else{
-		bctx.drawImage(oc,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
+		bctx.drawImage(ocimg,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
 	//	bctx.beginPath();
 
 		 //bctx.arc(bb.x,bb.y,bb.size,0,2*Math.PI);
@@ -993,8 +994,6 @@ function zWrapCoord(x, maxx, min=0){
 }
 
 
-
 </script>
-
 </body>
 </html>
