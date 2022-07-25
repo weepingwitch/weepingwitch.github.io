@@ -51,21 +51,22 @@ canvas{
 	</div>
 	<div id="scoretext" >score:</div><BR>
 		wasd/arrow keys/mouse/touch to move.<BR>
-			avoid bullets, but do hit the bombs.<BR>
+			avoid bullets, but do hit the bombs.<BR>graze near bullets to earn kisses!<BR>
 				(ﾉ>ω<)ﾉ :｡･:*:･ﾟ’★,｡･:*:･ﾟ’☆
 
 			</div>
-
-
 			<script>
 
 			// hewwo i hope you like my game!!! enjoy!
 			// the rectangle you play as is a girl.
+			//
 			// sowwy if the code is bad or confusing,,
 			// i made this from scratch in like three days :3
 			// and my gf has covid and i think i do too :(
 			// anyway this has been fun to make!!
+			//
 			// feel free to modify it and make it better!
+			//
 			// ~ willow
 
 			var screendiv = document.getElementById("screen");
@@ -738,13 +739,11 @@ canvas{
 
 			document.onkeydown = function(e) {
 				mmode = false;
-				if (deadmode){
-					location.reload();
-				}
-				if(e.keyCode == 37 || e.keyCode == 65) LEFT = true;
-				if(e.keyCode == 38  || e.keyCode == 87) UP = true;
-				if(e.keyCode == 39 || e.keyCode == 68) RIGHT = true;
-				if(e.keyCode == 40  || e.keyCode == 83) DOWN = true;
+
+				if(e.keyCode == 37 || e.keyCode == 65) {LEFT = true;if (deadmode){location.reload();}}
+				if(e.keyCode == 38  || e.keyCode == 87) {UP = true;if (deadmode){location.reload();}}
+				if(e.keyCode == 39 || e.keyCode == 68) {RIGHT = true;if (deadmode){location.reload();}}
+				if(e.keyCode == 40  || e.keyCode == 83) {DOWN = true;if (deadmode){location.reload();}}
 			}
 
 			document.onkeyup = function(e) {
@@ -994,6 +993,7 @@ canvas{
 				res = x - maxx;
 				return res;
 			}
+
 		</script>
 	</body>
 </html>
