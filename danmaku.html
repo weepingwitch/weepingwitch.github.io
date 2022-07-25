@@ -334,7 +334,7 @@ canvas{
 				life = 0;
 				drawtop();
 				console.log(tt/1000);
-				tcx.fillStyle = "rgba(0,0,0,.5)";
+				tcx.fillStyle = "rgba(0,0,0,.7)";
 				tcx.fillRect(0,00,420,420);
 				tcx.fillStyle = "cyan";
 				tcx.textBaseline = "top";
@@ -354,13 +354,13 @@ canvas{
 				finalscore = Math.floor(score) + Math.floor(tt) + (nmbmb * 7777) + Math.floor(lngsft);
 				tcx.font = "18px monospace";
 				tcx.textAlign = "right";
-				tcx.fillText(Math.floor(score).toLocaleString("en-US"),400,120);
-				tcx.fillText(Math.floor(tt).toLocaleString("en-US"),400,170);
-				tcx.fillText(nmbmb + " x 7777",400,220);
-				tcx.fillText(Math.floor(lngsft).toLocaleString("en-US"),400,270);
+				tcx.fillText(Math.floor(score).toLocaleString("en-US"),380,120);
+				tcx.fillText(Math.floor(tt).toLocaleString("en-US"),380,170);
+				tcx.fillText(nmbmb + " x 7,777",380,220);
+				tcx.fillText(Math.floor(lngsft).toLocaleString("en-US"),380,270);
 				tcx.font = "26px monospace";
 				tcx.fillStyle = "white";
-				tcx.fillText(Math.floor(finalscore).toLocaleString("en-US"),400,340);
+				tcx.fillText(Math.floor(finalscore).toLocaleString("en-US"),380,340);
 				setTimeout(
 					function() {
 						deadmode = true;
@@ -419,6 +419,9 @@ canvas{
 					case 23:
 					case 22:
 					case 21:
+					if (levelnum == 0){
+						em.phase = 0;
+					}
 					break;
 					case 32:
 					case 33:
@@ -600,7 +603,7 @@ canvas{
 					}
 
 					bb.age += dt;
-					//	console.log(bb.age/1000);
+					//	c.............
 
 
 					if (bb.age > 6000){
@@ -670,7 +673,7 @@ canvas{
 
 
 
-			////// Arrow keys //////
+			//
 
 			function move() {
 
@@ -778,21 +781,21 @@ canvas{
 				tcx.fillRect(Math.floor(420/2)*(1 -(life/100)),415,Math.floor(420*(life/100)),5);
 				tcx.fillRect(0,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
 				tcx.fillRect(415,Math.floor(420/2)*(1 -(life/100)),5,Math.floor(420*(life/100)));
-				//tctaaaaaaa
+				//tctaa
 
 			}
 
 			function drawbot(){
 				clearcanv(bcx);
 
-				//bcxaaaaaaa
+				//bcxaaa
 				for (let bb of bulls){
 					if (!bb.alv){
 						continue;
 					}
 					drawbull(bb);
 				}
-				//bctaaaaaaa
+				//bctaa
 
 				bcx.beginPath();
 				bcx.moveTo(emts[0].x,emts[0].y);
@@ -901,8 +904,8 @@ canvas{
 
 				if (grazing){
 					mcx.fillStyle = "rgba(100,255,255,.3)";
-					//	mcx
-					// mcx.
+					//
+					// mc
 					//
 					mcx.fillStyle = "cyan";
 
