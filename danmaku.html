@@ -57,9 +57,6 @@ canvas{
 			</div>
 
 
-
-
-
 			<script>
 
 			// hewwo i hope you like my game!!! enjoy!
@@ -69,7 +66,6 @@ canvas{
 			// and my gf has covid and i think i do too :(
 			// anyway this has been fun to make!!
 			// feel free to modify it and make it better!
-			//
 			// ~ willow
 
 			var screendiv = document.getElementById("screen");
@@ -312,6 +308,8 @@ canvas{
 				drawtop();
 
 
+
+
 				var newbs = [];
 				for (let bb of bulls){
 					if (bb.alv){
@@ -330,9 +328,7 @@ canvas{
 					gameover(tt);
 				}
 
-
 			}
-
 
 			function gameover(tt){
 				life = 0;
@@ -581,9 +577,6 @@ canvas{
 
 
 
-
-
-
 					if (sqrmag([bb.x,bb.y],[grl.x,grl.y]) <= bb.size ){
 						if (!bb.bomb){
 							life = life-25;
@@ -620,6 +613,7 @@ canvas{
 				}
 				botdirt = true;
 			}
+
 
 
 			function dobomb(bx,by){
@@ -884,7 +878,12 @@ canvas{
 				else{
 					bcx.drawImage(ocimg,Math.floor(bb.x - (bb.size)),Math.floor(bb.y- (bb.size)),bb.size*2,bb.size*2);
 					//	bcx
+
+
+
+
 					//		bcx.
+
 				}
 
 				if (bb.bomb){
@@ -994,6 +993,7 @@ canvas{
 				res = x - maxx;
 				return res;
 			}
+			
 		</script>
 	</body>
 </html>
