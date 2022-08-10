@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="errors.js"></script>
+    <script src="encode.js"></script>
+<script src="opcodes.js"></script>
+      <script src="ast.js"></script>
+    <script src="tokens.js"></script>
+    <script src="lexer.js"></script>
+    <script src="parser.js"></script>
+        <script src="compiler.js"></script>
+    <script src="emitter.js"></script>
+    <script src="handcode.js"></script>
+    <script src="runner.js"></script>
+    <script src="ui.js"></script>
+    <title>compiler</title>
+  </head>
+  <body>
+
+    <textarea id="codeinput" name="codeinput" rows="10" cols="50" autofocus>
+
+
+{ &return i42; }
+
+
+</textarea>
+<script>
+//document.getElementById("codeinput").innerHTML = hardcode;
+</script>
+<BR>
+    <button onclick="compilebutton()">
+      compile
+      </button>
+      <button onclick="cleardivs()">
+        clear
+        </button>
+      <BR><HR><BR>
+<div id="tokendiv"></div><hr>
+<div id="astdiv"></div><hr>
+  <textarea id="bhodiv" rows="20" cols="22"></textarea>
+  <textarea id="bdodiv" rows = "20"></textarea><hr>
+    <div id="rdiv"></div><BR><HR><BR>
+  </body>
+</html>
