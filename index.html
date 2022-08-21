@@ -12,7 +12,7 @@
 		  <title>willow.lol</title>
 
 			<style type="text/css">
-				.container {margin: 0 auto;border: 1px solid black; width:100%;border-radius: 25px; padding: 4px;}
+				.container {margin: 0 auto;border: 1px solid #aaffaa; width:100%;border-radius: 25px; padding: 4px;}
 
 				* {
 				  box-sizing: border-box;
@@ -20,6 +20,17 @@
 					background-color:black;
 					color:#aaffaa;
 				}
+				body{
+					-webkit-animation: ccs 120s infinite;
+				}
+				
+				
+@-webkit-keyframes ccs {
+	0%, 100%  { -webkit-filter: hue-rotate(0deg); }
+	50% { -webkit-filter: hue-rotate(360deg); }
+}
+				
+				
 
 h1 {
 	text-align:center;
