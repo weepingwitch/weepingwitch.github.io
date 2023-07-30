@@ -237,11 +237,11 @@ tr{
 }
 
 	.topmenu{
-		display:block; margin: auto;
+		display:none; margin: auto;
 		width:80%;height:32px;font-size:20px;overflow:hidden;padding:0px;
 	}
 	.menubutton{
-		float:left;display:block;text-align:center;width:33%;background-color: #cacaca; padding: 0px 0;
+		float:left;display:block;text-align:center;width:25%;background-color: #cacaca; padding: 0px 0;
 	}
 	body {
 		position:relative;
@@ -278,14 +278,13 @@ tr{
 
 	}
 	#inst{
-		width:80%;
-		height:20%;
-		left:10%;
-		padding:0;
-		position:fixed;
-		text-align:center;
-		top:80%;
-		overflow:scroll;
+		display:block;padding:5;position:fixed;top: 10%;width:300px;height:320px;
+		left: 50%;
+		margin-top: -00px;
+		margin-left: -150px;
+		line-height:120%;
+		background-color:#cacaca;
+		text-align: center;
 
 	}
 	@media screen and (min-width: 600px) {
@@ -319,6 +318,8 @@ tr{
 every step of the simulation, the Angel toggles the alive/dead state of the cells she covers, acting as an external influence on the regular Conway's life simulation.
 <BR><BR>
 find this Angel by noticing the abnormalities in the simulation, and click on her. it will let you know when you find her.
+<div onclick="insttoggle()"  title="close" class="menubutton" style="float:none;position:absolute;margin:auto;width:50%;bottom:10;left:20;right:20;">🆗</div>
+
 </div>
 
 
@@ -335,6 +336,7 @@ find this Angel by noticing the abnormalities in the simulation, and click on he
 
 
 	<div id="topmenubuttons" class="topmenu">
+		<div onclick="insttoggle()" id="instbutton" title="instructions" class="menubutton">ℹ️</div>
 		<div onclick="stopemu()" id="pbutton" title="play/pause" class="menubutton">⏸️</div>
 		<div onclick="zReset()" id="rsbutton" title="reset" class="menubutton" >🔄</div>
 		<div onclick="settingsmenutoggle()" id="settingsbutton" title="toggle settings" class="menubutton">⚙️</div>
@@ -642,6 +644,7 @@ drawGrid();
 	var elemLeft = thold.offsetLeft;
 	var   elemTop = thold.offsetTop;
 	var settingsopen = false;
+	var infoopen = true;
 	var wasemu = true;
 	//var canv = document.getElementById("theCanvas");
 	var pb = document.getElementById("pbutton");
@@ -725,34 +728,55 @@ var animid = null;
 	}
 
 
+		function settingsmenutoggle(){
 
-	function settingsmenutoggle(){
+			if (!settingsopen) {
+				settingsmenu.style.display = "block";
+				//zClearScreen();
 
-		if (!settingsopen) {
-			settingsmenu.style.display = "block";
+
+				settingsopen = true;
+				wasemu = zEmulating;
+				zEmulating = false;
+				topmenud.style.display="none";
+
+			} else {
+				settingsmenu.style.display = "none";
+				settingsopen = false;
+
+				if (wasemu)
+				zEmulating = true;
+				topmenud.style.display = "block";
+				setrate(ratefield.value);
+				numangels = numangelsfield.value;
+				numangels = zClamp(numangels,1,12);
+				numrows = gridsizefield.value;
+				numcols = gridsizefield.value;
+				numrows = zClamp(numrows,7,144);
+				numcols = zClamp(numcols,7,144);
+				zReset();
+			}
+		}
+
+
+
+	function insttoggle(){
+
+		if (!infoopen) {
+			inst.style.display = "block";
 			//zClearScreen();
+				topmenud.style.display="none";
 
+			infoopen = true;
 
-			settingsopen = true;
-			wasemu = zEmulating;
-			zEmulating = false;
-			topmenud.style.display="none";
 
 		} else {
-			settingsmenu.style.display = "none";
-			settingsopen = false;
+			inst.style.display = "none";
+			infoopen = false;
 
-			if (wasemu)
-			zEmulating = true;
+
 			topmenud.style.display = "block";
-			setrate(ratefield.value);
-			numangels = numangelsfield.value;
-			numangels = zClamp(numangels,1,12);
-			numrows = gridsizefield.value;
-			numcols = gridsizefield.value;
-			numrows = zClamp(numrows,7,144);
-			numcols = zClamp(numcols,7,144);
-			zReset();
+
 		}
 	}
 
