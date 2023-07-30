@@ -277,6 +277,17 @@ tr{
 
 
 	}
+	#inst{
+		width:80%;
+		height:20%;
+		left:10%;
+		padding:0;
+		position:fixed;
+		text-align:center;
+		top:80%;
+		overflow:scroll;
+
+	}
 	@media screen and (min-width: 600px) {
 		.menubutton:hover{
 			background-color: #808080;
@@ -302,7 +313,13 @@ tr{
 <div id="tableholder">
 
 </div>
-
+<div id="inst" class="inst">
+	Conway's game of life simulation is happening, but additionally, there is an invisible 3 cell by 3 cell square Angel that is slowly moving across the board in a steady direction.
+<BR><BR>
+every step of the simulation, the Angel toggles the alive/dead state of the cells she covers, acting as an external influence on the regular Conway's life simulation.
+<BR><BR>
+find this Angel by noticing the abnormalities in the simulation, and click on her. it will let you know when you find her.
+</div>
 
 
 	<div id="settingsmenu" class="settings"><b>configure the angels</b><HR />
@@ -327,13 +344,7 @@ tr{
 </div>
 	<div id="logmenu" class="logmenu">
 	</div>
-<div>
-	Conway's game of life simulation is happening, but additionally, there is an invisible 3 cell by 3 cell square Angel that is slowly moving across the board in a steady direction. 
-<BR><BR>
-every step of the simulation, the Angel toggles the alive/dead state of the cells she covers, acting as an external influence on the regular Conway's life simulation.
-<BR><BR>
-find this Angel by noticing the abnormalities in the simulation, and click on her. it will let you know when you find her.
-</div>
+
 	<script>
 
 	//// engine code below this lol
