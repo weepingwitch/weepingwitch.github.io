@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>a wilding ritual</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href='https://fonts.googleapis.com/css?family=Architects Daughter' rel='stylesheet'>
+        <style>
+            body {color:#E1E289;
+                background-color:#0A210F;
+                font-family: 'Architects Daughter';
+            }
+            
+            button {
+                margin:0 auto;
+            }
+            
+            .main {margin:0 auto;
+                width:60%;
+                   
+             
+                
+            }
+            
+            .text{
+                
+                    position:relative;
+                    left:0px;
+                    right:-20px;
+                    border-radius: 20px;
+                    background-color:#14591D;
+                    color:#E1E289;
+                    padding:20px;
+                    text-indent:2em;
+                    
+                
+            }
+            
+            .text::first-letter
+            {
+                font-size: 150%;
+            }
+            .imgbg{
+                border-radius: 20px;
+                position:relative;
+                width:100%;
+                height:10em;
+               
+                background-image: url("leaves.jpg");
+                
+                background-attachment: fixed;
+                  background-position: center;
+                  background-repeat: no-repeat;
+                  background-size: cover;
+
+            }
+            
+            
+            
+            
+            
+            .page{
+                margin:0 auto;
+                overflow: hidden;
+                height:0px;
+                width:20%;
+                font-size: 0px;
+                transition:  1.5s;
+            }
+            
+            #p1{height:auto;width:100%;font-size: 22px;}
+            
+            @media only screen and (max-width: 768px) {
+              /* For mobile phones: */
+              .main {width:90%;}
+              
+              }
+            
+            
+            
+            
+            
+        </style>
+        
+       
+        
+    </head>
+    <body>
+        
+        <div id="main" class="main">
+            
+            <div class="page" id="p1">
+                <div class="text">
+                hello world<BR><BR>
+                <button onclick="nextPage()">Click Me</button>  orrrr  <a onclick="showAll()">show all pages</a>
+                </div>
+            </div>
+            
+            <div class="page" id="p2">
+                <div class="text">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR>
+                <button onclick="nextPage()">Click Me</button>
+                </div>
+            </div>
+            
+            
+            
+            <div class="page" id="p3">
+                <div class="text">
+                page 3 lol
+                </div>
+                <div class="imgbg">
+                    </div>
+                <div class="text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero. Donec condimentum elementum lacus, at ultricies ipsum aliquet eget. Nunc sagittis turpis felis, et cursus leo fermentum a. Praesent finibus fermentum molestie. Nulla vehicula in erat eu consequat.
+                Duis tristique, mi in commodo vestibulum, massa ligula hendrerit lorem, sit amet mollis sapien ipsum sed est. Proin eleifend eros non convallis blandit. Sed id purus mauris. Pellentesque mauris ligula, faucibus eu ligula nec, viverra tempor nibh. Aenean ornare ipsum augue, in pretium diam accumsan quis. Duis placerat lobortis quam, a sagittis tortor viverra ut.
+
+
+                </div>
+                <div class="imgbg" style="background-image: url('leaves2.jpg');">
+                    </div>
+                <div class="text">
+                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR>
+                <button onclick="nextPage()">Click Me</button>
+                </div>
+            </div>
+            
+            <div class="page" id="p4">
+                <div class="text">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR>
+                <button onclick="nextPage()">Click Me</button>
+                </div>
+            </div>
+            
+            
+            <div class="page" id="p5">
+                <div class="text">
+                page 5 lol
+                </div>
+                <div class="imgbg" style="background-image: url('leaves2.jpg');">
+                    </div>
+                <div class="text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero. Donec condimentum elementum lacus, at ultricies ipsum aliquet eget. Nunc sagittis turpis felis, et cursus leo fermentum a. Praesent finibus fermentum molestie. Nulla vehicula in erat eu consequat.
+                Duis tristique, mi in commodo vestibulum, massa ligula hendrerit lorem, sit amet mollis sapien ipsum sed est. Proin eleifend eros non convallis blandit. Sed id purus mauris. Pellentesque mauris ligula, faucibus eu ligula nec, viverra tempor nibh. Aenean ornare ipsum augue, in pretium diam accumsan quis. Duis placerat lobortis quam, a sagittis tortor viverra ut.
+
+
+                </div>
+                <div class="imgbg" >
+                    </div>
+                <div class="text">
+                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR>
+                <button onclick="nextPage()">Click Me</button>
+                </div>
+            </div>
+            
+            <div class="page" id="p6">
+                <div class="text">
+                goodbye world<BR><BR>
+          
+                </div>
+            </div>
+            
+           
+        </div>
+        
+        <script>
+            var curp = document.getElementById("p1");
+            var pnum = 1;
+            
+           
+            
+            function nextPage(){
+               
+                curp.style.width="0%";
+                curp.style.fontSize="0px";
+                curp.getElementsByTagName("button")[0].style.display="none";
+                pnum += 1;
+                
+                setTimeout(function(){
+                    curp.style.height = "0px";
+                    curp = document.getElementById("p" + pnum);
+                    curp.style.height = "auto";
+                    curp.style.width="100%";
+                    curp.style.fontSize="22px";
+                }, 700);
+               
+                
+            }
+            
+            function showAll(){
+                var pgs = document.getElementsByClassName("page");
+                for (var i = 0; i < pgs.length; i++) {
+                    pgs[i].style.height="auto";
+                    pgs[i].style.width="100%";
+                    pgs[i].style.fontSize="22px";
+                    pgs[i].style.padding="10px 0px";
+                    
+                    
+                    }
+                
+                var btns = document.getElementsByTagName("button");
+                for (var i = 0; i < btns.length; i++) {
+                    btns[i].style.display = "none";
+                }
+            
+            
+            }
+        </script>
+        
+    </body>
+    
+</html>
