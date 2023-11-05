@@ -3,32 +3,75 @@
     <head>
         <title>a wilding ritual</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href='https://fonts.googleapis.com/css?family=Architects Daughter' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Rajdhani' rel='stylesheet'>
+            <link href='https://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet'>
         <style>
-            body {color:#E1E289;
+            body {color:#c1F289;
                 background-color:#0A210F;
-                font-family: 'Architects Daughter';
+                font-family: 'Rajdhani';
+                margin:0px;
+                padding:0px;
             }
             
+         
             button {
                 margin:0 auto;
+              display: inline-block;
+              border-radius: 4px;
+              background-color: #c1F289;
+              border: none;
+              color: #0A210F;
+              text-align: center;
+              font-size: 22px;
+              padding: 20px;
+              width: 200px;
+              transition: all 0.5s;
+              cursor: pointer;
+              
+            }
+
+            button span {
+              cursor: pointer;
+              display: inline-block;
+              position: relative;
+              transition: 0.5s;
+            }
+
+            button span:after {
+              content: '\00bb';
+              position: absolute;
+              opacity: 0;
+              top: 0;
+              right: -20px;
+              transition: 0.5s;
+            }
+
+            button:hover span {
+              padding-right: 25px;
+            }
+
+            button:hover span:after {
+              opacity: 1;
+              right: 0;
             }
             
             .main {margin:0 auto;
+                padding-top:1em;
                 width:60%;
+           
                    
              
                 
             }
             
             .text{
-                
+                    font-family: 'Rajdhani';
                     position:relative;
                     left:0px;
                     right:-20px;
                     border-radius: 20px;
                     background-color:#14591D;
-                    color:#E1E289;
+                    color:#c1F289;
                     padding:20px;
                     text-indent:2em;
                     
@@ -69,11 +112,75 @@
             
             #p1{height:auto;width:100%;font-size: 22px;}
             
+            h1, h2, h3 {
+                font-family: 'Cinzel';
+            }
+           
+            
+            .navbar {
+                font-family: 'Cinzel';
+              
+             
+              z-index: 1; /* Stay on top */
+              top: 0; /* Stay at the top */
+              left: 0;
+              background-color: #288e95; 
+              overflow: hidden; /* Disable horizontal scroll */
+              font-size:22px;
+            }
+            
+            .navbar  a {
+               
+                text-decoration: none;
+            
+                color: #eaf8f9;
+                text-align: center;
+                display: block;
+                
+                 transition: 0.5s;
+              }
+            
+            .navbar a:hover {
+              background: #eaf8f9;
+              color: #288e95;
+            }
+            
+            @media only screen and (min-width: 769px) {
+                .navbar{
+                    height: 100%; /* Full-height: remove this if you want "auto" height */
+                    width: 160px; /* Set the width of the sidebar */
+                    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                    padding-top: 20px;
+                    
+                }
+                
+                .navbar a{
+                    padding: 6px 8px 6px 16px;
+                }
+                
+                }
+            
             @media only screen and (max-width: 768px) {
               /* For mobile phones: */
               .main {width:90%;}
               
+              .navbar {
+                overflow: hidden;
+                font-size:18px;
+                height:3em;
+                width: 100%; /* Full width */
+                
               }
+              
+               .navbar a {
+                 float: left;
+           
+                 
+                 padding: 14px 16px;
+                
+               }
+              
+            }
             
             
             
@@ -85,20 +192,28 @@
         
     </head>
     <body>
-        
+        <div class="navbar" id="navbar">
+          <a href="#home" class="active">Ritual</a>
+          <a href="#news">Resources</a>
+          <a href="#contact">Action</a>
+          <a href="#about">About</a>
+        </div>
         <div id="main" class="main">
             
             <div class="page" id="p1">
                 <div class="text">
-                hello world<BR><BR>
-                <button onclick="nextPage()">Click Me</button>  orrrr  <a onclick="showAll()">show all pages</a>
+                <h2>hello world</h2><BR>
+                some text goes here<BR><BR>
+                </div><Br><div class="text">
+                <button onclick="nextPage()"><span>Next  </span></button><BR> or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
                 </div>
             </div>
             
             <div class="page" id="p2">
                 <div class="text">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR>
-                <button onclick="nextPage()">Click Me</button>
+                </div><Br><div class="text">
+                <button onclick="nextPage()"><span>Next  </span></button>
                 </div>
             </div>
             
@@ -106,7 +221,7 @@
             
             <div class="page" id="p3">
                 <div class="text">
-                page 3 lol
+                <h3>page 3 lol</h3>
                 </div>
                 <div class="imgbg">
                     </div>
@@ -119,15 +234,15 @@
                 <div class="imgbg" style="background-image: url('leaves2.jpg');">
                     </div>
                 <div class="text">
-                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR>
-                <button onclick="nextPage()">Click Me</button>
+                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR> </div><Br><div class="text">
+                <button onclick="nextPage()"><span>Next  </span></button>
                 </div>
             </div>
             
             <div class="page" id="p4">
                 <div class="text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR>
-                <button onclick="nextPage()">Click Me</button>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR> </div><Br><div class="text">
+                <button onclick="nextPage()"><span>Next  </span></button>
                 </div>
             </div>
             
@@ -147,8 +262,8 @@
                 <div class="imgbg" >
                     </div>
                 <div class="text">
-                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR>
-                <button onclick="nextPage()">Click Me</button>
+                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR> </div><Br><div class="text">
+                <button onclick="nextPage()"><span>Next  </span></button>
                 </div>
             </div>
             
