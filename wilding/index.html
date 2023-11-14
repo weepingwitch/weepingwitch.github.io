@@ -7,16 +7,21 @@
             <link href='https://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet'>
         <style>
             body {color:#c1F289;
-                background-color:#0A210F;
+                background-color:#0A110F;
+          
+                background-attachment: fixed;
                 font-family: 'Rajdhani';
                 margin:0px;
                 padding:0px;
             }
             
+            pre{
+                font-family:serif;
+            }
          
             button {
                 margin:0 auto;
-              display: inline-block;
+              display: block;
               border-radius: 4px;
               background-color: #c1F289;
               border: none;
@@ -24,7 +29,7 @@
               text-align: center;
               font-size: 22px;
               padding: 20px;
-              width: 200px;
+              width: 300px;
               transition: all 0.5s;
               cursor: pointer;
               
@@ -35,6 +40,7 @@
               display: inline-block;
               position: relative;
               transition: 0.5s;
+            
             }
 
             button span:after {
@@ -70,18 +76,36 @@
                     left:0px;
                     right:-20px;
                     border-radius: 20px;
-                    background-color:#14591D;
-                    color:#c1F289;
+                    background-color:#355E3B;
+                    color:#ACE1AF;
                     padding:20px;
-                    text-indent:2em;
+                    margin-bottom:30px;
+                    
                     
                 
             }
             
-            .text::first-letter
-            {
-                font-size: 150%;
+            .frontpg{
+                font-family: 'Rajdhani';
+                
+                position:relative;
+                left:0px;
+                height:500px;
+                right:-20px;
+                border-radius: 20px;
+                background-color:#14591D;
+                color:white;
+                padding:20px;
+                margin-bottom:30px;
+                background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)) , url("frontpgjpeg.jpeg");
+                
+                background-attachment: fixed;
+                  background-position: center;
+                  background-repeat: no-repeat;
+                  background-size: cover;
             }
+            
+           
             .imgbg{
                 border-radius: 20px;
                 position:relative;
@@ -94,9 +118,22 @@
                   background-position: center;
                   background-repeat: no-repeat;
                   background-size: cover;
+                  margin-bottom:30px;
 
             }
             
+            
+            .imgnos{
+                border-radius: 20px;
+                position:relative;
+                width:100%;
+                height:10em;
+               
+                background-image: url("bg.png");
+                background-size: cover;
+                margin-bottom:30px;
+                
+            }
             
             
             
@@ -114,6 +151,7 @@
             
             h1, h2, h3 {
                 font-family: 'Cinzel';
+                font-size:28px;
             }
            
             
@@ -192,88 +230,414 @@
         
     </head>
     <body>
-        <div class="navbar" id="navbar">
-          <a href="#home" class="active">Ritual</a>
-          <a href="#news">Resources</a>
-          <a href="#contact">Action</a>
-          <a href="#about">About</a>
-        </div>
+        
         <div id="main" class="main">
             
             <div class="page" id="p1">
-                <div class="text">
-                <h2>hello world</h2><BR>
-                some text goes here<BR><BR>
-                </div><Br><div class="text">
-                <button onclick="nextPage()"><span>Next  </span></button><BR> or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
+                <div class="frontpg"><h2>A Wilding Ritual</h2><BR><BR>Recognizing our complicity in Earth's destruction, we turn to God Immanent, asking for the grace to walk alongside Earth's healing.<BR><BR><BR>
+                <button onclick="nextPage()"><span>Prepare for the Ritual  </span></button><BR> or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
                 </div>
             </div>
             
             <div class="page" id="p2">
+                <div class="text"><h2>The Wake</h2></div>
                 <div class="text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR>
-                </div><Br><div class="text">
-                <button onclick="nextPage()"><span>Next  </span></button>
+                    What are the things you remember about the earth? Was she funny, serious? Did she give you a special gift on your birthday?
                 </div>
+                <div class="imgbg" style="background-image:url('pinkflowers.jpeg');">
+                    </div>
+                <div class="text">
+
+                    I'd like to tell you a story and make space for you to tell your stories too.
+                </div>
+                <div class="text">
+
+                    This one time we were camping at the lake. Before the city had come in and made "official" campsites with concrete to park on and metal ring fire pits. Back when the game warden had told us, "You can camp wherever you think you're big enough." We found a place close to the water, with enough of a clearing to pitch the tent. There was a magic to be found in the summer twilight, watching the reflection of sunset in the water. The air held cicada music, and even the mesquite trees seemed to lean in closer like a hug.
+
+               
+                </div>
+                <div class="imgbg" style="background-image:url('river.jpg');">
+                    </div>
+                <div class="text">
+                    Was there a time you felt the affection of Mother Earth?
+
+                </div>
+                <div class="text">
+                    This other time, we had left the food out a bit too long and were sitting around the campfire when we heard the tell-tale crinkling of plastic. I jumped up and turned around to see a bushy gray and black tail flipping out of the trash bag and onto the ground. Well, that's a sure signal that it's time to get things put away, when critters get curious. Sure enough, our bushy tailed friend was hiding behind a tree and showed themself again when the trash bag went away. It took some shooing away with the business end of a hot dog stick to make sure they knew they weren't welcome.
+
+                </div>
+                <div class="imgbg" style="background-image:url('palmleaves.jpeg');">
+                </div>
+                <div class="text">
+                    Are there things you wish you could go back and change?
+
+                </div><div class="text">
+                <button onclick="nextPage()"><span>Reflect  </span></button>
+                </div>
+                <BR><BR><BR>
             </div>
             
             
             
             <div class="page" id="p3">
                 <div class="text">
-                <h3>page 3 lol</h3>
+                <h3>Turning Towards Death and Dying</h3>
                 </div>
-                <div class="imgbg">
+          
+                <div class="text">
+                    The planet's average surface temperature has risen about 2 degrees Fahrenheit (1 degrees Celsius) since the late 19th century, a change driven largely by increased carbon dioxide emissions into the atmosphere and other human activities.<BR><BR>Most of the warming occurred in the past 40 years, with the seven most recent years being the warmest.
+                
+                </div>
+                <div class="text">
+                    Greenland lost an average of 279 billion tons of ice per year between 1993 and 2019, while Antarctica lost about 148 billion tons of ice per year
+                    <BR><BR>
+                    Global sea level rose about 8 inches (20 centimeters) in the last century. The rate in the last two decades, however, is nearly double that of the last century and accelerating slightly every year.
+</div>
+              
+                <div class="imgnos" style="background-image: url('fire.jpg');">
                     </div>
                 <div class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero. Donec condimentum elementum lacus, at ultricies ipsum aliquet eget. Nunc sagittis turpis felis, et cursus leo fermentum a. Praesent finibus fermentum molestie. Nulla vehicula in erat eu consequat.
-                Duis tristique, mi in commodo vestibulum, massa ligula hendrerit lorem, sit amet mollis sapien ipsum sed est. Proin eleifend eros non convallis blandit. Sed id purus mauris. Pellentesque mauris ligula, faucibus eu ligula nec, viverra tempor nibh. Aenean ornare ipsum augue, in pretium diam accumsan quis. Duis placerat lobortis quam, a sagittis tortor viverra ut.
-
-
-                </div>
-                <div class="imgbg" style="background-image: url('leaves2.jpg');">
-                    </div>
+                    Wildlife populations have declined by an average 69% in the past 50 years.
+                    <BR><BR>
+                    Around 1 million animal and plant species are now threatened with extinction, many within decades, more than ever before in human history.
+</div>
                 <div class="text">
-                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR> </div><Br><div class="text">
-                <button onclick="nextPage()"><span>Next  </span></button>
+                    100-300 million people are at increased risk of floods and hurricanes because of loss of coastal habitats and protection. </div><div class="text">
+                <button onclick="nextPage()"><span>Enter  </span></button>
                 </div>
+                    <BR><BR><BR>
             </div>
             
             <div class="page" id="p4">
+                <div class="text"><h2>Entering the Ritual</h2></div>
+                
+               
                 <div class="text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero.<BR><BR> </div><Br><div class="text">
-                <button onclick="nextPage()"><span>Next  </span></button>
+                    Sense your breath.<BR>
+                    You are not breathing, something is breathing you.<br>
+                    You are being breathed.<br>
+                    <br>
+                    Know your work.<br>
+                    You are not working, something is working you.<br>
+                    You are being worked.<br>
                 </div>
+            <div class="imgbg" style="background-image:url('iceclouds.jpg');">
+                </div>
+            <div class="text">
+                    Recall your expression.<br>
+                    You are not expressing, something is expressing you.<br>
+                    You are being expressed.<BR>
+                  <BR>
+                    Open to prayer.<br>
+                    You are not praying, something is praying you.<br>
+                    You are being prayed.<br>
+                    <br>
+                    Feel your body.<br>
+                    You are not a body, something is embodying you.<br>
+                    You are being embodied.
             </div>
+        <div class="imgbg" style="background-image:url('windtree.jpeg');">
+            </div>
+        <div class="text">
+                    <br>
+                    Consider whom you know.<br>
+                    You are not having relationships, something is relationshipping you.<br>
+                    You are being relationshipped.<br>
+                    <br>
+                    Rest right here.<br>
+                    You are not abiding, something is abiding you.<br>
+                    You are being abided.<br>
+ </div><div class="text">
+                <button onclick="nextPage()"><span>Affirm  </span></button>
+                </div>
+ <BR><BR><BR>
+            </div>
+            
+            
+            
             
             
             <div class="page" id="p5">
-                <div class="text">
-                page 5 lol
+                <div class="text"><h2>
+                    Affirmation of Faith</h2>
+                    </div><div class="text">
+                    I believe my body is my soul's only home, and the Earth is God's first act of self-expression.<BR><BR>
+                    As a created expression of God, the Earth has sacrificed diversity of life, peace, and wholeness to nurture and support humanity.
                 </div>
-                <div class="imgbg" style="background-image: url('leaves2.jpg');">
-                    </div>
-                <div class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in ultricies est. Ut iaculis faucibus quam, in scelerisque lectus ultricies et. Etiam nec nibh sit amet purus faucibus accumsan nec sed libero. Donec condimentum elementum lacus, at ultricies ipsum aliquet eget. Nunc sagittis turpis felis, et cursus leo fermentum a. Praesent finibus fermentum molestie. Nulla vehicula in erat eu consequat.
-                Duis tristique, mi in commodo vestibulum, massa ligula hendrerit lorem, sit amet mollis sapien ipsum sed est. Proin eleifend eros non convallis blandit. Sed id purus mauris. Pellentesque mauris ligula, faucibus eu ligula nec, viverra tempor nibh. Aenean ornare ipsum augue, in pretium diam accumsan quis. Duis placerat lobortis quam, a sagittis tortor viverra ut.
-
-
+            
+            <div class="imgbg" >
                 </div>
-                <div class="imgbg" >
-                    </div>
-                <div class="text">
-                Mauris magna ipsum, posuere ut lacus et, ullamcorper pretium lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus tempus sapien id urna sodales, non varius nibh pellentesque. Sed vestibulum est vitae justo commodo iaculis. In tincidunt purus neque, in volutpat risus ullamcorper a. Fusce sed nulla nisi. Quisque accumsan porttitor orci nec cursus. Sed faucibus lectus a ante interdum, non aliquam purus condimentum. Sed tempus mauris vitae risus pretium, id blandit diam mollis. Sed a bibendum magna.<BR> </div><Br><div class="text">
-                <button onclick="nextPage()"><span>Next  </span></button>
+            <div class="text">
+                    Having borne the increasing burden of humanity's greed, sloth, and callousness, the Earth's jagged wounds, poisoned air, and polluted water have given rise to a judgment. Like a child with a virus, the Earth is heating to heal herself.<BR><BR>
+                    I believe that life on Earth will get hotter. Her crust and plates will heave and buckle; she will blow and destroy her enemies with hurricanes, and we can only look on in grief.<BR><BR>
+                    I believe that Earth, God's creation, has the wisdom and ability to heal if we allow it.
+                </div><div class="imgbg" style="background-image: url('striped.jpeg');">
+                </div><div class="text">
+                    I believe that God exists immanently in this Earth, the Creation without voice, and that "Whatever you have done to the least of these, you have done to me."<BR><BR>
+                    I believe that knowing an honoring God-in-this-Earth, I can work in concert not to heal her, but to be a midwife to this Earth as she labors to bring a new Earth into being.</div><div class="text">
+                                <button onclick="nextPage()"><span>Confess  </span></button>
                 </div>
+                    <BR><BR><BR>
             </div>
             
             <div class="page" id="p6">
+                <div class="text"><h2>Confession of Experience of Loss</h2></div>
                 <div class="text">
-                goodbye world<BR><BR>
-          
+                    Mother Earth,
+                    We confess that the world has become twisted out of shape and proportion, bent until it has become broken.
+                    The rivers no longer flow, there is no more water to bring life to a dry land.
+                    Our cities have choked out the beauty of your meandering grasslands.
+                    The warmth of the sun itself is now a laser beam of death.
+                </div><div class="imgbg" style="background-image: url('joshua.jpg');">
+                </div><div class="text">
+                   We confess that we have not loved you with our words or our deeds.
+                   Rather than take our place in the Great Circle,
+                   we have ignored your desire for flourishing,
+                   we have broken your boundaries,
+                   we have rebelled against your love and protection,
+                   we have brought death to our brothers,
+                   and we have ignored the cries of those in need.
+                   
+<BR><BR>
+ 
+               
+               
+               There is no defense for the harm we have done to all, even to our own selves.
+
+
+</div><div class="text">
+                <button onclick="nextPage()"><span>Next  </span></button>
                 </div>
+<BR><BR><BR>
             </div>
             
+           
+           <div class="page" id="p7">
+               <div class="text">
+                   Wake up sleepers! Rise from death!<br>
+                   Feel the skin, the tingle, the pain, the lack<br>
+                   Feel the air, the whisper, the weight, the heat<br>
+                   Open your mind, open your heart.<br>
+                   Fall apart and feel it.<br>
+                   <br>
+               </div>
+               <div class="imgbg" style="background-image:url('lillypad.jpeg');">
+                   </div>
+               <div class="text">
+                   Wake up sleepers! Rise from death!<br>
+                   Heft your body, heft your bones, they sink down, they get borne up.<br>
+                   Down, down to the ground, underground the stones are singing.<br>
+                   Open your mind, open your heart.<br>
+                   Fall apart and feel it.<br>
+               <BR>
+                   Wake up sleepers! Rise from death!<br>
+                   I meet you, you meet me, everybody so strange and a wonder.<br>
+                   Every blade, every tree, green spreading sees sun and me.<br>
+                   Open your mind, open your heart.<br>
+                   Fall apart and feel it.<br>
+               </div>
+               <div class="imgbg" style="background-image:url('ice.jpeg');">
+                   </div>
+               <div class="text">
+                   Wake up sleepers! Rise from death!<br>
+                   Cold thrill, sharp constrict, the glow in the heart, hands and feet.<br>
+                   Above in brooks icy tumult, below deep living wells.<br>
+                   Open your mind, open your heart.<br>
+                   Fall apart and feel it.<br>
+                   <br>
+                   Wake up sleepers! Rise from death!<br>
+                   Shy, smiling, hidden parts of me.<br>
+                   Wild eyes of friends and neighbors glance from grass and brush and tree.<br>
+                   Open your mind, open your heart.<br>
+                   Fall apart and feel it.<br>
+                   <br>
+         
+               
+           </div>
+               <div class="text">
+                               <button onclick="nextPage()"><span>Next  </span></button>
+               </div>
+               <BR><BR><BR>
+           </div>
+           
+           
+           <div class="page" id="p8">
+               <div class="text">
+               <h2>
+               Sacred Rite
+               </h2>
+               </div>
+               <div class="text">
+               Having crossed the threshold<br>
+               From thinking to feeling<br>
+               The changes all around<br>
+               We know the reality,<br>
+               The loss upon us.<br>
+               In our bodies, we know the loss.<br>
+               Letting go, into that,<br>
+               We have voiced grief.<br>
+               Expressed lamentation.<br>
+               Offered prayer.<br>
+               <br>
+               Stripped down,<br>
+               Open and uncertain,<br>
+               There is nothing to do here,<br>
+               In this space,<br>
+               But to feel life,<br>
+               All of life,<br>
+               As it is.<br>
+               </div><div class="imgbg" style="background-image: url('redrock.jpeg');">
+               </div><div class="text">
+               Now, take a moment,<br>
+               Go outside.<br>
+               Be with the earth.<br>
+               For as long as you like.<br>
+               For as long as you need.<br>
+               Feel her.<br>
+               Quietly, listen.<br>
+               That is all.<br>
+               Just listen,<br>
+               And receive what you hear.<br>
+               <br>
+               When ready,<br>
+               Return<br>
+               And prepare,<br>
+               To reemerge from this ritual.
+<BR><BR>
+         
+               </div>
+               <div class="text">
+                               <button onclick="nextPage()"><span>Arise  </span></button>
+               </div>
+               <BR><BR><BR>
+           </div>
+           
+           
+           
+           <div class="page" id="p9">
+               <div class="text">
+                   <h2>EXITING THE RITUAL</h2>
+                   </div>
+               <div class="text">
+                   “Ritual means nothing if you do not know the longing that precedes it.” –Gita Mehta, A River Sutra.  </div>
+               <div class="imgbg" style="background-image:url('riverrocks.jpg');">
+                   </div>
+               <div class="text">
+
+                   As we arise at the end of this practice, we as students of theology, wfould like to offer a prayer and a blessing on both the Earth and her inhabitants. We acknowledge the growth we’ve experienced by examining the current climate crisis through multiple religious traditions. We’ve felt grief, but interwoven in our prayer, we’ll share multiple examples of what we’ve learned from others and ourselves. These lessons will move us forward, we encourage you to join us.
+
+         
+               </div>
+               <div class="text">
+                               <button onclick="nextPage()"><span>Bless  </span></button>
+               </div>
+               <BR><BR><BR>
+           </div>
+           
+           
+           <div class="page" id="p10">
+               <div class="text">
+              <h3>BENEDICTION/BLESSING</h3>
+         
+               </div>
+               
+               
+               <div class="text">
+                   Dear Creator and Creations.<BR>
+<BR>
+                   In the tradition of Jewish prayer, thank you for waking us today. We feel like a repentant child who’s broken a window after you encouraged us (more than once) not to play with the rocks. We’re sorry and know the time for blame has passed. Seeking forgiveness seems insufficient, so we ask for assistance as we make amends.<BR>
+<BR>
+                   Help us feel wonder. “It is a wholesome and necessary thing for us to turn again to the earth and in the contemplation of her beauties to know the sense of wonder and humility.”</div><div class="imgbg" style="background-image: url('evergreen.jpg');">
+                   </div><div class="text">
+                   May we follow the example of the Ammatoans of Indonesia, and find reconciliation with all creation by seeking the healing power of the forest through the ritual of akdingingngi.<BR>
+<BR>
+                   Introduce us to the land so we can be better occupants. We have stripped her of her resources and have taken from our fellow residents.<BR>
+<BR>
+                   Guide us to better care for all, but more especially for those who can not care for themselves. Jesus would have been very aware of the reason for the destruction of Sodom. Help us care for the Earth and her inhabitants in a higher and holier way. For truly, it comes down to these questions by a wise king of a remnant of Israel: “Are we not all beggars? Do we not all depend on the same being, even God, for all our substance that we have?</div><div class="imgbg" style="background-image: url('bluebonnets.jpg');">
+                   </div><div class="text">
+<pre>
+We ask a blessing
+In letting go of what we grasp to,
+Letting go of what we fixate upon,
+Tension releases,
+And uncertainty calls
+Our hearts to open,
+Warm,
+To this world of interconnection —
+This weave of beings.
+
+Our shared suffering,
+Met with love.
+
+And we trust.
+And trust again.
+And again and again.
+Whatever happens,
+May it happen.
+Whichever way it goes,
+May it go that way.
+Without purpose,
+May we follow Nature —
+This sacred thread.
+</pre>
+                   </div><div class="imgbg" style="background-image: url('flowerswater.jpg');">
+                   </div><div class="text">
+                   The sunrise interrupts the morning and our mourning, bringing beauty and light to a new day. May our efforts to change serve multiple purposes as well. May they have far-reaching consequences and provide a better path forward. We will start by entering the world outside, contemplating a tree, and finally discovering God Imminent.
+
+                   
+                   </div>
+               <div class="text">
+                               <button onclick="nextPage()"><span>Act  </span></button>
+               </div>
+               <BR><BR><BR>
+           </div>
+           
+           
+           <div class="page" id="p11">
+               <div class="text">
+               <h2>Action Steps</h2>
+               </div>
+               <div class="text">
+                   We may not be able to stop climate change at this point but what can we do to show the earth we love her and help protect the life of nature without moving to the middle of the woods and eating tree bark for every meal? Here are some bite-size actions you can start doing by the end of the week, the end of the month, and the end of the year that actually make a difference!
+
+
+        
+               </div>
+               
+               <div class="text">
+                   <B>Week</b>
+                   <ul>
+                     <li>  Talk more about it. Studies show that 70%-80% of people recognize climate change but many of those people never talk about it because they have so much anxiety about it or they assume they are the only ones around who feel strongly about the environment. Just simply talking about climate change with those around you has been shown to elevate anxiety and lead to more action.</li>
+                     <li>  Pick up trash when you are walking. Okay sure this isn't going to single-handedly fix anything but each piece of garbage that doesn't end up in an animal habitat is something notable.</li>
+                      <li> Walk a little more drive a little less. Even if you just walk to your local coffee shop instead of driving two miles you save approximately 850 mL of carbon going into the air which is a little over two 12-ounce bottles of carbon dioxide in the air.</li>
+                   <li>    Continue to educate yourself. There are plenty of books to read or have around or even just follow more creators spreading the news about climate change and what's being done about it. If you are overwhelmed about where to start there are resources listed on this page (insert link to the page here) where you can get started.</li>
+                     <li>  Less food waste. Food waste in landfills emits 4x the amount of methane than anything else in a landfill and methane is 4x more potent than any other greenhouse gas. By sticking to grocery lists, using all of what you have before buying more, freezing and canning and strategically planning how much you buy you can eliminate more greenhouse gas emissions that you create more than anything else and even help with the world hunger crisis. (Blair Imani’s Smarter in Seconds)
+                         </li>
+                     </ul>
+                   <BR>
+                   <b>Month</b>
+                   <ul>
+                     <li>  Swap for more low-waste options at a local refill shop. Shampoo out? Toothbrush gross? Use the last of your laundry detergent? Swap it! Many local grocery stores now carry lower waste alternatives like shampoo bars or bamboo toothbrushes but if you live in a city there is probably a refill shop around where you can use leftover jars or bottles to pick up some typical household items. These refill shops are typically locally owned, low carbon or carbon neutral, and the products often last longer than your average product while costing about the same. (if getting to a refill shop is too much for you right now, switch to those lower-waste options at a grocery store!)</li>
+                    <li>   Swap to more plant-based options for food. You may not be able to (or want to) go straight vegetarian or vegan but if you eat meat for every meal try to do a meatless meal once or twice a week. Drawdown a book created by a group of climate scientists to give the top 100 solutions to climate change puts a plant-rich diet as the number 4 most effective way to help reduce your footprint.</li>
+                      <li> Repurpose and refresh. We all want houses that look nice on the inside and not like we threw it together but to follow the trends and get new furniture every time something is no longer in takes a toll on Mother Earth. Try to paint or restrain the things in your house that aren't inspiring you anymore when you want to get something new. The same goes for clothes. Try mending them before throwing them out when they get minor holes and tears. Dye them when they get stains. If all of that fails find a locally owned thrift shop to find new things and try to repurpose the things you're getting rid of. Can you use the fabric from that shirt for a patch on a pair of pants? Could the wood for that table be used to fix up the broken bookshelf? Or try to give it away on places like Facebook marketplace or buy nothing groups for someone else to repurpose!</li>
+                       
+                       </ul>
+              <BR><BR>
+              <b>Year</b>
+              <ul>
+                  
+                  <li>Vote in elections. Nothing will be done on large scales until people start turning their focus both politically and economically to climate change. Voting in local, state, and national elections with the environment in mind and advocating for others around you to do the same can lead to real changes on bigger scales than just you!</li>
+                <li>  Start composting. Some cities like Denver have city composts you can pay for and the city will pick it up. Other cities don't have this resource and you would have to start your own. Talk to some other friends or join Facebook groups who want to do more about starting one together or finding a local organization that will help!</li>
+                 <li> Invest in companies that are focused on the environment. Once again no actual change is going to happen if it is not economical. Many investing apps now have investment options in companies with the environment in mind. The more we invest money in the companies that are trying to reduce their carbon footprints the more other large companies will follow suit.</li>
+                 <li> Shop locally or at grocery stores that aren't funding things hurting the environment. Many big-name grocery stores are some of the worst when it comes to environmental impact. Try to shop at places that are more locally focused and environmentally conscious.</li>
+                <li>  Advocate for changes around you. Does your work recycle? Does your school use a lot of paper for things that could be digital? Does your church use a big company coffee when they could use a local roaster? Does your work turn off all the lights and computers at the end of the day? Figure out when the spaces around you could make minor changes and advocate for those things to make a difference.</li>
+
+                  </ul>
+           </div>
+           
+           <!-- -->
+           
+           
            
         </div>
         
