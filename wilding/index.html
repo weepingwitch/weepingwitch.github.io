@@ -16,6 +16,9 @@
                 margin:0px;
                 padding:0px;
             }
+            a {
+                color:white;
+            }
             
             pre{
                 font-family:serif;
@@ -73,7 +76,7 @@
             }
             
             .text{
-                    font-family: 'Rajdhani';
+                    
                     position:relative;
                     left:0px;
                     right:-20px;
@@ -87,6 +90,22 @@
                 
             }
             
+            
+            .buttondiv{
+                position:relative;
+                left:0px;
+                right:-20px;
+                border-radius: 20px;
+                background-color:#355E3B;
+                color:#ACE1AF;
+                padding:20px;
+                margin-bottom:30px;
+                text-align:center;
+            }
+            
+            .buttondiv a{
+                color:white;
+            }
             .ts{
                 font-family: 'Sura';
             }
@@ -109,6 +128,7 @@
                   background-position: center;
                   background-repeat: no-repeat;
                   background-size: cover;
+                  transition:  1.5s;
             }
             
            
@@ -240,8 +260,8 @@
         <div id="main" class="main">
             
             <div class="page" id="p1">
-                <div class="frontpg"><h2>A Wilding Ritual</h2><BR><BR>Recognizing our complicity in Earth's destruction, we turn to God Immanent, asking for the grace to walk alongside Earth's healing.<BR><BR><BR>
-                <button onclick="nextPage()"><span>Prepare for the Ritual  </span></button><BR> or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
+                <div class="frontpg" id="fp"><h2>A Wilding Ritual</h2><BR><BR>Recognizing our complicity in Earth's destruction, we turn to God Immanent, asking for the grace to walk alongside Earth's healing.<BR><BR><BR>
+                <button onclick="nextPage()" id="first"><span>Prepare for the Ritual  </span></button><BR> or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
                 </div>
             </div>
             
@@ -258,7 +278,7 @@
                 </div>
                 <div class="text">
 
-                    This one time we were camping at the lake. Before the city had come in and made "official" campsites with concrete to park on and metal ring fire pits. Back when the game warden had told us, "You can camp wherever you think you're big enough." We found a place close to the water, with enough of a clearing to pitch the tent. There was a magic to be found in the summer twilight, watching the reflection of sunset in the water. The air held cicada music, and even the mesquite trees seemed to lean in closer like a hug.
+                    Once we were camping at the lake, before the city came in and made "official" campsites with concrete parking and metal fire rings. Back then, the wardens told us, "You can camp wherever you think you're big enough." We found a place close to the water with enough clearing to pitch the tent. We found a magic in the summer twilight watching the sunset reflected in the water. The air held cicada music, and even the mesquite trees seemed to lean in closer like a hug.
 
                
                 </div>
@@ -269,7 +289,7 @@
 
                 </div>
                 <div class="text">
-                    This other time, we had left the food out a bit too long and were sitting around the campfire when we heard the tell-tale crinkling of plastic. I jumped up and turned around to see a bushy gray and black tail flipping out of the trash bag and onto the ground. Well, that's a sure signal that it's time to get things put away, when critters get curious. Sure enough, our bushy tailed friend was hiding behind a tree and showed themself again when the trash bag went away. It took some shooing away with the business end of a hot dog stick to make sure they knew they weren't welcome.
+                    Another time, we left the food out too long. As we sat around the campfire, we heard the tell-tale crinkling of plastic. I jumped up and turned to see a bushy gray and black tail flip out of the trash bag and onto the ground. When critters get curious, that's a sure signal that it's time to get things put away. Sure enough, our bushy-tailed friend hid behind a tree and showed themself again when the trash bag went away. It took some shooing away with the business end of a hot dog stick to make sure they knew they weren't welcome.
 
                 </div>
                 <div class="imgbg" style="background-image:url('palmleaves.jpeg');">
@@ -277,8 +297,10 @@
                 <div class="text">
                     Are there things you wish you could go back and change?
 
-                </div><div class="text">
-                <button onclick="nextPage()"><span>Reflect  </span></button>
+                </div><div class="buttondiv">
+                <button onclick="nextPage()"><span>Reflect</span></button>
+                <BR>
+                <a href="#" onclick="prevPage()">(back)</a>
                 </div>
                 <BR><BR><BR>
             </div>
@@ -295,23 +317,28 @@
                 
                 </div>
                 <div class="text">
-                   "Greenland lost an average of 279 billion tons of ice per year between 1993 and 2019, while Antarctica lost about 148 billion tons of ice per year."
+                   "Greenland lost an average of 279 billion tons of ice per year between 1993 and 2019, while Antarctica lost about 148 billion tons of ice per year."<sup>1</sup>
                     <BR><BR>
-                    "Global sea level rose about 8 inches in the last century. The rate in the last two decades, however, is nearly double that of the last century and increasing every year."
+                    "Global sea level rose about 8 inches in the last century. The rate in the last two decades, however, is nearly double that of the last century and increasing every year."<sup>1</sup>
 </div>
               
                 <div class="imgnos" style="background-image: url('fire.jpg');">
                     </div>
                 <div class="text">
-                    "Wildlife populations have declined by an average 69% in the past 50 years."
+                    "Wildlife populations have declined by an average 69% in the past 50 years."<sup>2</sup>
                     <BR><BR>
-                    "Around 1 million animal and plant species are now threatened with extinction, many within decades, more than ever before in human history."
+                    "Around 1 million animal and plant species are now threatened with extinction, many within decades, more than ever before in human history."<sup>3</sup>
 </div>
                 <div class="text">
-                    "100-300 million people are at increased risk of floods and hurricanes because of loss of coastal habitats and protection." </div><div class="text">
-                <button onclick="nextPage()"><span>Enter  </span></button>
-                </div>
-                    <BR><BR><BR>
+                    "100-300 million people are at increased risk of floods and hurricanes because of loss of coastal habitats and protection."<sup>3</sup> </div><div class="buttondiv">
+                        <button onclick="nextPage()"><span>Enter</span></button>
+                        <BR>
+                        <a href="#" onclick="prevPage()">(back)</a>
+                        </div>
+                    <div class="text"><sup>1</sup> - <a target="_blank" href="https://climate.nasa.gov/evidence/">https://climate.nasa.gov/evidence/</a><BR>
+                        <sup>2</sup> - <a target="_blank" href="https://www.weforum.org/agenda/2022/10/nature-loss-biodiversity-wwf/">https://www.weforum.org/agenda/2022/10/nature-loss-biodiversity-wwf/</a><BR>
+                        <sup>3</sup> - <a target="_blank" href="https://www.ipbes.net/news/Media-Release-Global-Assessment">https://www.ipbes.net/news/Media-Release-Global-Assessment</a><BR></div>
+                        
             </div>
             
             <div class="page" id="p4">
@@ -353,9 +380,11 @@
                     Rest right here.<br>
                     You are not abiding, something is abiding you.<br>
                     You are being abided.<br>
- </div><div class="text">
-                <button onclick="nextPage()"><span>Affirm  </span></button>
-                </div>
+ </div><div class="buttondiv">
+     <button onclick="nextPage()"><span>Affirm</span></button>
+     <BR>
+     <a href="#" onclick="prevPage()">(back)</a>
+     </div>
  <BR><BR><BR>
             </div>
             
@@ -380,29 +409,31 @@
                 </div><div class="imgbg" style="background-image: url('striped.jpeg');">
                 </div><div class="text">
                     I believe that God exists immanently in this Earth, the Creation without voice, and that "Whatever you have done to the least of these, you have done to me."<BR><BR>
-                    I believe that knowing an honoring God-in-this-Earth, I can work in concert not to heal her, but to be a midwife to this Earth as she labors to bring a new Earth into being.</div><div class="text">
-                                <button onclick="nextPage()"><span>Confess  </span></button>
-                </div>
+                    I believe that knowing and honoring God-in-this-Earth, I can work in concert not to heal her, but to be a midwife to this Earth as she labors to bring a new Earth into being.</div><div class="buttondiv">
+                        <button onclick="nextPage()"><span>Confess</span></button>
+                        <BR>
+                        <a href="#" onclick="prevPage()">(back)</a>
+                        </div>
                     <BR><BR><BR>
             </div>
             
             <div class="page" id="p6">
                 <div class="text"><h2>Confession of Experience of Loss</h2></div>
                 <div class="text">
-                    Mother Earth,
-                    We confess that the world has become twisted out of shape and proportion, bent until it has become broken.
-                    The rivers no longer flow, there is no more water to bring life to a dry land.
-                    Our cities have choked out the beauty of your meandering grasslands.
+                    Mother Earth,<BR><BR>
+                    We confess that the world has become twisted out of shape and proportion, bent until it has become broken.<BR>
+                    Once rivers watered a dry land; now their beds are bone dry, and the land grows arid.<BR>
+                    Our cities have choked out the beauty of your meandering grasslands.<BR>
                     The warmth of the sun itself is now a laser beam of death.
                 </div><div class="imgnos" style="background-image: url('joshua.jpg');">
                 </div><div class="text">
-                   We confess that we have not loved you with our words or our deeds.
-                   Rather than take our place in the Great Circle,
-                   we have ignored your desire for flourishing,
-                   we have broken your boundaries,
-                   we have rebelled against your love and protection,
-                   we have brought death to our brothers,
-                   and we have ignored the cries of those in need.
+                   We confess that we have not loved you with our words or our deeds.<BR>
+                   Rather than take our place in the Great Circle,<BR>
+                   we have ignored your desire for flourishing,<BR>
+                   we have broken your boundaries,<BR>
+                   we have rebelled against your love and protection,<BR>
+                   we have brought death to our brothers,<BR>
+                   and we have ignored the cries of those in need.<BR>
                    
 <BR><BR>
  
@@ -411,9 +442,11 @@
                There is no defense for the harm we have done to all, even to our own selves.
 
 
-</div><div class="text">
-                <button onclick="nextPage()"><span>Pray  </span></button>
-                </div>
+</div><div class="buttondiv">
+    <button onclick="nextPage()"><span>Pray</span></button>
+    <BR>
+    <a href="#" onclick="prevPage()">(back)</a>
+    </div>
 <BR><BR><BR>
             </div>
             
@@ -423,55 +456,32 @@
                 <div class="text"><h2>Prayers of the People</h2>
                     </div>
                 <div class="text">
-                    When we are not fully present to ourselves or those around us; when we wish we were
-                    anyplace else but here; when we get stuck in our heads and trapped by others’ ideas; when we
-                    struggle so hard to see and understand what’s right in front of us and right inside of us:<BR>
-                    <BR>
-                 <B>   Let us see all that we don’t understand. Help us.
-</b><BR><BR>
-                    When we literally can’t do any better than we are doing right this minute; when we impact
-                    those around us with our beliefs and intentions, moods and words, things we do and things we
-                    fail to do, the ways we exert domination and the ways we render others invisible, the ways our
-                    lives create destruction and suffering, and the ways we can’t or don’t do anything at all to help:<BR><BR>
-             <b>       Let us imagine and do what we never thought was possible. Help us.</b>
-<BR><BR>
-                    When we see living things like people, animals, trees, and insects as merely objects to meet our
-                    needs, or as a threat or a nuisance, or fail to see them at all; when we cannot connect to our
-                    own bodies or to our own hearts; when we cannot connect to the life that’s happening all
-                    around us; when we fail to understand the meaningful, dynamic presence of landscapes, skies,
-                    rivers, winds, and weathers:<BR><BR>
-                 <B>   Let us again join our friends and neighbors in a living, loving reality. Help us.
-                    <BR><BR></b>
-                    When we find ourselves fearful for our very existence, threatened and grasping for survival in
-                    ways both big and small; when we find ourselves exerting any measure of violence in order to
-                    regain personal comfort and sense of security; when we see ourselves wounding and
-                    destabilizing our neighbors, friends, and families:<BR><BR>
-                <b>    Let us embrace our fears with compassion and embrace those around us with responsibility.
-                    Help us.</b>
-                    <BR><BR>
-                    When we see ourselves acting out racial supremacy, colonial supremacy, gender and sexual
-                    supremacy, ability supremacy, and any other supremacy, recreating ourselves and those
-                    around us in a pattern of privilege and oppression; when we find we cannot alter this pattern
-                    through our conscious will, vigilance, or good intentions; when we see this pattern exacting
-                    daily death on our neighbors, friends, and family:<BR><BR>
-             <b>       Let us find a new path leading from death to life and walk it with integrity. Help us.</b>
-                    <BR><BR>
-                    When we see our bird neighbors dying, our animal neighbors dying, our fish neighbors dying;
-                    when we see our land impacted by not enough rain or too much rain, fire, pollution, too much
-                    heat or too much cold; when we see the land unable to sustain our lives or the lives of the
-                    animals and plants around us:<BR><BR>
-               <b>     Let us be open to the grief and conscious of new opportunities to serve. Help us.</b><BR><BR>
-                    In this spirit of compassion, humility, and presence, we see our own inherent goodness and the
-                    goodness of the whole world, and that we are open to whatever new work is being birthed
-                    through, in, and around us.<BR><BR>
-                    If there is anything that has not been said here that needs to be said, please do so either
-                    silently or aloud at this time.
+                    When we are not fully present to ourselves or those around us; when we wish we were any place else but here; when we get stuck in our heads and trapped by others’ ideas; when we struggle so hard to see and understand what’s right in front of us and right inside of us:<BR><BR>
+               <B>     Let us see all that we don’t understand. Help us.</b><BR><BR>
+                 When we literally can't do any better than we are doing right this minute; when we impact those around us with our beliefs and intentions, moods and words, things we do and things we fail to do, the ways we exert domination and the ways we render others invisible, the ways our lives create destruction and suffering, and the ways we can’t or don't do anything at all to help:<BR><BR>
+                  <B>  Let us imagine and do what we never thought was possible. Help us.</b></div><div class="imgbg" style="background-image:url('rainbow.jpeg');">
+                  </div><div class="text">
+                    When we see living things like people, animals, trees, and insects merely as objects to meet our needs, as a threat or a nuisance, or fail to see them at all; when we cannot connect to our own bodies or to our own hearts; when we cannot connect to the life that’s happening all around us; when we fail to understand the meaningful, dynamic presence of landscapes, skies, rivers, winds, and weathers:<BR><BR>
+                   <B> Let us again join our friends and neighbors in a living, loving reality. Help us.</B><BR><BR>
+                    When we find ourselves fearful for our very existence, threatened and grasping for survival in ways both big and small; when we find ourselves exerting any measure of violence in order to regain personal comfort and sense of security; when we see ourselves wounding and destabilizing our neighbors, friends, and families:<BR><BR>
+                   <B> Let us embrace our fears with compassion and embrace those around us with responsibility. Help us.</b> </div><div class="imgbg" style="background-image:url('pinkflower.jpeg');">
+                   </div><div class="text">
+                    When we see ourselves acting out racial supremacy, colonial supremacy, gender and sexual supremacy, ability supremacy, and any other supremacy, recreating ourselves and those around us in a pattern of privilege and oppression; when we find we cannot alter this pattern through our conscious will, vigilance, or good intentions; when we see this pattern exacting daily death on our neighbors, friends, and family:<BR><BR>
+                <B>    Let us find a new path leading from death to life and walk it with integrity. Help us.</b>
+                 <BR><BR>
+                    When we see our bird neighbors dying, our animal neighbors dying, our fish neighbors dying; when we see our land impacted by not enough rain or too much rain, fire, pollution, too much heat or too much cold; when we see the land unable to sustain our lives or the lives of the animals and plants around us:<BR><BR>
+                  <B>  Let us be open to the grief and conscious of new opportunities to serve. Help us.</b><BR><BR>
+                    In this spirit of compassion, humility, and presence, we see our own inherent goodness and the goodness of the whole world, and that we are open to whatever new work is being birthed through, in, and around us.<BR><BR>
+                    If there is anything that has not been said
+                    here that needs to be said, please do so either silently or aloud at this time.
                     </div>
                 
                 
-                <div class="text">
-                                <button onclick="nextPage()"><span>Arise  </span></button>
-                </div>
+                <div class="buttondiv">
+                <button onclick="nextPage()"><span>Invoke  </span></button>
+                <BR>
+                <a href="#" onclick="prevPage()">(back)</a>
+                </div><BR><BR>
                 </div>
             
             
@@ -479,6 +489,9 @@
             
            
            <div class="page" id="p8">
+               <div class="text">
+                   <h2>Invocation</h2>
+                   </div>
                <div class="text ts">
                    Wake up sleepers! Rise from death!<br>
                    Feel the skin, the tingle, the pain, the lack<br>
@@ -520,8 +533,10 @@
          
                
            </div>
-               <div class="text">
-                               <button onclick="nextPage()"><span>Next  </span></button>
+               <div class="buttondiv">
+               <button onclick="nextPage()"><span>Ritual</span></button>
+               <BR>
+               <a href="#" onclick="prevPage()">(back)</a>
                </div>
                <BR><BR><BR>
            </div>
@@ -572,8 +587,10 @@
 <BR><BR>
          
                </div>
-               <div class="text">
-                               <button onclick="nextPage()"><span>Arise  </span></button>
+               <div class="buttondiv">
+               <button onclick="nextPage()"><span>Arise  </span></button>
+               <BR>
+               <a href="#" onclick="prevPage()">(back)</a>
                </div>
                <BR><BR><BR>
            </div>
@@ -590,12 +607,14 @@
                    </div>
                <div class="text">
 
-                   As we arise at the end of this practice, we as students of theology, would like to offer a prayer and a blessing on both the Earth and her inhabitants. We acknowledge the growth we’ve experienced by examining the current climate crisis through multiple religious traditions. We’ve felt grief, but interwoven in our prayer, we’ll share multiple examples of what we’ve learned from others and ourselves. These lessons will move us forward, we encourage you to join us.
+                   As students of theology, we arise at the end of this practice to offer a prayer and a blessing on both the Earth and her inhabitants. We acknowledge the growth we've experienced by examining the current climate crisis through multiple religious traditions. We've felt grief, but interwoven in our prayer, we'll share multiple examples of what we've learned from others and ourselves. These lessons will move us forward, we encourage you to join us.
 
          
                </div>
-               <div class="text">
-                               <button onclick="nextPage()"><span>Bless  </span></button>
+               <div class="buttondiv">
+               <button onclick="nextPage()"><span>Bless  </span></button>
+               <BR>
+               <a href="#" onclick="prevPage()">(back)</a>
                </div>
                <BR><BR><BR>
            </div>
@@ -613,13 +632,13 @@
 <BR>
                    In the tradition of Jewish prayer, thank you for waking us today. We feel like a repentant child who’s broken a window after you encouraged us (more than once) not to play with the rocks. We’re sorry and know the time for blame has passed. Seeking forgiveness seems insufficient, so we ask for assistance as we make amends.<BR>
 <BR>
-                   Help us feel wonder. “It is a wholesome and necessary thing for us to turn again to the earth and in the contemplation of her beauties to know the sense of wonder and humility.”</div><div class="imgbg" style="background-image: url('evergreen.jpg');">
+                   Help us feel wonder. “It is a wholesome and necessary thing for us to turn again to the earth and in the contemplation of her beauties to know the sense of wonder and humility.”<sup>1</sup></div><div class="imgbg" style="background-image: url('evergreen.jpg');">
                    </div><div class="text">
-                   May we follow the example of the Ammatoans of Indonesia, and find reconciliation with all creation by seeking the healing power of the forest through the ritual of akdingingngi.<BR>
+                   May we follow the example of the Ammatoans of Indonesia, and find reconciliation with all creation by seeking the healing power of the forest through the ritual of akdingingngi.<sup>2</sup><BR>
 <BR>
-                   Introduce us to the land so we can be better occupants. We have stripped her of her resources and have taken from our fellow residents.<BR>
+                   Introduce us to the land so we can be better occupants.<sup>3</sup> We have stripped her of her resources and have taken from our fellow residents.<BR>
 <BR>
-                   Guide us to better care for all, but more especially for those who can not care for themselves. Jesus would have been very aware of the reason for the destruction of Sodom. Help us care for the Earth and her inhabitants in a higher and holier way. For truly, it comes down to these questions by a wise king of a remnant of Israel: “Are we not all beggars? Do we not all depend on the same being, even God, for all our substance that we have?</div><div class="imgbg" style="background-image: url('bluebonnets.jpg');">
+                   Guide us to better care for all, but more especially for those who can not care for themselves. Help us care for the Earth and her inhabitants in a higher and holier way. For truly, it comes down to these questions by a wise king of a remnant of Israel: “Are we not all beggars? Do we not all depend on the same being, even God, for all our substance that we have?"<sup>4</sup></div><div class="imgbg" style="background-image: url('bluebonnets.jpg');">
                    </div><div class="text ts">
 
 We ask a blessing<BR>
@@ -652,10 +671,19 @@ This sacred thread.
 
                    
                    </div>
+                   <div class="buttondiv">
+                   <button onclick="nextPage()"><span>Act  </span></button>
+                   <BR>
+                   <a href="#" onclick="prevPage()">(back)</a>
+                   </div>
                <div class="text">
-                               <button onclick="nextPage()"><span>Act  </span></button>
-               </div>
-               <BR><BR><BR>
+                   <sup>1</sup> - Carson, Rachel, 1907-1964. Silent Spring. Boston Houghton Mifflin, 2002.<BR>
+                   <sup>2</sup> - Samsul Maarif <a target="_blank" href="https://www.academia.edu/38852098/Maarif_ammatoan_indigenous_religion_and_forest_conservation">https://www.academia.edu/38852098/Maarif_ammatoan_indigenous_religion_and_forest_conservation</a><BR>
+                   <sup>3</sup> - Ellen Davis. Reading the Bible as Agrarian Literature. Pennsylvania State University Press, 2015.<BR>
+                   <sup>4</sup> - Mosiah 4:19, Book of Mormon.
+
+
+                   </div>
            </div>
            
            
@@ -664,7 +692,7 @@ This sacred thread.
                <h2>Action Steps</h2>
                </div>
                <div class="text">
-                   We may not be able to stop climate change at this point but what can we do to show the earth we love her and help protect the life of nature without moving to the middle of the woods and eating tree bark for every meal? Here are some bite-size actions you can start doing by the end of the week, the end of the month, and the end of the year that actually make a difference!
+                   We may not be able to stop climate change, but can we show the earth we love her and help protect the living nature without moving to the middle of the woods and eating tree bark for every meal? Here are some bitesize actions you can do by the end of the week, the end of the month, and the end of the year that actually make a difference!
 
 
         
@@ -673,35 +701,58 @@ This sacred thread.
                <div class="text">
                    <B>Week</b>
                    <ul>
-                     <li>  Talk more about it. Studies show that 70%-80% of people recognize climate change but many of those people never talk about it because they have so much anxiety about it or they assume they are the only ones around who feel strongly about the environment. Just simply talking about climate change with those around you has been shown to elevate anxiety and lead to more action.</li>
-                     <li>  Pick up trash when you are walking. Okay sure this isn't going to single-handedly fix anything but each piece of garbage that doesn't end up in an animal habitat is something notable.</li>
-                      <li> Walk a little more drive a little less. Even if you just walk to your local coffee shop instead of driving two miles you save approximately 850 mL of carbon going into the air which is a little over two 12-ounce bottles of carbon dioxide in the air.</li>
-                   <li>    Continue to educate yourself. There are plenty of books to read or have around or even just follow more creators spreading the news about climate change and what's being done about it. If you are overwhelmed about where to start there are resources listed on this page (insert link to the page here) where you can get started.</li>
-                     <li>  Less food waste. Food waste in landfills emits 4x the amount of methane than anything else in a landfill and methane is 4x more potent than any other greenhouse gas. By sticking to grocery lists, using all of what you have before buying more, freezing and canning and strategically planning how much you buy you can eliminate more greenhouse gas emissions that you create more than anything else and even help with the world hunger crisis. (Blair Imani’s Smarter in Seconds)
+                     <li><B><i>Talk more about it.</i></b> Studies show that 70%-80% of people recognize climate change but many of those people never talk about it. People may have anxiety about it, or they assume they are isolated in feeling strongly about the environment. Simply talking about climate change with those around you has been shown to elevate anxiety and lead to more action. </li>
+                     <li><B><i>Pick up trash when you are walking.</i></b> Okay, sure. This isn't going to single-handedly fix anything, but each piece of garbage that doesn't end up in an animal habitat is notable. </li>
+                      <li><B><i>Walk a little more, drive a little less.</i></b> Just walking to your local coffee shop instead of driving two miles prevents approximately 850 mL of carbon from going into the air. That's more than two 12-ounce bottles of carbon dioxide you kept out of the air. </li>
+                   <li><B><i>Continue to educate yourself.</i></b> There are plenty of books to read or have around or even just follow more creators spreading the news about climate change and what's being done about it. If you are overwhelmed about where to start a good book: Drawdown, a podcast to listen to: TED Climate, and an Instagram account to follow: itsthegarbagequeen- Alaina Wood. These aren't everything but they are a great start!
+</li>
+                     <li><B><i>Less food waste.</i></b> Food waste in landfills emits 4x more methane than anything else in a landfill, and methane is 4x more potent than any other greenhouse gas. By sticking to grocery lists, using all of what you have before buying more, freezing and canning and strategically planning how much you buy, you can eliminate more greenhouse gas emissions than you create, and doing this can even help with the world hunger crisis.
                          </li>
                      </ul>
                    <BR>
                    <b>Month</b>
                    <ul>
-                     <li>  Swap for more low-waste options at a local refill shop. Shampoo out? Toothbrush gross? Use the last of your laundry detergent? Swap it! Many local grocery stores now carry lower waste alternatives like shampoo bars or bamboo toothbrushes but if you live in a city there is probably a refill shop around where you can use leftover jars or bottles to pick up some typical household items. These refill shops are typically locally owned, low carbon or carbon neutral, and the products often last longer than your average product while costing about the same. (if getting to a refill shop is too much for you right now, switch to those lower-waste options at a grocery store!)</li>
-                    <li>   Swap to more plant-based options for food. You may not be able to (or want to) go straight vegetarian or vegan but if you eat meat for every meal try to do a meatless meal once or twice a week. Drawdown a book created by a group of climate scientists to give the top 100 solutions to climate change puts a plant-rich diet as the number 4 most effective way to help reduce your footprint.</li>
-                      <li> Repurpose and refresh. We all want houses that look nice on the inside and not like we threw it together but to follow the trends and get new furniture every time something is no longer in takes a toll on Mother Earth. Try to paint or restrain the things in your house that aren't inspiring you anymore when you want to get something new. The same goes for clothes. Try mending them before throwing them out when they get minor holes and tears. Dye them when they get stains. If all of that fails find a locally owned thrift shop to find new things and try to repurpose the things you're getting rid of. Can you use the fabric from that shirt for a patch on a pair of pants? Could the wood for that table be used to fix up the broken bookshelf? Or try to give it away on places like Facebook marketplace or buy nothing groups for someone else to repurpose!</li>
+                     <li><B><i>Swap for more low-waste options at a local refill shop.</i></b> Shampoo out? Toothbrush gross? Use the last of your laundry detergent? Swap it! Many local grocery stores now carry lower waste alternatives like shampoo bars or bamboo toothbrushes. If you live in a city, there is probably a refill shop nearby where you can use leftover jars or bottles to pick up typical household items. These refill shops typically are locally owned, low carbon or carbon neutral, and the products often last longer than your average product while costing about the same. If getting to a refill shop is too much for you right now, switch to lower-waste options at a grocery store!</li>
+                    <li><B><i>Swap to more plant-based options for food.</i></b> You may not be able (or want) to be vegetarian or vegan, but if you eat meat for every meal, try a meatless meal once or twice a week. Drawdown, a book created by a group of climate scientists to give the top 100 solutions to climate change, lists a plant-rich diet as the fourth most effective way to help reduce your environmental footprint.</li>
+                      <li><B><i>Repurpose and refresh.</i></b> We all want homes that look nice and not like we threw it together, but following trends and replacing furniture or clothes every time styles change takes a toll on Mother Earth. Try to paint or restain the things in your house that don't inspire you anymore instead of buying new. The same goes for clothes. Try mending them before throwing them out when they get minor holes and tears. Dye them when they get stains. If all of that fails, find a locally owned thrift shop to find new things and try to repurpose things you're getting rid of. Can you use the fabric from that shirt for a patch on a pair of pants? Could the wood for that table be used to fix up the broken bookshelf? Or try to give it away on places like Facebook marketplace or buy-nothing groups for someone else to repurpose!</li>
                        
                        </ul>
               <BR><BR>
               <b>Year</b>
               <ul>
                   
-                  <li>Vote in elections. Nothing will be done on large scales until people start turning their focus both politically and economically to climate change. Voting in local, state, and national elections with the environment in mind and advocating for others around you to do the same can lead to real changes on bigger scales than just you!</li>
-                <li>  Start composting. Some cities like Denver have city composts you can pay for and the city will pick it up. Other cities don't have this resource and you would have to start your own. Talk to some other friends or join Facebook groups who want to do more about starting one together or finding a local organization that will help!</li>
-                 <li> Invest in companies that are focused on the environment. Once again no actual change is going to happen if it is not economical. Many investing apps now have investment options in companies with the environment in mind. The more we invest money in the companies that are trying to reduce their carbon footprints the more other large companies will follow suit.</li>
-                 <li> Shop locally or at grocery stores that aren't funding things hurting the environment. Many big-name grocery stores are some of the worst when it comes to environmental impact. Try to shop at places that are more locally focused and environmentally conscious.</li>
-                <li>  Advocate for changes around you. Does your work recycle? Does your school use a lot of paper for things that could be digital? Does your church use a big company coffee when they could use a local roaster? Does your work turn off all the lights and computers at the end of the day? Figure out when the spaces around you could make minor changes and advocate for those things to make a difference.</li>
+                  <li><B><I>Vote!</i></b> Nothing will be happen at large scales until people start turning their political and economic focus to climate change. Voting in local, state, and national elections with the environment in mind and advocating for others around you to do the same can lead to real changes on bigger scales than just you! </li>
+                <li><B><i>Start composting.</i></b> Some cities like Denver have city composts you can pay for and the city will pick it up. Other cities don't have this resource, so you might start your own. Talk to some other friends or join Facebook Groups who want to do more about starting one together or finding a local organization that will help! </li>
+                 <li><B><I>Invest in companies that are focused on the environment.</b></i> Once again no actual change is going to happen if it is not economical. Many investing apps now have investment options in companies that operate with the environment in mind. The more we invest in the companies that are trying to reduce their carbon footprints, the more other large companies will follow suit. </li>
+                 <li><B><I>Shop locally or at grocery stores that aren't funding things hurting the environment.</b></u> Many big-name grocery stores are some of the worst when it comes to environmental impact. Try to shop at places that are locally focused and environmentally conscious.</li>
+                <li><B><I>Advocate for changes around you.</b></i> Does your work recycle? Does your school use a lot of paper for things that could be digital? Does your church use a big company coffee when they could use a local roaster? Does your work turn off all the lights and computers at the end of the day? Figure out when the spaces around you could make minor changes and advocate for those things to make a difference.</li>
 
                   </ul>
+              
+              </div>
+           <!--    <div class="text" style="text-align:center;">
+                   <a href="#" onclick="nextPage()" style="color:white">(about)</button>
+                   </div> -->
+               <div class="buttondiv">
+
+               <a href="#" onclick="prevPage()">(back)</a>
+               </div>
            </div>
+           <!--
+           <div class="page" id="p13">
+               <div class="text">
+                   <ul>
+                       <li>willow is an anarchist, a baptist, and a witch.
+                           </li>
+                       </ul>
+                   </div>
+               <div class="buttondiv">
+
+               <a href="#" onclick="prevPage()">(back)</a>
+               </div>
+               </div>
            
-           <!-- -->
+           -->
            
            
            
@@ -717,18 +768,40 @@ This sacred thread.
                
                 curp.style.width="0%";
                 curp.style.fontSize="0px";
-                curp.getElementsByTagName("button")[0].style.display="none";
+                if (pnum > 1){
+                    curp.getElementsByClassName("buttondiv")[0].style.display="none";
+                }
+               
                 pnum += 1;
                 
                 setTimeout(function(){
                     curp.style.height = "0px";
                     curp = document.getElementById("p" + pnum);
+                    curp.getElementsByClassName("buttondiv")[0].style.display="block";
                     curp.style.height = "auto";
                     curp.style.width="100%";
                     curp.style.fontSize="22px";
                 }, 700);
                
                 
+            }
+            
+            function prevPage(){
+                curp.style.width="0%";
+                curp.style.fontSize="0px";
+                curp.getElementsByClassName("buttondiv")[0].style.display="none";
+                pnum -= 1;
+                
+                setTimeout(function(){
+                    curp.style.height = "0px";
+                    curp = document.getElementById("p" + pnum);
+                    if (pnum > 1){
+                        curp.getElementsByClassName("buttondiv")[0].style.display="block";
+                    }
+                    curp.style.height = "auto";
+                    curp.style.width="100%";
+                    curp.style.fontSize="22px";
+                }, 700);
             }
             
             function showAll(){
@@ -741,8 +814,10 @@ This sacred thread.
                     
                     
                     }
-                
-                var btns = document.getElementsByTagName("button");
+                var fb = document.getElementById("first");
+                fb.style.display="none";
+                document.getElementById("fp").style.height = "300px";
+                var btns = document.getElementsByClassName("buttondiv");
                 for (var i = 0; i < btns.length; i++) {
                     btns[i].style.display = "none";
                 }
