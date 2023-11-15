@@ -131,6 +131,8 @@
                   transition:  1.5s;
             }
             
+            b{color:white;}
+            
            
             .imgbg{
                 border-radius: 20px;
@@ -260,8 +262,8 @@
         <div id="main" class="main">
             
             <div class="page" id="p1">
-                <div class="frontpg" id="fp"><h2>A Wilding Ritual</h2><BR><BR>Recognizing our complicity in Earth's destruction, we turn to God Immanent, asking for the grace to walk alongside Earth's healing.<BR><BR><BR>
-                <button onclick="nextPage()" id="first"><span>Prepare for the Ritual  </span></button><BR> or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
+                <div class="frontpg" id="fp"><h2>A Wilding Ritual</h2><BR><BR>Recognizing our complicity in Earth's destruction, we turn to God Immanent, asking for the grace to walk alongside Earth's healing.<BR><BR><BR><BR><BR>
+                <button onclick="nextPage()" id="first"><span>Prepare for the Ritual  </span></button></div><div class="buttondiv" style="background-color:#0A110F;">or <a onclick="showAll()" style="text-decoration:underline;">(show all pages)</a>
                 </div>
             </div>
             
@@ -404,12 +406,12 @@
                 </div>
             <div class="text">
                     Having borne the increasing burden of humanity's greed, sloth, and callousness, the Earth's jagged wounds, poisoned air, and polluted water have given rise to a reckoning. Like a child with a virus, the Earth is heating to heal herself.<BR><BR>
-                    I believe that life on Earth will get hotter. Her crust and plates will heave and buckle; she will blow and destroy her enemies with hurricanes, and we can only look on in grief.<BR><BR>
+                    I believe that life on Earth will get hotter. Her crust and plates will heave and buckle; she will blow and destroy with hurricanes, and we can only look on in grief.<BR><BR>
                     I believe that Earth, God's creation, has the wisdom and ability to heal if we allow it.
                 </div><div class="imgbg" style="background-image: url('striped.jpeg');">
                 </div><div class="text">
                     I believe that God exists immanently in this Earth, the Creation without voice, and that "Whatever you have done to the least of these, you have done to me."<BR><BR>
-                    I believe that knowing and honoring God-in-this-Earth, I can work in concert not to heal her, but to be a midwife to this Earth as she labors to bring a new Earth into being.</div><div class="buttondiv">
+                    I believe that knowing and honoring God-in-this-Earth, I can work in concert not to heal her, but to be a midwife as she labors to bring a new Earth into being.</div><div class="buttondiv">
                         <button onclick="nextPage()"><span>Confess</span></button>
                         <BR>
                         <a href="#" onclick="prevPage()">(back)</a>
@@ -493,7 +495,6 @@
                    <h2>Invocation</h2>
                    </div>
                <div class="text ts">
-                   Wake up sleepers! Rise from death!<br>
                    Feel the skin, the tingle, the pain, the lack<br>
                    Feel the air, the whisper, the weight, the heat<br>
                    Open your mind, open your heart.<br>
@@ -503,13 +504,12 @@
                <div class="imgbg" style="background-image:url('lillypad.jpeg');">
                    </div>
                <div class="text ts">
-                   Wake up sleepers! Rise from death!<br>
                    Heft your body, heft your bones, they sink down, they get borne up.<br>
                    Down, down to the ground, underground the stones are singing.<br>
                    Open your mind, open your heart.<br>
                    Fall apart and feel it.<br>
                <BR>
-                   Wake up sleepers! Rise from death!<br>
+                  
                    I meet you, you meet me, everybody so strange and a wonder.<br>
                    Every blade, every tree, green spreading sees sun and me.<br>
                    Open your mind, open your heart.<br>
@@ -518,13 +518,13 @@
                <div class="imgbg" style="background-image:url('ice.jpeg');">
                    </div>
                <div class="text ts">
-                   Wake up sleepers! Rise from death!<br>
+                  
                    Cold thrill, sharp constrict, the glow in the heart, hands and feet.<br>
                    Above in brooks icy tumult, below deep living wells.<br>
                    Open your mind, open your heart.<br>
                    Fall apart and feel it.<br>
                    <br>
-                   Wake up sleepers! Rise from death!<br>
+                   
                    Shy, smiling, hidden parts of me.<br>
                    Wild eyes of friends and neighbors glance from grass and brush and tree.<br>
                    Open your mind, open your heart.<br>
@@ -601,10 +601,29 @@
                <div class="text">
                    <h2>EXITING THE RITUAL</h2>
                    </div>
-               <div class="text">
-                   “Ritual means nothing if you do not know the longing that precedes it.” –Gita Mehta, A River Sutra.  </div>
+               <div class="text ts">
+                   Wake up, sleepers! Rise from death!<BR>
+                   From the earth, the tingle<BR>
+                   Sparking, popping, pinging, urging<BR>
+                   Open your mind, open your heart<BR>
+                   Fall apart and feel it.<BR><BR>
+                   Wake up, sleepers! Rise from death!<BR>
+                   Tender, yearning, aching, burning<BR>
+                   A child in the grass, a child in the sky, a child in your heart, a child on the wing<BR>
+                   Open your mind, open your heart<BR>
+                   Fall apart and feel it.<BR><BR>
+                   Wake up, sleepers! Rise from death!<BR>
+                   A gift too great, no gift too great, open handed, surrounded<BR>
+                   Give yourself, let go, surrender.<BR>
+                   Open your mind, open your heart.<BR>
+                   Fall apart and feel it.<BR>
+                   
+                   </div>
+               
                <div class="imgbg" style="background-image:url('riverrocks.jpg');">
                    </div>
+               <div class="text">
+                   “Ritual means nothing if you do not know the longing that precedes it.” –Gita Mehta, A River Sutra.  </div>
                <div class="text">
 
                    As students of theology, we arise at the end of this practice to offer a prayer and a blessing on both the Earth and her inhabitants. We acknowledge the growth we've experienced by examining the current climate crisis through multiple religious traditions. We've felt grief, but interwoven in our prayer, we'll share multiple examples of what we've learned from others and ourselves. These lessons will move us forward, we encourage you to join us.
@@ -770,9 +789,9 @@ This sacred thread.
                
                 curp.style.width="0%";
                 curp.style.fontSize="0px";
-                if (pnum > 1){
+            
                     curp.getElementsByClassName("buttondiv")[0].style.display="none";
-                }
+                
                
                 pnum += 1;
                 
@@ -797,9 +816,9 @@ This sacred thread.
                 setTimeout(function(){
                     curp.style.height = "0px";
                     curp = document.getElementById("p" + pnum);
-                    if (pnum > 1){
+                   
                         curp.getElementsByClassName("buttondiv")[0].style.display="block";
-                    }
+                    
                     curp.style.height = "auto";
                     curp.style.width="100%";
                     curp.style.fontSize="22px";
