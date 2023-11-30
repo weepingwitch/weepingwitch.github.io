@@ -10,9 +10,11 @@
         var natminscale = ["c3","d3","eb3","f3","g3","ab3","bb3","c4","d4","eb4","f4","g4","ab4","bb4","c5","d5","eb5","f5","g5","ab5","bb5","c6","d6","eb6"];
         var harmminscale = ["c3","d3","eb3","f3","g3","ab3","b3","c4","d4","eb4","f4","g4","ab4","b4","c5","d5","eb5","f5","g5","ab5","b5","c6","d6","eb6"];
         var melminscale = ["c3","d3","eb3","f3","g3","a3","b3","c4","d4","eb4","f4","g4","a4","b4","c5","d5","eb5","f5","g5","a5","b5","c6","d6","eb6"];
-        var chromscale = ["c4","c#4","d4","d#4","e4","f4","f#4","g4","g#4","a4","a#4","b4","c5","c#5","d5","d#5","e5","f5","f#5","g5","g#5","a5","a#5","b5"]
-        var allscales = {"majscale":majscale,"natminscale":natminscale,"chromscale":chromscale,"harmminscale":harmminscale,"melminscale":melminscale}
-        console.log(chromscale.length)
+        var chromscale = ["c4","c#4","d4","d#4","e4","f4","f#4","g4","g#4","a4","a#4","b4","c5","c#5","d5","d#5","e5","f5","f#5","g5","g#5","a5","a#5","b5"];
+        var bluesscale = ["c3","eb3","f3","gb3","g3","bb3","c4","eb4","f4","gb4","g4","bb4","c5","eb5","f5","gb5","g5","bb5","c6","eb6","f6","gb6","g6","bb6"];
+        var pentscale = ["c3","d3","e3","g3","a3","c4","d4","e4","g4","a4","c5","d5","e5","g5","a5","c6","d6","e6","g6","a6","c7","d7","e7","g7"]
+        var allscales = {"majscale":majscale,"natminscale":natminscale,"chromscale":chromscale,"harmminscale":harmminscale,"melminscale":melminscale,"bluesscale":bluesscale,"pentscale":pentscale}
+        console.log(pentscale.length)
 
         function doStart(){
             if (!started){
@@ -41,6 +43,7 @@
     #main{
             width:80%;
             aspect-ratio: 4 / 3;
+            margin:0 auto;
         }
 }
 
@@ -89,7 +92,7 @@
     <div id="main">
         <div id="tableholder">
             
-        </div>
+        </div><BR><BR>
         <button onClick="doStart()">play</button>  <label for="scales">Choose a scale:</label>
 
         <select name="scales" id="scales">
@@ -97,6 +100,8 @@
           <option value="natminscale">natural minor</option>
           <option value="harmminscale">harmonic minor</option>
           <option value="melminscale">melodic minor</option>
+          <option value="bluesscale">blues</option>
+          <option value="pentscale">pentatonic</option>
           <option value="chromscale">chromatic</option>
         </select> 
     </div>
