@@ -1,0 +1,362 @@
+<html>
+<head>
+    <title>life music</title>
+    
+    <script>
+        var started = false;
+        var numcols = 32;
+        var numrows = 24;
+        var majscale = ["c3","d3","e3","f3","g3","a3","b3","c4","d4","e4","f4","g4","a4","b4","c5","d5","e5","f5","g5","a5","b5","c6","d6","e6"];
+        var natminscale = ["c3","d3","eb3","f3","g3","ab3","bb3","c4","d4","eb4","f4","g4","ab4","bb4","c5","d5","eb5","f5","g5","ab5","bb5","c6","d6","eb6"];
+        var harmminscale = ["c3","d3","eb3","f3","g3","ab3","b3","c4","d4","eb4","f4","g4","ab4","b4","c5","d5","eb5","f5","g5","ab5","b5","c6","d6","eb6"];
+        var melminscale = ["c3","d3","eb3","f3","g3","a3","b3","c4","d4","eb4","f4","g4","a4","b4","c5","d5","eb5","f5","g5","a5","b5","c6","d6","eb6"];
+        var chromscale = ["c4","c#4","d4","d#4","e4","f4","f#4","g4","g#4","a4","a#4","b4","c5","c#5","d5","d#5","e5","f5","f#5","g5","g#5","a5","a#5","b5"]
+        var allscales = {"majscale":majscale,"natminscale":natminscale,"chromscale":chromscale,"harmminscale":harmminscale,"melminscale":melminscale}
+        console.log(chromscale.length)
+
+        function doStart(){
+            if (!started){
+                repeat = setInterval(doStep,250);
+                started = true;
+            }
+            else{
+                started = false;
+                clearInterval(repeat);
+            }
+        }
+
+    </script>
+    <style>
+
+@media only screen and (min-width: 769px) {
+    /*computers*/
+    #main{
+            height:80%;
+            aspect-ratio: 4 / 3;
+            margin: 0 auto;
+        }
+}
+@media only screen and (max-width: 768px) {
+    /*phones*/
+    #main{
+            width:80%;
+            aspect-ratio: 4 / 3;
+        }
+}
+
+    .hl{
+        background-color:aqua;
+    }
+
+    .active{
+    background-color: blue;
+    }
+
+    #tableholder{
+        width:100%;
+        height:100%;
+        margin: 0 auto;
+    }
+    
+	table{
+		border:1px solid black;
+		border-spacing:0px;
+		width:100%;
+        height:100%;
+		padding:0;
+	}
+    td{
+        vertical-align: top;
+        
+        padding:0;
+        margin:0;
+        font-size:12px;
+        white-space: nowrap;
+        border: 1px solid black
+    }
+    td div{
+        width:100%;
+        height:100%;
+    }
+    tr{
+        
+        margin:0;
+        padding:0;
+    }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="tableholder">
+            
+        </div>
+        <button onClick="doStart()">play</button>  <label for="scales">Choose a scale:</label>
+
+        <select name="scales" id="scales">
+          <option value="majscale">major</option>
+          <option value="natminscale">natural minor</option>
+          <option value="harmminscale">harmonic minor</option>
+          <option value="melminscale">melodic minor</option>
+          <option value="chromscale">chromatic</option>
+        </select> 
+    </div>
+    
+    
+    <script>
+        var curscale = majscale;
+        var notes;
+        var grid;
+        var oldgrid;
+        var tdiv = document.getElementById("tableholder");
+        var audioContext = new AudioContext();
+        var gainNode = audioContext.createGain();
+        var scaleselect = document.getElementById("scales");
+        var maintable;
+        var cnum = 0;
+        var nonzoffs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+        var offs = zClone(nonzoffs);
+        offs.push([0,0]); 
+        gainNode.gain.value = 0.1 // 10 %
+        gainNode.connect(audioContext.destination)
+
+        mapNotes();
+        makeGrid();
+
+        
+        
+        var repeat = null;
+        //window.addEventListener('click',function(event) { doStart()},false);
+
+
+      
+
+        function doStep(){
+            playCol(cnum);
+            cnum+=1;
+            if (cnum >= numcols){
+                cnum = 0;
+                doLife();
+            }
+            
+        }
+
+
+
+        function makeGrid(){
+           
+            tdiv.innerHTML = "";
+      
+
+         
+            grid = new Array(numcols);
+            for (i=0;i<numcols;i++){
+                grid[i]=new Array(numrows);
+            }
+            oldgrid = zClone(grid);
+            
+            var tbl = document.createElement("table");
+            maintable = tbl;
+            var tblBody = document.createElement("tbody");
+            
+            
+            var cellw = 12;
+            var cellh = 12;
+            // creating all cells
+            for (var i = 0; i < numrows; i++) {
+                // creates a table row
+                var row = document.createElement("tr");
+                
+                for (var j = 0; j < numcols; j++) {
+                    // Create a <td> element and a text node, make the text
+                    // node the contents of the <td>, and put the <td> at
+                    // the end of the table row
+                    var cell = document.createElement("td");
+                    
+                    var cellText = document.createElement("div");
+                    cellText.id = "cellx" + j + "y" + i;
+                    cellText.className = "tcell";
+                    cellText.innerHTML = ' ';
+                   // cellText.style.width = cellw;
+                    //cellText.style.height = cellh;
+                    grid[j][i] = Math.random() >= 0.5;
+                    if (grid[j][i]){
+                        cellText.classList.add("active");
+                    }
+                    
+                    
+                    cell.appendChild(cellText);
+                    cellText.addEventListener('click',function(event) {
+                        newid = this.id.replace('cellx','');
+                        newids = newid.split('y');
+                        zClick(newids[0],newids[1]);
+                    }, false);
+                    row.appendChild(cell);
+                }
+                
+                // add the row to the end of the table body
+                tblBody.appendChild(row);
+            }
+            
+            tbl.appendChild(tblBody);
+            tdiv.appendChild(tbl);
+            
+        }
+
+        function mapNotes(){
+            const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
+
+            // frequency of A4
+            const A = 440;
+
+            // the octave range - here 0 - 8
+            const octaveRange = range(0, 8).map(val => [val, val - 4]);
+
+            // semitone offset
+            const semitoneOffsets = [
+                ["c", -9],
+                ["c#", -8],
+                ["db", -8],
+                ["d", -7],
+                ["d#", -6],
+                ["eb", -6],
+                ["e", -5],
+                ["f", -4],
+                ["f#", -3],
+                ["gb", -3],
+                ["g", -2],
+                ["g#", -1],
+                ["ab", -1],
+                ["a", 0],
+                ["a#", 1],
+                ["bb", 1],
+                ["b", 2],
+            ];
+
+            // map notes to frequencies
+            notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.reduce((ob, [note, semitones]) => ({
+                ...ob,
+                [note + range]: A * Math.pow(2, (semitones + (multiplier * 12)) / 12),
+            }), ob), {});
+        }
+
+        function playFrequency(frequency) {
+            // create 2 second worth of audio buffer, with single channels and sampling rate of your device.
+            var sampleRate = audioContext.sampleRate;
+            var duration = sampleRate/4;
+            var numChannels = 1;
+            var buffer  = audioContext.createBuffer(numChannels, duration, sampleRate);
+            // fill the channel with the desired frequency's data
+            var channelData = buffer.getChannelData(0);
+            for (var i = 0; i < sampleRate; i++) {
+            channelData[i]=Math.sin(2*Math.PI*frequency*i/(sampleRate));
+            }
+
+            // create audio source node.
+            var source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(gainNode);
+
+            // finally start to play
+            source.start(0);
+        }
+
+        function playNote(note){
+            playFrequency(notes[note]);
+        }
+
+
+        function playCol(x){
+            for (var i = 0; i <numrows;i++){
+                maintable.rows[i].cells[x].children[0].classList.add("hl");
+                maintable.rows[i].cells[wrapx(x-1)].children[0].classList.remove("hl");
+                if (grid[x][i]){
+                    playNote(allscales[scaleselect.value][23-i])
+                }
+            }
+        };
+
+
+        function zClick(xp,yp){
+            console.log(xp + "," + yp);
+            console.log(grid[yp][xp]);
+            toggleCell(yp,xp);
+            playNote(allscales[scaleselect.value][23-yp]);
+        }
+
+        function wrapx(x){
+            var res = x;
+            if (x<0)
+            res =  x + numcols;
+            if (x >= numcols)
+            res = x - numcols;
+            return res;
+        }
+
+        function wrapy(y){
+            var res = y;
+            if (y<0)
+            res =  y + numrows;
+            if (y >= numrows)
+            res = y - numrows;
+            return res;
+        }
+
+        function toggleCell(x,y){
+            if (!grid[x][y]){
+                grid[x][y] = true;
+                oldgrid[x][y] = true;
+                maintable.rows[x].cells[y].children[0].classList.add("active");
+            }
+            else{
+                grid[x][y] = false;
+                oldgrid[x][y] = false;
+                maintable.rows[x].cells[y].children[0].classList.remove("active"); 
+            }
+        }
+
+        function doLife(){
+            oldgrid = zClone(grid);
+            
+            for (i=0;i<numcols;i++){
+                for(j=0;j<numrows;j++){
+
+
+                    numalive = countalivecells(i,j);
+                   
+
+                    //life
+                    if (numalive == 4){
+                        grid[i][j] = oldgrid[i][j];
+                    }
+                    else if (numalive == 3){
+                        grid[i][j] = true;
+                        maintable.rows[j].cells[i].children[0].classList.add("active");
+                    }
+                    else{
+                        grid[i][j] = false;
+                        maintable.rows[j].cells[i].children[0].classList.remove("active");
+                    }
+                }
+            }
+        }
+
+    function countalivecells(x,y){
+		alivens = 0;
+		nx = x;
+		ny = y;
+		for (n = 0; n < 9 ;n++){
+			nx = wrapx(x + offs[n][0]);
+			ny = wrapy(y + offs[n][1] );
+			if (oldgrid[nx][ny]){
+				alivens = alivens + 1;
+			}
+		}
+		return alivens;
+	}
+        
+	function zClone(thing){
+		return JSON.parse(JSON.stringify(thing));
+	}
+    </script>
+</body>
+</html>
