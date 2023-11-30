@@ -6,8 +6,8 @@
     
     <script>
         var playing = false;
-        var numcols = 32;
-        var numrows = 24;
+        var numcols = 16;
+        var numrows = 16;
         var majscale = ["c3","d3","e3","f3","g3","a3","b3","c4","d4","e4","f4","g4","a4","b4","c5","d5","e5","f5","g5","a5","b5","c6","d6","e6"];
         var natminscale = ["c3","d3","eb3","f3","g3","ab3","bb3","c4","d4","eb4","f4","g4","ab4","bb4","c5","d5","eb5","f5","g5","ab5","bb5","c6","d6","eb6"];
         var harmminscale = ["c3","d3","eb3","f3","g3","ab3","b3","c4","d4","eb4","f4","g4","ab4","b4","c5","d5","eb5","f5","g5","ab5","b5","c6","d6","eb6"];
@@ -33,7 +33,8 @@
 
 body{
     background-color: cornflowerblue;
-  
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color:darkblue;
 }
  #buttons{
     width:100%;
@@ -44,7 +45,7 @@ body{
 button {
   background-color: lightskyblue;
   border: none;
-  color: white;
+  color: darkblue;
   padding: .2em .7em;
   text-align: center;
   text-decoration: none;
@@ -58,9 +59,7 @@ font-size: larger;
     /*computers*/
    
     #main{
-            height:70%;
-            aspect-ratio: 4 / 3;
-            margin: 0 auto;
+            width:100%;
         }
 
         td{
@@ -70,13 +69,28 @@ font-size: larger;
         td div{
             border-radius:20px;
         }
+        #sequencer{
+            width:50%;
+            aspect-ratio: 1/1;
+            display: inline-block;
+        }
+        #innercontrols{
+            width:80%;
+        }
+        #controls{
+            position:absolute;
+            width:50%;
+            
+            display: inline-block;
+            margin:auto;
+        }
        
 }
 @media only screen and (max-width: 768px) {
     /*phones*/
     #main{
-            width:95%;
-            aspect-ratio: 4 / 3;
+            width:100%;
+            
             margin:0 auto;
         
         }
@@ -87,6 +101,18 @@ font-size: larger;
 
         td div{
             border-radius:20px;
+        }
+
+        #sequencer{
+            width: 95%;
+            aspect-ratio: 1/1;
+  display: block; /* Stops it from floating */
+  margin: auto; /* Ensures that it is centered */
+        }
+        #controls{
+            width: 95%;
+  display: block; /* Stops it from floating */
+  margin: auto; /* Ensures that it is centered */
         }
 }
 
@@ -155,11 +181,14 @@ input {
         margin: 0 auto;
         
     }
-   
     #controls{
         margin-top:10px;
-        
-        width:100%;
+    }
+   
+    #innercontrols{
+
+      
+        margin:0 auto;
         border:1px solid blue;
         border-radius:8px;
     }
@@ -202,6 +231,7 @@ input {
         </div>
         </div>
         <div id="controls">
+            <div id="innercontrols">
             <div id="buttons">
         <button onClick="doStart()" id="pbutton">▶️</button> 
         <button onClick="clearGrid()" id="cbutton">💣</button>
@@ -230,6 +260,7 @@ input {
                 <span>melodic minor</span></label>
             </div>
             </div>
+         <BR><button style="width:100%" onclick="location.href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life';">?</button>   </div>
     </div>
     </div>
     
@@ -426,7 +457,7 @@ function clearGrid(){
                 maintable.rows[i].cells[wrapx(x-1)].children[0].classList.remove("hl");
                 if (grid[x][i]){
                     cs = document.querySelector( 'input[name="scales"]:checked').value;
-                    playNote(allscales[cs][23-i])
+                    playNote(allscales[cs][21-i])
                 }
             }
         };
@@ -438,7 +469,7 @@ function clearGrid(){
             toggleCell(yp,xp);
             if (!playing){
                 cs = document.querySelector( 'input[name="scales"]:checked').value;
-                    playNote(allscales[cs][23-i])
+                    playNote(allscales[cs][21-yp])
             }
             
         }
