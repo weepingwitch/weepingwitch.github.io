@@ -33,6 +33,11 @@
 #sequencer{
     border:1px solid blue;
     border-radius: 8px;
+} 
+#mlink{
+    width:100%;
+    
+    text-wrap: wrap;
 }
 
 body{
@@ -139,7 +144,7 @@ label{
   position: relative;
 }
 
-input {
+.sinput {
 		position: absolute;
 		left: -9999px;
 		&:checked + span {
@@ -253,26 +258,27 @@ input {
         </div><BR>
             <div id="scaleholder" >
             <div stye="width:100%;">
-            <label><input type="radio" id="bluesscale" name="scales" value="bluesscale"  checked="checked">
+            <label onclick="updateString()"><input type="radio" id="bluesscale" name="scales" value="bluesscale" class="sinput" checked="checked">
                 <span>minor blues</span></label>
-            <label><input type="radio" id="walkbluesscale" name="scales" value="walkbluesscale">
+            <label onclick="updateString()"><input type="radio" id="walkbluesscale" name="scales" value="walkbluesscale" class="sinput">
                 <span>walking blues</span></label>
-            <label><input type="radio" id="majscale" name="scales" value="majscale">
+            <label onclick="updateString()"><input type="radio" id="majscale" name="scales" value="majscale" class="sinput">
                 <span>major</span></label>
-            <label><input type="radio" id="harmminscale" name="scales" value="harmminscale">
+            <label onclick="updateString()"><input type="radio" id="harmminscale" name="scales" value="harmminscale" class="sinput">
                 <span>harmonic minor</span></label>
             </div><div>
-            <label><input type="radio" id="majorbluesscale" name="scales" value="majorbluesscale">
+            <label onclick="updateString()"><input type="radio" id="majorbluesscale" name="scales" value="majorbluesscale" class="sinput">
                 <span>major blues</span></label>
-            <label><input type="radio" id="pentscale" name="scales" value="pentscale">
+            <label onclick="updateString()"><input type="radio" id="pentscale" name="scales" value="pentscale" class="sinput">
                 <span>pentatonic</span></label>
-            <label><input type="radio" id="natminscale" name="scales" value="natminscale">
+            <label onclick="updateString()"><input type="radio" id="natminscale" name="scales" value="natminscale" class="sinput">
                 <span>natural minor</span></label>
-            <label><input type="radio" id="melminscale" name="scales" value="melminscale">
+            <label onclick="updateString()"><input type="radio" id="melminscale" name="scales" value="melminscale" class="sinput">
                 <span>melodic minor</span></label>
             </div>
-            </div>
-         <BR><button style="width:100%" onclick="location.href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life';">?</button>   </div>
+            </div><BR>
+         share this pattern:<textarea id="mlink" rows="3" readonly></textarea><BR>
+            <BR><button style="width:100%" onclick="location.href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life';">?</button>   </div>
     </div>
     </div>
     
@@ -283,6 +289,7 @@ input {
         var grid;
         var oldgrid;
         var tdiv = document.getElementById("tableholder");
+        var udiv = document.getElementById("mlink");
         var pb = document.getElementById("pbutton");
         var audioContext = new AudioContext();
         var gainNode = audioContext.createGain();
@@ -298,6 +305,18 @@ input {
 
         mapNotes();
         makeGrid();
+        if(window.location.href.indexOf("s=") > -1){
+			var newscale = getUrlVars()["s"];
+            console.log(newscale);
+            document.getElementById(newscale).checked = true;
+		}
+
+        if(window.location.href.indexOf("g=") > -1){
+			var newpattern = getUrlVars()["g"];
+            decoderepr(newpattern);
+            updateString();
+		}
+        updateString();
 
         
         
@@ -325,6 +344,7 @@ input {
             if (cnum >= numcols){
                 cnum = 0;
                 doLife();
+                updateString();
             }
             
         }
@@ -338,6 +358,67 @@ function clearGrid(){
         }
     }
 }
+
+function makerepr(){
+    var res = "";
+    for (var i = 0; i < numrows; i++) {
+        var rres = "";
+        for (var j = 0; j < numcols; j++) {
+            var nchar = (grid[j][i]) ? 1 : 0;
+            rres += nchar;
+        }
+        var rdec = parseInt(rres,2).toString(36);
+        rdec = rdec.padStart(4,"0");
+        console.log(rdec);
+        res += rdec;
+    }
+   // console.log(res);
+    //decoderepr(res);
+    return res;
+}
+
+function decoderepr(str){
+    var lines = str.match(/.{4}/g);
+    console.log(lines);
+    for (var i = 0; i < numrows; i++) {
+        var cl = [...Array(16)].map((x,k)=>parseInt(lines[i],36)>>k&1);
+        cl = cl.reverse();
+        //console.log(cl);
+        for (var j = 0; j < numcols; j++) {
+            grid[j][i] = (cl[j] == 1);
+            if (grid[j][i]){
+                maintable.rows[i].cells[j].children[0].classList.add("active");
+            }
+            else{
+                maintable.rows[i].cells[j].children[0].classList.remove("active");
+            }
+        }
+    }
+
+
+}
+
+function updateString(){
+    //console.log(window.location.href);
+    var nurl = window.location.origin + window.location.pathname;
+    nurl += "?s=";
+    var cs = document.querySelector( 'input[name="scales"]:checked').value
+    nurl += cs;
+    nurl += "&g=";
+    nurl += makerepr();
+    console.log(nurl);
+    udiv.value = nurl;
+
+}
+
+function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}
+
 
         function makeGrid(){
            
@@ -397,7 +478,7 @@ function clearGrid(){
             
             tbl.appendChild(tblBody);
             tdiv.appendChild(tbl);
-            
+            updateString();
         }
 
         function mapNotes(){
@@ -483,6 +564,7 @@ function clearGrid(){
                 cs = document.querySelector( 'input[name="scales"]:checked').value;
                     playNote(allscales[cs][21-yp])
             }
+            updateString();
             
         }
 
