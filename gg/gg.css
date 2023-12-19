@@ -1,0 +1,60 @@
+body{
+  background-color:black;
+}
+canvas{
+  margin: 0 auto;
+  border: 1px solid pink;
+}
+
+#icanvas{
+    width:100%;
+    height:100%;
+    border:2px dashed yellow;
+}
+
+#main{
+    width:95%;
+    height:95%;
+   
+        position:relative;
+        margin: 0 auto;
+        background-color:black;
+  }
+
+  @media screen and (min-width: 781px) {
+    #main{
+  
+        width:60%;
+  
+      }
+    }
+    #log{
+        position:relative;
+        top:0px;
+        width:100%;
+        height:2em;
+        border:2px solid blue;
+        background-color:blue;
+        color:white;
+        font-weight: bold;
+      }
+
+    #screen{
+        display:block;
+        position:relative;
+    width:100%;
+    height:1em;
+   
+    border:2px solid purple;
+    background-color:black;
+  }
+
+    #input{
+        position:relative;
+        top:0px;
+       
+        width:100%;
+        height:30%;
+        border:2px solid green;
+        background-color:green;
+      }
