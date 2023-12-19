@@ -1,5 +1,5 @@
-var jlx, jly, jrx, jry;
-
+var jlx, jly, jrx, jry, jolx, joly, jorx, jory;
+var dirtyx, dirtyy, retval;
 
 var inputdiv;
 var idivwidth, idivhalf;
@@ -84,19 +84,36 @@ function onTouchMove(e) {
         ty = touch.clientY - icy;
 
         if (touch.identifier == touchleftid){
-            var dirtyx = tx - leftstartx;
-            var dirtyy = leftstarty - ty;
-            jlx = Math.min(Math.max(-cstickradius,dirtyx),cstickradius)/cstickradius;
-            jly = Math.min(Math.max(-cstickradius,dirtyy),cstickradius)/cstickradius;
+             dirtyx = tx - leftstartx;
+             dirtyy = leftstarty - ty;
+             dirtyx = Math.min(Math.max(-cstickradius,dirtyx),cstickradius)/cstickradius;
+             dirtyy = Math.min(Math.max(-cstickradius,dirtyy),cstickradius)/cstickradius;
+            if (magnitude(dirtyx,dirtyy) > 1){
+                retval = normalize(dirtyx,dirtyy);
+                jlx = retval[0];
+                jly = retval[1];
+             }
+             else{
+                jlx = dirtyx;
+                jly = dirtyy;
+             }
+             
+            jolx = jlx;
+            joly = jly;
             logdiv.innerHTML += "left: " + jlx + "," + jly + "<BR>";
     
         }
         if (touch.identifier == touchrightid){
     
-            var dirtyx = tx - rightstartx;
-            var dirtyy = rightstarty - ty;
-            jrx = Math.min(Math.max(-cstickradius,dirtyx),cstickradius)/cstickradius;
-            jry = Math.min(Math.max(-cstickradius,dirtyy),cstickradius)/cstickradius;
+             dirtyx = tx - rightstartx;
+             dirtyy = rightstarty - ty;
+            
+                retval = normalize(dirtyx,dirtyy);
+                jrx = retval[0];
+                jry = retval[1];
+            
+            jorx = jrx;
+            jory = jry;
             logdiv.innerHTML += "right: " + jrx + "," + jry + "<BR>";
          }
     }
@@ -108,11 +125,15 @@ function onTouchEnd(e) {
 		var touch =e.changedTouches[i]; 
         if (touch.identifier == touchleftid){
             touchleftid = -1;
+            jolx = jlx;
+            joly = jly;
             jlx = 0;
             jly = 0;
         }
         if (touch.identifier == touchrightid){
             touchrightid = -1;
+            jorx = jrx;
+            jory = jry;
             jrx = 0;
             jry = 0;
         }

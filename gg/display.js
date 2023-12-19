@@ -14,6 +14,9 @@ function makeScreen(){
     var uicanv = document.getElementById('uicanvas');
     var bgcanv = document.getElementById("bgcanvas");
     ctx = canv.getContext('2d');
+ctx.strokeStyle = "cyan";
+ctx.lineWidth = 5;
+ctx.fillStyle = "pink";
     uictx = uicanv.getContext('2d');
     bgctx = bgcanv.getContext('2d');
 }
