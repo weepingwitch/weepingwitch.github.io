@@ -1,4 +1,5 @@
 var me;
+var enems = [];
 
 
 
@@ -6,6 +7,8 @@ function initgame(){
 
 
     me = new girl(screenwidth/2,screenheight/2);
+    new enem(10,10);
+    new enem(screenwidth-10,screenheight-10);
 
 
 
@@ -27,10 +30,16 @@ function mainloop(tt){
 
     //update loop
     me.update(dt);
+    for (let p of enems){
+        p.update(dt);
+    }
 
     //draw loop
     ctx.clearRect(0,0,screenwidth,screenheight);
     me.draw();
+    for (let p of enems){
+        p.draw();
+    }
 
 
     //repeat loop
