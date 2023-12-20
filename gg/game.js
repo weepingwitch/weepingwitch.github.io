@@ -1,18 +1,51 @@
-var dotx, doty, aimx, aimy, retval;
+var me;
 
-function drawloop(){
+
+
+function initgame(){
+
+
+    me = new girl(screenwidth/2,screenheight/2);
+
+
+
+    requestAnimationFrame(mainloop);
+
+
+}
+
+
+var dt;
+var lastt = -1;
+function mainloop(tt){
+    //time logic
+    dt = tt - lastt;
+    if (lastt == -1){dt = 0;}
+    if (dt > 3333){location.reload();}
+    lastt = tt;
+
+
+    //update loop
+    me.update(dt);
+
+    //draw loop
     ctx.clearRect(0,0,screenwidth,screenheight);
-     dotx = ((jolx + 1)/2) * screenwidth;
-     doty = screenheight - ((joly+1)/2 * screenheight);
-    ctx.beginPath();
-        
-        ctx.arc(dotx,doty,20,0,2*Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-        ctx.moveTo(dotx,doty);
-    
-        ctx.lineTo(dotx + (jorx*50), doty - (jory*50));
-    ctx.stroke();
-    ctx.closePath();
-    requestAnimationFrame(drawloop);
+    me.draw();
+
+
+    //repeat loop
+    requestAnimationFrame(mainloop);
+}
+
+
+
+function trymove(obj, nx,ny){
+    if (nx > 0 && ny > 0 && nx < screenwidth && ny < screenheight){
+        obj.x = nx;
+        obj.y = ny;
+        return true;
+    }
+    else{
+        return false;
+    }
 }

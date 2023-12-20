@@ -97,9 +97,11 @@ function onTouchMove(e) {
                 jlx = dirtyx;
                 jly = dirtyy;
              }
-             
-            jolx = jlx;
-            joly = jly;
+            if (!((jlx==0)&&(jly==0))){
+                jolx = jlx;
+                joly = jly;
+            }
+            
             logdiv.innerHTML += "left: " + jlx + "," + jly + "<BR>";
     
         }

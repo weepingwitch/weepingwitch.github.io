@@ -8,3 +8,11 @@ function normalize(x,y){
     y = y/m;
     return [x,y];
 }
+
+function randfrom(myarray){
+    return myarray[Math.floor(Math.random() * myarray.length)];
+}
+
+function riinc(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
