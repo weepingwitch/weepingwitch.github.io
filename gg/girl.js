@@ -23,7 +23,14 @@ function girl(ix,iy) {
         ny = this.y + (this.dy * dt * spd);
        
     
-        trymove(this,nx,ny);
+        if(!trymove(this,nx,ny)){
+            if(!trymove(this,this.x,ny)){
+                if(!trymove(this,nx,this.y))
+                {
+                    //stuck on wall
+                }
+            }
+        }
     }
 
  
