@@ -8,7 +8,7 @@ function initgame(){
 
     me = new girl(screenwidth/2,screenheight/2);
     new enem(10,10);
-    new enem(screenwidth-10,screenheight-10);
+    new enem(470,310);
 
 
 
@@ -35,7 +35,7 @@ function mainloop(tt){
     }
 
     //draw loop
-    ctx.clearRect(0,0,screenwidth,screenheight);
+    ctx.clearRect(0,0,roomwidth,roomheight);
     me.draw();
     for (let p of enems){
         p.draw();
@@ -49,7 +49,7 @@ function mainloop(tt){
 
 
 function trymove(obj, nx,ny){
-    if (nx > 0 && ny > 0 && nx < screenwidth && ny < screenheight){
+    if (nx > 0 && ny > 0 && nx < roomwidth && ny < roomheight){
         obj.x = nx;
         obj.y = ny;
         return true;
