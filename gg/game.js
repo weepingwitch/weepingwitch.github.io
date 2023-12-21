@@ -6,7 +6,7 @@ var enems = [];
 function initgame(){
 
 
-    me = new girl(screenwidth/2,screenheight/2);
+    me = new girl(240,160);
     new enem(10,10);
     new enem(470,310);
 
@@ -20,8 +20,10 @@ function initgame(){
 
 var dt;
 var lastt = -1;
-function mainloop(tt){
+function mainloop(tt){    
+
     //time logic
+
     dt = tt - lastt;
     if (lastt == -1){dt = 0;}
     if (dt > 3333){location.reload();}
@@ -41,7 +43,7 @@ function mainloop(tt){
         p.draw();
     }
 
-
+    drawInputs();
     //repeat loop
     requestAnimationFrame(mainloop);
 }

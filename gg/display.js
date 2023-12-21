@@ -11,26 +11,24 @@ function makeScreen(){
     screenwidth = screendiv.clientWidth;
     screenheight = Math.floor(screenwidth * (2/3));
     screendiv.style.height = screenheight;
-    screendiv.innerHTML="<canvas style='z-index:1;position:absolute;top:0' id='bgcanvas' width='" + screenwidth + "' height='" + screenheight + "'></canvas>" +
-"<canvas style='z-index:2;position:absolute;top:0' id='mcanvas' width='" + screenwidth + "' height='" + screenheight + "'></canvas>" +
-"<canvas style='z-index:3;position:absolute;top:0;'  id='uicanvas' width='" + screenwidth + "' height='" + screenheight + "'></canvas>";
-console.log(screenwidth);
+    screendiv.innerHTML=
+    "<canvas id='bgcanvas' style='z-index:1;position:absolute;top:0;width:" + screenwidth + ";height:" + screenheight + ";' width='480' height='320'></canvas>" +
+    "<canvas id='mcanvas' style='z-index:2;position:absolute;top:0width:" + screenwidth + ";height:" + screenheight + ";' width='480' height='320'></canvas>" +
+    "<canvas id='uicanvas' style='z-index:3;position:absolute;top:0;width:" + screenwidth + ";height:" + screenheight + ";' width='480' height='320'></canvas>";
 
-var sf = screenwidth/roomwidth;    
-console.log(sf);
 
 var canv = document.getElementById('mcanvas');
     var uicanv = document.getElementById('uicanvas');
     var bgcanv = document.getElementById("bgcanvas");
     ctx = canv.getContext('2d');
-    ctx.scale(sf,sf);
+   // ctx.scale(sf,sf);
 ctx.strokeStyle = "cyan";
 ctx.lineWidth = 5;
 ctx.fillStyle = "pink";
     uictx = uicanv.getContext('2d');
-    uictx.scale(sf,sf);
+   // uictx.scale(sf,sf);
     bgctx = bgcanv.getContext('2d');
-    bgctx.scale(sf,sf);
+   // bgctx.scale(sf,sf);
 }
 
 window.addEventListener('resize', function(event) {

@@ -16,7 +16,18 @@ function enem(ix,iy){
         nx = this.x + (this.dx * dt * spd);
         ny = this.y + (this.dy * dt * spd);
         if (!trymove(this,nx,ny)){
-            this.newdirect();
+            if(!trymove(this,this.x,ny)){
+                if(!trymove(this,nx,this.y))
+                {
+                    this.newdirect();
+                }
+                else{
+                    this.dy = -this.dy;
+                }
+            }
+            else{
+                this.dx = -this.dx;
+            }
         }
         
 
