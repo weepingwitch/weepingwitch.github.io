@@ -1,9 +1,10 @@
 var nx, ny, retval;
-var spd = .2;
 
-function enem(ix,iy){
+
+function enem(ix,iy, spd = .2){
     this.x = ix;
     this.y = iy;
+    this.spd = spd;
     this.dx = 0;
     this.dy = 0;
     enems.push(this);
@@ -13,8 +14,8 @@ function enem(ix,iy){
         if (this.dx == 0 && this.dy == 0){
             this.newdirect();
         }
-        nx = this.x + (this.dx * dt * spd);
-        ny = this.y + (this.dy * dt * spd);
+        nx = this.x + (this.dx * dt * this.spd);
+        ny = this.y + (this.dy * dt * this.spd);
         if (!trymove(this,nx,ny)){
             if(!trymove(this,this.x,ny)){
                 if(!trymove(this,nx,this.y))

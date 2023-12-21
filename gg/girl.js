@@ -1,5 +1,7 @@
 var nx, ny;
 var spd = .2;
+var shootrate = 100;
+var shootcount = 0;
 
 function girl(ix,iy) {
   this.x = ix;
@@ -33,6 +35,14 @@ function girl(ix,iy) {
         }
     }
 
+
+    shootcount += dt;
+    if (shootcount > shootrate){
+        new proj(this.x,this.y,this.aimx,this.aimy);
+        shootcount = 0;
+    }
+    
+
  
    
 
@@ -49,6 +59,8 @@ function girl(ix,iy) {
         ctx.lineTo(this.x + (this.aimx*50), this.y - (this.aimy*50));
     ctx.stroke();
     ctx.closePath();
+    var aimangle = -Math.atan2(this.aimy, this.aimx);
+    drawImage(ctx,meimg,this.x,this.y,aimangle +(Math.PI/2),0.1);
   }
 
 

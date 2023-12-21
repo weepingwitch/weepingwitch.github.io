@@ -24,7 +24,7 @@ var canv = document.getElementById('mcanvas');
    // ctx.scale(sf,sf);
 ctx.strokeStyle = "cyan";
 ctx.lineWidth = 5;
-ctx.fillStyle = "pink";
+ctx.fillStyle = "green";
     uictx = uicanv.getContext('2d');
    // uictx.scale(sf,sf);
     bgctx = bgcanv.getContext('2d');
@@ -34,3 +34,14 @@ ctx.fillStyle = "pink";
 window.addEventListener('resize', function(event) {
     makeScreen();
 }, true);
+
+
+function drawImage(canv,image, x, y, rotation, scale=1){
+    canv.setTransform(scale, 0, 0, scale, x, y); // sets scale and origin
+    canv.rotate(rotation);
+    canv.drawImage(image, -image.width / 2, -image.height / 2);
+    canv.setTransform(1,0,0,1,0,0)
+} 
+
+var meimg = new Image;
+meimg.src = "https://64.media.tumblr.com/fcb80d683ae115df2300783347c28873/f19a6107c31f2f4d-bb/s1280x1920/ed2f14a35de909f4093da6a20e0b7c04fae0a6ac.jpg"

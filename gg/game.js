@@ -1,5 +1,6 @@
 var me;
 var enems = [];
+var projs = [];
 
 
 
@@ -32,6 +33,9 @@ function mainloop(tt){
 
     //update loop
     me.update(dt);
+    for (let p of projs){
+        p.update(dt);
+    }
     for (let p of enems){
         p.update(dt);
     }
@@ -40,6 +44,9 @@ function mainloop(tt){
     ctx.clearRect(0,0,roomwidth,roomheight);
     me.draw();
     for (let p of enems){
+        p.draw();
+    }
+    for (let p of projs){
         p.draw();
     }
 
