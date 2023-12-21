@@ -43,6 +43,10 @@ function enem(ix,iy, spd = .2){
                 
             }
         }
+
+        if (doesTouch(this,me)){
+            location.reload();
+        }
         
 
     }

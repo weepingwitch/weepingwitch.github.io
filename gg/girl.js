@@ -55,12 +55,12 @@ function girl(ix,iy) {
         ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
     ctx.fill();
     ctx.closePath();
-    ctx.beginPath();
-        ctx.moveTo(this.x,this.y);
-        ctx.lineTo(this.x + (this.aimx*50), this.y - (this.aimy*50));
-    ctx.stroke();
-    ctx.closePath();
-    //var aimangle = -Math.atan2(this.aimy, this.aimx);
+    //ctx.beginPath();
+    //    ctx.moveTo(this.x,this.y);
+    //    ctx.lineTo(this.x + (this.aimx*50), this.y - (this.aimy*50));
+    //ctx.stroke();
+    //ctx.closePath();
+    var aimangle = -Math.atan2(this.aimy, this.aimx);
     //drawImage(ctx,meimg,this.x,this.y,aimangle +(Math.PI/2),0.1);
   }
 
