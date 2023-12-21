@@ -8,6 +8,7 @@ function girl(ix,iy) {
   this.y = iy;
   this.aimx = 0;
   this.aimy = 1;
+  this.r = 10;
   this.dx = 0;
   this.dy = 0;
 
@@ -51,7 +52,7 @@ function girl(ix,iy) {
 
   this.draw = function(){
     ctx.beginPath();
-        ctx.arc(this.x,this.y,10,0,2*Math.PI);
+        ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
     ctx.fill();
     ctx.closePath();
     ctx.beginPath();

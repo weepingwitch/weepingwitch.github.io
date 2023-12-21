@@ -7,6 +7,7 @@ function enem(ix,iy, spd = .2){
     this.spd = spd;
     this.dx = 0;
     this.dy = 0;
+    this.r = 20;
     enems.push(this);
 
 
@@ -30,6 +31,18 @@ function enem(ix,iy, spd = .2){
                 this.dx = -this.dx;
             }
         }
+
+        for (let p of projs){
+            if (doesTouch(this,p)){
+                projs.splice(projs.indexOf(p),1);
+                this.r -= 1;
+                if (this.r < 8){
+                    enems.splice(enems.indexOf(this),1);
+                }
+
+                
+            }
+        }
         
 
     }
@@ -44,7 +57,7 @@ function enem(ix,iy, spd = .2){
 
     this.draw = function(){
         ctx.beginPath();
-            ctx.arc(this.x,this.y,20,0,2*Math.PI);
+            ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
         ctx.stroke();
         ctx.closePath();
     }

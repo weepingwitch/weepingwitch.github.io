@@ -4,6 +4,7 @@ function proj(ix,iy,idx,idy,spd = .2){
     this.spd = spd;
     this.dx = idx;
     this.dy = idy;
+    this.r = 5;
     projs.push(this);
 
     this.update = function(dt){
@@ -17,7 +18,7 @@ function proj(ix,iy,idx,idy,spd = .2){
 
     this.draw = function(){
         ctx.beginPath();
-            ctx.arc(this.x,this.y,5,0,2*Math.PI);
+            ctx.arc(this.x,this.y,this.r,0,2*Math.PI);
             ctx.fill();
         ctx.closePath();
     }
