@@ -1,4 +1,4 @@
-function proj(ix,iy,idx,idy,spd = .2){
+function proj(ix,iy,idx,idy,spd = .4){
     this.x = ix;
     this.y = iy;
     this.spd = spd;

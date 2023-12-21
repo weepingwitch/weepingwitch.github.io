@@ -35,7 +35,7 @@ function enem(ix,iy, spd = .2){
         for (let p of projs){
             if (doesTouch(this,p)){
                 projs.splice(projs.indexOf(p),1);
-                this.r -= 1;
+                this.r -= 2;
                 if (this.r < 8){
                     enems.splice(enems.indexOf(this),1);
                 }
