@@ -60,8 +60,8 @@ function girl(ix,iy) {
         ctx.lineTo(this.x + (this.aimx*50), this.y - (this.aimy*50));
     ctx.stroke();
     ctx.closePath();
-    var aimangle = -Math.atan2(this.aimy, this.aimx);
-    drawImage(ctx,meimg,this.x,this.y,aimangle +(Math.PI/2),0.1);
+    //var aimangle = -Math.atan2(this.aimy, this.aimx);
+    //drawImage(ctx,meimg,this.x,this.y,aimangle +(Math.PI/2),0.1);
   }
 
 
