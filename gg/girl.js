@@ -1,6 +1,6 @@
 var nx, ny;
 var spd = .2;
-var shootrate = 200;
+var shootrate = 150;
 var shootcount = 0;
 
 function girl(ix,iy) {
