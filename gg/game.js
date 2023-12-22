@@ -18,11 +18,13 @@ function initgame(){
 
 }
 
+var halfrate = false;
 
 var dt;
 var lastt = -1;
 function mainloop(tt){    
-
+    halfrate = !halfrate;
+   
     //time logic
 
     dt = tt - lastt;
@@ -39,7 +41,7 @@ function mainloop(tt){
     for (let p of enems){
         p.update(dt);
     }
-
+    
     //draw loop
     ctx.clearRect(0,0,roomwidth,roomheight);
     me.draw();
@@ -49,7 +51,7 @@ function mainloop(tt){
     for (let p of projs){
         p.draw();
     }
-
+    if (halfrate)
     drawInputs();
     //repeat loop
     requestAnimationFrame(mainloop);

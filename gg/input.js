@@ -10,12 +10,127 @@ var alx,aly,arx,ary;
 var isx,isy;
 
 var cstickradius = 14;
+var kbm = false;
 
 var touches = [];
-
+jlx = 0;
+jly = 0;
+jrx = 0;
+jry = 0;
 jory = 1;
 jorx = 0;
+var klx = 0;
+var kly = 0;
+var krx = 0;
+var kry = 0;
+var klleft = false;
+var klright = false;
+var klup = false;
+var kldown = false;
+var krleft = false;
+var krright = false;
+var krup = false;
+var krdown = false;
 
+
+
+document.onkeydown = function(e) {
+    kbm = true;
+    if (!e.repeat){
+        if(e.key == "a" ) {klx -=1;klleft = true; };
+        if(e.key == "w" ) {kly += 1;klup = true;}
+        if(e.key == "d" ) {klx += 1;klright = true;}
+        if(e.key == "s" ) {kly -= 1;kldown = true;}
+        if (!((klx==0)&&(kly==0))){
+            retval = normalize(klx,kly);
+            jlx = retval[0];
+            jly = retval[1];
+        }
+        else{
+            jlx = 0;jly = 0;
+        }
+        if(e.key == "ArrowLeft" ) {krx = -1;jorx =krx; krleft = true;};
+        if(e.key == "ArrowUp" ) {kry = 1;jory = kry;krup = true;}
+        if(e.key == "ArrowRight" ) {krx = 1;jorx = krx;krright = true;}
+        if(e.key == "ArrowDown" ) {kry = -1;jory = kry;krdown = true;}
+
+       
+        resetkeyboardinput();
+
+    }
+    
+    
+}
+
+
+function resetkeyboardinput(){
+    if (krup){
+        jory = 1;
+        jorx = 0;
+        if (krleft){
+            jorx = -1;
+        }
+        else{
+            if (krright){
+                jorx = 1;
+             }
+             
+        }
+    }
+
+        if (krdown){
+            jory = -1;
+            jorx = 0;
+            if (krleft){
+                jorx = -1;
+            }
+            else{
+                if (krright){
+                    jorx = 1;
+                 }
+                 
+
+             }
+            }
+
+        if (!krup && !krdown){
+            if (krleft){
+                jorx = -1;jory = 0;
+            }
+            if (krright){
+                jorx = 1;jory = 0;
+            }
+        }
+            
+}
+    
+
+
+document.onkeyup = function(e) {
+
+    if(e.key == "a" &&klleft ) {jolx = jlx;klx +=1;klleft = false;};
+    if(e.key == "w" && klup ) {joly = jly;kly-=1;klup = false;}
+    if(e.key == "d" && klright ) {jolx=jlx;klx-=1;klright = false;}
+    if(e.key == "s" && kldown) {joly =jly;kly+=1;kldown = false;}
+    if (!((klx==0)&&(kly==0))){
+    retval = normalize(klx,kly);
+        jlx = retval[0];
+        jly = retval[1];
+    }
+    else{
+        jlx = 0;
+        jly = 0;
+    }
+    if(e.key == "ArrowLeft" ) {krleft = false;};
+        if(e.key == "ArrowUp" ) {krup = false;}
+        if(e.key == "ArrowRight" ) {krright = false;}
+        if(e.key == "ArrowDown" ) {krdown = false;}
+
+
+    resetkeyboardinput();
+    
+
+}
 
 
 function makeInputs(){
@@ -43,8 +158,9 @@ function makeInputs(){
 
 
 function drawInputs(){
-
     ictx.clearRect(0,0,200,100);
+    if (!kbm){
+        
     if (touchleftid == -1){
         //draw left centered
         ictx.beginPath();
@@ -57,7 +173,7 @@ function drawInputs(){
     else{
         //draw left stick moved
         ictx.beginPath();
-            ictx.moveTo(leftstartx/isx,leftstarty/isy);
+            ictx.moveTo(50,50);
             ictx.lineTo(alx/isx,aly/isy);
             ictx.stroke();
         ictx.closePath();
@@ -90,6 +206,35 @@ function drawInputs(){
             ictx.stroke();
         ictx.closePath();
     }
+    }
+    else{
+        //keyboard mode
+        //draw left stick moved
+        ictx.beginPath();
+            ictx.moveTo(50,50);
+            ictx.lineTo(50+(jlx*30),50-(jly*30));
+            ictx.stroke();
+        ictx.closePath();
+        ictx.beginPath();
+            ictx.arc(50+(jlx*30),50-(jly*30),cstickradius,0,Math.PI*2);
+            ictx.fill();
+            ictx.stroke();
+        ictx.closePath();
+        //draw right stick moved
+        ictx.beginPath();
+            ictx.moveTo(150,50);
+            ictx.lineTo(150+(jorx*30),50-(jory*30));
+            ictx.stroke();
+        ictx.closePath();
+        ictx.beginPath();
+            ictx.arc(150+(jorx*30),50-(jory*30),cstickradius,0,Math.PI*2);
+            ictx.fill();
+            ictx.stroke();
+        ictx.closePath();
+
+
+    }
+    
 }
 
 
@@ -109,6 +254,7 @@ var rightstartx = -1
 var rightstarty = -1;
 
 function onTouchStart(e) {
+    kbm = false;
 	touches = e.touches; 
     for(var i = 0; i<e.changedTouches.length; i++){
 		var touch =e.changedTouches[i]; 
@@ -159,9 +305,7 @@ function onTouchMove(e) {
             aly = ty;
              dirtyx = tx - leftstartx;
              dirtyy = leftstarty - ty;
-             dirtyx = Math.min(Math.max(-cstickradius,dirtyx),cstickradius)/cstickradius;
-             dirtyy = Math.min(Math.max(-cstickradius,dirtyy),cstickradius)/cstickradius;
-            if (magnitude(dirtyx,dirtyy) > 1){
+             if (magnitude(dirtyx,dirtyy) > 1){
                 retval = normalize(dirtyx,dirtyy);
                 jlx = retval[0];
                 jly = retval[1];
@@ -175,8 +319,7 @@ function onTouchMove(e) {
                 joly = jly;
             }
             
-            logdiv.innerHTML += "left: " + jlx + "," + jly + "<BR>";
-    
+            
         }
         if (touch.identifier == touchrightid){
             arx = tx;
@@ -193,8 +336,7 @@ function onTouchMove(e) {
                 
             
             
-            logdiv.innerHTML += "right: " + jrx + "," + jry + "<BR>";
-         }
+                   }
     }
 } 
  
