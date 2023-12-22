@@ -4,6 +4,7 @@ var projs = [];
 var obs = [];
 
 var score = 0;
+var newspcount = 0;
 
 function initgame(){
 
@@ -73,5 +74,10 @@ function trymove(obj, nx,ny){
 
 function addScore(amt){
     score += amt;
+    newspcount += amt;
+    if (newspcount >= 3){
+        spawnNewEnem();
+        newspcount = 0;
+    }
     logdiv.innerHTML = " score: " + score;
 }
