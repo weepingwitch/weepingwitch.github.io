@@ -293,7 +293,6 @@ function onTouchStart(e) {
 function onTouchMove(e) {
 	 // Prevent the browser from doing its default thing (scroll, zoom)
     e.preventDefault();
-    logdiv.innerHTML = "";
     touches = e.touches; 
     for(var i = 0; i<e.changedTouches.length; i++){
 		var touch =e.changedTouches[i]; 
