@@ -1,8 +1,9 @@
 var me;
 var enems = [];
 var projs = [];
+var obs = [];
 
-
+var score = 0;
 
 function initgame(){
 
@@ -68,4 +69,9 @@ function trymove(obj, nx,ny){
     else{
         return false;
     }
+}
+
+function addScore(amt){
+    score += amt;
+    logdiv.innerHTML = " score: " + score;
 }

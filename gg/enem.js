@@ -1,7 +1,7 @@
 var nx, ny, retval;
 
 
-function enem(ix,iy, spd = .2){
+function enem(ix,iy, spd = .15){
     this.x = ix;
     this.y = iy;
     this.spd = spd;
@@ -36,8 +36,12 @@ function enem(ix,iy, spd = .2){
             if (doesTouch(this,p)){
                 projs.splice(projs.indexOf(p),1);
                 this.r -= 2;
+                this.spd = Math.min(this.spd + .04, .4);
+                this.newdirect();
                 if (this.r < 8){
                     enems.splice(enems.indexOf(this),1);
+                    addScore(1);
+                   spawnNewEnem();
                 }
 
                 
@@ -65,4 +69,22 @@ function enem(ix,iy, spd = .2){
         ctx.stroke();
         ctx.closePath();
     }
+}
+
+function spawnNewEnem(){
+    var nex, ney;
+    if (me.x < 100){
+        nex = 150;
+    }
+    else{
+        nex = 50;
+    }
+    if (me.y < 50){
+        ney = 75;
+    }
+    else{
+        ney = 25;
+    }
+    new enem(nex,ney);
+
 }
