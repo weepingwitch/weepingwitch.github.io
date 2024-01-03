@@ -10,6 +10,9 @@ function getTime(){
     var curh = curAccess.getUTCHours();
     tdiv.innerHTML += "hour " + curh + "<BR>";
 
+    var tseed = curAccess.getUTCSeconds();
+    tdiv.innerHTML += "secs " + tseed + "<BR>";
+
 
     if (localStorage.hasOwnProperty("lastViewed")){
         //get duration time
@@ -29,4 +32,6 @@ function getTime(){
 
 
     localStorage.setItem("lastViewed",curAccess);
+    return tseed;
+    
 }
