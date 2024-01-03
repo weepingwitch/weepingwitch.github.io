@@ -10,8 +10,8 @@ function getTime(){
     var curh = curAccess.getUTCHours();
     tdiv.innerHTML += "hour " + curh + "<BR>";
 
-    var tseed = curAccess.getUTCSeconds();
-    tdiv.innerHTML += "secs " + tseed + "<BR>";
+    var secs = curAccess.getUTCSeconds();
+    tdiv.innerHTML += "secs " + secs + "<BR>";
 
 
     if (localStorage.hasOwnProperty("lastViewed")){
@@ -32,6 +32,10 @@ function getTime(){
 
 
     localStorage.setItem("lastViewed",curAccess);
+
+    var tseed = "" + curAccess.getUTCMilliseconds() + "" +  curh + "" + secs + "" + curAccess.getUTCMinutes() + "" + curAccess.getUTCDay();
+    tdiv.innerHTML += "<BR>" + tseed;
+
     return tseed;
     
 }

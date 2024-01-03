@@ -24,14 +24,14 @@ function initGeo(locseed){
 
 function genData(){
     
-
+    
     var georand = "";
-    for (var i=0;i<5;i++){
+    for (var i=0;i<6;i++){
         georand += String.fromCharCode(97+Math.floor(locgen() * 26));
     }
     
     var timerand = "";
-    for (var i=0;i<5;i++){
+    for (var i=0;i<6;i++){
         timerand += String.fromCharCode(97+Math.floor(timegen() * 26));
     }
     gdiv.innerHTML += georand + "<BR>" + timerand;
