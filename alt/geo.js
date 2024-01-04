@@ -1,4 +1,5 @@
 var x = document.getElementById("locinfo");
+var sl;
 
 function getPosition() {
     return new Promise((resolve, reject) => 
@@ -41,7 +42,37 @@ function parseLoc(pos){
     dlong = dlong.padStart(6,"0");
     showPosition(pos);
     var seedstring = "" + dlat + "" + dlong;
+    seedstring = parseInt(seedstring).toString(36);
     x.innerHTML += "<BR>"  + seedstring;
+
+    
+    if (localStorage.hasOwnProperty("savedlocs")){
+        
+        sl = localStorage.getItem("savedlocs");
+        sl = JSON.parse(sl);
+        if (sl.includes(seedstring)){
+            //already been here
+
+        }
+        else{
+            //first time being here
+            sl.push(seedstring);
+            localStorage.setItem("savedlocs",JSON.stringify(sl));
+        }
+        x.innerHTML += "<BR>" + sl;
+    
+    }
+    else{
+        //first time being somewhere;
+        var sl = [];
+        sl.push(seedstring);
+        localStorage.setItem("savedlocs",JSON.stringify(sl));
+    }
+    console.log(sl);
+    console.log(sl.length);
+
+
+
     initGeo(seedstring);
 
 

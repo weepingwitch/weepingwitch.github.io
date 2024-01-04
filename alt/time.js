@@ -33,7 +33,8 @@ function getTime(){
 
     localStorage.setItem("lastViewed",curAccess);
 
-    var tseed = "" + curAccess.getUTCMilliseconds() + "" +  curh + "" + secs + "" + curAccess.getUTCMinutes() + "" + curAccess.getUTCDay();
+    var tseed =  "" +  curh + "" + secs + "" + curAccess.getUTCMinutes() + "" + curAccess.getUTCDay();
+    tseed = parseInt(tseed).toString(36);
     tdiv.innerHTML += "<BR>" + tseed;
 
     return tseed;
