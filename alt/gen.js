@@ -27,10 +27,12 @@ const cyrb53 = (str, seed = 42) => {
 };
 
 function startGenerator(){
+    log("getting location");
     getLocation();
 }
 
 function initGeo(locseed){
+    log("seeing generators");
     locgen = randSeed(cyrb53(locseed));
     timegen = randSeed(cyrb53(getTime()));
     genData();
@@ -38,7 +40,7 @@ function initGeo(locseed){
 }
 
 function genData(){
-    
+    log("seeded, generating");
     
     var georand = "";
     for (var i=0;i<6;i++){

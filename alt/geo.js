@@ -9,17 +9,21 @@ function getPosition() {
 
 function getLocation() {
     if (navigator.geolocation) {
+        log("has geolocation, getting");
         getPosition()
         .then((position) => {
+            log("geo successful");
             parseLoc(position);
             
         })
         .catch((err) => {
             console.error(err.message);
+            log("failed to get geo");
             initGeo(0);
         });
     } else {
       x.innerHTML = "Geolocation is not supported by this browser.";
+    log("no geolocation");
       initGeo(0);
     }
   }
@@ -40,6 +44,7 @@ function parseLoc(pos){
     dlong = dlong.toFixed(3);
     dlong = dlong.replace(".","");
     dlong = dlong.padStart(6,"0");
+    log("parsed geo");
     showPosition(pos);
     var seedstring = "" + dlat + "" + dlong;
     seedstring = parseInt(seedstring).toString(36);
