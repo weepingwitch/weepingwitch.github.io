@@ -1,0 +1,529 @@
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <head>
+        <title>sudoku land</title>
+        <style type="text/css">
+            body{
+                background-color:skyblue;
+                margin:0;
+                padding:0;
+            }
+            canvas{
+                image-rendering: pixelated;
+                image-rendering: -moz-crisp-edges;
+                image-rendering: crisp-edges;
+                position:absolute;
+                top:0;
+                left:0;
+            }
+            #containerDiv{
+                width:100%;
+                height:100%;
+               
+            }
+            #gridDiv{
+                height:66%;
+                margin: 0 auto;
+              
+            }
+            #canvasDiv{
+                position:relative;
+                max-width: 100%;
+                max-height:100%;
+                aspect-ratio: 1/1;
+                margin:0 auto;
+                background-color: lawngreen;
+            }
+            #controlsDiv{
+                height:33%;
+                
+            }
+            #buttonsDiv{
+                padding-top:1em;
+                margin:0 auto;
+                width:fit-content;
+          
+
+            }
+            button{
+                width:4em;
+                height:4em;
+                margin:4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="containerDiv">
+            <div id="gridDiv">
+                <div id="canvasDiv">
+
+                </div>
+            </div>
+            <div id="controlsDiv">
+                <div id="buttonsdiv">
+                    <button onClick="putNumber(1)">1</button>
+                    <button onClick="putNumber(2)">2</button>
+                    <button onClick="putNumber(3)">3</button>
+                    <button onClick="putNumber(4)">4</button>
+                    <button onClick="putNumber(5)">5</button>
+                    <BR>
+                    <button onClick="putNumber(6)">6</button>
+                    <button onClick="putNumber(7)">7</button>
+                    <button onClick="putNumber(8)">8</button>
+                    <button onClick="putNumber(9)">9</button>
+                    <button onClick="putNumber(0)">clear</button>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+        //main
+            var gridCtx, cellCtx, theGrid, origGrid, fullGrid;
+            var selected = [-1,-1];
+            var errs = [];
+            var check = [1,2,3,4,5,6,7,8,9];
+            var chars = ["","🌲","🌳","🏞️","⛰️","🛣️","⛵️","🌧️","🛤️","🌅"];
+            
+
+            var img1 = new Image;
+            img1.src = "sudokuart/grass.png";
+            var img2 = new Image;
+            img2.src = "sudokuart/tree.png";
+            var img3 = new Image;
+            img3.src = "sudokuart/hill.png";
+            var img4 = new Image;
+            img4.src = "sudokuart/twotrees.png";
+            var img5 = new Image;
+            img5.src = "sudokuart/rocks.png";
+            var img6 = new Image;
+            img6.src = "sudokuart/desert.png";
+            var img7 = new Image;
+            img7.src = "sudokuart/water.png";
+            var img8 = new Image;
+            img8.src = "sudokuart/mtn.png";
+            var img9 = new Image;
+            img9.src = "sudokuart/icy.png";
+
+            var imgs = ["",img1,img2,img3,img4,img5,img6,img7,img8,img9];
+
+            buttons = document.getElementsByTagName("button");
+            var n = 1;
+            for (const btn of buttons){
+                if (n<=9){
+                    btn.innerHTML = "";
+                    btn.style.backgroundImage="url('" + imgs[n].src + "')";
+                    n++;
+                }
+                
+            }
+            
+            
+
+
+            init();
+
+
+        //models
+
+        function grid( vals = null){
+                this.values;
+                
+                if (vals == null){
+                    this.values = []
+                    for (var x = 0; x < 9; x++){
+                        var res = [];
+                        for (var y = 0; y < 9; y++){
+                            res.push(0);
+                        }
+                        this.values.push(res);
+                    }
+                
+                }else{
+                    this.values = vals;
+                };
+                console.log(this.values);
+
+                this.row = function(rn){
+                    var res = [];
+                    for (var i=0;i<9;i++){
+                        res.push(this.values[i][rn]);
+                    }
+                    return res;
+                };
+                this.col = function(cn){
+                    return this.values[cn];
+                };
+                this.box = function(bn){
+                    var res = [];
+                    for (var x = 0; x < 9; x++){
+                        for (var y = 0; y < 9; y++){
+                            if (boxNum(y,x) == bn){
+                                res.push(this.values[y][x])
+                            }
+                        }
+                    }
+                    return res;
+                }
+            }
+
+        //functions
+
+
+
+            function init(){
+               
+                theGrid = new grid();
+                genFull(theGrid);
+                fullGrid = new grid(zClone(theGrid.values));
+                removeSpots(theGrid);
+                origGrid = new grid(zClone(theGrid.values));
+                
+                redrawall();
+            }
+            
+
+            //sudoku logic --------------------------------
+
+            
+
+
+            function boxNum(col,row){
+                if (col < 3){
+                    if (row < 3){return 0;}
+                    else if(row < 6){return 3;}
+                    else{return 6; }
+                }
+                else if (col < 6){
+                    if (row < 3){return 1;}
+                    else if(row < 6){return 4;}
+                    else{return 7; }
+                }
+                else {
+                    if (row < 3){return 2;}
+                    else if(row < 6){return 5;}
+                    else{return 8; }
+                }
+            }
+
+
+
+            function listPossible(grid,col,row){
+                var pos = [];
+                var myr = grid.row(row);
+                var myc = grid.col(col);
+                var myb = grid.box(boxNum(col,row));
+                for (var n = 1; n <= 9; n++){
+                    if (!myr.includes(n) && !myc.includes(n) && !myb.includes(n)){
+                        pos.push(n);
+                    }
+                }
+                return pos;
+            }
+
+            function isCurrentlyValid(grid,col,row,val){
+                return (listPossible(grid,col,row).includes(val));
+            }
+
+            
+            function checkRow(g,r){
+                var cr = g.row(r);
+                return checkSet(cr);
+            }
+            function checkCol(g,c){
+                var cc = g.col(c);
+                return checkSet(cc);
+            }
+            function checkBox(g,b){
+                var cb = g.box(b);
+                return checkSet(cb);
+            }
+
+            function checkBoard(g){
+                var res = true;
+                for (var i=0;i<9;i++){
+                    res = res && checkRow(g,i);
+                    res = res && checkCol(g,i);
+                    res = res && checkBox(g,i);
+                }
+                return res;
+            }
+
+           
+
+            function checkSet(s){
+                var ss = zClone(s);
+                ss.sort();
+                if (ss.join() === check.join()){
+                    return true;
+                }
+                return false;
+            }
+
+
+
+
+
+            //sudoku solver -----------------------------
+
+            function removeSpots(g, sn = 18){
+                for (var i = 0; i < sn; i++){
+                    var testspot = 0;
+                    var rc,rr,oc,or = -1;
+                    while (testspot == 0){
+                        rc = randintinc(0,8);
+                        rr = randintinc(0,8);
+                        oc = 8 - rc;
+                        or  = 8 - rr;
+                        testspot = g.values[rc][rr] + g.values[oc][or];
+                    }
+                    g.values[rc][rr] = 0;
+                    g.values[oc][or] = 0;
+                }
+            }
+
+ 
+            function genFull(g) {
+                
+                for (let c = 0; c < 9; c++) {
+                    for (let r = 0; r < 9; r++) {
+                        if (g.values[c][r] == '0') {
+                            var pns = zShuffle(zClone(check));
+                            for (let n = 0; n < 9; n++) {
+                                if (isCurrentlyValid(g, c, r, pns[n])) {
+                                    g.values[c][r] = pns[n];
+                                    if (genFull(g)) {
+                                        return true;
+                                    } else {
+                                        g.values[c][r] = 0;
+                                    }
+                                }   
+                            }
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            
+
+
+            function findBlanks(g){
+                var res = [];
+                for (var c=0;c<9;c++){
+                    for (var r=0;r<9;r++){
+                        if(g.values[c][r]==0){
+                            res.push([c,r]);
+                        }
+                    }
+                }
+                return res;
+            }
+
+
+            //number input ------------------
+            function putNumber(pn){
+                if (selected[0] != -1){
+
+                    var pc = selected[0];
+                    var pr = selected[1];
+                    console.log(origGrid.values[pc][pr])
+                    if (origGrid.values[pc][pr] == 0){
+                        if (fullGrid.values[pc][pr] == pn){
+                            theGrid.values[pc][pr] = pn;
+                        }
+                        else{
+                            theGrid.values[pc][pr] = pn;
+                            if (pn!=0)
+                            errs.push([pc,pr]);
+                        }
+                    }else{
+
+                    }
+
+                    redrawall();
+                }
+            }
+
+            //grid visual --------------------------------
+
+            
+            function doClick(x,y){
+                var nc = parseInt(x / 18);
+                var nr = parseInt(y / 18);
+                console.log(nc + "," + nr);
+                console.log(theGrid.values[nc][nr]);
+                selected = [nc,nr];
+                redrawall();
+            }
+
+            function redrawall(){
+                makeCanvas();
+                drawCells();
+                drawHilight();
+            }
+
+
+            window.addEventListener('resize', function(event) {
+                redrawall();
+            }, true);
+
+            function makeCanvas(){
+                canvasDiv = document.getElementById("canvasDiv");
+                canvasw = canvasDiv.clientWidth;
+                canvasDiv.innerHTML=
+                "<canvas id='bCanvas' style='z-index:1;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>" +
+                "<canvas id='cCanvas' style='z-index:2;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>" +
+                "<canvas id='hCanvas' style='z-index:3;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>";
+                gridCtx = document.getElementById("bCanvas").getContext("2d");
+                cellCtx = document.getElementById("cCanvas").getContext("2d");
+                var hcanv = document.getElementById("hCanvas");
+                hCtx = hcanv.getContext("2d");
+                hcanv.addEventListener('mousedown', function(e) {
+                    var mp = getMousePos(hcanv, e);
+                    doClick(mp.x,mp.y);
+                })
+                drawGridLines();
+            }
+
+            function drawGridLines(){
+                gridCtx.lineWidth = 1;
+                gridCtx.globalAlpha = .3;
+                for (var x = 0; x < 10; x+=1){
+                    var xpos = x * 18;
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(xpos,0);
+                        gridCtx.lineTo(xpos,164);
+                    gridCtx.closePath();
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(xpos+1,0);
+                        gridCtx.lineTo(xpos+1,164);
+                    gridCtx.closePath();
+                    gridCtx.stroke();      
+                }
+                for (var y = 0; y < 10; y+=1){
+                    var ypos = y * 18;
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(0,ypos);
+                        gridCtx.lineTo(164,ypos);
+                    gridCtx.closePath();
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(0,ypos+1);
+                        gridCtx.lineTo(164,ypos+1);
+                    gridCtx.closePath();
+                    gridCtx.stroke();      
+                }
+                gridCtx.globalAlpha = .6;
+                for (var x = 0; x < 4; x+=1){
+                    var xpos = x * 54;
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(xpos,0);
+                        gridCtx.lineTo(xpos,164);
+                    gridCtx.closePath();
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(xpos+1,0);
+                        gridCtx.lineTo(xpos+1,164);
+                    gridCtx.closePath();
+                    gridCtx.stroke();      
+                }
+                for (var y = 0; y < 4; y+=1){
+                    var ypos = y * 54;
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(0,ypos);
+                        gridCtx.lineTo(164,ypos);
+                    gridCtx.closePath();
+                    gridCtx.beginPath();
+                        gridCtx.moveTo(0,ypos+1);
+                        gridCtx.lineTo(164,ypos+1);
+                    gridCtx.closePath();
+                    gridCtx.stroke();      
+                }
+            }
+
+            function drawCells(){
+                cellCtx.font = "16px Arial";
+                cellCtx.clearRect(0,0,164,164);
+                var xpos = 0;
+                var ypos = 0;
+                cellCtx.globalAlpha = 1;
+                for (var x = 0; x<9;x++){
+                    for (var y = 0; y<9; y++){
+                        xpos = x * 18;
+                        ypos = y*18;
+                        if (theGrid.values[x][y] != 0){
+                            
+                            cellCtx.drawImage(imgs[theGrid.values[x][y]],xpos+2,ypos+2);
+                           // cellCtx.fillText(theGrid.values[x][y],xpos,ypos + 16);
+                        }
+                        
+                    }
+                }
+                
+
+
+            }
+
+            function drawHilight(){
+                hCtx.clearRect(0,0,164,164);
+                hCtx.globalAlpha = .3;
+                if (selected[0] != -1){
+                    
+                    hCtx.fillStyle = "cyan";
+                    xpos = selected[0] * 18;
+                    ypos = selected[1] * 18;
+                    hCtx.fillRect(xpos+1,ypos+1,18,18);
+                }
+                hCtx.fillStyle = "red";
+                for (var n = 0; n < errs.length; n ++){
+                    xpos = errs[n][0] * 18;
+                    ypos = errs[n][1] * 18;
+                    hCtx.fillRect(xpos+1,ypos+1,18,18);
+                }
+                
+                
+
+            }
+
+            // utility ---------------
+
+            function  getMousePos(canvas, evt) {
+                var rect = canvas.getBoundingClientRect(), // abs. size of element
+                    scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
+                    scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
+
+                return {
+                    x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+                    y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+                }
+            }
+
+
+            function zClone(thing){
+                return JSON.parse(JSON.stringify(thing));
+            }
+            function randintinc(min, max) {
+                return Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+            function zShuffle(array) {
+                var currentIndex = array.length, temporaryValue, randomIndex;
+
+                // While there remain elements to shuffle...
+                while (0 !== currentIndex) {
+
+                    // Pick a remaining element...
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex -= 1;
+
+                    // And swap it with the current element.
+                    temporaryValue = array[currentIndex];
+                    array[currentIndex] = array[randomIndex];
+                    array[randomIndex] = temporaryValue;
+                }
+
+                return array;
+            }
+            
+        </script>
+    </body>
+</html>
