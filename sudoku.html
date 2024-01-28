@@ -105,17 +105,19 @@
             img8.src = "sudokuart/mtn.png";
             var img9 = new Image;
             img9.src = "sudokuart/icy.png";
+             var imgcan = new Image;
+            imgcan.src = "sudokuart/cancel.png";
 
-            var imgs = ["",img1,img2,img3,img4,img5,img6,img7,img8,img9];
+            var imgs = ["",img1,img2,img3,img4,img5,img6,img7,img8,img9,imgcan];
 
             buttons = document.getElementsByTagName("button");
             var n = 1;
             for (const btn of buttons){
-                if (n<=9){
+                
                     btn.innerHTML = "";
                     btn.style.backgroundImage="url('" + imgs[n].src + "')";
                     n++;
-                }
+                
                 
             }
             
