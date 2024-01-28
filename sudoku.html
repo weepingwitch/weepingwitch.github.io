@@ -39,14 +39,14 @@
                 height:33%;
                 
             }
-            #buttonsDiv{
+            #buttonsDiv, #restartdiv{
                 padding-top:1em;
                 margin:0 auto;
                 width:fit-content;
           
 
             }
-            button{
+            .numbuts{
                 width:4em;
                 height:4em;
                 margin:4px;
@@ -54,6 +54,11 @@
                 image-rendering: pixelated;
                 image-rendering: -moz-crisp-edges;
                 image-rendering: crisp-edges;
+            }
+            .restartbutton{
+                height:3em;
+                width:12em;
+                background-color: #d4d5dc;
             }
         </style>
     </head>
@@ -66,17 +71,20 @@
             </div>
             <div id="controlsDiv">
                 <div id="buttonsdiv">
-                    <button onClick="putNumber(1)">1</button>
-                    <button onClick="putNumber(2)">2</button>
-                    <button onClick="putNumber(3)">3</button>
-                    <button onClick="putNumber(4)">4</button>
-                    <button onClick="putNumber(5)">5</button>
+                    <button class="numbuts" onClick="putNumber(1)">1</button>
+                    <button class="numbuts" onClick="putNumber(2)">2</button>
+                    <button class="numbuts" onClick="putNumber(3)">3</button>
+                    <button class="numbuts" onClick="putNumber(4)">4</button>
+                    <button class="numbuts" onClick="putNumber(5)">5</button>
                     <BR>
-                    <button onClick="putNumber(6)">6</button>
-                    <button onClick="putNumber(7)">7</button>
-                    <button onClick="putNumber(8)">8</button>
-                    <button onClick="putNumber(9)">9</button>
-                    <button onClick="putNumber(0)">clear</button>
+                    <button class="numbuts" onClick="putNumber(6)">6</button>
+                    <button class="numbuts" onClick="putNumber(7)">7</button>
+                    <button class="numbuts" onClick="putNumber(8)">8</button>
+                    <button class="numbuts" onClick="putNumber(9)">9</button>
+                    <button class="numbuts" onClick="putNumber(0)">clear</button>
+                </div>
+                <div id="restartdiv">
+                    <button class="restartbutton" onClick="init()">new board</button>
                 </div>
             </div>
         </div>
@@ -94,28 +102,30 @@
             var img1 = new Image;
             img1.src = "sudokuart/grass.png";
             var img2 = new Image;
-            img2.src = "sudokuart/tree.png";
+            img2.src = "sudokuart/trees.png";
             var img3 = new Image;
             img3.src = "sudokuart/hill.png";
             var img4 = new Image;
-            img4.src = "sudokuart/trees.png";
+            img4.src = "sudokuart/rocks.png";
+            
             var img5 = new Image;
-            img5.src = "sudokuart/rocks.png";
+            img5.src = "sudokuart/desert.png";
             var img6 = new Image;
-            img6.src = "sudokuart/desert.png";
+            img6.src = "sudokuart/water.png";
             var img7 = new Image;
-            img7.src = "sudokuart/water.png";
+            img7.src = "sudokuart/river.png";
             var img8 = new Image;
-            img8.src = "sudokuart/mtn.png";
+            img8.src = "sudokuart/snowtrees.png";
             var img9 = new Image;
             img9.src = "sudokuart/icy.png";
+            
             var imgcan = new Image;
             imgcan.src = "sudokuart/cancel.png";
            
 
             var imgs = ["",img1,img2,img3,img4,img5,img6,img7,img8,img9,imgcan];
 
-            buttons = document.getElementsByTagName("button");
+            buttons = document.getElementsByClassName("numbuts");
             var n = 1;
             for (const btn of buttons){
                 
@@ -129,7 +139,7 @@
             
 
 
-            init();
+            tryLoad();
 
 
         //models
@@ -178,6 +188,29 @@
         //functions
 
 
+            function tryLoad(){
+                if (localStorage.getItem("gridData")!=null){
+                    var gd = JSON.parse(localStorage.getItem("gridData"));
+                    theGrid = new grid(zClone(gd.curGrid));
+                    fullGrid = new grid(zClone(gd.fullGrid));
+                    origGrid = new grid(zClone(gd.origGrid));
+                    redrawall();
+
+                }
+                else{
+                    init();
+                }
+            }
+
+            function saveData(){
+                var ngd = {};
+                ngd.curGrid = zClone(theGrid.values);
+                ngd.fullGrid = zClone(fullGrid.values);
+                ngd.origGrid = zClone(origGrid.values);
+                console.log(ngd);
+                localStorage.setItem("gridData",JSON.stringify(ngd));
+            }
+
 
             function init(){
                
@@ -186,6 +219,7 @@
                 fullGrid = new grid(zClone(theGrid.values));
                 removeSpots(theGrid);
                 origGrid = new grid(zClone(theGrid.values));
+                saveData();
                 
                 redrawall();
             }
@@ -349,7 +383,7 @@
                     }else{
 
                     }
-
+                    saveData();
                     redrawall();
                 }
             }
@@ -362,7 +396,12 @@
                 var nr = parseInt(y / 18);
                 console.log(nc + "," + nr);
                 console.log(theGrid.values[nc][nr]);
-                selected = [nc,nr];
+                if(selected[0] == nc && selected[1] == nr){
+                    selected = [-1,-1];
+                }else{
+                    selected = [nc,nr];
+                }
+                
                 redrawall();
             }
 
@@ -398,6 +437,7 @@
             function drawGridLines(){
                 gridCtx.lineWidth = 1;
                 gridCtx.strokeStyle = "#586657"
+                gridCtx.setLineDash([5,5])
                 for (var x = 0; x < 10; x+=1){
                     var xpos = x * 18;
                     gridCtx.beginPath();
@@ -422,7 +462,8 @@
                     gridCtx.closePath();
                     gridCtx.stroke();      
                 }
-                gridCtx.strokeStyle="#323842"
+                gridCtx.strokeStyle="#172338"
+                gridCtx.setLineDash([]);
                 for (var x = 0; x < 4; x+=1){
                     var xpos = x * 54;
                     gridCtx.beginPath();
