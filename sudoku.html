@@ -84,8 +84,8 @@
             var selected = [-1,-1];
             var errs = [];
             var check = [1,2,3,4,5,6,7,8,9];
-            var chars = ["","🌲","🌳","🏞️","⛰️","🛣️","⛵️","🌧️","🛤️","🌅"];
-            
+            // images from https://opengameart.org/content/blowhard-2-blow-harder
+      
 
             var img1 = new Image;
             img1.src = "sudokuart/grass.png";
@@ -335,8 +335,8 @@
                         }
                         else{
                             theGrid.values[pc][pr] = pn;
-                            if (pn!=0)
-                            errs.push([pc,pr]);
+                            
+                            
                         }
                     }else{
 
@@ -475,10 +475,15 @@
                     hCtx.fillRect(xpos+1,ypos+1,18,18);
                 }
                 hCtx.fillStyle = "red";
-                for (var n = 0; n < errs.length; n ++){
-                    xpos = errs[n][0] * 18;
-                    ypos = errs[n][1] * 18;
-                    hCtx.fillRect(xpos+1,ypos+1,18,18);
+                for (var c = 0; c < 9; c ++){
+                    for (var r=0;r<9;r++){
+                        if (theGrid.values[c][r]!=0 && (theGrid.values[c][r] != fullGrid.values[c][r])){
+                            xpos =c*18;
+                            ypos = r * 18;
+                            hCtx.fillRect(xpos+1,ypos+1,18,18);
+                        }
+                    }
+                    
                 }
                 
                 
