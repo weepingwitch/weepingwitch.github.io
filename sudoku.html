@@ -5,7 +5,7 @@
         <title>sudoku land</title>
         <style type="text/css">
             body{
-                background-color:skyblue;
+                background-color:#70809e;
                 margin:0;
                 padding:0;
             }
@@ -33,7 +33,7 @@
                 max-height:100%;
                 aspect-ratio: 1/1;
                 margin:0 auto;
-                background-color: lawngreen;
+                background-color: #8ea37b;
             }
             #controlsDiv{
                 height:33%;
@@ -98,7 +98,7 @@
             var img3 = new Image;
             img3.src = "sudokuart/hill.png";
             var img4 = new Image;
-            img4.src = "sudokuart/twotrees.png";
+            img4.src = "sudokuart/trees.png";
             var img5 = new Image;
             img5.src = "sudokuart/rocks.png";
             var img6 = new Image;
@@ -109,8 +109,9 @@
             img8.src = "sudokuart/mtn.png";
             var img9 = new Image;
             img9.src = "sudokuart/icy.png";
-             var imgcan = new Image;
+            var imgcan = new Image;
             imgcan.src = "sudokuart/cancel.png";
+           
 
             var imgs = ["",img1,img2,img3,img4,img5,img6,img7,img8,img9,imgcan];
 
@@ -338,6 +339,7 @@
                     if (origGrid.values[pc][pr] == 0){
                         if (fullGrid.values[pc][pr] == pn){
                             theGrid.values[pc][pr] = pn;
+                            selected=[-1,-1];
                         }
                         else{
                             theGrid.values[pc][pr] = pn;
@@ -381,7 +383,7 @@
                 canvasDiv.innerHTML=
                 "<canvas id='bCanvas' style='z-index:1;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>" +
                 "<canvas id='cCanvas' style='z-index:2;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>" +
-                "<canvas id='hCanvas' style='z-index:3;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>";
+                "<canvas id='hCanvas' style='opacity: 0.5;z-index:3;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>";
                 gridCtx = document.getElementById("bCanvas").getContext("2d");
                 cellCtx = document.getElementById("cCanvas").getContext("2d");
                 var hcanv = document.getElementById("hCanvas");
@@ -395,7 +397,7 @@
 
             function drawGridLines(){
                 gridCtx.lineWidth = 1;
-                gridCtx.globalAlpha = .3;
+                gridCtx.strokeStyle = "#586657"
                 for (var x = 0; x < 10; x+=1){
                     var xpos = x * 18;
                     gridCtx.beginPath();
@@ -420,7 +422,7 @@
                     gridCtx.closePath();
                     gridCtx.stroke();      
                 }
-                gridCtx.globalAlpha = .6;
+                gridCtx.strokeStyle="#323842"
                 for (var x = 0; x < 4; x+=1){
                     var xpos = x * 54;
                     gridCtx.beginPath();
@@ -472,21 +474,31 @@
 
             function drawHilight(){
                 hCtx.clearRect(0,0,164,164);
-                hCtx.globalAlpha = .3;
+                hCtx.globalAlpha = 1;
+                
                 if (selected[0] != -1){
                     
-                    hCtx.fillStyle = "cyan";
+                    
                     xpos = selected[0] * 18;
                     ypos = selected[1] * 18;
-                    hCtx.fillRect(xpos+1,ypos+1,18,18);
+                    hCtx.fillStyle = "white";
+                    hCtx.globalAlpha = .5;
+                    hCtx.fillRect(0,ypos+1,164,18);
+                    hCtx.fillRect(xpos+1,0,18,164);
+                    var bs=[1,1,1,55,55,55,109,109,109];
+                    //hCtx.fillRect(bs[selected[0]],bs[selected[1]],54,54);
+                    hCtx.globalAlpha = 1;
+                    hCtx.fillStyle = "#904ee1";
+                    hCtx.fillRect(xpos,ypos,20,20);
                 }
-                hCtx.fillStyle = "red";
+                hCtx.globalAlpha = 1;
+                hCtx.fillStyle = "#c40101";
                 for (var c = 0; c < 9; c ++){
                     for (var r=0;r<9;r++){
                         if (theGrid.values[c][r]!=0 && (theGrid.values[c][r] != fullGrid.values[c][r])){
                             xpos =c*18;
                             ypos = r * 18;
-                            hCtx.fillRect(xpos+1,ypos+1,18,18);
+                            hCtx.fillRect(xpos,ypos,20,20);
                         }
                     }
                     
