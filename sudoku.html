@@ -1,6 +1,5 @@
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <head>
         <title>sudoku land</title>
         <style type="text/css">
@@ -20,12 +19,10 @@
             #containerDiv{
                 width:100%;
                 height:100%;
-               
             }
             #gridDiv{
                 height:66%;
                 margin: 0 auto;
-              
             }
             #canvasDiv{
                 position:relative;
@@ -33,7 +30,7 @@
                 max-height:100%;
                 aspect-ratio: 1/1;
                 margin:0 auto;
-                background-color: #8ea37b;
+                background-color: #abc4b0;
             }
             #controlsDiv{
                 height:33%;
@@ -43,8 +40,6 @@
                 padding-top:1em;
                 margin:0 auto;
                 width:fit-content;
-          
-
             }
             .numbuts{
                 width:4em;
@@ -66,7 +61,6 @@
         <div id="containerDiv">
             <div id="gridDiv">
                 <div id="canvasDiv">
-
                 </div>
             </div>
             <div id="controlsDiv">
@@ -84,70 +78,59 @@
                     <button class="numbuts" onClick="putNumber(0)">clear</button>
                 </div>
                 <div id="restartdiv">
-                    <button class="restartbutton" onClick="init()">new board</button>
+                    <button class="restartbutton" onClick="init()">new puzzle</button>
+                    <button class="restartbutton" onClick="fresh()">blank slate</button>
                 </div>
             </div>
         </div>
-
-
         <script>
         //main
             var gridCtx, cellCtx, theGrid, origGrid, fullGrid;
             var selected = [-1,-1];
             var errs = [];
+            var freemode = false;
             var check = [1,2,3,4,5,6,7,8,9];
-            // images from https://opengameart.org/content/blowhard-2-blow-harder
-      
-
+            // images modified from https://opengameart.org/content/blowhard-2-blow-harder
             var img1 = new Image;
-            img1.src = "sudokuart/grass.png";
+            img1.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAABKUlEQVQokXVSPUvEQBCdTEQsDgQTSGURchAMpLBOYwpbi5QB/164SiS9pNrKPiHFVluF86Nwr1CQs3g6Lqs3xbIz83jz3uwGm/tb+gltbHa++jfthrmt8yKpGA0iuskuBFokFREBHdw9S31c1BEa2tieJiEmUr9DmoiI2jpHhckJV49XwfxumMOP5KRM47PTYyjZ7gzu2lj3Mr8+EVGZxoxZEDouSrjXj+/eNFj9lrRvom6YpdcN876JgPA2xrIT4cAGDxkLL6vsM1ygD6LLNEYPKSJ6eCuurrc7wx6BTHNTKIRDdsW4vgFF2ta5OGT3Ud3HBlSI4KpIKnZX2esJCDlFMCrjolgbK+Pk2xx6cm1sIL/V26aE1IukWq9e+C9CHEOGsIyL6vX0BS9qn4hfOscgAAAAAElFTkSuQmCC";
             img1.onload=function(){redrawall()};
             var img2 = new Image;
-            img2.src = "sudokuart/trees.png";
+            img2.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAACc0lEQVQokT2SX0hTcRTHv+dien/3lpDNYVZuGrkr1kPRDFeabrSCUAgfDHI+2UOJ5VsS9SjUWyz0xRWR+pKU0R9QU1MnTpP+0B/cRuhuIZh36EPc/a4mrYdf8zx9OXwO5wPn0POhFhARcFJ2AwCI6zHmdAHEEyJAhP7FseLCXdLi8u8MTVeGH4GIObVvOacAMKdrbe8ZEQBcKvERkXRwf66gQViO/QGg2nn55gyIQJS3MqraLRBZehxElXKFJGiux2X3RQCyu9E0FGRqIhx5/ewTQLJTEx2J63EQmNPVdrMt1P3E3+QFYCXiAE1Oz55vOFpT7ZmcjoBglPoAouRUD0Cyu9Hf5AWRVlQe7Axa7wcgLDOl5HPTYEBaUu0cgL/JO9I3PtI7FuwMXr91jUAEAgig1jchgFKGsl7gI1CWuapwPaY5yv0B377SrOX4FgCgenvBTtMlQt7KOADi0fumoaj53DSUd32vKgJ1BHA9ZjvuMJOs/l53mePIgv7lRftV1cZNg0nmKgNgGky4Cmvm0MwkA/Cga+Bz9ONw7xgAM8lAyOKJGCvWJsIRgGoCdeKo6wXe3b/GbwyGgfDjh4Nnm30HynZ0+S9biRglp0Jvw7O11R5Lj839XKup8mzb5xxraLlz7sfXzaLD2aGOoY0PTwFQcioEogxEBKweqrV/nwDQOtIT6hgSqu232+9eqPo/YOlx2amBoOZbKYOJ4cnwzOkqD4D53pfuQB1firJiTbVxKbIxLztdQBppmIYMAEgrtpSgF7Ir/6bTAPa4iwCE5qclAP2Lo+LnMv8zkzIUAHwpWrYZOdFcz5eiqaSyZa6XFOb+A3lR+hJEf7HsAAAAAElFTkSuQmCC";
             img2.onload=function(){redrawall()};
             var img3 = new Image;
-            img3.src = "sudokuart/hill.png";
+            img3.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAABkklEQVQokWVRsUsCYRT/ebp1S1YYhS4JiYJ65HZLg2TLQQ4dLaJ/gIuDZkRxS3TUUG2NBhFyDgk3OTZ8tBiRweWgU4QciC0ZREvDq89PesPHx3u/936/93ueejPXf/3QUhnHZdGA6rjMutsAYOhjAJQEAMBut1aCso/QAKiwf76YUGDoY7vd0lKZE/MNsPAXlarsIzSVASSUONW0VKZQsrY1dS0SpsxDt3diMomXAWT3+lxMoWSZ5TxHA6C/ROMpxcfzkeKHXomP57OJh0N5G4XkuIybIPLUzvSGzf6zeTr3l5gOw5p5euzcHq+ISe7K1A4AHJcZ+jihxEVhHD1hKJQmZtfOdOIBIFJRm+f46KBhM7Oc5w3V0yvq+S/PcZn3/dNnlvMP3d7SvJ+yaTVZPLzZ2owBWI99d0fBi+vuTtoPYEEOSeQAHUU0URSZUOKk8Hdp0b61SJh6SBVfnU5kt1ve4m7y5flrdk4eDEcABsNRw2aV6vKCHMru9ekmhAawuhT21Js5ANGAKnrHXaKgvQnwA5dHzSVwb1xaAAAAAElFTkSuQmCC";
             img3.onload=function(){redrawall()};
             var img4 = new Image;
-            img4.src = "sudokuart/river.png";
+            img4.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAABZUlEQVQokX1SPU/CUBQ9Lah5jTWSNISXONjBpEMNKUtxZPAfOMDA4OYvYfVHMPA2GZxcWGGhEhpC4oDbQ1Onmnax0eGamwaMd2jeO/fjnHv6DDXud6yWLXMAm2jhBk0AqRbZ64t1fkF4qoUt81SLSTavUjVBs3Vlto4BRHES+E73KgcAgNqS7RQnh5Xb69OabDw8Pg/VStat0CvOnO/CPAYwVKuP90//sp5qcWR/VeG6B9LIlgM1igGEXuEGTaICQOAvVc8nqlQLk06hVziNNrMDoKLAd0KvUKM41YJUGdlyQPOoYoeBZ3MYb0/3PJWD2/ZBkxObaME5W+Z8JTGs1mSI/wClyYDyVpSt7kB8ph0o2Ctb5ma5m4WpURzFCRt4d1PjEUa2HPCL4NmhV8zWFXaJ1qUGsyyXGLo932m0qZSKWGfoFX/b+k+YyXaaakHS963kM38NNe4D6FitHbtQeu3cOcnmP8A1zlheBsN9AAAAAElFTkSuQmCC";
             img4.onload=function(){redrawall()};
             var img5 = new Image;
-            img5.src = "sudokuart/water.png";
+            img5.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABNElEQVQ4jY1TsWqEQBQcNQSuSZHmxDqFXJtywerAylKsQr4i4CcE/Aq7yHEQCAS8WAmW1yVgYZNmsbK1CqZ6z93NebmplH1v5s2bXevl9WECgNufLS7F4FT8bS81u964SPDxfo3NWswEni+0gmPboZcrAECa5SjKGmmW83kSBnxuHfb5tKSUZjniaCbfvTV4fnrUamy1WFUx0X1L7Z+mtg77fFKVTJWirLXRTbAFKqQi1xvZp4lj2+Hev9MtJGGgKahLJEICNTOBOiYpEMjOqWmKsp4tnBvZ8wVk22gTETFb6OXqZOYAtOY4EogjwTXW51c3yba5KHPVLu3ritiBv1lTg7pcM0rtJv6XueuNsG+2bGlwKtiDU/GtoiiTMNDIKJVerri5KGts1gKW+ZzPpUFQn/MvcVWnIzr3dScAAAAASUVORK5CYII=";
             img4.onload=function(){redrawall()};
             var img6 = new Image;
-            img6.src = "sudokuart/rocks.png";
+            img6.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAByklEQVQ4jW2TsWvbQBTGfxKZ2kUgjAd7EIFiaDYb5CEa6qEYTKZMHpwO9eCp+Q86ZejWgjJ5yKbBXUwGU0g7uIMWC+JNAeNQNDSDKAIt9hRQB/Ud59pvuXun+9677/uejMntRXF99cD00wCAbbImChN+NVr0KxlRmOB6DvMk5+Zupe7Nt0sAjNNWqzg779GvZOgxGC+4PKmq3I9Ttb88qeLHKR8+vsYE6FcyXjiv1IUoTBQozJ8J82f1rVmz8eOUZs3m+uoB4+u7XuF6DodiMF6ofTBqq7Nht8HN3QoA049TojBhnuQ73WUFODvv7RQS8LDbwAxGbTZ1i5e/cyWYDhaKEjrVjmOVGnQcS/GVIrpgemyT9Q4lI/3+pZDDwXhBs2bjWUdKdT2XYq7nMPljc7y6x/wZ/Njj/H9nP04Zdhts6paieLy6x/WckoIMDsDyKVMgyYNRm45j0XEs9QIR3xSPZ9NvSlnx+VDoIvpxWk6iLoroIC8JRu09YSU+zx5LCgKG0nMBS0FxR9dK1iNJ3gzesk3W9CsZs39gvXAUJntzsnzKMJs1G9dzlL8cAAtfvfOmbgFgTG4vCmOa7fksl3Xu8oeK8Kfvq/wFSVf4mq3YawkAAAAASUVORK5CYII=";
             img6.onload=function(){redrawall()};
             var img7 = new Image;
-            img7.src = "sudokuart/desert.png";
+            img7.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJElEQVQ4jY2SsUvDQBSHv8SMwdWItBRa7CIJAYujdhB3cSr0TxB0zuLiKoXsLgXJItRNENRVFEoCCoIBIVgchQYEDYlT9EzSJt94977fvXt3kjPqJwB+EAJwet4ixTB1RNyxB8DxwTtnN8/0um2UybTO58cTzZqKNdBykohh6r8hvW4bALmqLIZYAw0/CPGDkAV1dfHIuVirJKdoy0tcXn+zt/OF8uhu5uSO3gDg3nvNrYnrk2kdafdwmBSdIgpZMcUdeyiz2swWF2GYOnJpVQn/OqjSdmFAVkyljt4oHGguYNZmlTnIUWyXFs1j5itA8dtnrySdDK3k9uEKRd6vFCTKUWwjOaN+4gchdy9vc0OyRLHNRmvl7x9srW9TdR6p3Kyp/AARInWMIQW+eAAAAABJRU5ErkJggg==";
             img7.onload=function(){redrawall()};
             var img8 = new Image;
-            img8.src = "sudokuart/snowtrees.png";
+            img8.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAABqklEQVQokV1SP0gCYRT/ebkFt4RDQpLi4CSiIIKL3BAUBDmIky1BDk5ugoM4iEKDS0IGIbWk3HCCg9txIEchCCoWQuLJBUkcDR7kFjS8+jp7fBzv7vu99/vD2ZrtFICjg0tdM1xuB36r1hqL9QL1iizpmjF5KQJAs50y1yt2Jk8zc70qN3rBiMC+UN9sp8YPV2Ag6wlGhK4ysr6WGz2asZnrFZMRE+LUlCrVPcf2q/HJrvK5rCJLADhdMxj67uZakSVFlvK5LKGHmslmCMmR0ZgQL1WqzDTNEHqomflcFkCnv/xhqLXGhFP7C10zdM1Q+wsAYr0Q4uchfk63FJrNXK9iQjyRLgIIuHlYihazWE/PzhPpIkfrj8O7TLH1SWgALrdDkSWxXuCI6G2qEjtDMyUkj2VjZwIG01nI52W4wXQGgKTSDOXGWUXnLm4JByDk8wKwclKzMUA4py+6QcvPtz6GlBgAO5F+7fBwegCV/AymM7Gj/tvl9EUTaQ/H0gy4eRq2lthRB6YncniiyFKnv8wk/X//EjmLhvcfu23yQ6YzST8BFqP753f1G2HOHPPyWsXAAAAAAElFTkSuQmCC";
             img8.onload=function(){redrawall()};
             var img9 = new Image;
-            img9.src = "sudokuart/icy.png";
+            img9.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAACPElEQVQ4jWWTv0sbYRzGP3kbbC89aRBTNJd4xIsKKXQrNwcpWQLBVenWWaQdO3esiF27lUoXoQdZbgiZ7w+oweYXr/GikFIjCZcOEjuE921Kv9PL8Xx5nu/zPBf7+u3V/Un9HDdvAWAkC6QXL5j/5vkSgErJBsDJmpzUz9ktbhF7/3Hnfn6x3RszP54vWU9vANDpN3nz+hn90ZrGCgWcDM9o98YErVArUcwAkdEF4PDTd40FEGpBjZI9GZ4BsOLEqdckl4HJihPXuKAV4mRNhJu3NKvnS83q+VIvuOUpm89TAMjGAqdfbnHzFu3emHjQCnHz1j+3en4TgOv2HbKxgJVKEA4kIChu29RrEnhC0AqJK8nqzsQkpx0/PrqiuG0TGV0yQGKSo9Nvsn8wS2O3uIVwsqZmvwxM6rXZ2/Ml+werdPpN9m6WsbtJOv0mlZKNkzUBZikoNyOjS8Yda0YhYni+pFKyab14yMrLx9qb+bTE8dEV6+kNgqogMckRGV2CquBp7oEuzXwflLrd4hZGsoCwUgkio4tbnuq43PJU+9IfrelkVBdUH9KLF4hwEGl2tzwl485OCqrivz4oj1S87d6Y+P7BKp4vqdckVsokHESapVKy8XyJbCywnrbJuH/TkA3J6c9b4hqI5O3SEmw+4sOva/3jqCL9CAaEg5kqKzXALU8JqhGxw8/v7pXM+TGSBS1ftVKZrEpWKdmI9OKFXnKyJkaygJM1mQzPdN8rJZvr9h07v0fs3SzrZYA/duEjXx8qE7oAAAAASUVORK5CYII=";
             img9.onload=function(){redrawall()};
             var imgcan = new Image;
-            imgcan.src = "sudokuart/cancel.png";
+            imgcan.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAABkklEQVQokZWSvUsCYRzHv48dcpeZg3mai/YGDR1xGs29QWU01dLkFkJLU/9ES0ugbbYELUHQRaDQmtAd9dBgYF1LqRGkZr6gXMM9iMkN9Z2eh9/n8zwPD19S/i7hP+G6N82vip66KFK1WsgDcPj83ulwYH7FPuDsMKRzQ17L0ONEq/bdeyQvSNGYT579JeS1jHZ0AMPwSPLIYsQVHANQ0nPPaeWdaiBE3t41HRuAZqVMk3EYxsT65szOnntyiuMFjhfck1PvVAMAw6DJeLNSZsLL9VWrXhOl0PjaRvdjLmNb5kKUQq16TU8rTCjc3QIILkUs6dX4iTkqUpUJ1fwrAFdg1JLujKqFNyb0pIcGQAgBQPo4Jjh8fgCllydLGsCnngPQPyQywTsdBqCnFUsagJ5SAIiSzITA3DLHC8V71ZLOKWdFqnK8EFyMMMHuHJSiMRBi/uBH9qHdaLQbjY/sw+3h/uP5KQiRojG7cxC/qqHe0ONEq17r+QPraphh5btXvwqvNo5ziMMeSQ4urFqX74/5AW+3sENO1cbIAAAAAElFTkSuQmCC";
             imgcan.onload=function(){redrawall()};
-
             var imgs = ["",img1,img2,img3,img4,img5,img6,img7,img8,img9,imgcan];
-
             buttons = document.getElementsByClassName("numbuts");
             var n = 1;
             for (const btn of buttons){
-                
                     btn.innerHTML = "";
                     btn.style.backgroundImage="url('" + imgs[n].src + "')";
                     n++;
-                
-                
             }
-            
-            
-
 
             tryLoad();
-
 
         //models
 
@@ -168,7 +151,6 @@
                     this.values = vals;
                 };
                 console.log(this.values);
-
                 this.row = function(rn){
                     var res = [];
                     for (var i=0;i<9;i++){
@@ -193,7 +175,6 @@
             }
 
         //functions
-
 
             function tryLoad(){
                 if (localStorage.getItem("gridData")!=null){
@@ -220,22 +201,29 @@
 
 
             function init(){
-               
+                selected = [-1,-1];
                 theGrid = new grid();
                 genFull(theGrid);
                 fullGrid = new grid(zClone(theGrid.values));
-                removeSpots(theGrid);
+                var sn =randintinc(12,18);
+                removeSpots(theGrid,sn);
                 origGrid = new grid(zClone(theGrid.values));
                 saveData();
                 
                 redrawall();
             }
+
+            function fresh(){
+                selected = [-1,-1];
+                theGrid = new grid();
+                fullGrid = new grid(zClone(theGrid.values));
+                origGrid = new grid(zClone(theGrid.values));
+                saveData();
+                redrawall();
+            }
             
 
             //sudoku logic --------------------------------
-
-            
-
 
             function boxNum(col,row){
                 if (col < 3){
@@ -271,7 +259,14 @@
             }
 
             function isCurrentlyValid(grid,col,row,val){
-                return (listPossible(grid,col,row).includes(val));
+                var res = false;
+                var tmp = grid.values[col][row];
+                grid.values[col][row] = 0;
+                var lpo = listPossible(grid,col,row)
+                //console.log(col + "," + row + ": testing " + val + "in " + lpo.toString());
+                res = lpo.includes(val);
+                grid.values[col][row] = tmp;
+                return res;
             }
 
             
@@ -297,8 +292,6 @@
                 }
                 return res;
             }
-
-           
 
             function checkSet(s){
                 var ss = zClone(s);
@@ -331,7 +324,6 @@
                 }
             }
 
- 
             function genFull(g) {
                 
                 for (let c = 0; c < 9; c++) {
@@ -354,8 +346,6 @@
                 }
                 return true;
             }
-            
-
 
             function findBlanks(g){
                 var res = [];
@@ -369,11 +359,9 @@
                 return res;
             }
 
-
             //number input ------------------
             function putNumber(pn){
                 if (selected[0] != -1){
-
                     var pc = selected[0];
                     var pr = selected[1];
                     console.log(origGrid.values[pc][pr])
@@ -384,11 +372,8 @@
                         }
                         else{
                             theGrid.values[pc][pr] = pn;
-                            
-                            
                         }
                     }else{
-
                     }
                     saveData();
                     redrawall();
@@ -508,25 +493,17 @@
                         xpos = x * 18;
                         ypos = y*18;
                         if (theGrid.values[x][y] != 0){
-                            
                             cellCtx.drawImage(imgs[theGrid.values[x][y]],xpos+2,ypos+2);
                            // cellCtx.fillText(theGrid.values[x][y],xpos,ypos + 16);
                         }
-                        
                     }
                 }
-                
-
-
             }
 
             function drawHilight(){
                 hCtx.clearRect(0,0,164,164);
                 hCtx.globalAlpha = 1;
-                
                 if (selected[0] != -1){
-                    
-                    
                     xpos = selected[0] * 18;
                     ypos = selected[1] * 18;
                     hCtx.fillStyle = "white";
@@ -543,17 +520,13 @@
                 hCtx.fillStyle = "#c40101";
                 for (var c = 0; c < 9; c ++){
                     for (var r=0;r<9;r++){
-                        if (theGrid.values[c][r]!=0 && (theGrid.values[c][r] != fullGrid.values[c][r])){
+                        if (origGrid.values[c][r]==0 && theGrid.values[c][r]!=0 && !isCurrentlyValid(theGrid,c,r,theGrid.values[c][r])){
                             xpos =c*18;
                             ypos = r * 18;
                             hCtx.fillRect(xpos,ypos,20,20);
                         }
                     }
-                    
                 }
-                
-                
-
             }
 
             // utility ---------------
@@ -562,14 +535,11 @@
                 var rect = canvas.getBoundingClientRect(), // abs. size of element
                     scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
                     scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
-
                 return {
                     x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
                     y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
                 }
             }
-
-
             function zClone(thing){
                 return JSON.parse(JSON.stringify(thing));
             }
@@ -578,23 +548,15 @@
             }
             function zShuffle(array) {
                 var currentIndex = array.length, temporaryValue, randomIndex;
-
-                // While there remain elements to shuffle...
                 while (0 !== currentIndex) {
-
-                    // Pick a remaining element...
                     randomIndex = Math.floor(Math.random() * currentIndex);
                     currentIndex -= 1;
-
-                    // And swap it with the current element.
                     temporaryValue = array[currentIndex];
                     array[currentIndex] = array[randomIndex];
                     array[randomIndex] = temporaryValue;
                 }
-
                 return array;
             }
-            
         </script>
     </body>
 </html>
