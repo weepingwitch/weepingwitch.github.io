@@ -86,9 +86,11 @@
         <script>
         //main
             var gridCtx, cellCtx, theGrid, origGrid, fullGrid;
+            var part;
             var selected = [-1,-1];
             var errs = [];
             var freemode = false;
+            var gamewon = false;
             var check = [1,2,3,4,5,6,7,8,9];
             // images modified from https://opengameart.org/content/blowhard-2-blow-harder
             var img1 = new Image;
@@ -182,7 +184,11 @@
                     theGrid = new grid(zClone(gd.curGrid));
                     fullGrid = new grid(zClone(gd.fullGrid));
                     origGrid = new grid(zClone(gd.origGrid));
+                    gamewon = gd.gamewon;
                     redrawall();
+                    if (gamewon){
+                        requestAnimationFrame(winanim);
+                    }
 
                 }
                 else{
@@ -195,17 +201,20 @@
                 ngd.curGrid = zClone(theGrid.values);
                 ngd.fullGrid = zClone(fullGrid.values);
                 ngd.origGrid = zClone(origGrid.values);
+                ngd.gamewon = gamewon;
                 console.log(ngd);
                 localStorage.setItem("gridData",JSON.stringify(ngd));
             }
 
 
             function init(){
+                gamewon = false;
                 selected = [-1,-1];
                 theGrid = new grid();
                 genFull(theGrid);
                 fullGrid = new grid(zClone(theGrid.values));
-                var sn =randintinc(12,18);
+                var sn =randintinc(12,22);
+                
                 removeSpots(theGrid,sn);
                 origGrid = new grid(zClone(theGrid.values));
                 saveData();
@@ -214,6 +223,7 @@
             }
 
             function fresh(){
+                gamewon = false;
                 selected = [-1,-1];
                 theGrid = new grid();
                 fullGrid = new grid(zClone(theGrid.values));
@@ -366,12 +376,16 @@
                     var pr = selected[1];
                     console.log(origGrid.values[pc][pr])
                     if (origGrid.values[pc][pr] == 0){
-                        if (fullGrid.values[pc][pr] == pn){
+                        if (isCurrentlyValid(theGrid,pc,pr , pn)){
                             theGrid.values[pc][pr] = pn;
                             selected=[-1,-1];
                         }
                         else{
                             theGrid.values[pc][pr] = pn;
+                        }
+                        gamewon = checkBoard(theGrid);
+                        if(gamewon){
+                            requestAnimationFrame(winanim);
                         }
                     }else{
                     }
@@ -419,6 +433,10 @@
                 cellCtx = document.getElementById("cCanvas").getContext("2d");
                 var hcanv = document.getElementById("hCanvas");
                 hCtx = hcanv.getContext("2d");
+                part = hCtx.createImageData(2,2); // only do this once per page
+                                     // only do this once per page
+                part.data=[144,78,255,255,144,78,255,255,144,78,255,255,144,78,255,255];
+
                 hcanv.addEventListener('mousedown', function(e) {
                     var mp = getMousePos(hcanv, e);
                     doClick(mp.x,mp.y);
@@ -500,7 +518,27 @@
                 }
             }
 
+                          
+          
+            function winanim(){
+                console.log("winanim");
+                hCtx.fillStyle = 'rgba(133,147,81,.1)';
+                hCtx.globalAlpha = .5;
+                hCtx.fillRect(0,0,164,164);
+                hCtx.globalAlpha = 1;
+                hCtx.fillStyle = "rgba(242,246,241,.9)";
+                hCtx.beginPath();
+                hCtx.ellipse(randintinc(-16,164),randintinc(-16,164),2,2,0,0,2*Math.PI);
+                hCtx.fillRect(randintinc(-16,164),randintinc(-16,164),4,4);
+                hCtx.fill();
+
+                if(gamewon){
+                    requestAnimationFrame(winanim);
+                }
+            }
+
             function drawHilight(){
+                
                 hCtx.clearRect(0,0,164,164);
                 hCtx.globalAlpha = 1;
                 if (selected[0] != -1){
@@ -528,6 +566,8 @@
                     }
                 }
             }
+
+
 
             // utility ---------------
 
