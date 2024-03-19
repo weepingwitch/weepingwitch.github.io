@@ -4,7 +4,7 @@ body {
 	padding: 0;
 	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 140%;
-    background-image: url("../vision.jpg");
+    background-image: url("vision.jpg");
 }
 
 .headerDiv{
@@ -176,7 +176,7 @@ button {
     height: 280px;
     width:400px;
     margin:0 auto;
-    background-image: url("../const.webp");
+    background-image: url("const.webp");
     background-repeat: round;
     text-align: left;
     font-size: small;

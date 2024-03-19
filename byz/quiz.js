@@ -59,17 +59,21 @@ function grademe(){
     switch (winner) {
         case "docetism":
             resbox.innerHTML += "<h1>Docetism</h1>";
-            resbox.innerHTML += "<B><i>You Heretic!</i></b><BR>"
-            resbox.innerHTML += "";
+            resbox.innerHTML += "<B><i style='color:red;'>You Heretic!</i></b><BR>"
+            resbox.innerHTML += "You believe that Jesus wasn't actually human at all, and could best be described as some sort of divine apparition or hologram. ";
+            resbox.innerHTML += "You have listened to Marcion's heresies, and believe that Christ was fully divine and not capable of suffering."
             break;
         case "arianism":
             resbox.innerHTML += "<h1>Arianism</h1>";
-            resbox.innerHTML += "<B><i>You Heretic!</i></b><BR>"
-            resbox.innerHTML += "";
+            resbox.innerHTML += "<B><i style='color:red;'>You Heretic!</i></b><BR>"
+            resbox.innerHTML += "You believe that there was a time when the Son of God did not yet exist, and that he is not coeternal to the Father. ";
+            resbox.innerHTML += "You have listened to Arius' heresies, and believe that Jesus is different from and subordinate to God."
             break;
         case "orthodox":
             resbox.innerHTML += "<h1>Orthodoxy</h1><BR>";
-            resbox.innerHTML += "";
+            resbox.innerHTML += "You hold correct and true beliefs!<BR>";
+            resbox.innerHTML += "You believe that Christ is co-eternal and co-substantial with the Father, that God the Father and God the Son have both always existed and are equal in power. ";
+            resbox.innerHTML += "You will not be denounced as a heretic!"
             
         default:
             break;
