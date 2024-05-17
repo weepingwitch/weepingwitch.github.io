@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>antgame</title>
+    <style type="text/css">
+        html{
+            height:100%;
+        }
+        body {
+            background-color: #70809e;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border:1px solid black;
+        }
+        #containerDiv{
+            width:100%;
+            height:100%;
+            
+        }
+        #screenDiv{
+            height:80%;
+            margin: 0 auto;
+            
+        }
+        #canvasDiv{
+            position:relative;
+            max-width: 100%;
+            max-height:100%;
+            aspect-ratio: 1/1;
+            margin:0 auto;
+           
+        }
+        #controlsDiv {
+            height: 20%;
+        }
+
+        #buttonsDiv {
+            padding-top: 1em;
+            margin: 0 auto;
+            width: fit-content;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="containerDiv">
+        <div id="screenDiv">
+            <div id="canvasDiv">
+            </div>
+        </div>
+        <div id="controlsDiv">
+            <div id="buttonsDiv">
+                buttons
+            </div>
+         </div>
+    </div>
+    <script>
+
+
+
+        var canvasDiv, bdiv;
+        var ot = 0;
+        var dt;
+        var c0, c1, c2, c3, c0ctx, c1ctx, c2ctx, c3ctx;
+        var girl;
+
+        var tx = -1;
+        var ty = -1;
+
+        girl = new mychar();
+        makeCanvas();
+
+        newroom(1, 1, 160, 80);
+        requestAnimationFrame(drawframe);
+        
+
+
+        function drawframe(nt) {
+            dt = nt - ot;
+            ot = nt;
+            //console.log(dt);
+
+            girl.calcmove();
+            girl.move();
+            
+            c2ctx.clearRect(0, 0, 164, 164);
+            girl.draw();
+            requestAnimationFrame(drawframe);
+        }
+
+
+        function newroom(rx, ry, doortox, doortoy) {
+            drawbg(rx * 164, ry * 164);
+
+
+            girl.x = doortox;
+            girl.y = doortoy;
+            girl.dx = 0;
+            girl.dy = 0;
+            tx = -1;
+            ty = -1;
+        }
+
+        function mychar() {
+            this.x = 5;
+            this.y = 6;
+            this.dx = 0;
+            this.dy = 0;
+            this.draw = function () {
+                c2ctx.fillStyle = "purple";
+                c2ctx.fillRect(Math.floor(this.x - 1), Math.floor(this.y - 1), 2, 2);
+            }
+            this.calcmove = function () {
+                if (tx == -1) {
+                    this.dx = 0;
+                    this.dy = 0;
+                }
+                else {
+                    this.dx = tx - this.x;
+                    this.dy = ty - this.y;
+                    if (Math.abs(this.dx) < 1.5 && Math.abs(this.dy) < 1.5) {
+                        this.dx = 0; this.dy = 0;
+                    }
+                    else {
+                        [this.dx, this.dy] = normalize(this.dx, this.dy);
+                        console.log(this.dx + "," + this.dy);
+                    }
+                    
+                }
+            }
+            this.move = function () {
+                this.x = this.x + (this.dx * dt / 16);
+                this.y = this.y + (this.dy * dt / 16);
+
+            }
+        }
+
+
+
+
+
+        function drawbg(cx, cy) {
+            var bgimgurl = "https://www.mapsofworld.com/style_2019/images/world-map.png";
+            var bgimg = new Image;
+            bgimg.src = bgimgurl;
+            c0ctx.drawImage(bgimg, cx, cy, 164, 164, 0, 0, 164, 164);
+        }
+
+
+
+        function makeCanvas(){
+            canvasDiv = document.getElementById("canvasDiv");
+            bdiv = document.getElementById("buttonsDiv");
+            canvasw = canvasDiv.clientWidth;
+            canvasDiv.innerHTML=
+            "<canvas id='canv0' style='z-index:1;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
+            "<canvas id='canv1' style='z-index:2;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
+            "<canvas id='canv2' style='z-index:3;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
+            "<canvas id='canv3' style='z-index:4;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>";
+
+            c0 = document.getElementById("canv0");
+            c0ctx = c0.getContext("2d");
+            c1 = document.getElementById("canv1");
+            c1ctx = c1.getContext("2d");            
+            c2 = document.getElementById("canv2");
+            c2ctx = c2.getContext("2d");
+            c3 = document.getElementById("canv3");
+            c3ctx = c3.getContext("2d");
+
+            c3.addEventListener('mousedown', function (e) {
+                var mp = getMousePos(c3, e);
+                doClick(mp.x, mp.y);
+            });
+            
+        }
+
+        window.addEventListener('resize', function (event) {
+            makeCanvas();
+        }, true);
+
+        function doClick(x, y) {
+            console.log(x + "," + y);
+            bdiv.innerHTML = x + "," + y;
+            tx = x;
+            ty = y;
+            
+        }
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect(), // abs. size of element
+                scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
+                scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
+            return {
+                x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+                y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+            }
+        }
+
+        function normalize(x, y) {
+            var m = Math.sqrt((x * x) + (y * y));
+            return [x/m,y/m];
+        }
+        
+
+    </script>
+</body>
+</html>
