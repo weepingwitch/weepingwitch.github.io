@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -41,6 +41,9 @@
             margin:0 auto;
            
         }
+        #canv1{
+            opacity:20%;
+        }
         #controlsDiv {
             height: 20%;
         }
@@ -70,18 +73,24 @@
 
 
         var canvasDiv, bdiv;
+        var bgimg, ftstpimg, colimg;
         var ot = 0;
         var dt;
-        var c0, c1, c2, c3, c0ctx, c1ctx, c2ctx, c3ctx;
-        var girl;
+        var cdata;
+        var c0, c1, c2, c3, c0ctx, c1ctx, c2ctx, c3ctx, ftctx, colctx;
+        var g;
 
         var tx = -1;
         var ty = -1;
 
-        girl = new mychar();
-        makeCanvas();
 
-        newroom(1, 1, 160, 80);
+        g = new game();
+
+       
+        makeCanvas();
+        initbgs();
+
+        gotonewroom(1, 1, 160, 80);
         requestAnimationFrame(drawframe);
         
 
@@ -91,35 +100,71 @@
             ot = nt;
             //console.log(dt);
 
-            girl.calcmove();
-            girl.move();
+            g.g.calcmove();
+            g.g.move();
             
-            c2ctx.clearRect(0, 0, 164, 164);
-            girl.draw();
+            c3ctx.clearRect(0, 0, 164, 164);
+            g.g.draw();
             requestAnimationFrame(drawframe);
         }
 
 
-        function newroom(rx, ry, doortox, doortoy) {
+        function gotonewroom(rx, ry, doortox, doortoy) {
             drawbg(rx * 164, ry * 164);
 
-
-            girl.x = doortox;
-            girl.y = doortoy;
-            girl.dx = 0;
-            girl.dy = 0;
+            g.rx = rx;
+            g.ry = ry;
+            g.g.x = doortox;
+            g.g.y = doortoy;
+            g.g.dx = 0;
+            g.g.dy = 0;
             tx = -1;
             ty = -1;
         }
 
-        function mychar() {
+        function game() {
+            this.g = new girl();
+            this.rooms = [];
+            this.roomnum = 0;
+            this.rx = 0;
+            this.ry = 0;
+        }
+
+        function room() {
+            var rx = 0;
+            var ry = 0;
+            var objs = [];
+        }
+
+        function girl() {
             this.x = 5;
-            this.y = 6;
+            this.y = 5;
             this.dx = 0;
             this.dy = 0;
+
+            this.ox = 5;
+            this.oy = 5;
+
+            this.lps = [[7, 7], [7, 3], [3, 3], [3, 7], [3, 5], [7, 5]];
             this.draw = function () {
-                c2ctx.fillStyle = "purple";
-                c2ctx.fillRect(Math.floor(this.x - 1), Math.floor(this.y - 1), 2, 2);
+                //drawshadow
+                c1ctx.fillRect(Math.floor(this.x), Math.floor(this.y), 1, 1);
+                ftctx.fillRect((g.rx*164)+Math.floor(this.x), (g.ry*164)+Math.floor(this.y), 1, 1);
+
+                //drawbodycircle
+                c3ctx.beginPath();
+                c3ctx.arc(Math.floor(this.x), Math.floor(this.y), 2, 0, 2 * Math.PI);
+                c3ctx.fill();
+
+                
+            }
+
+            this.step = function () {
+                this.ox = this.x;
+                this.oy = this.y;
+                this.calcmove();
+                this.move();
+
             }
             this.calcmove = function () {
                 if (tx == -1) {
@@ -127,34 +172,110 @@
                     this.dy = 0;
                 }
                 else {
+                    
                     this.dx = tx - this.x;
                     this.dy = ty - this.y;
-                    if (Math.abs(this.dx) < 1.5 && Math.abs(this.dy) < 1.5) {
+                  
+                    if (Math.abs(this.dx) < 1 && Math.abs(this.dy) < 1) {
                         this.dx = 0; this.dy = 0;
                     }
                     else {
+                        
                         [this.dx, this.dy] = normalize(this.dx, this.dy);
-                        console.log(this.dx + "," + this.dy);
+                        this.dx += Math.sin(ot / 120) / 3;
+                        this.dy += Math.cos(ot / 120) / 3;
+                        [this.dx, this.dy] = normalize(this.dx, this.dy);
+
+                        
+                        //console.log(this.dx + "," + this.dy);
                     }
                     
                 }
             }
             this.move = function () {
-                this.x = this.x + (this.dx * dt / 16);
-                this.y = this.y + (this.dy * dt / 16);
+                if (this.dx != 0 && this.dy != 0) {
+
+                    let nx = this.x + (this.dx * dt / 16);
+                    let ny = this.y + (this.dy * dt / 16);
+
+                    if (!getCol(nx, ny)) {
+                        this.x = nx;
+                        this.y = ny;
+                    }
+                    else {
+                        if (!getCol(this.x, ny)) {
+                            
+                            this.y = ny;
+                            
+                        }
+                        else {
+                            if (!getCol(nx, this.y)) {
+                                this.x = nx;
+                                
+                            }
+                        }
+                    }
+                    
+                }
+                
 
             }
         }
 
 
+        function initbgs() {
+            var bgimgurl = "https://www.mapsofworld.com/style_2019/images/world-map.png";
+            bgimg = new Image;
+            bgimg.src = bgimgurl;
+            ftstpimg = document.createElement("canvas");
+            ftstpimg.style.visibility = "hidden";
+            ftstpimg.width = 2460;
+            ftstpimg.height = 2460;
+            ftctx = ftstpimg.getContext("2d");
+            ftctx.fillStyle = "gray";
+            colimg = document.createElement("canvas");
+            colimg.style.visibility = "hidden";
+            colimg.width = 2460;
+            colimg.height = 2460;
+            colctx = colimg.getContext("2d");
+            colctx.fillStyle = "orange";
 
+
+
+            for (var x = 0; x < 20; x++) {
+                for (var y = 0; y < 20; y++) {
+                    colctx.beginPath();
+                    colctx.arc(x * 50, y * 50, randintinc(2,25), 0, Math.PI * 2);
+                    colctx.fill();
+                }
+            }
+            
+            
+        }
 
 
         function drawbg(cx, cy) {
-            var bgimgurl = "https://www.mapsofworld.com/style_2019/images/world-map.png";
-            var bgimg = new Image;
-            bgimg.src = bgimgurl;
+            c0ctx.clearRect(0, 0, 164, 164);
             c0ctx.drawImage(bgimg, cx, cy, 164, 164, 0, 0, 164, 164);
+            c1ctx.clearRect(0, 0, 164, 164);
+            c1ctx.drawImage(ftstpimg, cx, cy, 164, 164, 0, 0, 164, 164);
+            c2ctx.clearRect(0, 0, 164, 164);
+            c2ctx.drawImage(colimg, cx, cy, 164, 164, 0, 0, 164, 164);
+            cdata = colctx.getImageData(cx, cy, 164, 164);
+            //console.log(cdata);
+        }
+
+        function getCol(x, y) {
+            x = Math.floor(x); y = Math.floor(y);
+            return getColPixelInd(cdata, y * cdata.width + x)
+        }
+
+        function getColPixelInd(imgData, index) {
+            var i = index * 4, d = imgData.data;
+            //console.log(d);
+            //console.log(i);
+            //console.log(d[i]);
+            return ((d[i] > 0) || (d[i + 1] > 0) || (d[i + 2] > 0));  // Returns array [R,G,B,A]
         }
 
 
@@ -167,7 +288,8 @@
             "<canvas id='canv0' style='z-index:1;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
             "<canvas id='canv1' style='z-index:2;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
             "<canvas id='canv2' style='z-index:3;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
-            "<canvas id='canv3' style='z-index:4;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>";
+            "<canvas id='canv3' style='z-index:4;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>" +
+            "<canvas id='canv4' style='z-index:5;width:" + canvasw + "px;height:" + canvasw + "px;'height='164' width='164'></canvas>";
 
             c0 = document.getElementById("canv0");
             c0ctx = c0.getContext("2d");
@@ -177,8 +299,13 @@
             c2ctx = c2.getContext("2d");
             c3 = document.getElementById("canv3");
             c3ctx = c3.getContext("2d");
+            c4 = document.getElementById("canv4");
+            c4ctx = c4.getContext("2d");
+            c1ctx.fillStyle = "gray";
 
-            c3.addEventListener('mousedown', function (e) {
+            c3ctx.fillStyle = "purple";
+
+            c4.addEventListener('mousedown', function (e) {
                 var mp = getMousePos(c3, e);
                 doClick(mp.x, mp.y);
             });
@@ -210,6 +337,9 @@
         function normalize(x, y) {
             var m = Math.sqrt((x * x) + (y * y));
             return [x/m,y/m];
+        }
+        function randintinc(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         
 
