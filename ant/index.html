@@ -90,7 +90,7 @@
         makeCanvas();
         initbgs();
 
-        gotonewroom(1, 1, 160, 80);
+        gotonewroom(1, 1, 80, 80);
         requestAnimationFrame(drawframe);
         
 
@@ -109,6 +109,26 @@
         }
 
 
+        function checkroomtravel() {
+            if (g.g.x < 16) {
+                //warp left
+                gotonewroom(g.rx - 1, g.ry, 144, g.g.y);
+            }
+            if (g.g.x > 148) {
+                //warp right
+                gotonewroom(g.rx + 1, g.ry, 20, g.g.y);
+            }
+            if (g.g.y < 16) {
+                //warp up
+                gotonewroom(g.rx, g.ry - 1, g.g.x, 144);
+                
+            }
+            if (g.g.y > 148) {
+                //warp down
+                gotonewroom(g.rx, g.ry + 1, g.g.x, 20);
+            }
+        }
+
         function gotonewroom(rx, ry, doortox, doortoy) {
             drawbg(rx * 164, ry * 164);
 
@@ -126,8 +146,8 @@
             this.g = new girl();
             this.rooms = [];
             this.roomnum = 0;
-            this.rx = 0;
-            this.ry = 0;
+            this.rx = 1;
+            this.ry = 1;
         }
 
         function room() {
@@ -215,6 +235,8 @@
                             }
                         }
                     }
+
+                    checkroomtravel();
                     
                 }
                 
