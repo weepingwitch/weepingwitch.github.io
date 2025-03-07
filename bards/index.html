@@ -1,0 +1,260 @@
+<html>
+<head>
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="howler.min.js"></script>
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+           rel = "stylesheet">
+        <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+        
+        <!-- Bootstrap core CSS -->
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="css/portfolio-item.css" rel="stylesheet">
+        <style>
+
+        .ui-slider .ui-slider-handle, .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+color:#00aaff;
+background:#00aaff;
+        }
+
+        .ui-widget-content .ui-state-active, .ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-hover{
+          color:#00aaff;
+          background:#00aaff;
+          border: 2px solid #ffaaff;
+        }
+</style>
+      </head>
+<body>
+
+
+      <!-- Page Content -->
+      <div class="container">
+
+        <!-- Portfolio Item Heading -->
+        <h1 class="my-4">puzzle song
+          - <small>oops all bards</small>
+        </h1>
+
+        <!-- Portfolio Item Row -->
+        <div class="row">
+
+         
+
+          <div class="col-md-4">
+
+
+            <button type="button" id="pbutton" class="btn btn-secondary btn-lg">play</button>
+          </div>
+
+        </div>
+        <!-- /.row -->
+
+        <!-- Related Projects Row -->
+        <h3 class="my-4">dynamic layers</h3>
+<form autocomplete="off">
+        <div class="row">
+
+          <div class="col-md-3 col-sm-6 mb-4">
+            <label for="t1" style="width:100%;height:100%;background-color:lightgray;padding:4px;margin:4px;border: 2px solid black;border-radius:5px;" >
+             
+                <input type="checkbox" id="t1" name="t1" value="t1" onclick="toggle(0)">
+                <strong>layer 1</strong> - lute <BR><BR>
+              
+            </label> 
+          </div>
+
+          <div class="col-md-3 col-sm-6 mb-4">
+            <label for="t2" style="width:100%;height:100%;background-color:lightgray;padding:4px;margin:4px;border: 2px solid black;border-radius:5px;">
+             
+                <input type="checkbox" id="t2" name="t2" value="t2" onclick="toggle(1)">
+                <strong>layer 2</strong> - string2 <BR><BR>
+              
+            </label> 
+          </div>
+
+          <div class="col-md-3 col-sm-6 mb-4">
+            <label for="t3" style="width:100%;height:100%;background-color:lightgray;padding:4px;margin:4px;border: 2px solid black;border-radius:5px;">
+             
+                <input type="checkbox" id="t3" name="t3" value="t3" onclick="toggle(2)">
+                <strong>layer 3</strong> - lyre <BR><BR>
+              
+            </label> 
+          </div>
+<!--
+          <div class="col-md-3 col-sm-6 mb-4">
+            track 4
+          </div>
+-->
+        </div>
+<BR><BR>
+        
+        <div class="row">
+
+          <div class="col-md-3 col-sm-6 mb-4">
+            <label for="t4" style="width:100%;height:100%;background-color:lightgray;padding:4px;margin:4px;border: 2px solid black;border-radius:5px;">
+             
+                <input type="checkbox" id="t4" name="t4" value="t4" onclick="toggle(3)">
+                <strong>layer 4</strong> - flute <BR><BR>
+              
+            </label> 
+          </div>
+
+          <div class="col-md-3 col-sm-6 mb-4">
+            <label for="t5" style="width:100%;height:100%;background-color:lightgray;padding:4px;margin:4px;border: 2px solid black;border-radius:5px;">
+             
+                <input type="checkbox" id="t5" name="t5" value="t5" onclick="toggle(4)">
+                <strong>layer 5</strong> - horn <BR><BR>
+              
+            </label> 
+          </div>
+
+          <div class="col-md-3 col-sm-6 mb-4">
+            <label for="t6" style="width:100%;height:100%;background-color:lightgray;padding:4px;margin:4px;border: 2px solid black;border-radius:5px;">
+             
+                <input type="checkbox" id="t6" name="t6" value="t6" onclick="toggle(5)">
+                <strong>layer 6</strong> - drums <BR><BR>
+              
+            </label> 
+          </div>
+<!--
+          <div class="col-md-3 col-sm-6 mb-4">
+            track 4
+          </div>
+-->
+        </div>
+      </form>
+        <!-- /.row -->
+
+      </div>
+      <!-- /.container -->
+
+      <!-- Footer --><BR><BR>
+      <footer class="py-5 bg-dark">
+        <div class="container">
+          <p class="m-0 text-center text-white">built by <a href="http://willow.lol/" target="_blank">willow</a></p>
+        </div>
+        <!-- /.container -->
+      </footer>
+
+      <!-- Bootstrap core JavaScript -->
+
+      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+<div class="debug" id="debug"></div>
+<script>
+ this.sounds = [];
+ this.is_playing = false;
+
+
+var soundarray = this;
+
+
+
+$(document).ready(function() {
+
+  var sound1 = new Howl({
+    src: ['bard1.mp3'],
+    preload: true,
+    loop: true,
+    volume:0
+  });
+  var sound2 = new Howl({
+    src: ['bard2.mp3'],
+    preload: true,
+    loop: true,
+    volume: 0
+  });
+  var sound3 = new Howl({
+    src: ['bard3.mp3'],
+    preload: true,
+    loop: true,
+    volume:0
+  });
+  var sound4 = new Howl({
+    src: ['bard4.mp3'],
+    preload: true,
+    loop: true,
+    volume:0
+  });
+  var sound5 = new Howl({
+    src: ['bard5.mp3'],
+    preload: true,
+    loop: true,
+    volume:0
+  });
+  var sound6 = new Howl({
+    src: ['bard6.mp3'],
+    preload: true,
+    loop: true,
+    volume:0
+  });
+  soundarray.sounds[0] = sound1;
+  sound1.volume(0);
+  soundarray.sounds[1] = sound2;
+  sound2.volume(0);
+  soundarray.sounds[2] = sound3;
+  sound3.volume(0);
+  soundarray.sounds[3] = sound4;
+  sound4.volume(0);
+  soundarray.sounds[4] = sound5;
+  sound5.volume(0);
+  soundarray.sounds[5] = sound6;
+  sound6.volume(0);
+//$( ".slider" ).slider();
+
+
+
+
+  $("#pbutton").click(function(){
+    if ($("#pbutton").text() == "play"){
+      sound1.play();
+      sound2.play();
+      sound3.play();
+      sound4.play();
+      sound5.play();
+      sound6.play();
+      $("#pbutton").text("pause");
+    }
+    else{
+      sound1.pause();
+      sound2.pause();
+      sound3.pause();
+      sound4.pause();
+      sound5.pause();
+      sound6.pause();
+      $("#pbutton").text("play");
+    }
+
+     });
+
+
+
+
+
+
+});
+
+function changevol(i,amt){
+
+soundarray.sounds[i].volume(amt/100);
+}
+
+function toggle(i){
+  console.log(soundarray.sounds[i]._volume);
+  soundarray.sounds[i].volume(1-soundarray.sounds[i]._volume);
+  console.log(soundarray.sounds[i]._volume);
+}
+
+
+</script>
+</body>
+</html>
