@@ -1,0 +1,277 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Jacob's Sheep Manager</title>
+       
+        <style type="text/css">
+            body{
+                background-color:#41980a;
+                margin:0;
+                padding:0;
+            }
+        
+            #containerDiv{
+                width:100%;
+                height:100%;
+            }
+            #gridDiv{
+                padding-top:1em;
+                height:90%;
+                aspect-ratio: 1;
+                margin: 0 auto;
+            }
+      
+
+        </style>
+         <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="containerDiv">
+            <div id="gridDiv">
+                <div class="window" style="width:100%;height:100%;position:relative;">
+                    <div class="title-bar">
+                      <div class="title-bar-text">Jacob's Sheep Manager</div>
+                    </div>
+                    <div class="window-body" >
+                <BR>
+                        <menu role="tablist" id="tmenu">
+                          <li role="tab" aria-selected="true"><a href="#" onclick="clickTab(0);">Farm Overview</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(1);">Pasture Manager</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Manager</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(3);">Settings</a></li>
+                      
+                        </menu>
+                        <div class="window" role="tabpanel">
+                          <div class="window-body" id="tabbody" style="padding:1em;">
+<!-- begin tab view-->
+
+
+
+
+
+                    <!-- end tab view-->
+                          </div>
+                        </div><hr>
+<!-- end window content-->
+                    </div>
+                    <div class="status-bar">
+                      <p class="status-bar-field">GenesOS 30.29-30.43</p>
+                      <p class="status-bar-field" id="scount">Total Sheep:</p>
+                      <p class="status-bar-field" style="text-align:right">Registered to Laban the Aramean</p>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    <script>
+    //vars
+    
+
+   var gd;
+   var tb = document.getElementById("tabbody");
+   var tm = document.getElementById("tmenu");
+   var sc = document.getElementById("scount");
+
+    //main
+    
+    init();
+
+    function init(){
+       
+       
+        game();
+        clickTab(0);
+    }
+
+
+
+    function game(){
+       gd = new gameData();
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
+       gd.curPid = 2;
+       addNewSheep();
+      
+       
+
+    }
+
+    function clickTab(tid){
+        tb.innerHTML = "";
+       
+        for (let t of tm.children){
+            t.ariaSelected = false;
+        }
+        tm.children[tid].ariaSelected = true;
+
+        switch (tid) {
+            case 0:
+                tb.innerHTML = tid;
+                renderFarmOverview();
+                break;
+            case 1:
+                tb.innerHTML = tid;
+                renderPastureView();
+                break;
+            case 2:
+                tb.innerHTML = tid;
+                break;
+            case 3:
+               tb.innerHTML = tid;
+                break;
+            case 4:
+               tb.innerHTML = tid;
+                break;
+            case 5:
+                tb.innerHTML = tid;
+                break;
+            }
+
+        tb.innerHTML += "<BR><BR>";
+
+    }
+
+    function renderFarmOverview(){
+        var out = "";
+        out += renderAllSheepList();
+        tb.innerHTML = out;
+        return out;
+    }
+    function changePastureMenu(){
+        var pm = document.getElementById("pselector");
+      
+        gd.curPid = pm.selectedIndex;
+        renderPastureView();
+    }
+
+    function renderPastureView(){
+        var out = `
+        <select id="pselector" oninput='changePastureMenu()'>
+        <option ` + (gd.curPid==0 ? "selected" : "") + ` id='ps0'>` + gd.pastures[0].name + `</option>
+        <option ` + (gd.curPid==1 ? "selected" : "") + ` id='ps1'>` + gd.pastures[1].name + `</option>
+        <option ` + (gd.curPid==2 ? "selected" : "") + ` id='ps2'>` + gd.pastures[2].name + `</option>
+        <option ` + (gd.curPid==3 ? "selected" : "") + ` id='ps3'>` + gd.pastures[3].name + `</option>
+        </select>
+        <BR>`;
+
+        out += renderPastureList(gd.curPid);
+        tb.innerHTML = out;
+        return out;
+    }
+
+
+
+
+    function addNewSheep(cx = .2, cy = .2, female=true){
+        var s = new sheep(cx, cy, -1, -1, -1, female)
+        console.log("baa! made " + s.name);
+        gd.sheeps[s.id] = s;
+        gd.pastures[gd.curPid].heldSheepIds.push(s.id);
+       s.pid = gd.curPid;
+       gd.curSid = s.id;
+       sc.innerHTML = "Total Sheep: " + gd.sheeps.length;
+        
+    }
+
+    function moveSheep(sid, newpid){
+        newpid = Math.min(newpid,gd.pastures.length-1)
+        newpid = Math.max(0,newpid);
+        var s = gd.sheeps[sid];
+        rem(gd.pastures[s.pid].heldSheepIds, sid)
+        gd.pastures[newpid].heldSheepIds.push(sid);
+        s.pid = newpid;
+    }
+
+    function renderPastureList(pid){
+        var out = "";
+        var p = gd.pastures[pid];
+        out += p.name + "<BR><HR>";
+        for (let si of p.heldSheepIds){
+            var s = gd.sheeps[si];
+            out += s.id + " - " + s.name + "<br>";
+        }
+        return out;
+    }
+
+    function renderAllSheepList(){
+        var out = "<pre>";
+        out += "All Sheep" + "<BR><HR>";
+        for (let s of gd.sheeps){
+            
+            out += s.id + " - " + s.name + "<br>";
+        }
+        out += "</pre>"
+        return out;
+    }
+
+    function renderSheep(sid){
+        var out = "";
+        var s = gd.sheeps[sid];
+        out += s.id + " - " + s.name + "<br><hr><BR>";
+        out += "age: " + s.age + "<BR>";
+        out += s.cx + "," + s.cy;
+        return out;
+    }
+
+
+
+
+    // models
+
+    function gameData(){
+        this.sheepIndex = 0;
+        this.curPid = 0;
+        this.curSid = 0;
+        this.pastures = [];
+        this.pastures.push(new pasture(0));
+        this.pastures.push(new pasture(1));
+        this.pastures.push(new pasture(2));
+        this.pastures.push(new pasture(3));
+        this.sheeps = [];
+    }
+
+
+    function pasture(pid){
+        this.pid = pid;
+        this.name = "Pasture " + (this.pid+1);
+        this.heldSheepIds = []
+        this.maxSheep = 12;
+    }
+   
+
+   function sheep( cx = .2, cy = .2,g1 = -1, g2 = -1, g3 = -1, female=true,name = "willow"){
+    this.name = name;
+    this.id = gd.sheepIndex;
+    gd.sheepIndex+=1;
+    this.cx = cx;
+    this.cy = cy;
+    this.pid = gd.curPid;
+    this.age = 0;
+    this.female = female;
+    if (g1 == -1) this.g1 = randint(0,10);
+    if (g2 == -1) this.g2 = randint(0,10);
+    if (g3 == -1) this.g3 = randint(0,10);
+    this.dv = Math.random();
+    
+    
+   }
+
+        //utility
+
+ function randint(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function rem(a, ele) {
+    a.forEach((item, index) => {
+        if (item === ele) {
+            a.splice(index, 1);
+        }
+    });
+    return a;
+}
+
+    </script>
+    </body>
+</html>

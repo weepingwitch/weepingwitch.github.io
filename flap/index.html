@@ -1,0 +1,166 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>flap</title>
+
+        <style type="text/css">
+            body{
+                background-color:#70809e;
+                margin:0;
+                padding:0;
+            }
+            canvas{
+                image-rendering: pixelated;
+                image-rendering: -moz-crisp-edges;
+                image-rendering: crisp-edges;
+                position:absolute;
+                top:0;
+                left:0;
+            }
+            #containerDiv{
+                width:100%;
+                height:100%;
+            }
+            #gridDiv{
+                height:80%;
+                margin: 0 auto;
+            }
+            #canvasDiv{
+                position:relative;
+                max-width: 100%;
+                max-height:100%;
+                aspect-ratio: 1/1;
+                margin:0 auto;
+                background-color: #abc4b0;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="containerDiv">
+            <div id="gridDiv">
+                <div id="canvasDiv">
+                </div>
+            </div>
+        </div>
+    <script>
+    //vars
+    
+    var canvas;
+    var ctx;
+
+    //main
+    
+    init();
+
+    function init(){
+        makeCanvas();
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        generateWorld();
+        game();
+    }
+
+
+
+    function game(){
+        let rotation = 0;
+        setInterval(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let triangle = new Triangle(new Vec3(-1, 1, 0), new Vec3(0, -1, 0), new Vec3(1, 1, 0));
+            triangle = multiplyTriMatrix(triangle, generateWorld({x: 64, y: 64, z: 1}, {x: 0, y: rotation, z: 0}, {x: canvas.width / 2, y: canvas.height / 2, z: 0})); // Calculate the positions of each triangle vertex
+            rotation += 0.1;
+            drawTriangle(triangle);
+        }, 50);
+    }
+
+    function makeCanvas(){
+        canvasDiv = document.getElementById("canvasDiv");
+        canvasw = canvasDiv.clientWidth;
+        canvasDiv.innerHTML=
+        "<canvas id='bgCanvas' style='z-index:1;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>" +
+        "<canvas id='canvas' style='z-index:2;width:" + canvasw + ";height:" + canvasw + ";'height='164' width='164'></canvas>";
+    }
+
+
+
+
+
+
+
+
+    // models
+
+    function Vec3(x=0,y=0,z=0,w=1) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+    }
+
+    function Matrix(rows = 0, columns = 0) {
+        this.rows = rows;
+        this.columns = columns;
+        this.value = Array.from({ length: rows }, () => Array(columns).fill(0));
+    }
+
+    function Triangle(v1 = new Vec3(), v2 = new Vec3(), v3 = new Vec3()) {
+        this.vertices = [new Vec3(v1.x, v1.y, v1.z), new Vec3(v2.x, v2.y, v2.z), new Vec3(v3.x, v3.y, v3.z)];
+    }
+
+
+        //utility
+
+    function drawTriangle(triangle, color) {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(triangle.vertices[0].x, triangle.vertices[0].y);
+        ctx.lineTo(triangle.vertices[1].x, triangle.vertices[1].y);
+        ctx.lineTo(triangle.vertices[2].x, triangle.vertices[2].y);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function generateWorld(scale = new Vec3(1, 1, 1), rotation = new Vec3(), translation = new Vec3()) {
+        const result = new Matrix(4, 4);
+        const sinx = Math.sin(rotation.x);
+        const siny = Math.sin(rotation.y);
+        const sinz = Math.sin(rotation.z);
+        const cosx = Math.cos(rotation.x);
+        const cosy = Math.cos(rotation.y);
+        const cosz = Math.cos(rotation.z);
+        result.value = [
+            [cosy * cosz * scale.x, cosy * sinz * scale.x, siny * scale.x, 0],
+            [(sinx * siny * cosz + cosx * -sinz) * scale.y, (sinx * siny * sinz + cosx * cosz) * scale.y, -sinx * cosy * scale.y, 0],
+            [(cosx * -siny * cosz - sinx * sinz) * scale.z, (cosx * -siny * sinz + sinx * cosz) * scale.z, cosx * cosy * scale.z, 0],
+            [translation.x, translation.y, translation.z, 1]
+        ];
+        return result;
+    }
+
+     function multiplyMatrix(vector, matrix) {
+        const result = { x: 0, y: 0, z: 0, w: 0 };
+        result.x = vector.x * matrix[0][0] + vector.y * matrix[1][0] + vector.z * matrix[2][0] + vector.w * matrix[3][0];
+        result.y = vector.x * matrix[0][1] + vector.y * matrix[1][1] + vector.z * matrix[2][1] + vector.w * matrix[3][1];
+        result.z = vector.x * matrix[0][2] + vector.y * matrix[1][2] + vector.z * matrix[2][2] + vector.w * matrix[3][2];
+        result.w = vector.x * matrix[0][3] + vector.y * matrix[1][3] + vector.z * matrix[2][3] + vector.w * matrix[3][3];
+        return result;
+    }
+
+    function multiplyTriMatrix(triangle = new Triangle(), matrix = new Matrix(4, 4)) {
+        const result = new Triangle();
+        for (let i = 0; i < 3; i++) {
+            const vertex = triangle.vertices[i];
+            result.vertices[i].x = vertex.x * matrix.value[0][0] + vertex.y * matrix.value[1][0] + vertex.z * matrix.value[2][0] + vertex.w * matrix.value[3][0];
+            result.vertices[i].y = vertex.x * matrix.value[0][1] + vertex.y * matrix.value[1][1] + vertex.z * matrix.value[2][1] + vertex.w * matrix.value[3][1];
+            result.vertices[i].z = vertex.x * matrix.value[0][2] + vertex.y * matrix.value[1][2] + vertex.z * matrix.value[2][2] + vertex.w * matrix.value[3][2];
+            result.vertices[i].w = vertex.x * matrix.value[0][3] + vertex.y * matrix.value[1][3] + vertex.z * matrix.value[2][3] + vertex.w * matrix.value[3][3];
+        }
+        return result;
+    }
+    </script>
+    </body>
+</html>
