@@ -1,26 +1,51 @@
-<html>
+<!doctype html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>Jacob's Sheep Manager</title>
        
         <style type="text/css">
+            html{
+                width:100%;
+                height:100%;
+            }
             body{
                 background-color:#41980a;
                 margin:0;
                 padding:0;
+                width:100%;
+                height:100%;
+
             }
-        
-            #containerDiv{
+
+             #containerDiv{
                 width:100%;
                 height:100%;
             }
-            #gridDiv{
+            
+
+            @media (max-aspect-ratio: 1/1) {
+                #gridDiv{
                 padding-top:1em;
-                height:90%;
+                width:100%;
                 aspect-ratio: 1;
                 margin: 0 auto;
+                }
             }
+
+            @media (min-aspect-ratio: 1/1) {
+
+              
+                #gridDiv{
+                    padding-top:1em;
+                    height:90%;
+                    aspect-ratio: 1;
+                    margin: 0 auto;
+                }
+
+            }
+        
+           
       
 
         </style>
@@ -38,8 +63,9 @@
                         <menu role="tablist" id="tmenu">
                           <li role="tab" aria-selected="true"><a href="#" onclick="clickTab(0);">Farm Overview</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(1);">Pasture Manager</a></li>
-                          <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Manager</a></li>
-                          <li role="tab"><a href="#" onclick="clickTab(3);">Settings</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Status</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(3);">Market</a></li>
+                          
                       
                         </menu>
                         <div class="window" role="tabpanel">
@@ -115,7 +141,7 @@
                 renderPastureView();
                 break;
             case 2:
-                tb.innerHTML = tid;
+               renderSheepView();
                 break;
             case 3:
                tb.innerHTML = tid;
@@ -153,13 +179,21 @@
         <option ` + (gd.curPid==2 ? "selected" : "") + ` id='ps2'>` + gd.pastures[2].name + `</option>
         <option ` + (gd.curPid==3 ? "selected" : "") + ` id='ps3'>` + gd.pastures[3].name + `</option>
         </select>
-        <BR>`;
+        <BR><HR><BR>Sheep in pasture:<BR>`;
 
         out += renderPastureList(gd.curPid);
         tb.innerHTML = out;
         return out;
     }
 
+    function renderSheepView(){
+        var s = gd.sheeps[gd.curSid];
+        var out = `<b>` + s.name + `</b>`;
+        
+
+        tb.innerHTML = out;
+        return out;
+    }
 
 
 
@@ -186,7 +220,6 @@
     function renderPastureList(pid){
         var out = "";
         var p = gd.pastures[pid];
-        out += p.name + "<BR><HR>";
         for (let si of p.heldSheepIds){
             var s = gd.sheeps[si];
             out += s.id + " - " + s.name + "<br>";
