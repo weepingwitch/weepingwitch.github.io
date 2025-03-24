@@ -171,6 +171,11 @@
         renderPastureView();
     }
 
+    function changeSheepPastureMenu(){
+        var psm = document.getElementById("pmselector");
+        moveSheep(gd.curSid,psm.selectedIndex);
+    }
+
     function renderPastureView(){
         var out = `
         <select id="pselector" oninput='changePastureMenu()'>
@@ -188,8 +193,16 @@
 
     function renderSheepView(){
         var s = gd.sheeps[gd.curSid];
-        var out = `<b>` + s.name + `</b>`;
-        
+        var out = "<b>" + s.name + "</b>, sheep #" + s.id;
+        out += "<BR>" + ((s.female)? "female" : "male") + ", " + s.age + " weeks old<BR>";
+        out += "Assigned pasture: "
+        out += `
+        <select id="pmselector" oninput='changeSheepPastureMenu()'>
+        <option ` + (s.pid==0 ? "selected" : "") + ` id='ps0'>` + gd.pastures[0].name + `</option>
+        <option ` + (s.pid==1 ? "selected" : "") + ` id='ps1'>` + gd.pastures[1].name + `</option>
+        <option ` + (s.pid==2 ? "selected" : "") + ` id='ps2'>` + gd.pastures[2].name + `</option>
+        <option ` + (s.pid==3 ? "selected" : "") + ` id='ps3'>` + gd.pastures[3].name + `</option>
+        </select>`;
 
         tb.innerHTML = out;
         return out;
@@ -212,9 +225,11 @@
         newpid = Math.min(newpid,gd.pastures.length-1)
         newpid = Math.max(0,newpid);
         var s = gd.sheeps[sid];
+        var oldpid = s.pid;
         rem(gd.pastures[s.pid].heldSheepIds, sid)
         gd.pastures[newpid].heldSheepIds.push(sid);
         s.pid = newpid;
+        log("moved " + s.name + " from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
     }
 
     function renderPastureList(pid){
@@ -291,6 +306,10 @@
    }
 
         //utility
+
+function log(s){
+    console.log(s);
+}
 
  function randint(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
