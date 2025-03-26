@@ -82,7 +82,7 @@
                           <li role="tab" aria-selected="true"><a href="#" onclick="clickTab(0);">Farm Overview</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(1);">Pasture Manager</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Status</a></li>
-                          <li role="tab"><a href="#" onclick="clickTab(3);">Market</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(3);">Birth Log</a></li>
                           
                       
                         </menu>
@@ -134,10 +134,19 @@
        addNewSheep();
        addNewSheep();
        addNewSheep();
-       gd.curPid = 1;
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
+      
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
        addNewSheep();
        gd.curPid = 0;
-      breedSheep(gd.sheeps[0],gd.sheeps[1]);
+     
        
 
     }
@@ -163,7 +172,7 @@
                renderSheepView();
                 break;
             case 3:
-               tb.innerHTML = tid;
+               tb.innerHTML = gd.longlog;
                 break;
             case 4:
                tb.innerHTML = tid;
@@ -190,6 +199,9 @@
     function renderFarmOverview(){
         var out = "";
         out += renderAllSheepList();
+
+        out += "<BR><HR><BR>";
+        out += "<button onclick='breedall()'>breed</button>"
         tb.innerHTML = out;
         return out;
     }
@@ -221,11 +233,25 @@
 
     }
 
+    function nextsheepall(){
+        var bsid = gd.curSid += 1;
+        if (bsid > gd.sheeps.length - 1) bsid = 0;
+        gd.curSid = bsid;
+        renderSheepView();
+    }
+
     function prevsheep(){
         var bsid = gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds.indexOf(gd.curSid);
         bsid -= 1;
         if (bsid < 0) bsid = (gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds.length - 1);
         gd.curSid =  gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds[bsid];
+        renderSheepView();
+    }
+
+    function prevsheepall(){
+        var bsid = gd.curSid -= 1;
+        if (bsid < 0) bsid =  gd.sheeps.length - 1;
+        gd.curSid = bsid;
         renderSheepView();
     }
 
@@ -236,7 +262,7 @@
 
     function renderPastureView(){
         var out = ` <input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /> - 
-        <button onclick='prevpast()'>prev</button><button onclick="nextpast()">next</button>
+        <button onclick='prevpast()'>prev pasture</button><button onclick="nextpast()">next pasture</button>
         <BR><HR><BR>Sheep in pasture:<BR>`;
 
         out += renderPastureList(gd.curPid);
@@ -247,7 +273,8 @@
     function renderSheepView(){
         var s = gd.sheeps[gd.curSid];
         var out = "<b>  <input id='sname' type='text' value='" + s.name + "' onchange='renamesheep()' /></b> - #" + s.id;
-        out += ` <button onclick='prevsheep()'>prev</button><button onclick="nextsheep()">next</button>
+        out += ` <BR><button onclick='prevsheep()'>prev in pasture</button><button onclick="nextsheep()">next in pasture</button>
+            <BR><button onclick='prevsheepall()'>prev overall</button><button onclick="nextsheepall()">next overall</button>
    `;
         out += "<BR>" + ((s.female)? "female" : "male") + ", " + s.age + " weeks old<BR>";
             if (s.sx || s.sy) { out += "solid "} else {out += "spotted "}
@@ -262,7 +289,23 @@
         <option ` + (s.pid==2 ? "selected" : "") + ` id='ps2'>` + gd.pastures[2].name + `</option>
         <option ` + (s.pid==3 ? "selected" : "") + ` id='ps3'>` + gd.pastures[3].name + `</option>
         </select>
+
+      
+
         `;
+        if (s.msi != -1 && s.fsi != -1){
+            out += "<BR><BR><a onclick='selectandviewsheep(" + s.fsi + ")'>father: " + gd.sheeps[s.fsi].name + "</a> - ";
+            out += "<a onclick='selectandviewsheep(" + s.msi + ")'>mother: " + gd.sheeps[s.msi].name + "</a>";
+            
+        }
+        if (s.kids.length > 0){
+            out += "<BR><BR>children: <ul>"
+            for (let sk of s.kids){
+                out += "<li onclick='selectandviewsheep(" + sk + ")'>" + gd.sheeps[sk].name + "</li>";
+            }
+            out += "</ul";
+        }
+       
 
         //out += "spotg: " + s.sx + "," + s.sy + "<BR>";
         //out +="colorg: " +  s.cx + "," + s.cy + "<BR>";
@@ -291,7 +334,7 @@
 
     function addNewSheep(){
         var s = new sheep( )
-        log("baa! made " + s.name);
+        //log("baa! made " + s.name);
         gd.sheeps[s.id] = s;
         gd.pastures[gd.curPid].heldSheepIds.push(s.id);
        s.pid = gd.curPid;
@@ -309,7 +352,11 @@
         bsy = randfrom([s1.sy,s2.sy]);
 
         var bs = new sheep(bcx,bcy,bsx,bsy);
-        log("baa! made " + bs.name);
+        log("baa! " + s1.name + " and " + s2.name + " gave birth to " + bs.name);
+        bs.fsi = s1.id;
+        bs.msi = s2.id;
+        s1.kids.push(bs.id);
+        s2.kids.push(bs.id);
         gd.curPid = s1.pid;
         gd.sheeps[bs.id] = bs;
         gd.pastures[gd.curPid].heldSheepIds.push(bs.id);
@@ -322,7 +369,63 @@
 
 
     function breedall(){
+        for (let p of gd.pastures){
+            breedPasture(p);
+            p.heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
+        }
+        log("<HR>");
         
+        clickTab(3);
+    }
+
+
+    function breedPasture(p){
+        console.log("breeding " + p.name);
+        var ms = [];
+        var fs = [];
+        p.heldSheepIds = shuffle(p.heldSheepIds)
+        for (let si of p.heldSheepIds){
+        
+            var s = gd.sheeps[si];
+            
+            if (s.female){
+               
+               if ((fs.length > 0 ) && (s.sexy > gd.sheeps[fs[0]].sexy)){
+                
+                fs.unshift(si);
+               }else{
+                
+                fs.push(si);
+               }
+            }
+            else{
+            if ((ms.length > 0 ) && (s.sexy > gd.sheeps[ms[0]].sexy)){
+                ms.unshift(si);
+               }else{
+                ms.push(si);
+               }
+            }
+        }
+       console.log(ms);
+        console.log(fs);
+
+        var done = false;
+        if (fs.length <= 0 || ms.length <= 0){
+                done = true;
+            }
+        while (!done){
+            var sbf = gd.sheeps[fs.shift()];
+            var sbm = gd.sheeps[ms.shift()];
+            breedSheep(sbf,sbm);
+
+
+
+            if (fs.length <= 0 || ms.length <= 0){
+                done = true;
+            }
+        }
+
+
     }
 
     function moveSheep(sid, newpid){
@@ -343,7 +446,7 @@
         var p = gd.pastures[pid];
         for (let si of p.heldSheepIds){
             var s = gd.sheeps[si];
-            out +=  "<li onclick='selectandviewsheep(" + s.id + ")'>" + s.id + " -" + s.name + "</li>";
+            out +=  "<li onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</li>";
         }
         out += "</ul>"
         return out;
@@ -358,7 +461,7 @@
 
             for (let si of p.heldSheepIds){
                 var s = gd.sheeps[si];
-                out += "<li onclick='selectandviewsheep(" + s.id + ")'>" + s.id + " - " + s.name + "</li>";
+                out += "<li onclick='selectandviewsheep(" + s.id + ")'>" +  s.name + "</li>";
 
             }
 
@@ -393,6 +496,7 @@
         this.pastures.push(new pasture(2));
         this.pastures.push(new pasture(3));
         this.sheeps = [];
+        this.longlog = "";
     }
 
 
@@ -415,8 +519,8 @@
     this.sy = sy;
     if (cx == -1) this.cx = ((randint(0,10)>5));
     if (cy == -1) this.cy = ((randint(0,10)>5));
-    if (sx == -1) this.sx = ((randint(0,10)>3));
-    if (sy == -1) this.sy = ((randint(0,10)>3));
+    if (sx == -1) this.sx = ((randint(0,10)>4));
+    if (sy == -1) this.sy = ((randint(0,10)>4));
     this.pid = gd.curPid;
     this.age = 0;
     this.female = ((randint(0,10)>5));
@@ -427,6 +531,10 @@
     if (g2 == -1) this.g2 = randint(0,10);
     if (g3 == -1) this.g3 = randint(0,10);
     this.dv = Math.random();
+    this.sexy = this.g1+this.g2-this.g3;
+    this.fsi = -1;
+    this.msi = -1;
+    this.kids = [];
     
     
    }
@@ -435,6 +543,7 @@
 
 function log(s){
     console.log(s);
+    gd.longlog += s + "<BR>";
 }
 
  function randint(min, max) {
@@ -455,6 +564,16 @@ function rem(a, ele) {
     });
     return a;
 }
+
+
+
+function shuffle (array) { 
+  for (let i = array.length - 1; i > 0; i--) { 
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [array[i], array[j]] = [array[j], array[i]]; 
+  } 
+  return array; 
+}; 
 
     </script>
     </body>
