@@ -273,8 +273,8 @@
     function renderSheepView(){
         var s = gd.sheeps[gd.curSid];
         var out = "<b>  <input id='sname' type='text' value='" + s.name + "' onchange='renamesheep()' /></b> - #" + s.id;
-        out += ` <BR><button onclick='prevsheep()'>prev in pasture</button><button onclick="nextsheep()">next in pasture</button>
-            <BR><button onclick='prevsheepall()'>prev overall</button><button onclick="nextsheepall()">next overall</button>
+        out += `
+            <BR><button onclick='prevsheepall()'>prev sheep</button><button onclick="nextsheepall()">next sheep</button>
    `;
         out += "<BR>" + ((s.female)? "female" : "male") + ", " + s.age + " weeks old<BR>";
             if (s.sx || s.sy) { out += "solid "} else {out += "spotted "}
@@ -437,7 +437,7 @@
         gd.pastures[newpid].heldSheepIds.push(sid);
         s.pid = newpid;
         log("moved " + s.name + " from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
-        
+        gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
         clickTab(2);
     }
 
@@ -512,7 +512,7 @@
     
     this.id = gd.sheepIndex;
     gd.sheepIndex+=1;
-    this.name = "sheep"+this.id;
+    this.name = "sheep "+this.id;
     this.cx = cx;
     this.cy = cy;
     this.sx = sx;
