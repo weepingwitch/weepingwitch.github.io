@@ -30,6 +30,12 @@
                 
             }
 
+            .mobile2 { display:flex;width:100%;}
+            .mobile2 > div {
+                    width:48%;
+                }
+
+
             .item1 { grid-area: header; }
             .item2 { grid-area: menu; }
             .item3 { grid-area: main; }
@@ -39,7 +45,7 @@
             .uigrid{
                 display: grid;
                 grid-template-areas:
-                'header header header header menu menu'
+                'header header header menu menu menu'
                 'main main main right right right'
                 'footer footer footer footer footer footer';
                 grid-gap: 4px;
@@ -63,6 +69,13 @@
                 width:95%;
                
                 }
+
+                .mobile2 { display:flex;height:100%;flex-direction: column;}
+
+                .mobile2 > div {
+                    width:100%;
+                }
+
             }
 
             @media (aspect-ratio: 1/1) {
@@ -104,7 +117,7 @@
                           <li role="tab" aria-selected="true"><a href="#" onclick="clickTab(0);">Farm Overview</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(1);">Pasture Manager</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Status</a></li>
-                          <li role="tab"><a href="#" onclick="clickTab(3);">Birth Log</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(3);">Farm Log</a></li>
                           
                       
                         </menu>
@@ -134,9 +147,11 @@
     
 
    var gd;
+   var curtab = 0;
    var tb = document.getElementById("tabbody");
    var tm = document.getElementById("tmenu");
    var sc = document.getElementById("scount");
+   var firstrender = true;
 
     //main
     
@@ -153,20 +168,23 @@
 
     function game(){
        gd = new gameData();
+       
+       
+       addNewSheep(true,true);
+       addNewSheep(false,true);
+       addNewSheep(true, false);
+       addNewSheep(true, false);
+       addNewSheep(false,true);
+       addNewSheep(true,true);
+       addNewSheep(true,true);
+       addNewSheep(false,false);
        addNewSheep();
        addNewSheep();
        addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
+       
+       
       breedall();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
+      
        breedall();
        breedall();
        gd.curPid = 0;
@@ -177,6 +195,7 @@
 
     function clickTab(tid){
         tb.innerHTML = "";
+        curtab = tid;
        
         for (let t of tm.children){
             t.ariaSelected = false;
@@ -185,18 +204,18 @@
 
         switch (tid) {
             case 0:
-                tb.innerHTML = tid;
+              
                 renderFarmOverview();
                 break;
             case 1:
-                tb.innerHTML = tid;
+              
                 renderPastureView();
                 break;
             case 2:
                renderSheepView();
                 break;
             case 3:
-               tb.innerHTML = gd.longlog;
+               renderLogView();
                 break;
             case 4:
                tb.innerHTML = tid;
@@ -221,17 +240,45 @@
     }
 
     function renderFarmOverview(){
-        var out = "";
+        var out = "<div class='mobile2' ><div >";
         //out += renderAllSheepList();
         for (let p of gd.pastures){
             out += "<button onclick='selectandviewpasture(" + p.id + ")'>" + p.name + "</button><BR>";
             out += `<div class="progress-indicator segmented">
-  <span class="progress-indicator-bar" style="width:` + (p.heldSheepIds.length/gd.pm)*100   + `%;" />
+  <span class="progress-indicator-bar" style="width:` + (p.heldSheepIds.length/p.maxSheep)*100   + `%;" />
 </div>`;    
         }
 
         out += "<BR><HR><BR>";
-        out += "<button class='default' onclick='breedall()'>Advance time</button>"
+        out += "<button class='default' onclick='advancetime()'>Advance time</button><BR><BR>"
+        out += "</div><div style='width:4%;'></div><div >";
+            
+            out += "<ul class='tree-view'>";
+    var wi = 0;
+for (var w of gd.longlog){
+    out += "<li> ";
+        
+    if (wi == gd.time || firstrender){
+        out += "<details open>";
+    }
+    else{
+        out += "<details> ";
+    }
+   
+        
+    out += "<summary>week " + wi + "</summary>";
+        out += "<ul>";
+            for (var wu of w){
+                out += "<li>" + wu + "</li>"
+            }
+        out += "</ul></details>"
+
+    out += "</li>"
+    wi += 1;
+}
+out += "</ul>"
+            
+        out += "</div></div>"
         tb.innerHTML = out;
         return out;
     }
@@ -288,6 +335,8 @@
     function changeSheepPastureMenu(){
         var psm = document.getElementById("pmselector");
         moveSheep(gd.curSid,psm.selectedIndex);
+
+
     }
 
     function renderPastureView(){
@@ -307,15 +356,20 @@
         out += `<div class="uigrid">
   <div class="item1 window"><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b> - #` + s.id + `</div>
   <div class="item2 window"> <button onclick='prevsheepall()'>prev sheep</button><button onclick="nextsheepall()">next sheep</button></div>
-  <div class="item3 window">` + ((s.female)? "female" : "male") + ", " + s.age + " weeks old<BR>";
-
+  <div class="item3 window">` + ((s.female)? "female" : "male") + ", ";
+    if (s.retired) {
+        out += "retired <BR>";
+    }
+    else{
+        out += s.age + " weeks old" + "<BR>";
+        }
     out += s.pattern + " " + s.color;
     out += `</div>
   <div class="item4 window ">`;
     if (s.msi != -1 && s.fsi != -1){
-            out += "<a onclick='selectandviewsheep(" + s.fsi + ")'>father: " + gd.sheeps[s.fsi].name + "</a> - ";
-            out += "<a onclick='selectandviewsheep(" + s.msi + ")'>mother: " + gd.sheeps[s.msi].name + "</a>";
-            
+            out += "<a onclick='selectandviewsheep(" + s.fsi + ")'>mother: " + gd.sheeps[s.fsi].name + "</a> - ";
+            out += "<a onclick='selectandviewsheep(" + s.msi + ")'>father: " + gd.sheeps[s.msi].name + "</a>";
+            out += "<BR>";
         }
         if (s.kids.length > 0){
             out += "children: <ul>"
@@ -328,15 +382,17 @@
     
     out += ` </div>
   <div class="item5 window">`;
-    
-    out += "Assigned pasture: ";
+    if (!s.retired){
+        out += "Assigned pasture: ";
         out += `<button onclick='selectandviewpasture(` + s.pid + `)' > ` + gd.pastures[s.pid].name  +`</button>
         Move to <select id="pmselector" oninput='changeSheepPastureMenu()'>
         <option ` + (s.pid==0 ? "selected" : "") + ` id='ps0'>` + gd.pastures[0].name + `</option>
         <option ` + (s.pid==1 ? "selected" : "") + ` id='ps1'>` + gd.pastures[1].name + `</option>
         <option ` + (s.pid==2 ? "selected" : "") + ` id='ps2'>` + gd.pastures[2].name + `</option>
         <option ` + (s.pid==3 ? "selected" : "") + ` id='ps3'>` + gd.pastures[3].name + `</option>
-        </select>
+        </select>`;
+    }
+   out += `
     </div>
 </div>`;
         
@@ -361,6 +417,41 @@
         return out;
     }
 
+
+
+    function renderLogView(){
+
+var out = "";
+
+out += "<ul class='tree-view'>";
+    var wi = 0;
+for (var w of gd.longlog){
+    out += "<li> ";
+        
+    if (wi == gd.time ){
+        out += "<details open>";
+    }
+    else{
+        out += "<details> ";
+    }
+   
+        
+    out += "<summary>week " + wi + "</summary>";
+        out += "<ul>";
+            for (var wu of w){
+                out += "<li>" + wu + "</li>"
+            }
+        out += "</ul></details>"
+
+    out += "</li>"
+    wi += 1;
+}
+out += "</ul>"
+
+tb.innerHTML = out;
+return out;
+}
+
     function renamesheep(){
         var sn = document.getElementById("sname").value;
         gd.sheeps[gd.curSid].name = sn;
@@ -375,16 +466,25 @@
 
 
 
-    function addNewSheep(){
-        var s = new sheep( )
+    function addNewSheep( sx = -1, sy = -1, cx = -1, cy = -1){
+        var s = new sheep(sx,sy, cx, cy )
         //log("baa! made " + s.name);
         gd.sheeps[s.id] = s;
         gd.pastures[gd.curPid].heldSheepIds.push(s.id);
        s.pid = gd.curPid;
        gd.curSid = s.id;
-       s.age = randint(0,10);
-       sc.innerHTML = "Total Sheep: " + gd.sheeps.length;
+       s.age = randint(0,20);
+       updateSheepCount();
         
+    }
+
+    function updateSheepCount(){
+        gd.numalive = 0;
+        for (let p of gd.pastures){
+            gd.numalive += p.heldSheepIds.length
+        }
+
+        sc.innerHTML = "Total Sheep: " + gd.numalive;
     }
 
 
@@ -406,20 +506,27 @@
         gd.pastures[gd.curPid].heldSheepIds.push(bs.id);
        bs.pid = gd.curPid;
        gd.curSid = bs.id;
-       sc.innerHTML = "Total Sheep: " + gd.sheeps.length;
+       updateSheepCount();
 
     }
 
+function advancetime(){
+    firstrender = false;
 
+     breedall();
+}
 
     function breedall(){
         for (let p of gd.pastures){
             breedPasture(p);
             p.heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
         }
-        log("<HR>");
         
-        clickTab(3);
+        
+        
+        clickTab(0);
+        gd.time += 1;
+        gd.longlog[gd.time]=[];
     }
 
 
@@ -434,30 +541,40 @@
         
             var s = gd.sheeps[si];
             //age check and space check
-           
-            if (s.age > 0 ){
-                if (s.female){
-               
-               if ((fs.length > 0 ) && (s.sexy > gd.sheeps[fs[0]].sexy)){
-                
-                fs.unshift(si);
-               }else{
-                
-                fs.push(si);
-               }
-            }
-            else{
-            if ((ms.length > 0 ) && (s.sexy > gd.sheeps[ms[0]].sexy)){
-                ms.unshift(si);
-               }else{
-                ms.push(si);
-               }
-            }
+
+            if (s.age > 49){
+                log (s.name + " retired to the old sheeps farm.");
+                s.retired = true;
+                rem(p.heldSheepIds, s.id);
+                updateSheepCount();
+
+            }else{
+                if (s.age > 0 ){
+                        if (s.female){
+                    
+                    if ((fs.length > 0 ) && (s.sexy > gd.sheeps[fs[0]].sexy)){
+                        
+                        fs.unshift(si);
+                    }else{
+                        
+                        fs.push(si);
+                    }
+                    }
+                    else{
+                    if ((ms.length > 0 ) && (s.sexy > gd.sheeps[ms[0]].sexy)){
+                        ms.unshift(si);
+                    }else{
+                        ms.push(si);
+                    }
+                    }
             }
             
             //age up sheep
             s.age += 1;
            
+            }
+           
+          
 
 
         }
@@ -473,15 +590,32 @@
             var sbf = gd.sheeps[fs.shift()];
             var sbm = gd.sheeps[ms.shift()];
 
+
+
+            //check for incest
+
+            if (sbf.msi == sbm.id || sbf.fsi == sbm.id || sbm.msi == sbf.id || sbm.fsi == sbf.id ){
+                console.log("didn't breed " + sbf.name + " and " + sbm.name);
+
+                if (fs.length > ms.length) {ms.push(sbm.id)}
+                else {fs.push(sbf.id)}
+                
+
+            }
+            else{
+
             //only breed sometimes
             //can be buffed
-            if (p.heldSheepIds.length < gd.pm)
+            if (p.heldSheepIds.length < p.maxSheep)
         {
             if (randint(0,10) > 5){
                 breedSheep(sbf,sbm);
             }
         }
             
+            }
+
+
             
 
 
@@ -497,14 +631,24 @@
     function moveSheep(sid, newpid){
         newpid = Math.min(newpid,gd.pastures.length-1)
         newpid = Math.max(0,newpid);
-        var s = gd.sheeps[sid];
-        var oldpid = s.pid;
-        rem(gd.pastures[s.pid].heldSheepIds, sid)
-        gd.pastures[newpid].heldSheepIds.push(sid);
-        s.pid = newpid;
-        log("moved " + s.name + " from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
-        gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
-        clickTab(2);
+        if (gd.pastures[newpid].heldSheepIds.length < gd.pastures[newpid].maxSheep){
+            var s = gd.sheeps[sid];
+            if (!s.retired){
+                
+            var oldpid = s.pid;
+            rem(gd.pastures[s.pid].heldSheepIds, sid)
+            gd.pastures[newpid].heldSheepIds.push(sid);
+            s.pid = newpid;
+            log("moved " + s.name + " from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
+            gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
+
+            }
+            
+        }else{
+            log ("pasture " + newpid + " full, couldn't move " + s.name);
+        }
+       
+               clickTab(2);
     }
 
     function renderPastureList(pid){
@@ -553,6 +697,7 @@
     // models
 
     function gameData(){
+        this.time = 0;
         this.sheepIndex = 0;
         this.curPid = 0;
         this.curSid = 0;
@@ -562,8 +707,8 @@
         this.pastures.push(new pasture(2));
         this.pastures.push(new pasture(3));
         this.sheeps = [];
-        this.longlog = "";
-        this.pm = 24;
+        this.longlog = [[]];
+        
     }
 
 
@@ -571,11 +716,11 @@
         this.id = pid;
         this.name = "Pasture " + (this.id+1);
         this.heldSheepIds = []
-        this.maxSheep = 12;
+        this.maxSheep = 24;
     }
    
 
-   function sheep( cx = -1, cy = -1, sx = -1, sy = -1, g1 = -1, g2 = -1, g3 = -1, ){
+   function sheep( sx = -1, sy = -1,  cx = -1, cy = -1, g1 = -1, g2 = -1, g3 = -1, ){
     
     this.id = gd.sheepIndex;
     gd.sheepIndex+=1;
@@ -605,16 +750,92 @@
     this.fsi = -1;
     this.msi = -1;
     this.kids = [];
+    this.retired = false;
     
     
    }
 
         //utility
 
+        window.addEventListener("keydown", function (event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if the event was already processed
+  }
+
+  if (event.shiftKey){
+    switch(event.key){
+        case "Tab":
+        if (curtab > 0) {clickTab(curtab - 1)}
+        else {clickTab(3)}
+
+            break;
+
+            default:
+      return; // Quit when this doesn't handle the key event.
+  
+
+    }
+  }
+  else{
+    switch (event.key) {
+    case "1":
+        if (curtab == 0 || curtab == 1) selectandviewpasture(0)
+      if (curtab == 2) moveSheep(gd.curSid,0);
+      break;
+    case "2":
+    if (curtab == 0 || curtab == 1) selectandviewpasture(1)
+    if (curtab == 2) moveSheep(gd.curSid,1);
+      break;
+    case "3":
+    if (curtab == 0 || curtab == 1) selectandviewpasture(2)
+    if (curtab == 2) moveSheep(gd.curSid,2);
+      break;
+    case "4":
+    if (curtab == 0 || curtab == 1) selectandviewpasture(3)
+    if (curtab == 2) moveSheep(gd.curSid,3);
+      break;
+      case "ArrowLeft":
+        if (curtab == 1) prevpast();
+        if (curtab == 2) prevsheepall();
+      break;
+    case "ArrowRight":
+    if (curtab == 1) nextpast();
+    if (curtab == 2) nextsheepall();
+      break;
+      case "ArrowUp":
+        if (curtab == 1) prevpast();
+        if (curtab == 2) prevsheepall();
+      break;
+    case "ArrowDown":
+    if (curtab == 1) nextpast();
+    if (curtab == 2) nextsheepall();
+      break;
+    case "Tab": 
+        if (curtab < 3) {clickTab(curtab + 1)}
+        else {clickTab(0)}
+
+    break;
+
+
+
+    default:
+      return; // Quit when this doesn't handle the key event.
+  }
+  }
+
+ 
+
+  // Cancel the default action to avoid it being handled twice
+  event.preventDefault();
+}, true);
+
 function log(s){
     console.log(s);
-    gd.longlog += s + "<BR>";
+    gd.longlog[gd.time].push(s);
 }
+
+
+
 
  function randint(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
