@@ -495,7 +495,7 @@ return out;
         bsx = randfrom([s1.sx,s2.sx]);
         bsy = randfrom([s1.sy,s2.sy]);
 
-        var bs = new sheep(bcx,bcy,bsx,bsy);
+        var bs = new sheep(bsx,bsy,bcx,bcy);
         log("baa! " + s1.name + " and " + s2.name + " gave birth to " + bs.name);
         bs.fsi = s1.id;
         bs.msi = s2.id;
