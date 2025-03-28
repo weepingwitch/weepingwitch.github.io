@@ -36,18 +36,20 @@
                 }
 
 
+            .item0 {grid-area: prevb}
             .item1 { grid-area: header; }
-            .item2 { grid-area: menu; }
+            .item2 { grid-area: menu;text-align: right; }
             .item3 { grid-area: main; }
             .item4 { grid-area: right; }
             .item5 { grid-area: footer; }
+            .item6 {grid-area: sellme;}
 
             .uigrid{
                 display: grid;
                 grid-template-areas:
-                'header header header menu menu menu'
+                'prevb header header header header menu'
                 'main main main right right right'
-                'footer footer footer footer footer footer';
+                'footer footer footer footer sellme sellme';
                 grid-gap: 4px;
                 background-color: #e1bf92;
             }
@@ -135,8 +137,13 @@
 <!-- end window content-->
                     </div>
                     <div class="status-bar" style="z-index: 0;">
+                        <p class="status-bar-field">season</p>
+                        <p class="status-bar-field" id="scount">Total Sheep:</p>
+                        <p class="status-bar-field" style="text-align:right">gold</p>
+                      </div>
+                    <div class="status-bar" style="z-index: 0;">
                       <p class="status-bar-field">GenesOS 30.29-30.43</p>
-                      <p class="status-bar-field" id="scount">Total Sheep:</p>
+                      
                       <p class="status-bar-field" style="text-align:right">Registered to Laban</p>
                     </div>
                   </div>
@@ -266,7 +273,7 @@ for (var w of gd.longlog){
     }
    
         
-    out += "<summary>week " + wi + "</summary>";
+    out += "<summary>season " + wi + "</summary>";
         out += "<ul>";
             for (var wu of w){
                 out += "<li>" + wu + "</li>"
@@ -339,9 +346,13 @@ out += "</ul>"
 
     }
 
+    function cpsm(npi){
+        moveSheep(gd.curSid,npi);
+    }
+
     function renderPastureView(){
-        var out = ` <input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /> - 
-        <button onclick='prevpast()'>prev pasture</button><button onclick="nextpast()">next pasture</button>
+        var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev pasture</button></div><div class="item1 window"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /></div>
+        <div class="item2"><button onclick="nextpast()">next pasture</button></div></div>
         <BR><HR><BR>Sheep in pasture:<BR>`;
 
         out += renderPastureList(gd.curPid);
@@ -354,14 +365,22 @@ out += "</ul>"
 
         var out = "";
         out += `<div class="uigrid">
-  <div class="item1 window"><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b> - #` + s.id + `</div>
-  <div class="item2 window"> <button onclick='prevsheepall()'>prev sheep</button><button onclick="nextsheepall()">next sheep</button></div>
+<div class="item0"><button onclick='prevsheepall()'>prev sheep</button></div>
+  <div class="item1 window"><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b> in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button></div>
+  <div class="item2"><button onclick="nextsheepall()">next sheep</button></div>
   <div class="item3 window">` + ((s.female)? "female" : "male") + ", ";
     if (s.retired) {
-        out += "retired <BR>";
+        out += "retired<BR>";
     }
+    
     else{
-        out += s.age + " weeks old" + "<BR>";
+        if (s.sold){
+            out += "sold.<BR>"
+        }
+        else{
+            out += s.age + " seasons old" + "<BR>";
+        }
+        
         }
     out += s.pattern + " " + s.color;
     out += `</div>
@@ -382,18 +401,45 @@ out += "</ul>"
     
     out += ` </div>
   <div class="item5 window">`;
-    if (!s.retired){
-        out += "Assigned pasture: ";
-        out += `<button onclick='selectandviewpasture(` + s.pid + `)' > ` + gd.pastures[s.pid].name  +`</button>
-        Move to <select id="pmselector" oninput='changeSheepPastureMenu()'>
-        <option ` + (s.pid==0 ? "selected" : "") + ` id='ps0'>` + gd.pastures[0].name + `</option>
-        <option ` + (s.pid==1 ? "selected" : "") + ` id='ps1'>` + gd.pastures[1].name + `</option>
-        <option ` + (s.pid==2 ? "selected" : "") + ` id='ps2'>` + gd.pastures[2].name + `</option>
-        <option ` + (s.pid==3 ? "selected" : "") + ` id='ps3'>` + gd.pastures[3].name + `</option>
-        </select>`;
+    if (!s.retired && !s.sold){
+        
+        out += `
+        
+     
+            <form name="pmove">
+            <fieldset>
+                
+  <legend>Assigned to</legend>
+  <div class="field-row">
+    <input id="radio0" ` + ((s.pid==0) ? "checked='checked' " : "" ) + ` type="radio" name="fieldset-example2" value="0" onchange='cpsm(0)' />
+    <label for="radio0">` + gd.pastures[0].name + `</label>
+  </div>
+  <div class="field-row">
+    <input id="radio1"  ` + ((s.pid==1) ? "checked='checked' " : "" ) + ` type="radio" name="fieldset-example2" value="1" onchange='cpsm(1)' />
+    <label for="radio1">` + gd.pastures[1].name + `</label>
+  </div>
+  <div class="field-row">
+    <input id="radio2" ` + ((s.pid==2) ? "checked='checked' " : "" ) + `  type="radio" name="fieldset-example2" value="2" onchange='cpsm(2)' />
+    <label for="radio2">` + gd.pastures[2].name + `</label>
+  </div>
+  <div class="field-row">
+    <input id="radio3" ` + ((s.pid==3) ? "checked='checked' " : "" ) + `  type="radio" name="fieldset-example2" value="3" onchange='cpsm(3)' />
+    <label for="radio3">` + gd.pastures[3].name + `</label>
+  </div>
+
+</fieldset>
+</form>
+        
+        
+        
+        
+        `;
     }
    out += `
-    </div>
+   </div><div class="item6">`;
+   if (!s.retired && !s.sold)  {out += `<button style="color:red;" onclick='sellsheep()'>sell for ` + s.getvalue() + `g</button>`;}
+    
+    out += `</div>
 </div>`;
         
 
@@ -436,7 +482,7 @@ for (var w of gd.longlog){
     }
    
         
-    out += "<summary>week " + wi + "</summary>";
+    out += "<summary>season " + wi + "</summary>";
         out += "<ul>";
             for (var wu of w){
                 out += "<li>" + wu + "</li>"
@@ -494,8 +540,11 @@ return out;
         bcy = randfrom([s1.cy,s2.cy]);
         bsx = randfrom([s1.sx,s2.sx]);
         bsy = randfrom([s1.sy,s2.sy]);
+        bg1 = Math.min(Math.max((((s1.g1 + s2.g1)/2)+randint(-5,5)),0),10);
+        bg2 = Math.min(Math.max((((s1.g2 + s2.g2)/2)+randint(-5,5)),0),10);
+        bg3 = Math.min(Math.max((((s1.g3 + s2.g3)/2)+randint(-5,5)),0),10);
 
-        var bs = new sheep(bsx,bsy,bcx,bcy);
+        var bs = new sheep(bsx,bsy,bcx,bcy,bg1,bg2,bg3);
         log("baa! " + s1.name + " and " + s2.name + " gave birth to " + bs.name);
         bs.fsi = s1.id;
         bs.msi = s2.id;
@@ -514,6 +563,16 @@ function advancetime(){
     firstrender = false;
 
      breedall();
+}
+
+function sellsheep(){
+    gd.sheeps[gd.curSid].sold = true;
+    var s = gd.sheeps[gd.curSid];
+    rem(gd.pastures[s.pid].heldSheepIds,s.id);
+    gd.numalive -= 1;
+    gd.g += s.getvalue();
+    log("sold " + s.name + " for " + s.getvalue() + "g");
+    clickTab(2);
 }
 
     function breedall(){
@@ -542,7 +601,7 @@ function advancetime(){
             var s = gd.sheeps[si];
             //age check and space check
 
-            if (s.age > 49){
+            if (s.age > 24){
                 log (s.name + " retired to the old sheeps farm.");
                 s.retired = true;
                 rem(p.heldSheepIds, s.id);
@@ -708,6 +767,7 @@ function advancetime(){
         this.pastures.push(new pasture(3));
         this.sheeps = [];
         this.longlog = [[]];
+        this.g = 40;
         
     }
 
@@ -745,12 +805,14 @@ function advancetime(){
     if (g1 == -1) this.g1 = randint(0,10);
     if (g2 == -1) this.g2 = randint(0,10);
     if (g3 == -1) this.g3 = randint(0,10);
+    this.getvalue = function(){return Math.floor(((24-this.age) + Math.max(this.g2+this.g3-this.g1,1)+10)/2);}
     this.dv = Math.random();
     this.sexy = this.g1+this.g2-this.g3;
     this.fsi = -1;
     this.msi = -1;
     this.kids = [];
     this.retired = false;
+    this.sold = false;
     
     
    }
