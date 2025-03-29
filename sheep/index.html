@@ -186,8 +186,21 @@
     function init(){
        
        
-        game();
+        tryLoad();
         clickTab(0);
+    }
+
+    function tryLoad(){
+        if (localStorage.getItem("sheeps")!=null){
+            gd = JSON.parse(localStorage.getItem("sheeps"));
+        }
+        else{
+            game();
+        }
+    }
+
+    function saveData(){
+        localStorage.setItem("sheeps",JSON.stringify(gd));
     }
 
 
@@ -252,6 +265,7 @@
     }
 
     function clickTab(tid){
+        saveData();
         tb.style.maxHeight = "" + window.innerHeight*.7 + "px";
         tb.innerHTML = "";
         curtab = tid;
@@ -551,11 +565,16 @@ out += "</ul>"
         }
         out += "<BR>You split the flock according to coat pattern. <BR><BR>Your flock of spotted sheep was worth " + yv + "g,<BR><BR>while Laban's flock of solid-colored sheep was worth " + lv + "g.";
 
-        out += "<BR><HR><BR><button onclick='window.location.reload()'>Try Again?</button></fieldset>";
+        out += "<BR><HR><BR><button onclick='newgame()'>Try Again?</button></fieldset>";
 
 
         document.getElementById("wbody").innerHTML = out;
 
+    }
+
+    function newgame(){
+        localStorage.removeItem("sheeps");
+        window.location.reload();
     }
 
     function renderPastureView(){
