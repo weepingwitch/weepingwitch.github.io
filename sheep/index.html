@@ -1,88 +1,49 @@
 <!doctype html>
+
+<!-- hello i am willow and i made this sheep game. -->
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">         <title>Jacob's Sheep Manager</title>         <style type="text/css">
-            /*! 98.css v0.1.20 - https://github.com/jdan/98.css */.vertical-bar,button,input[type=reset],input[type=submit]{box-shadow:var(--border-raised-outer),var(--border-raised-inner)}.status-bar,.title-bar,.title-bar-controls{display:flex}input[type=checkbox]+label::before,input[type=radio]+label::before{margin-right:var(--radio-label-spacing);content:"";position:absolute}menu[role=tablist],ul.tree-view li{list-style-type:none}u,ul.tree-view a{text-decoration:none}table>tbody>tr>*,table>thead>tr>*{padding:0 var(--grouped-element-spacing)}:root{--text-color:#222222;--surface:#f6d7b0;--button-highlight:#ffffff;--button-face:#eccca2;--button-shadow:#806000;--window-frame:#0a0a0a;--dialog-blue:#806000;--dialog-blue-light:#e1bf92;--dialog-gray:#806000;--dialog-gray-light:#b5b5b5;--link-blue:#0000ff;--element-spacing:8px;--grouped-button-spacing:4px;--grouped-element-spacing:6px;--radio-width:12px;--checkbox-width:13px;--radio-label-spacing:6px;--range-track-height:4px;--range-spacing:10px;--radio-total-width-precalc:var(--radio-width) + var(--radio-label-spacing);--radio-total-width:calc(var(--radio-total-width-precalc));--radio-left:calc(-1 * var(--radio-total-width-precalc));--radio-dot-width:4px;--radio-dot-top:calc(var(--radio-width) / 2 - var(--radio-dot-width) / 2);--radio-dot-left:calc(
-      -1 * (var(--radio-total-width-precalc)) + var(--radio-width) / 2 - var(
-          --radio-dot-width
-        ) / 2
-    );--checkbox-total-width-precalc:var(--checkbox-width) + var(--radio-label-spacing);--checkbox-total-width:calc(var(--checkbox-total-width-precalc));--checkbox-left:calc(-1 * var(--checkbox-total-width-precalc));--checkmark-width:7px;--checkmark-left:3px;--border-width:1px;--border-raised-outer:inset -1px -1px var(--window-frame),inset 1px 1px var(--button-highlight);--border-raised-inner:inset -2px -2px var(--button-shadow),inset 2px 2px var(--button-face);--border-sunken-outer:inset -1px -1px var(--button-highlight),inset 1px 1px var(--window-frame);--border-sunken-inner:inset -2px -2px var(--button-face),inset 2px 2px var(--button-shadow);--default-button-border-raised-outer:inset -2px -2px var(--window-frame),inset 1px 1px var(--window-frame);--default-button-border-raised-inner:inset 2px 2px var(--button-highlight),inset -3px -3px var(--button-shadow),inset 3px 3px var(--button-face);--default-button-border-sunken-outer:inset 2px 2px var(--window-frame),inset -1px -1px var(--window-frame);--default-button-border-sunken-inner:inset -2px -2px var(--button-highlight),inset 3px 3px var(--button-shadow),inset -3px -3px var(--button-face);--border-window-outer:inset -1px -1px var(--window-frame),inset 1px 1px var(--button-face);--border-window-inner:inset -2px -2px var(--button-shadow),inset 2px 2px var(--button-highlight);--border-field:inset -1px -1px var(--button-highlight),inset 1px 1px var(--button-shadow),inset -2px -2px var(--button-face),inset 2px 2px var(--window-frame);--border-tab:inset -1px 0 var(--window-frame),inset 1px 1px var(--button-face),inset -2px 0 var(--button-shadow),inset 2px 2px var(--button-highlight)}body{font-family:monospace,Arial;font-size:12px;color:var(--text-color)}.title-bar,.window,button,input,label,legend,li[role=tab],option,select,table,textarea,ul.tree-view{font-family:monospace,Arial;-webkit-font-smoothing:none;font-size:12px}h1{font-size:5rem}h2{font-size:2.5rem}h3{font-size:2rem}h4{font-size:1.5rem}u{border-bottom:.5px solid #222}button,input[type=reset],input[type=submit]{box-sizing:border-box;border:none;color:transparent;text-shadow:0 0 var(--text-color);background:var(--button-face);border-radius:0;min-width:75px;min-height:23px;padding:0 12px}button.default,input[type=reset].default,input[type=submit].default{box-shadow:var(--default-button-border-raised-outer),var(--default-button-border-raised-inner)}input[type=checkbox]+label::before,pre,ul.tree-view{box-shadow:var(--border-field)}.vertical-bar{width:4px;height:20px;background:#f6d7b0}.window,input[type=checkbox]:active+label::before,input[type=checkbox][disabled]+label::before,legend,table>thead>tr>*{background:var(--surface)}button:not(:disabled):active,input[type=reset]:not(:disabled):active,input[type=submit]:not(:disabled):active{box-shadow:var(--border-sunken-outer),var(--border-sunken-inner);text-shadow:1px 1px var(--text-color)}button.default:not(:disabled):active,input[type=reset].default:not(:disabled):active,input[type=submit].default:not(:disabled):active{box-shadow:var(--default-button-border-sunken-outer),var(--default-button-border-sunken-inner)}@media (not(hover)){button:not(:disabled):hover,input[type=reset]:not(:disabled):hover,input[type=submit]:not(:disabled):hover{box-shadow:var(--border-sunken-outer),var(--border-sunken-inner)}}button:focus,input[type=reset]:focus,input[type=submit]:focus{outline:#000000 dotted 1px;outline-offset:-4px}button::-moz-focus-inner,input[type=reset]::-moz-focus-inner,input[type=submit]::-moz-focus-inner{border:0}:disabled,:disabled+label,input[readonly],input[readonly]+label{color:var(--button-shadow)}select:focus,ul.tree-view a:focus{color:var(--button-highlight)}:disabled+label,button:disabled,input[type=reset]:disabled,input[type=submit]:disabled{text-shadow:1px 1px 0 var(--button-highlight)}.window{box-shadow:var(--border-window-outer),var(--border-window-inner);padding:3px}.title-bar{background:linear-gradient(90deg,var(--dialog-blue),var(--dialog-blue-light));padding:3px 2px 3px 3px;justify-content:space-between;align-items:center}.title-bar.inactive{background:linear-gradient(90deg,var(--dialog-gray),var(--dialog-gray-light))}.title-bar-text{font-weight:700;color:#fff;letter-spacing:0;margin-right:24px}.title-bar-controls button{padding:0;display:block;min-width:16px;min-height:14px}.title-bar-controls button:active{padding:0}.title-bar-controls button:focus,input[type=email]:focus,input[type=number]:focus,input[type=password]:focus,input[type=range]:focus,input[type=search]:focus,input[type=tel]:focus,input[type=text]:focus,menu[role=tablist]>li[aria-selected=true]>a:focus,select:focus,textarea:focus{outline:0}.title-bar-controls button[aria-label=Minimize],.title-bar-controls button[aria-label].minimize{background-image:svg-load("./icon/minimize.svg");background-repeat:no-repeat;background-position:bottom 3px left 4px}.title-bar-controls button[aria-label=Maximize],.title-bar-controls button[aria-label].maximize{background-image:svg-load("./icon/maximize.svg");background-repeat:no-repeat;background-position:top 2px left 3px}.title-bar-controls button[aria-label=Maximize]:disabled,.title-bar-controls button[aria-label].maximize:disabled{background-image:svg-load("./icon/maximize-disabled.svg");background-repeat:no-repeat;background-position:top 2px left 3px}.title-bar-controls button[aria-label=Restore],.title-bar-controls button[aria-label].restore{background-image:svg-load("./icon/restore.svg");background-repeat:no-repeat;background-position:top 2px left 3px}.title-bar-controls button[aria-label=Help],.title-bar-controls button[aria-label].help{background-image:svg-load("./icon/help.svg");background-repeat:no-repeat;background-position:top 2px left 5px}.title-bar-controls button[aria-label=Close],.title-bar-controls button[aria-label].close{margin-left:2px;background-image:svg-load("./icon/close.svg");background-repeat:no-repeat;background-position:top 3px left 4px}.status-bar{margin:0 1px;gap:1px}.status-bar-field{box-shadow:inset -1px -1px #dfdfdf,inset 1px 1px #806000;flex-grow:1;padding:2px 3px;margin:0}.window-body{margin:var(--element-spacing);margin-top:0}fieldset{border-image:svg-load("./icon/groupbox-border.svg") 2;padding:calc(2 * var(--border-width) + var(--element-spacing));padding-block-start:var(--element-spacing);margin:0}.sunken-panel,select:focus option,table{background-color:#fff}.field-row{display:grid;align-items:center}.field-row-stacked *+*,[class^=field-row]+[class^=field-row]{margin-top:var(--grouped-element-spacing)}.field-row>*+*{margin-left:var(--grouped-element-spacing)}.field-row-stacked{display:flex;flex-direction:column}label{display:inline-flex;align-items:center}input[type=checkbox],input[type=radio]{appearance:none;-webkit-appearance:none;-moz-appearance:none;margin:0;background:0;position:fixed;opacity:0;border:none}input[type=checkbox]+label,input[type=radio]+label{line-height:13px}input[type=radio]+label{position:relative;margin-left:var(--radio-total-width)}input[type=radio]+label::before{top:0;left:calc(-1 * (var(--radio-total-width-precalc)));display:inline-block;width:var(--radio-width);height:var(--radio-width);background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 0H4v1H2v1H1v2H0v4h1v2h1V8H1V4h1V2h2V1h4v1h2V1H8V0z' fill='gray'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 1H4v1H2v2H1v4h1v1h1V8H2V4h1V3h1V2h4v1h2V2H8V1z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9 3h1v1H9V3zm1 5V4h1v4h-1zm-2 2V9h1V8h1v2H8zm-4 0v1h4v-1H4zm0 0V9H2v1h2z' fill='%23DFDFDF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11 2h-1v2h1v4h-1v2H8v1H4v-1H2v1h2v1h4v-1h2v-1h1V8h1V4h-1V2z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 2h4v1h1v1h1v4H9v1H8v1H4V9H3V8H2V4h1V3h1V2z' fill='%23fff'/%3E%3C/svg%3E")}input[type=checkbox]+label::before,pre,ul.tree-view{background:var(--button-highlight)}input[type=radio]:active+label::before{background:svg-load("./icon/radio-border-disabled.svg")}input[type=radio]:checked+label::after{content:"";display:block;width:var(--radio-dot-width);height:var(--radio-dot-width);top:var(--radio-dot-top);left:var(--radio-dot-left);position:absolute;background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='4' height='4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3 0H1v1H0v2h1v1h2V3h1V1H3V0z' fill='%23000'/%3E%3C/svg%3E")}input[type=checkbox]:focus+label,input[type=radio]:focus+label,summary:focus{outline:#000000 dotted 1px}input[type=radio][disabled]+label::before{background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 0H4v1H2v1H1v2H0v4h1v2h1V8H1V4h1V2h2V1h4v1h2V1H8V0z' fill='gray'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 1H4v1H2v2H1v4h1v1h1V8H2V4h1V3h1V2h4v1h2V2H8V1z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9 3h1v1H9V3zm1 5V4h1v4h-1zm-2 2V9h1V8h1v2H8zm-4 0v1h4v-1H4zm0 0V9H2v1h2z' fill='%23DFDFDF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11 2h-1v2h1v4h-1v2H8v1H4v-1H2v1h2v1h4v-1h2v-1h1V8h1V4h-1V2z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 2h4v1h1v1h1v4H9v1H8v1H4V9H3V8H2V4h1V3h1V2z' fill='silver'/%3E%3C/svg%3E")}input[type=radio][disabled]:checked+label::after{background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='4' height='4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3 0H1v1H0v2h1v1h2V3h1V1H3V0z' fill='gray'/%3E%3C/svg%3E")}input[type=checkbox]+label{position:relative;margin-left:var(--checkbox-total-width)}input[type=checkbox]+label::before{left:calc(-1 * (var(--checkbox-total-width-precalc)));display:inline-block;width:var(--checkbox-width);height:var(--checkbox-width)}input[type=checkbox]:checked+label::after{content:"";display:block;width:var(--checkmark-width);height:var(--checkmark-width);position:absolute;left:calc(-1 * (var(--checkbox-total-width-precalc)) + var(--checkmark-left));background:svg-load("./icon/checkmark.svg")}input[type=checkbox][disabled]:checked+label::after{background:svg-load("./icon/checkmark-disabled.svg")}input[type=email],input[type=number],input[type=password],input[type=search],input[type=tel],input[type=text],select,textarea{padding:3px 4px;border:none;box-shadow:var(--border-field);background-color:var(--button-highlight);box-sizing:border-box;-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0}input[type=email],input[type=password],input[type=search],input[type=tel],input[type=text],select{height:21px}input[type=number]{height:22px}input[type=search]::-ms-clear{display:none;width:0;height:0}input[type=search]::-ms-reveal{display:none;width:0;height:0}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration,input[type=search]::-webkit-search-results-button,input[type=search]::-webkit-search-results-decoration{display:none}input[type=email],input[type=number],input[type=password],input[type=search],input[type=tel],input[type=text]{line-height:2}input[type=email]:disabled,input[type=email]:read-only,input[type=number]:disabled,input[type=number]:read-only,input[type=password]:disabled,input[type=password]:read-only,input[type=search]:disabled,input[type=search]:read-only,input[type=tel]:disabled,input[type=tel]:read-only,input[type=text]:disabled,input[type=text]:read-only,textarea:disabled{background-color:var(--surface)}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;position:relative;padding-right:32px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M15 0H0v16h1V1h14V0z' fill='%23DFDFDF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M2 1H1v14h1V2h12V1H2z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M16 17H0v-1h15V0h1v17z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M15 1h-1v14H1v1h14V1z' fill='gray'/%3E%3Cpath fill='silver' d='M2 2h12v13H2z'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11 6H4v1h1v1h1v1h1v1h1V9h1V8h1V7h1V6z' fill='%23000'/%3E%3C/svg%3E");background-position:top 2px right 2px;background-repeat:no-repeat;border-radius:0}input[type=range]{-webkit-appearance:none;width:100%;background:0 0}select:focus,table>tbody>tr.highlighted,ul.tree-view a:focus{background-color:var(--dialog-blue)}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:21px;width:11px;background:svg-load("./icon/indicator-horizontal.svg");transform:translateY(-8px);box-shadow:none;border:none}input[type=range].has-box-indicator::-webkit-slider-thumb{background:svg-load("./icon/indicator-rectangle-horizontal.svg");transform:translateY(-10px)}input[type=range]::-moz-range-thumb{height:21px;width:11px;border:0;border-radius:0;background:svg-load("./icon/indicator-horizontal.svg");transform:translateY(2px)}input[type=range].has-box-indicator::-moz-range-thumb{background:svg-load("./icon/indicator-rectangle-horizontal.svg");transform:translateY(0)}input[type=range]::-webkit-slider-runnable-track{width:100%;height:2px;box-sizing:border-box;background:#000;border-right:1px solid grey;border-bottom:1px solid grey;box-shadow:1px 0 0 #fff,1px 1px 0 #fff,0 1px 0 #fff,-1px 0 0 #a9a9a9,-1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,-1px 1px 0 #fff,1px -1px #a9a9a9}input[type=range]::-moz-range-track{width:100%;height:2px;box-sizing:border-box;background:#000;border-right:1px solid grey;border-bottom:1px solid grey;box-shadow:1px 0 0 #fff,1px 1px 0 #fff,0 1px 0 #fff,-1px 0 0 #a9a9a9,-1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,-1px 1px 0 #fff,1px -1px #a9a9a9}.is-vertical{display:inline-block;width:4px;height:150px;transform:translateY(50%)}.is-vertical>input[type=range]{width:150px;height:4px;margin:0 calc(var(--grouped-element-spacing) + var(--range-spacing)) 0 var(--range-spacing);transform-origin:left;transform:rotate(270deg) translateX(calc(-50% + var(--element-spacing)))}.is-vertical>input[type=range]::-webkit-slider-runnable-track{border-left:1px solid grey;border-right:0;border-bottom:1px solid grey;box-shadow:-1px 0 0 #fff,-1px 1px 0 #fff,0 1px 0 #fff,1px 0 0 #a9a9a9,1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,1px 1px 0 #fff,-1px -1px #a9a9a9}.is-vertical>input[type=range]::-moz-range-track{border-left:1px solid grey;border-right:0;border-bottom:1px solid grey;box-shadow:-1px 0 0 #fff,-1px 1px 0 #fff,0 1px 0 #fff,1px 0 0 #a9a9a9,1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,1px 1px 0 #fff,-1px -1px #a9a9a9}.is-vertical>input[type=range]::-webkit-slider-thumb{transform:translateY(-8px) scaleX(-1)}.is-vertical>input[type=range].has-box-indicator::-webkit-slider-thumb{transform:translateY(-10px) scaleX(-1)}.is-vertical>input[type=range]::-moz-range-thumb{transform:translateY(2px) scaleX(-1)}.is-vertical>input[type=range].has-box-indicator::-moz-range-thumb{transform:translateY(0) scaleX(-1)}select:focus option{color:#000}select:active{background-image:svg-load("./icon/button-down-active.svg")}a{color:var(--link-blue)}a:focus{outline:1px dotted var(--link-blue)}ul.tree-view{display:block;padding:6px;margin:0}ul.tree-view a{color:#000}ul.tree-view li,ul.tree-view ul{margin-top:3px}ul.tree-view ul{margin-left:16px;padding-left:16px;border-left:1px dotted #806000}ul.tree-view ul>li{position:relative}ul.tree-view ul>li::before{content:"";display:block;position:absolute;left:-16px;top:6px;width:12px;border-bottom:1px dotted #806000}ul.tree-view ul>li:last-child::after{content:"";display:block;position:absolute;left:-20px;top:7px;bottom:0;width:8px;background:var(--button-highlight)}ul.tree-view details{margin-top:0}ul.tree-view details[open] summary{margin-bottom:0}ul.tree-view ul details>summary:before{margin-left:-22px;position:relative;z-index:1}ul.tree-view details>summary:before{text-align:center;display:block;float:left;content:"+";border:1px solid #806000;width:8px;height:9px;line-height:8px;margin-right:5px;padding-left:1px;background-color:#fff}ul.tree-view details[open]>summary:before{content:"-"}ul.tree-view details>summary::-webkit-details-marker,ul.tree-view details>summary::marker{content:""}pre{display:block;padding:12px 8px;margin:0}code,code *{font-family:monospace}::-webkit-scrollbar{width:16px}::-webkit-scrollbar:horizontal{height:17px}::-webkit-scrollbar-corner{background:var(--button-face)}::-webkit-scrollbar-track{background-image:svg-load("./icon/scrollbar-background.svg")}::-webkit-scrollbar-thumb{background-color:var(--button-face);box-shadow:var(--border-raised-outer),var(--border-raised-inner)}::-webkit-scrollbar-button:horizontal:end:increment,::-webkit-scrollbar-button:horizontal:start:decrement,::-webkit-scrollbar-button:vertical:end:increment,::-webkit-scrollbar-button:vertical:start:decrement{display:block}::-webkit-scrollbar-button:vertical:start{height:17px;background-image:svg-load("./icon/button-up.svg")}::-webkit-scrollbar-button:vertical:end{height:17px;background-image:svg-load("./icon/button-down.svg")}::-webkit-scrollbar-button:horizontal:start{width:16px;background-image:svg-load("./icon/button-left.svg")}::-webkit-scrollbar-button:horizontal:end{width:16px;background-image:svg-load("./icon/button-right.svg")}.window[role=tabpanel]{position:relative;z-index:2}menu[role=tablist]{position:relative;margin:0 0 -2px;text-indent:0;display:flex;padding-left:3px}menu[role=tablist]>li{border-top-left-radius:3px;border-top-right-radius:3px;box-shadow:var(--border-tab);z-index:1}menu[role=tablist]>li[aria-selected=true]{padding-bottom:2px;margin-top:-2px;background-color:var(--surface);position:relative;z-index:8;margin-left:-3px}menu[role=tablist]>li>a{display:block;color:#222;margin:6px;text-decoration:none}menu[role=tablist]>li>a:focus{outline:#222 dotted 1px}menu[role=tablist].multirows>li{flex-grow:1;text-align:center}.sunken-panel{box-sizing:border-box;border:2px groove transparent;border-image:svg-load("./icon/sunken-panel-border.svg") 2;overflow:auto}table{border-collapse:collapse;position:relative;text-align:left;white-space:nowrap}table>thead>tr>*{position:sticky;top:0;height:17px;box-shadow:var(--border-raised-outer),var(--border-raised-inner);box-sizing:border-box;font-weight:400}table.interactive>tbody>tr{cursor:pointer}table>tbody>tr.highlighted{color:#fff}table>tbody>tr>*{height:14px}.progress-indicator{height:32px;position:relative;box-shadow:var(--border-sunken-inner);padding:4px;border:none;box-sizing:border-box;-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0;background-color:#e1bf92}.progress-indicator>.progress-indicator-bar{height:100%;display:block;background-color:var(--dialog-blue)}.progress-indicator.segmented>.progress-indicator-bar{width:100%;background-color:transparent;background-image:linear-gradient(90deg,var(--dialog-blue) 0 16px,transparent 0 2px);background-repeat:repeat;background-size:18px 100%}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">         
+    <title>Jacob's Sheep Manager</title>         
+    <style type="text/css">
+            /*! 98.css v0.1.20 - https://github.com/jdan/98.css */.vertical-bar,button,input[type=reset],input[type=submit]{box-shadow:var(--border-raised-outer),var(--border-raised-inner)}.status-bar,.title-bar,.title-bar-controls{display:flex}input[type=checkbox]+label::before,input[type=radio]+label::before{margin-right:var(--radio-label-spacing);content:"";position:absolute}menu[role=tablist],ul.tree-view li{list-style-type:none}u,ul.tree-view a{text-decoration:none}table>tbody>tr>*,table>thead>tr>*{padding:0 var(--grouped-element-spacing)}:root{--text-color:#222222;--surface:#f6d7b0;--button-highlight:#ffffff;--button-face:#eccca2;--button-shadow:#806000;--window-frame:#0a0a0a;--dialog-blue:#806000;--dialog-blue-light:#e1bf92;--dialog-gray:#806000;--dialog-gray-light:#b5b5b5;--link-blue:#0000ff;--element-spacing:8px;--grouped-button-spacing:4px;--grouped-element-spacing:6px;--radio-width:12px;--checkbox-width:13px;--radio-label-spacing:6px;--range-track-height:4px;--range-spacing:10px;--radio-total-width-precalc:var(--radio-width) + var(--radio-label-spacing);--radio-total-width:calc(var(--radio-total-width-precalc));--radio-left:calc(-1 * var(--radio-total-width-precalc));--radio-dot-width:4px;--radio-dot-top:calc(var(--radio-width) / 2 - var(--radio-dot-width) / 2);--radio-dot-left:calc( -1 * (var(--radio-total-width-precalc)) + var(--radio-width) / 2 - var( --radio-dot-width ) / 2);--checkbox-total-width-precalc:var(--checkbox-width) + var(--radio-label-spacing);--checkbox-total-width:calc(var(--checkbox-total-width-precalc));--checkbox-left:calc(-1 * var(--checkbox-total-width-precalc));--checkmark-width:7px;--checkmark-left:3px;--border-width:1px;--border-raised-outer:inset -1px -1px var(--window-frame),inset 1px 1px var(--button-highlight);--border-raised-inner:inset -2px -2px var(--button-shadow),inset 2px 2px var(--button-face);--border-sunken-outer:inset -1px -1px var(--button-highlight),inset 1px 1px var(--window-frame);--border-sunken-inner:inset -2px -2px var(--button-face),inset 2px 2px var(--button-shadow);--default-button-border-raised-outer:inset -2px -2px var(--window-frame),inset 1px 1px var(--window-frame);--default-button-border-raised-inner:inset 2px 2px var(--button-highlight),inset -3px -3px var(--button-shadow),inset 3px 3px var(--button-face);--default-button-border-sunken-outer:inset 2px 2px var(--window-frame),inset -1px -1px var(--window-frame);--default-button-border-sunken-inner:inset -2px -2px var(--button-highlight),inset 3px 3px var(--button-shadow),inset -3px -3px var(--button-face);--border-window-outer:inset -1px -1px var(--window-frame),inset 1px 1px var(--button-face);--border-window-inner:inset -2px -2px var(--button-shadow),inset 2px 2px var(--button-highlight);--border-field:inset -1px -1px var(--button-highlight),inset 1px 1px var(--button-shadow),inset -2px -2px var(--button-face),inset 2px 2px var(--window-frame);--border-tab:inset -1px 0 var(--window-frame),inset 1px 1px var(--button-face),inset -2px 0 var(--button-shadow),inset 2px 2px var(--button-highlight)}body{font-family:monospace,Arial;font-size:12px;color:var(--text-color)}.title-bar,.window,button,input,label,legend,li[role=tab],option,select,table,textarea,ul.tree-view{font-family:monospace,Arial;-webkit-font-smoothing:none;font-size:12px}h1{font-size:5rem}h2{font-size:2.5rem}h3{font-size:2rem}h4{font-size:1.5rem}u{border-bottom:.5px solid #222}button,input[type=reset],input[type=submit]{box-sizing:border-box;border:none;color:transparent;text-shadow:0 0 var(--text-color);background:var(--button-face);border-radius:0;min-width:75px;min-height:23px;padding:0 12px}button.default,input[type=reset].default,input[type=submit].default{box-shadow:var(--default-button-border-raised-outer),var(--default-button-border-raised-inner)}input[type=checkbox]+label::before,pre,ul.tree-view{box-shadow:var(--border-field)}.vertical-bar{width:4px;height:20px;background:#f6d7b0}.window,input[type=checkbox]:active+label::before,input[type=checkbox][disabled]+label::before,legend,table>thead>tr>*{background:var(--surface)}button:not(:disabled):active,input[type=reset]:not(:disabled):active,input[type=submit]:not(:disabled):active{box-shadow:var(--border-sunken-outer),var(--border-sunken-inner);text-shadow:1px 1px var(--text-color)}button.default:not(:disabled):active,input[type=reset].default:not(:disabled):active,input[type=submit].default:not(:disabled):active{box-shadow:var(--default-button-border-sunken-outer),var(--default-button-border-sunken-inner)}@media (not(hover)){button:not(:disabled):hover,input[type=reset]:not(:disabled):hover,input[type=submit]:not(:disabled):hover{box-shadow:var(--border-sunken-outer),var(--border-sunken-inner)}}button:focus,input[type=reset]:focus,input[type=submit]:focus{outline:#000000 dotted 1px;outline-offset:-4px}button::-moz-focus-inner,input[type=reset]::-moz-focus-inner,input[type=submit]::-moz-focus-inner{border:0}:disabled,:disabled+label,input[readonly],input[readonly]+label{color:var(--button-shadow)}select:focus,ul.tree-view a:focus{color:var(--button-highlight)}:disabled+label,button:disabled,input[type=reset]:disabled,input[type=submit]:disabled{text-shadow:1px 1px 0 var(--button-highlight)}.window{box-shadow:var(--border-window-outer),var(--border-window-inner);padding:3px}.title-bar{background:linear-gradient(90deg,var(--dialog-blue),var(--dialog-blue-light));padding:3px 2px 3px 3px;justify-content:space-between;align-items:center}.title-bar.inactive{background:linear-gradient(90deg,var(--dialog-gray),var(--dialog-gray-light))}.title-bar-text{font-weight:700;color:#fff;letter-spacing:0;margin-right:24px}.title-bar-controls button{padding:0;display:block;min-width:16px;min-height:14px}.title-bar-controls button:active{padding:0}.title-bar-controls button:focus,input[type=email]:focus,input[type=number]:focus,input[type=password]:focus,input[type=range]:focus,input[type=search]:focus,input[type=tel]:focus,input[type=text]:focus,menu[role=tablist]>li[aria-selected=true]>a:focus,select:focus,textarea:focus{outline:0}.title-bar-controls button[aria-label=Minimize],.title-bar-controls button[aria-label].minimize{background-image:svg-load("./icon/minimize.svg");background-repeat:no-repeat;background-position:bottom 3px left 4px}.title-bar-controls button[aria-label=Maximize],.title-bar-controls button[aria-label].maximize{background-image:svg-load("./icon/maximize.svg");background-repeat:no-repeat;background-position:top 2px left 3px}.title-bar-controls button[aria-label=Maximize]:disabled,.title-bar-controls button[aria-label].maximize:disabled{background-image:svg-load("./icon/maximize-disabled.svg");background-repeat:no-repeat;background-position:top 2px left 3px}.title-bar-controls button[aria-label=Restore],.title-bar-controls button[aria-label].restore{background-image:svg-load("./icon/restore.svg");background-repeat:no-repeat;background-position:top 2px left 3px}.title-bar-controls button[aria-label=Help],.title-bar-controls button[aria-label].help{background-image:svg-load("./icon/help.svg");background-repeat:no-repeat;background-position:top 2px left 5px}.title-bar-controls button[aria-label=Close],.title-bar-controls button[aria-label].close{margin-left:2px;background-image:svg-load("./icon/close.svg");background-repeat:no-repeat;background-position:top 3px left 4px}.status-bar{margin:0 1px;gap:1px}.status-bar-field{box-shadow:inset -1px -1px #dfdfdf,inset 1px 1px #806000;flex-grow:1;padding:2px 3px;margin:0}.window-body{margin:var(--element-spacing);margin-top:0}fieldset{border-image:svg-load("./icon/groupbox-border.svg") 2;padding:calc(2 * var(--border-width) + var(--element-spacing));padding-block-start:var(--element-spacing);margin:0}.sunken-panel,select:focus option,table{background-color:#fff}.field-row{display:grid;align-items:center}
+        .field-row-stacked *+*,[class^=field-row]+[class^=field-row]{margin-top:var(--grouped-element-spacing)}.field-row>*+*{margin-left:var(--grouped-element-spacing)}.field-row-stacked{display:flex;flex-direction:column}label{display:inline-flex;align-items:center}input[type=checkbox],input[type=radio]{appearance:none;-webkit-appearance:none;-moz-appearance:none;margin:0;background:0;position:fixed;opacity:0;border:none}input[type=checkbox]+label,input[type=radio]+label{line-height:13px}input[type=radio]+label{position:relative;margin-left:var(--radio-total-width)}input[type=radio]+label::before{top:0;left:calc(-1 * (var(--radio-total-width-precalc)));display:inline-block;width:var(--radio-width);height:var(--radio-width);background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 0H4v1H2v1H1v2H0v4h1v2h1V8H1V4h1V2h2V1h4v1h2V1H8V0z' fill='gray'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 1H4v1H2v2H1v4h1v1h1V8H2V4h1V3h1V2h4v1h2V2H8V1z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9 3h1v1H9V3zm1 5V4h1v4h-1zm-2 2V9h1V8h1v2H8zm-4 0v1h4v-1H4zm0 0V9H2v1h2z' fill='%23DFDFDF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11 2h-1v2h1v4h-1v2H8v1H4v-1H2v1h2v1h4v-1h2v-1h1V8h1V4h-1V2z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 2h4v1h1v1h1v4H9v1H8v1H4V9H3V8H2V4h1V3h1V2z' fill='%23fff'/%3E%3C/svg%3E")}input[type=checkbox]+label::before,pre,ul.tree-view{background:var(--button-highlight)}input[type=radio]:active+label::before{background:svg-load("./icon/radio-border-disabled.svg")}input[type=radio]:checked+label::after{content:"";display:block;width:var(--radio-dot-width);height:var(--radio-dot-width);top:var(--radio-dot-top);left:var(--radio-dot-left);position:absolute;background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='4' height='4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3 0H1v1H0v2h1v1h2V3h1V1H3V0z' fill='%23000'/%3E%3C/svg%3E")}input[type=checkbox]:focus+label,input[type=radio]:focus+label,summary:focus{outline:#000000 dotted 1px}input[type=radio][disabled]+label::before{background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 0H4v1H2v1H1v2H0v4h1v2h1V8H1V4h1V2h2V1h4v1h2V1H8V0z' fill='gray'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 1H4v1H2v2H1v4h1v1h1V8H2V4h1V3h1V2h4v1h2V2H8V1z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9 3h1v1H9V3zm1 5V4h1v4h-1zm-2 2V9h1V8h1v2H8zm-4 0v1h4v-1H4zm0 0V9H2v1h2z' fill='%23DFDFDF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11 2h-1v2h1v4h-1v2H8v1H4v-1H2v1h2v1h4v-1h2v-1h1V8h1V4h-1V2z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 2h4v1h1v1h1v4H9v1H8v1H4V9H3V8H2V4h1V3h1V2z' fill='silver'/%3E%3C/svg%3E")}input[type=radio][disabled]:checked+label::after{background:url("data:image/svg+xml;charset=utf-8,%3Csvg width='4' height='4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M3 0H1v1H0v2h1v1h2V3h1V1H3V0z' fill='gray'/%3E%3C/svg%3E")}input[type=checkbox]+label{position:relative;margin-left:var(--checkbox-total-width)}input[type=checkbox]+label::before{left:calc(-1 * (var(--checkbox-total-width-precalc)));display:inline-block;width:var(--checkbox-width);height:var(--checkbox-width)}input[type=checkbox]:checked+label::after{content:"";display:block;width:var(--checkmark-width);height:var(--checkmark-width);position:absolute;left:calc(-1 * (var(--checkbox-total-width-precalc)) + var(--checkmark-left));background:svg-load("./icon/checkmark.svg")}input[type=checkbox][disabled]:checked+label::after{background:svg-load("./icon/checkmark-disabled.svg")}input[type=email],input[type=number],input[type=password],input[type=search],input[type=tel],input[type=text],select,textarea{padding:3px 4px;border:none;box-shadow:var(--border-field);background-color:var(--button-highlight);box-sizing:border-box;-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0}input[type=email],input[type=password],input[type=search],input[type=tel],input[type=text],select{height:21px}input[type=number]{height:22px}input[type=search]::-ms-clear{display:none;width:0;height:0}input[type=search]::-ms-reveal{display:none;width:0;height:0}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration,input[type=search]::-webkit-search-results-button,input[type=search]::-webkit-search-results-decoration{display:none}input[type=email],input[type=number],input[type=password],input[type=search],input[type=tel],input[type=text]{line-height:2}input[type=email]:disabled,input[type=email]:read-only,input[type=number]:disabled,input[type=number]:read-only,input[type=password]:disabled,input[type=password]:read-only,input[type=search]:disabled,input[type=search]:read-only,input[type=tel]:disabled,input[type=tel]:read-only,input[type=text]:disabled,input[type=text]:read-only,textarea:disabled{background-color:var(--surface)}select{appearance:none;-webkit-appearance:none;-moz-appearance:none;position:relative;padding-right:32px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M15 0H0v16h1V1h14V0z' fill='%23DFDFDF'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M2 1H1v14h1V2h12V1H2z' fill='%23fff'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M16 17H0v-1h15V0h1v17z' fill='%23000'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M15 1h-1v14H1v1h14V1z' fill='gray'/%3E%3Cpath fill='silver' d='M2 2h12v13H2z'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11 6H4v1h1v1h1v1h1v1h1V9h1V8h1V7h1V6z' fill='%23000'/%3E%3C/svg%3E");background-position:top 2px right 2px;background-repeat:no-repeat;border-radius:0}input[type=range]{-webkit-appearance:none;width:100%;background:0 0}select:focus,table>tbody>tr.highlighted,ul.tree-view a:focus{background-color:var(--dialog-blue)}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:21px;width:11px;background:svg-load("./icon/indicator-horizontal.svg");transform:translateY(-8px);box-shadow:none;border:none}input[type=range].has-box-indicator::-webkit-slider-thumb{background:svg-load("./icon/indicator-rectangle-horizontal.svg");transform:translateY(-10px)}input[type=range]::-moz-range-thumb{height:21px;width:11px;border:0;border-radius:0;background:svg-load("./icon/indicator-horizontal.svg");transform:translateY(2px)}input[type=range].has-box-indicator::-moz-range-thumb{background:svg-load("./icon/indicator-rectangle-horizontal.svg");transform:translateY(0)}input[type=range]::-webkit-slider-runnable-track{width:100%;height:2px;box-sizing:border-box;background:#000;border-right:1px solid grey;border-bottom:1px solid grey;box-shadow:1px 0 0 #fff,1px 1px 0 #fff,0 1px 0 #fff,-1px 0 0 #a9a9a9,-1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,-1px 1px 0 #fff,1px -1px #a9a9a9}input[type=range]::-moz-range-track{width:100%;height:2px;box-sizing:border-box;background:#000;border-right:1px solid grey;border-bottom:1px solid grey;box-shadow:1px 0 0 #fff,1px 1px 0 #fff,0 1px 0 #fff,-1px 0 0 #a9a9a9,-1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,-1px 1px 0 #fff,1px -1px #a9a9a9}.is-vertical{display:inline-block;width:4px;height:150px;transform:translateY(50%)}.is-vertical>input[type=range]{width:150px;height:4px;margin:0 calc(var(--grouped-element-spacing) + var(--range-spacing)) 0 var(--range-spacing);transform-origin:left;transform:rotate(270deg) translateX(calc(-50% + var(--element-spacing)))}.is-vertical>input[type=range]::-webkit-slider-runnable-track{border-left:1px solid grey;border-right:0;border-bottom:1px solid grey;box-shadow:-1px 0 0 #fff,-1px 1px 0 #fff,0 1px 0 #fff,1px 0 0 #a9a9a9,1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,1px 1px 0 #fff,-1px -1px #a9a9a9}.is-vertical>input[type=range]::-moz-range-track{border-left:1px solid grey;border-right:0;border-bottom:1px solid grey;box-shadow:-1px 0 0 #fff,-1px 1px 0 #fff,0 1px 0 #fff,1px 0 0 #a9a9a9,1px -1px 0 #a9a9a9,0 -1px 0 #a9a9a9,1px 1px 0 #fff,-1px -1px #a9a9a9}.is-vertical>input[type=range]::-webkit-slider-thumb{transform:translateY(-8px) scaleX(-1)}.is-vertical>input[type=range].has-box-indicator::-webkit-slider-thumb{transform:translateY(-10px) scaleX(-1)}.is-vertical>input[type=range]::-moz-range-thumb{transform:translateY(2px) scaleX(-1)}.is-vertical>input[type=range].has-box-indicator::-moz-range-thumb{transform:translateY(0) scaleX(-1)}select:focus option{color:#000}select:active{background-image:svg-load("./icon/button-down-active.svg")}a{color:var(--link-blue)}a:focus{outline:1px dotted var(--link-blue)}ul.tree-view{display:block;padding:6px;margin:0}ul.tree-view a{color:#000}ul.tree-view li,ul.tree-view ul{margin-top:3px}ul.tree-view ul{margin-left:16px;padding-left:16px;border-left:1px dotted #806000}ul.tree-view ul>li{position:relative}ul.tree-view ul>li::before{content:"";display:block;position:absolute;left:-16px;top:6px;width:12px;border-bottom:1px dotted #806000}ul.tree-view ul>li:last-child::after{content:"";display:block;position:absolute;left:-20px;top:7px;bottom:0;width:8px;background:var(--button-highlight)}ul.tree-view details{margin-top:0}ul.tree-view details[open] summary{margin-bottom:0}ul.tree-view ul details>summary:before{margin-left:-22px;position:relative;z-index:1}ul.tree-view details>summary:before{text-align:center;display:block;float:left;content:"+";border:1px solid #806000;width:8px;height:9px;line-height:8px;margin-right:5px;padding-left:1px;background-color:#fff}ul.tree-view details[open]>summary:before{content:"-"}ul.tree-view details>summary::-webkit-details-marker,ul.tree-view details>summary::marker{content:""}pre{display:block;padding:12px 8px;margin:0}code,code *{font-family:monospace}::-webkit-scrollbar{width:16px}::-webkit-scrollbar:horizontal{height:17px}::-webkit-scrollbar-corner{background:var(--button-face)}::-webkit-scrollbar-track{background-image:svg-load("./icon/scrollbar-background.svg")}::-webkit-scrollbar-thumb{background-color:var(--button-face);box-shadow:var(--border-raised-outer),var(--border-raised-inner)}::-webkit-scrollbar-button:horizontal:end:increment,::-webkit-scrollbar-button:horizontal:start:decrement,::-webkit-scrollbar-button:vertical:end:increment,::-webkit-scrollbar-button:vertical:start:decrement{display:block}::-webkit-scrollbar-button:vertical:start{height:17px;background-image:svg-load("./icon/button-up.svg")}::-webkit-scrollbar-button:vertical:end{height:17px;background-image:svg-load("./icon/button-down.svg")}::-webkit-scrollbar-button:horizontal:start{width:16px;background-image:svg-load("./icon/button-left.svg")}::-webkit-scrollbar-button:horizontal:end{width:16px;background-image:svg-load("./icon/button-right.svg")}.window[role=tabpanel]{position:relative;z-index:2}menu[role=tablist]{position:relative;margin:0 0 -2px;text-indent:0;display:flex;padding-left:3px}menu[role=tablist]>li{border-top-left-radius:3px;border-top-right-radius:3px;box-shadow:var(--border-tab);z-index:1}menu[role=tablist]>li[aria-selected=true]{padding-bottom:2px;margin-top:-2px;background-color:var(--surface);position:relative;z-index:8;margin-left:-3px}menu[role=tablist]>li>a{display:block;color:#222;margin:6px;text-decoration:none}menu[role=tablist]>li>a:focus{outline:#222 dotted 1px}menu[role=tablist].multirows>li{flex-grow:1;text-align:center}.sunken-panel{box-sizing:border-box;border:2px groove transparent;border-image:svg-load("./icon/sunken-panel-border.svg") 2;overflow:auto}table{border-collapse:collapse;position:relative;text-align:left;white-space:nowrap}table>thead>tr>*{position:sticky;top:0;height:17px;box-shadow:var(--border-raised-outer),var(--border-raised-inner);box-sizing:border-box;font-weight:400}table.interactive>tbody>tr{cursor:pointer}table>tbody>tr.highlighted{color:#fff}table>tbody>tr>*{height:14px}.progress-indicator{height:32px;position:relative;box-shadow:var(--border-sunken-inner);padding:4px;border:none;box-sizing:border-box;-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0;background-color:#e1bf92}.progress-indicator>.progress-indicator-bar{height:100%;display:block;background-color:var(--dialog-blue)}.progress-indicator.segmented>.progress-indicator-bar{width:100%;background-color:transparent;background-image:linear-gradient(90deg,var(--dialog-blue) 0 16px,transparent 0 2px);background-repeat:repeat;background-size:18px 100%}
+    </style>
+    <style type="text/css">
+        html{  width:100%;height:100%;}
+        body{ background-color:#41980a; margin:0;padding:0; width:100%;height:100%;}   
+        #containerDiv{ width:100%;   }
+        #gridDiv{  padding-top:1em;margin: 0 auto;   }
+        .slink{display:inline;border: 1px dashed gray;}             
+        .mobile2 { display:flex;width:100%;}
+        .mobile2 > div { width:48%;}
+        .sunken { background-color: #e1bf92;}
+        .item0 {grid-area: prevb}
+        .item1 { grid-area: header; background-color: #e1bf92;}
+        .item2 { grid-area: menu;text-align: right; }
+        .item3 { grid-area: main;  }
+        .item4 { grid-area: right; border:0px solid #e1bf92;border-left:2px solid #e1bf92;}
+        .item5 { grid-area: footer; }
+        .item6 {grid-area: sellme;text-align: right;;}             
+        .uigrid{width:100%;display: grid;
+        grid-template-areas:
+        'prevb header header menu'
+        'main main right right'
+        'footer footer footer sellme';
+        grid-gap: 4px;}             
+        .uigrid > div{padding: 4px 4px;margin:4px 4px;} 
+        .altlist li:nth-child(even) {background-color:#dfdfdf}
+        @media (max-aspect-ratio: 1/1) {
+            #gridDiv{width:95%;height:100%;}                 
+            .mobile2 { display:flex;height:100%;flex-direction: column;}                 
+            .mobile2 > div {width:100%;height:100%;}                 
+            .logview{max-height:18em;overflow-y:auto;}             }             
+        @media (aspect-ratio: 1/1) {
+            #gridDiv{width:95%; }
+        }             
+        @media (min-aspect-ratio: 1/1) {               
+            #gridDiv{width:60%;}                 
+            .logview{height:40em;}             }
         </style>
-        <style type="text/css">
-            html{
-                width:100%;
-                height:100%;
-            }
-            body{
-                background-color:#41980a;
-                margin:0;
-                padding:0;
-                width:100%;
-                height:100%;             }   
-             #containerDiv{
-                width:100%;   
-            }
-            #gridDiv{
-                padding-top:1em;
-                
-                margin: 0 auto;
-                
-            }
-            .slink{
-                display:inline;
-                border: 1px dashed gray;
-            }             .mobile2 { display:flex;width:100%;}
-            .mobile2 > div {
-                    width:48%;
-                }
-            .sunken {
-                background-color: #e1bf92;
-            }             .item0 {grid-area: prevb}
-            .item1 { grid-area: header; background-color: #e1bf92;}
-            .item2 { grid-area: menu;text-align: right; }
-            .item3 { grid-area: main;  }
-            .item4 { grid-area: right; border:0px solid #e1bf92;border-left:2px solid #e1bf92;}
-            .item5 { grid-area: footer; }
-            .item6 {grid-area: sellme;text-align: right;;}             .uigrid{
-                width:100%;
-                display: grid;
-                grid-template-areas:
-                'prevb header header menu'
-                'main main right right'
-                'footer footer footer sellme';
-                grid-gap: 4px;
-                
-            }             .uigrid > div{
-                padding: 4px 4px;
-                margin:4px 4px;
-            } 
-            .altlist li:nth-child(even) {
-                background-color:#dfdfdf
-            }
-                         @media (max-aspect-ratio: 1/1) {
-                #gridDiv{
-               
-                width:95%;
-               height:100%;
-                }                 .mobile2 { display:flex;height:100%;flex-direction: column;}                 .mobile2 > div {
-                    width:100%;
-                    height:100%;
-                }                 .logview{
-                    max-height:18em;
-                    overflow-y:auto;
-                }             }             @media (aspect-ratio: 1/1) {
-                #gridDiv{
-                    width:95%;
-            
-                }
-            }             @media (min-aspect-ratio: 1/1) {               
-                #gridDiv{
-                    
-                    width:60%;
-                    
-                }                 .logview{
-                    height:40em;
-                }             }
-                      </style>
         
     </head>
     <body>
@@ -130,20 +91,24 @@
    var gc = document.getElementById("gplace");
    var tc = document.getElementById("tplace");
    var firstrender = true;     
-    init();     function init(){
+    init();     
+    function init(){
 
         tryLoad();
         clickTab(0);
-    }     function tryLoad(){
+    }     
+    function tryLoad(){
         if (localStorage.getItem("sheeps")!=null){
             gd = JSON.parse(localStorage.getItem("sheeps"));
         }
         else{
             game();
         }
-    }     function saveData(){
+    }     
+    function saveData(){
         localStorage.setItem("sheeps",JSON.stringify(gd));
-    }      function game(){
+    }      
+    function game(){
        gd = new gameData();
        
        
@@ -154,76 +119,58 @@
        addNewSheep(false,true);
        addNewSheep(true,true);
        addNewSheep(true,true);
-              gd.curPid = 1;
+        gd.curPid = 1;
        addNewSheep(true, false);
        addNewSheep(false,true);
        addNewSheep(true,true);
        addNewSheep(false,true);
        addNewSheep(true, false);
        addNewSheep();        
-       
        gd.curPid = 2;
        addNewSheep(true, false);
        addNewSheep(false,true);
        addNewSheep(true,true);
        addNewSheep(true,true);
-       addNewSheep();
-       addNewSheep();        gd.curPid = 3;
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep();
-       addNewSheep(); 
-       
-       
-      breedall();
-      
-       breedall();
-       breedall();
-       gd.curPid = 0;
-     
-            }   
+       addNewSheep(); addNewSheep();        
+       gd.curPid = 3;
+       addNewSheep(); addNewSheep(); addNewSheep();
+       addNewSheep(); addNewSheep(); addNewSheep(); 
+      breedall(); breedall(); breedall();
+       gd.curPid = 0;}   
     function updatestatus(){
         sc.innerHTML = "total sheep: " + gd.numalive;
         gc.innerHTML = gd.g + "g";
         tc.innerHTML = "season " + gd.time;
-    }     function clickTab(tid){
+    }     
+    function clickTab(tid){
         saveData();
         tb.style.maxHeight = "" + window.innerHeight*.7 + "px";
         tb.innerHTML = "";
         curtab = tid;
         updatestatus();
-       
         for (let t of tm.children){
             t.ariaSelected = false;
         }
-        tm.children[tid].ariaSelected = true;         switch (tid) {
+        tm.children[tid].ariaSelected = true;         
+        switch (tid) {
             case 0:
-              
-                renderFarmOverview();
-                break;
+                renderFarmOverview(); break;
             case 1:
-              
-                renderPastureView();
-                break;
+                renderPastureView();break;
             case 2:
-               renderSheepView();
-                break;
+               renderSheepView(); break;
             case 3:
-             
-              renderMarketView();
-                break;
-          
+              renderMarketView(); break;
             }             }     function selectandviewsheep(sid){
         gd.curSid = sid;
         clickTab(2);
-    }     function selectandviewpasture(pid){
+    }     
+    function selectandviewpasture(pid){
         gd.curPid = pid;
         clickTab(1);
-    }     function renderFarmOverview(){
+    }     
+    function renderFarmOverview(){
         var out = "<div class='mobile2' ><div >";
-      
         for (let p of gd.pastures){
             out += "<button onclick='selectandviewpasture(" + p.id + ")'>" + p.name + "</button><BR>";
             out += `<div class="progress-indicator segmented">
@@ -233,9 +180,7 @@
         out += "<button class='default' onclick='advancetime()'>Advance time</button><BR><BR>"
             if (gd.assessor){
                 out += calcflockvals();
-            }       out += "</div><div style='width:4%;'></div><div >";
-            
-            out += "<ul class='tree-view logview' style='overflow-y:auto;line-height:150%;'>";
+            }       out += "</div><div style='width:4%;'></div><div ><ul class='tree-view logview' style='overflow-y:auto;line-height:150%;'>";
     var wi = 0;
 for (var w of gd.longlog){
     out += "<li> ";
@@ -245,7 +190,6 @@ for (var w of gd.longlog){
     else{
         out += "<details> ";
     }
-   
     out += "<summary>season " + wi + "</summary>";
         out += "<ul>";
             for (var wu of w){
@@ -262,53 +206,56 @@ out += "</ul>"
     }
     function changePastureMenu(npi){
         gd.curPid = npi;
-        renderPastureView();
-    }     function prevpast(){
+        renderPastureView();}     
+    function prevpast(){
         gd.curPid -= 1;
         if (gd.curPid < 0) gd.curPid = 3;
-        renderPastureView();
-    }     function nextpast(){
+        renderPastureView();}     
+    function nextpast(){
         gd.curPid += 1;
         if (gd.curPid > 3) gd.curPid = 0;
-        renderPastureView();
-    }     function nextsheep(){
+        renderPastureView();}     
+    function nextsheep(){
         var bsid = gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds.indexOf(gd.curSid);
         bsid += 1;
         if (bsid > (gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds.length -1)) bsid = 0;
         gd.curSid =  gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds[bsid];
-        renderSheepView();     }     function nextsheepall(){
+        renderSheepView();     }     
+        function nextsheepall(){
         var bsid = gd.curSid += 1;
         if (bsid > gd.sheeps.length - 1) bsid = 0;
         gd.curSid = bsid;
         renderSheepView();
-    }     function prevsheep(){
+    }     
+    function prevsheep(){
         var bsid = gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds.indexOf(gd.curSid);
         bsid -= 1;
         if (bsid < 0) bsid = (gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds.length - 1);
         gd.curSid =  gd.pastures[gd.sheeps[gd.curSid].pid].heldSheepIds[bsid];
         renderSheepView();
-    }     function prevsheepall(){
+    }     
+    function prevsheepall(){
         var bsid = gd.curSid -= 1;
         if (bsid < 0) bsid =  gd.sheeps.length - 1;
         gd.curSid = bsid;
         renderSheepView();
-    }     function changeSheepPastureMenu(){
+    }     
+    function changeSheepPastureMenu(){
         var psm = document.getElementById("pmselector");
         moveSheep(gd.curSid,psm.selectedIndex); 
-    }     function cpsm(npi){
+    }     
+    function cpsm(npi){
         moveSheep(gd.curSid,npi);
     } 
-    function buysheep(){     }     function buypoplar(){
+   function buypoplar(){
         if (gd.g >= 25){
             gd.g -= 25;
             gd.pb += 2;
-            clickTab(3);
-        }
+            clickTab(3); }
         else{
-            log ("Not enough money! Couldn't buy poplar branches.");
-            
-        }
-    }     function givepoplar(){
+            log ("Not enough money! Couldn't buy poplar branches."); }
+    }     
+    function givepoplar(){
         if (gd.pb > 0){
             gd.pb -= 1;
             gd.sheeps[gd.curSid].hasbranch = true;
@@ -316,42 +263,36 @@ out += "</ul>"
             
         }
         clickTab(2);
-    }     function buyspace(){
+    }     
+    function buyspace(){
         var amt = 8*(gd.maxSheep + 8);
-        if (gd.g >= amt){
             gd.g -= amt;
             gd.maxSheep += 8;
             clickTab(3)
-        }
-        else{
-            
-            log("Not enough money! Couldn't buy bigger pastures.")
-        }
     }
        function buygeneview(){
         gd.g -= 100;
         gd.geneview = true;
         log("You learned how to trace sheep genetics!");
         clickTab(3);
-    }     function buyassess(){
+    }    
+     function buyassess(){
         gd.g -= 150;
         gd.assessor = true;
         log ("You learned how to assess sheep value!");
         clickTab(3);
-    }     function renderMarketView(){
-    
+    }    
+     function renderMarketView(){
         var out = "<div class='mobile2' ><div >";         out += "<fieldset>";
             out += "<legend><b>current money: " + gd.g + "g</b></legend>" 
             out += "Buy Poplar Branches (bundle of 2).<BR><i>Currently owned: " + gd.pb + "</i>";
         out += "<BR><BR><button onclick='buypoplar()' " + ((gd.g<25) ? "disabled " : "") + ">25g</button><BR><BR><HR><BR>";             if (!gd.geneview){
                 out += "Learn how to track sheep genealogy.<i><BR>Exclusive training seminar</i>";
-          
           out += "<BR><BR><button onclick='buygeneview()' " + ((gd.g<100) ? "disabled " : "") + " >100g</button><br><BR><hr><br>";
-          
             }
             else{                
-            }             if (gd.assessor){
-                
+            }             
+            if (gd.assessor){    
             }
             else {
              out += "Learn how to appraise sheep value.<BR><i>Exclusive training seminar</i><BR><BR>";
@@ -365,12 +306,10 @@ out += "</ul>"
                 out += calcflockvals();
                  out += "<BR><BR><HR><BR>"
             }             out += "<button onclick='divest()' style='color:red;'>Divest your flocks from Laban</button>"             
-               
-             
-               
                 out += "</div></div>"  ;        tb.innerHTML = out;
         return out;
-    }     function divest(){
+    }     
+    function divest(){
         var out = "";
         curtab = 9;
         
@@ -394,23 +333,24 @@ out += "</ul>"
             out += "You lost!<BR>"
         }
         out += "<BR>You split the flock according to coat pattern. <BR><BR>Your flock of spotted sheep was worth " + yv + "g,<BR><BR>while Laban's flock of solid-colored sheep was worth " + lv + "g.";         out += "<BR><HR><BR><button onclick='newgame()'>Try Again?</button></fieldset>"; 
-        document.getElementById("wbody").innerHTML = out;     }     function newgame(){
+        document.getElementById("wbody").innerHTML = out;     }     
+        function newgame(){
         localStorage.removeItem("sheeps");
         window.location.reload();
-    }     function renderPastureView(){
+    }     
+    function renderPastureView(){
         var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev</button></div><div class="item1"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /><BR>`;
             
             if (gd.assessor){
                 out += calcpval();
             }
-            
-            
             out += `</div>
         <div class="item2"><button onclick="nextpast()">next</button></div></div>
         <BR><HR><BR>Sheep in pasture:<BR>`;         out += renderPastureList(gd.curPid);
         tb.innerHTML = out;
         return out;
-    }     function renderSheepView(){
+    }     
+    function renderSheepView(){
         var s = gd.sheeps[gd.curSid];         var out = "";
         out += `<div class="uigrid">
 <div class="item0"><button onclick='prevsheepall()'>Prev</button></div>
@@ -418,8 +358,6 @@ out += "</ul>"
     
     if (!s.retired && !s.sold)
     out += `in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button>`;
-    
-    
     out += `</div>
   <div class="item2"><button onclick="nextsheepall()">Next</button></div>
   <div class="item3 ">`;     if (s.age <2 ){
@@ -427,11 +365,9 @@ out += "</ul>"
     }else{
         out +=  ((s.female)? "Female" : "Male") + " - ";         out += s.pattern + " " + s.color + ".<BR><BR>";
     }     
-    
         if (s.retired) {
         out += "Retired.<BR>";
     }
-    
     else{
         if (s.sold){
             out += "Sold.<BR>"
@@ -443,9 +379,7 @@ out += "</ul>"
                 if (s.hasbranch){
                     out += "Has a poplar branch."
                 }          }
-        
         }
-    
     out += `</div>
   <div class="item4 ">`;
     if (gd.geneview){
@@ -487,8 +421,7 @@ out += "</ul>"
   <div class="field-row">
     <input id="radio3" ` + ((s.pid==3) ? "checked='checked' " : "" ) + `  type="radio" name="fieldset-example2" value="3" onchange='cpsm(3)' />
     <label for="radio3">` + gd.pastures[3].name + `</label>
-  </div> </fieldset>
-</form>`;
+  </div> </fieldset></form>`;
     }
    out += `</div><div class="item6"><BR><BR><BR>`;
    if (!s.retired && !s.sold)  {out += `<button style="color:red;" onclick='sellsheep()'>sell`;
@@ -499,36 +432,37 @@ out += "</ul>"
     out += `</div></div>`;
         tb.innerHTML = out;
         return out;
-    }     function renderLogView(){ var out = ""; out += "<ul class='tree-view'>";
+    }     
+function renderLogView(){ var out = ""; out += "<ul class='tree-view'>";
     var wi = 0;
-for (var w of gd.longlog){
-    out += "<li> ";
-        
-    if (wi == gd.time ){
-        out += "<details open>";
+    for (var w of gd.longlog){
+        out += "<li> ";
+        if (wi == gd.time ){
+            out += "<details open>";
+        }
+        else{
+            out += "<details> ";
+        }
+        out += "<summary>season " + wi + "</summary>";
+            out += "<ul>";
+                for (var wu of w){
+                    out += "<li>" + wu + "</li>"
+                }
+            out += "</ul></details>"  ;   out += "</li>"
+        wi += 1;
     }
-    else{
-        out += "<details> ";
-    }
-   
-        
-    out += "<summary>season " + wi + "</summary>";
-        out += "<ul>";
-            for (var wu of w){
-                out += "<li>" + wu + "</li>"
-            }
-        out += "</ul></details>"  ;   out += "</li>"
-    wi += 1;
-}
-out += "</ul>"; tb.innerHTML = out;
-return out;
-}     function renamesheep(){
+    out += "</ul>"; tb.innerHTML = out;
+    return out;
+    }     
+    function renamesheep(){
         var sn = document.getElementById("sname").value;
-        gd.sheeps[gd.curSid].name = sn;     }     function renamepasture(){
+        gd.sheeps[gd.curSid].name = sn;     }     
+    function renamepasture(){
         var pn = document.getElementById("pname").value;
         gd.pastures[gd.curPid].name = pn;
         clickTab(1);
-    }      function addNewSheep( sx = -1, sy = -1, cx = -1, cy = -1){
+    }      
+    function addNewSheep( sx = -1, sy = -1, cx = -1, cy = -1){
         var s = new sheep(sx,sy, cx, cy )
         gd.sheeps[s.id] = s;
         gd.pastures[gd.curPid].heldSheepIds.push(s.id);
@@ -537,7 +471,8 @@ return out;
        s.age = randint(0,20);
        updateSheepCount();
         
-    }     function updateSheepCount(){
+    }     
+    function updateSheepCount(){
         gd.numalive = 0;
         for (let p of gd.pastures){
             gd.numalive += p.heldSheepIds.length
@@ -553,7 +488,8 @@ return out;
         }
         var out = "total flock value: " + fv ;
         return out;
-    }     function calcpval(){
+    }     
+    function calcpval(){
         var pv = 0;
         var p = gd.pastures[gd.curPid];
         for(let si of p.heldSheepIds){
@@ -585,7 +521,8 @@ return out;
         gd.pastures[gd.curPid].heldSheepIds.push(bs.id);
        bs.pid = gd.curPid;
        gd.curSid = bs.id;
-       updateSheepCount();     } function advancetime(){
+       updateSheepCount();     } 
+       function advancetime(){
     firstrender = false;      breedall();
 } function sellsheep(){
     gd.sheeps[gd.curSid].sold = true;
@@ -611,7 +548,8 @@ function dorandommove(){     for (let p of gd.pastures){
                     console.log("didn't move sheep overnight")
                 }
             }
-        } }     function breedall(){          
+        } }     
+        function breedall(){          
         dorandommove();  
         for (let p of gd.pastures){
             breedPasture(p);
@@ -668,42 +606,30 @@ function dorandommove(){     for (let p of gd.pastures){
               if (sbf.msi == sbm.id || sbf.fsi == sbm.id || sbm.msi == sbf.id || sbm.fsi == sbf.id ){
                 console.log("didn't breed " + sbf.name + " and " + sbm.name);                 if (fs.length > ms.length) {ms.push(sbm.id)}
                 else {fs.push(sbf.id)}
-                             }
-            else{             //only breed sometimes
-            //can be buffed
-            if (p.heldSheepIds.length < gd.maxSheep)
-        { 
+                             }else{             
+            if (p.heldSheepIds.length < gd.maxSheep){ 
             if ((randint(0,10) > 5) || sbf.hasbranch || sbm.hasbranch){
                 breedSheep(sbf,sbm);
-            }
-        }
-            
-            } 
+            } }} 
                           if (fs.length <= 0 || ms.length <= 0){
                 done = true;
-            }
-        } 
-    }     function moveSheep(sid, newpid, overnight=false){
+            } }  }     
+    function moveSheep(sid, newpid, overnight=false){
         newpid = Math.min(newpid,gd.pastures.length-1)
         newpid = Math.max(0,newpid);
         if (gd.pastures[newpid].heldSheepIds.length < gd.maxSheep){
             var s = gd.sheeps[sid];
             if (!s.retired){
-                
             var oldpid = s.pid;
             rem(gd.pastures[s.pid].heldSheepIds, sid)
             gd.pastures[newpid].heldSheepIds.push(sid);
             s.pid = newpid;
             if (overnight){
-                log("oops! <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> jumped the fence from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name + ".");
-          
-            }
+                log("oops! <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> jumped the fence from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name + ".");}
             else{
                 log("moved <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name + ".");
-          
-            }
-              gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);             }
-            
+          }
+              gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);             }  
         }else{
             log ("pasture " + newpid + " full, couldn't move <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div>");
         }
@@ -719,12 +645,11 @@ function dorandommove(){     for (let p of gd.pastures){
                 else{
                     out += "lamb";
                 }
-                
                 out += "</li>";
         }
         out += "</ul>"
-        return out;
-    }     function renderAllSheepList(){
+        return out;}     
+    function renderAllSheepList(){
         var out = "";
         out += "All Sheep" + "<BR><HR><ul class='tree-view' style='height:15em;overflow-y:scroll;width:50%;'>";
         for (let p of gd.pastures){
@@ -736,66 +661,54 @@ function dorandommove(){     for (let p of gd.pastures){
         }
         out += "</ul>"
         return out;
-    }     function renderSheep(sid){
+    }     
+    function renderSheep(sid){
         var out = "";
         var s = gd.sheeps[sid];
         out += s.id + " - " + s.name + "<br><hr><BR>";
         out += "age: " + s.age + "<BR>";
-        return out;
-    }    
-      function gameData(){
-        this.time = 0;
-        this.sheepIndex = 0;
+        return out;}    
+    function gameData(){
+        this.time = 0;this.sheepIndex = 0;
         this.curPid = 0;this.curSid = 0;
         this.pastures = [];
         this.pastures.push(new pasture(0));this.pastures.push(new pasture(1));this.pastures.push(new pasture(2));this.pastures.push(new pasture(3));
-        this.sheeps = [];
-        this.longlog = [[]];
-        this.g =50;this.pb = 0;
-        this.maxSheep = 24;
-        this.geneview = false;this.assessor = false;
-        
-    } 
+        this.sheeps = [];this.longlog = [[]];
+        this.g =50;this.pb = 0; this.maxSheep = 24;this.geneview = false;this.assessor = false;} 
     function pasture(pid){
         this.id = pid;
         this.name = "Pasture " + (this.id+1);
-        this.heldSheepIds = []
-        
-    }
-       function sheep( sx = -1, sy = -1,  cx = -1, cy = -1, g1 = -1, g2 = -1, g3 = -1, ){
-    this.id = gd.sheepIndex;
-    gd.sheepIndex+=1;this.name = "sheep "+this.id;
-    this.cx = cx;this.cy = cy;this.sx = sx;this.sy = sy;
-    if (cx == -1) this.cx = ((randint(0,10)>5));
-    if (cy == -1) this.cy = ((randint(0,10)>5));
-    if (sx == -1) this.sx = ((randint(0,10)>4));
-    if (sy == -1) this.sy = ((randint(0,10)>4));     if (this.sx || this.sy) { this.pattern = "solid "} else {this.pattern = "spotted "}
-    if (this.cx || this.cy) { this.color = "gray"} else {this.color = "white"}
-    this.pid = gd.curPid;
-    this.age = 0;
-    this.female = ((randint(0,10)>5));
-    this.g1 = g1;this.g2 = g2;this.g3 = g3;
-    if (g1 == -1) this.g1 = randint(0,10);
-    if (g2 == -1) this.g2 = randint(0,10);
-    if (g3 == -1) this.g3 = randint(0,10);
-    this.sexy = this.g1+this.g2-this.g3;
-    this.hasbranch = false;
-    this.fsi = -1;this.msi = -1;
-    this.kids = [];
-    this.retired = false;this.sold = false;
-    
-   }    function sval(s){
-    return Math.floor(5 + ((28-s.age) + Math.max(s.g2+s.g3-s.g1,1)+10)/2);
-   }         //utility      
+        this.heldSheepIds = [] }
+    function sheep( sx = -1, sy = -1,  cx = -1, cy = -1, g1 = -1, g2 = -1, g3 = -1, ){
+        this.id = gd.sheepIndex;
+        gd.sheepIndex+=1;this.name = "sheep "+this.id;
+        this.cx = cx;this.cy = cy;this.sx = sx;this.sy = sy;
+        if (cx == -1) this.cx = ((randint(0,10)>5));
+        if (cy == -1) this.cy = ((randint(0,10)>5));
+        if (sx == -1) this.sx = ((randint(0,10)>4));
+        if (sy == -1) this.sy = ((randint(0,10)>4));     if (this.sx || this.sy) { this.pattern = "solid "} else {this.pattern = "spotted "}
+        if (this.cx || this.cy) { this.color = "gray"} else {this.color = "white"}
+        this.pid = gd.curPid;
+        this.age = 0;
+        this.female = ((randint(0,10)>5));
+        this.g1 = g1;this.g2 = g2;this.g3 = g3;
+        if (g1 == -1) this.g1 = randint(0,10);
+        if (g2 == -1) this.g2 = randint(0,10);
+        if (g3 == -1) this.g3 = randint(0,10);
+        this.sexy = this.g1+this.g2-this.g3;
+        this.hasbranch = false;this.fsi = -1;this.msi = -1;
+        this.kids = [];this.retired = false;this.sold = false;
+   }    
+   function sval(s){
+    return Math.floor(5 + ((28-s.age) + Math.max(s.g2+s.g3-s.g1,1)+10)/2);}  
+
    window.addEventListener("keydown", function (event) {
-  if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
+  if (event.defaultPrevented) {return; // Do nothing if the event was already processed
   }   if (event.shiftKey){
     switch(event.key){
         case "Tab":
-        if (curtab > 0) {clickTab(curtab - 1)}
-        else {clickTab(3)}             break;             default:
-      return; // Quit when this doesn't handle the key event.
+        if (curtab > 0) {clickTab(curtab - 1)}else {clickTab(3)} break;             
+        default:return; 
        }
   }else{
     switch (event.key) {
@@ -834,14 +747,17 @@ function dorandommove(){     for (let p of gd.pastures){
   }
   }   
   event.preventDefault();
-}, true); function log(s){
+}, true); 
+function log(s){
     console.log(s);
     gd.longlog[gd.time].push(s);
 }  
  function randint(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min; } function randfrom(myarray){
+  return Math.floor(Math.random() * (max - min + 1) ) + min; } 
+  function randfrom(myarray){
 		return myarray[Math.floor(Math.random() * myarray.length)];
-	} function rem(a, ele) {
+	} 
+    function rem(a, ele) {
     a.forEach((item, index) => {
         if (item === ele) {
             a.splice(index, 1);
