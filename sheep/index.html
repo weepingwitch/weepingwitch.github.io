@@ -1,6 +1,4 @@
-<!doctype html>
-
-<!-- hello i am willow and i made this sheep game. -->
+<!doctype html><!-- hello i am willow and i made this sheep game. -->
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">         
     <title>Jacob's Sheep Manager</title>         
@@ -36,15 +34,16 @@
             #gridDiv{width:95%;height:100%;}                 
             .mobile2 { display:flex;height:100%;flex-direction: column;}                 
             .mobile2 > div {width:100%;height:100%;}                 
-            .logview{max-height:18em;overflow-y:auto;}             }             
+            .logview{max-height:18em;overflow-y:auto;}             
+        }             
         @media (aspect-ratio: 1/1) {
             #gridDiv{width:95%; }
         }             
         @media (min-aspect-ratio: 1/1) {               
             #gridDiv{width:60%;}                 
-            .logview{height:40em;}             }
+            .logview{height:40em;}             
+        }
         </style>
-        
     </head>
     <body>
         <div id="containerDiv">
@@ -60,15 +59,11 @@
                           <li role="tab"><a href="#" onclick="clickTab(1);">Pasture Manager</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Status</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(3);">Market</a></li>
-                          
-                      
                         </menu>
                         <div class="window" role="tabpanel">
                           <div class="window-body" id="tabbody" style="padding:1em;z-index: 1;overflow-y: auto;">
-<!-- begin tab view-->                       <!-- end tab view-->
                           </div>
                         </div><hr>
-<!-- end window content-->
                     </div>
                     <div class="status-bar" style="z-index: 0;">
                         <p class="status-bar-field" id="tplace">season</p>
@@ -93,7 +88,6 @@
    var firstrender = true;     
     init();     
     function init(){
-
         tryLoad();
         clickTab(0);
     }     
@@ -110,8 +104,6 @@
     }      
     function game(){
        gd = new gameData();
-       
-       
        addNewSheep(true,true);
        addNewSheep(false,true);
        addNewSheep(true, false);
@@ -260,7 +252,6 @@ out += "</ul>"
             gd.pb -= 1;
             gd.sheeps[gd.curSid].hasbranch = true;
             gd.sheeps[gd.curSid].sexy += 10;
-            
         }
         clickTab(2);
     }     
@@ -301,7 +292,6 @@ out += "</ul>"
                      out += "Buy bigger pastures (8 more spaces each).<br><i>Current size: " + gd.maxSheep + "</i><br><BR><button onclick='buyspace()'  " + (gd.g<(8*(gd.maxSheep + 8)) ? "disabled " : "") + ">" + 8*(gd.maxSheep + 8)  + "g</button><br><BR>";                  
             out += "</fieldset>"
             out += "</div><div style='width:4%;'></div><div><BR>What'll it be?<BR><BR><HR><BR>";
-               
                 if (gd.assessor){
                 out += calcflockvals();
                  out += "<BR><BR><HR><BR>"
@@ -309,10 +299,10 @@ out += "</ul>"
                 out += "</div></div>"  ;        tb.innerHTML = out;
         return out;
     }     
-    function divest(){
+    function divest(forcelose = false){
         var out = "";
         curtab = 9;
-        
+        localStorage.removeItem("sheeps");
         var yv = 0;
         var lv = 0;
         for (let p of gd.pastures){
@@ -326,27 +316,31 @@ out += "</ul>"
                 }
             }
         }
-        out += "<fieldset> <legend>Game Over</legend>";         if (yv > lv){
+        out += "<fieldset> <legend>Game Over</legend>";         
+        if (!forcelose && (yv > lv)){
             out += "You won!<BR>"
+        }else{ 
+            out += "You lost!<BR>"}
+        if (forcelose){out += "<BR>You lost too many sheep!<BR><BR> Laban isn't happy."}else{
+            out += "<BR>You split the flock according to coat pattern. <BR><BR>Your flock of spotted sheep was worth " + yv + "g,<BR><BR>while Laban's flock of solid-colored sheep was worth " + lv + "g.";
         }
-        else{ 
-            out += "You lost!<BR>"
-        }
-        out += "<BR>You split the flock according to coat pattern. <BR><BR>Your flock of spotted sheep was worth " + yv + "g,<BR><BR>while Laban's flock of solid-colored sheep was worth " + lv + "g.";         out += "<BR><HR><BR><button onclick='newgame()'>Try Again?</button></fieldset>"; 
-        document.getElementById("wbody").innerHTML = out;     }     
+                out += "<BR><HR><BR><button onclick='newgame()'>Try Again?</button></fieldset>"; 
+        document.getElementById("wbody").innerHTML = out;     
+    }     
         function newgame(){
         localStorage.removeItem("sheeps");
         window.location.reload();
     }     
     function renderPastureView(){
         var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev</button></div><div class="item1"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /><BR>`;
-            
+
             if (gd.assessor){
                 out += calcpval();
             }
             out += `</div>
         <div class="item2"><button onclick="nextpast()">next</button></div></div>
         <BR><HR><BR>Sheep in pasture:<BR>`;         out += renderPastureList(gd.curPid);
+        out += "<BR><BR><button style='color:red;' onclick='sellpasture()'>Sell all sheep in pasture</button>"
         tb.innerHTML = out;
         return out;
     }     
@@ -424,7 +418,7 @@ out += "</ul>"
   </div> </fieldset></form>`;
     }
    out += `</div><div class="item6"><BR><BR><BR>`;
-   if (!s.retired && !s.sold)  {out += `<button style="color:red;" onclick='sellsheep()'>sell`;
+   if (!s.retired && !s.sold && (gd.numalive > 5))  {out += `<button style="color:red;" onclick='sellsheep()'>sell`;
     if (gd.assessor){
         out += ` for ` + sval(s) + "g"
     }
@@ -456,7 +450,8 @@ function renderLogView(){ var out = ""; out += "<ul class='tree-view'>";
     }     
     function renamesheep(){
         var sn = document.getElementById("sname").value;
-        gd.sheeps[gd.curSid].name = sn;     }     
+        gd.sheeps[gd.curSid].name = sn;     
+    }     
     function renamepasture(){
         var pn = document.getElementById("pname").value;
         gd.pastures[gd.curPid].name = pn;
@@ -470,7 +465,6 @@ function renderLogView(){ var out = ""; out += "<ul class='tree-view'>";
        gd.curSid = s.id;
        s.age = randint(0,20);
        updateSheepCount();
-        
     }     
     function updateSheepCount(){
         gd.numalive = 0;
@@ -521,18 +515,26 @@ function renderLogView(){ var out = ""; out += "<ul class='tree-view'>";
         gd.pastures[gd.curPid].heldSheepIds.push(bs.id);
        bs.pid = gd.curPid;
        gd.curSid = bs.id;
-       updateSheepCount();     } 
+       updateSheepCount();     
+    } 
        function advancetime(){
     firstrender = false;      breedall();
-} function sellsheep(){
+} 
+function sellsheep(){
     gd.sheeps[gd.curSid].sold = true;
     var s = gd.sheeps[gd.curSid];
     rem(gd.pastures[s.pid].heldSheepIds,s.id);
     gd.numalive -= 1;
     gd.g += sval(s);
     log("sold " + s.name + " for " + sval(s) + "g");
-    clickTab(2);
-} 
+    clickTab(2);} 
+    function sellpasture(){
+        var sl = zClone(gd.pastures[gd.curPid].heldSheepIds)
+        for (let si of sl){
+            gd.curSid = si;
+            sellsheep();
+        } clickTab(1);
+    }
 function dorandommove(){     for (let p of gd.pastures){
             for(let si of p.heldSheepIds){
                 var s = gd.sheeps[si];
@@ -570,7 +572,9 @@ function dorandommove(){     for (let p of gd.pastures){
                 log (s.name + " retired to the old sheeps farm.");
                 s.retired = true;
                 rem(p.heldSheepIds, s.id);
-                updateSheepCount();             }else{
+                updateSheepCount();            
+                if (gd.numalive< 4){divest(true);} 
+            }else{
                 if (s.age > 0 ){
                         if (s.female){
                     
@@ -590,12 +594,10 @@ function dorandommove(){     for (let p of gd.pastures){
                     }
                     }
             }
-            
             s.age += 1;           }          
         }
        console.log(ms);
         console.log(fs);
-          
             var done = false;
         if (fs.length <= 0 || ms.length <= 0){
                 done = true;
@@ -613,7 +615,8 @@ function dorandommove(){     for (let p of gd.pastures){
             } }} 
                           if (fs.length <= 0 || ms.length <= 0){
                 done = true;
-            } }  }     
+            } } 
+         }     
     function moveSheep(sid, newpid, overnight=false){
         newpid = Math.min(newpid,gd.pastures.length-1)
         newpid = Math.max(0,newpid);
@@ -678,7 +681,8 @@ function dorandommove(){     for (let p of gd.pastures){
     function pasture(pid){
         this.id = pid;
         this.name = "Pasture " + (this.id+1);
-        this.heldSheepIds = [] }
+        this.heldSheepIds = [] 
+    }
     function sheep( sx = -1, sy = -1,  cx = -1, cy = -1, g1 = -1, g2 = -1, g3 = -1, ){
         this.id = gd.sheepIndex;
         gd.sheepIndex+=1;this.name = "sheep "+this.id;
@@ -701,7 +705,6 @@ function dorandommove(){     for (let p of gd.pastures){
    }    
    function sval(s){
     return Math.floor(5 + ((28-s.age) + Math.max(s.g2+s.g3-s.g1,1)+10)/2);}  
-
    window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {return; // Do nothing if the event was already processed
   }   if (event.shiftKey){
@@ -748,12 +751,9 @@ function dorandommove(){     for (let p of gd.pastures){
   }   
   event.preventDefault();
 }, true); 
-function log(s){
-    console.log(s);
-    gd.longlog[gd.time].push(s);
-}  
- function randint(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min; } 
+function log(s){console.log(s);gd.longlog[gd.time].push(s);}   
+function zClone(thing){return JSON.parse(JSON.stringify(thing));}
+ function randint(min, max) {return Math.floor(Math.random() * (max - min + 1) ) + min; } 
   function randfrom(myarray){
 		return myarray[Math.floor(Math.random() * myarray.length)];
 	} 
