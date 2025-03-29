@@ -423,8 +423,8 @@ out += "</ul>"
     }
 
     function renderPastureView(){
-        var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev pasture</button></div><div class="item1 window"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /></div>
-        <div class="item2"><button onclick="nextpast()">next pasture</button></div></div>
+        var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev</button></div><div class="item1 window"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /></div>
+        <div class="item2"><button onclick="nextpast()">next</button></div></div>
         <BR><HR><BR>Sheep in pasture:<BR>`;
 
         out += renderPastureList(gd.curPid);
@@ -437,9 +437,9 @@ out += "</ul>"
 
         var out = "";
         out += `<div class="uigrid">
-<div class="item0"><button onclick='prevsheepall()'>prev sheep</button></div>
+<div class="item0"><button onclick='prevsheepall()'>prev</button></div>
   <div class="item1 window"><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b> in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button></div>
-  <div class="item2"><button onclick="nextsheepall()">next sheep</button></div>
+  <div class="item2"><button onclick="nextsheepall()">next</button></div>
   <div class="item3 window">`;
 
     if (s.age <2 ){
