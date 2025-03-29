@@ -136,13 +136,12 @@
     }     
     function clickTab(tid){
         saveData();
-        tb.style.maxHeight = "" + window.innerHeight*.7 + "px";
-        tb.innerHTML = "";
-        curtab = tid;
-        updatestatus();
+        tb.style.maxHeight = "" + window.innerHeight*.7 + "px";tb.innerHTML = "";
+        curtab = tid;updatestatus();
         for (let t of tm.children){
             t.ariaSelected = false;
         }
+        if (gd.numalive < 5){divest(true);}
         tm.children[tid].ariaSelected = true;         
         switch (tid) {
             case 0:
@@ -153,7 +152,8 @@
                renderSheepView(); break;
             case 3:
               renderMarketView(); break;
-            }             }     function selectandviewsheep(sid){
+            }             }     
+            function selectandviewsheep(sid){
         gd.curSid = sid;
         clickTab(2);
     }     
@@ -182,7 +182,7 @@ for (var w of gd.longlog){
     else{
         out += "<details> ";
     }
-    out += "<summary>season " + wi + "</summary>";
+    out += "<summary>season " + (wi+1) + "</summary>";
         out += "<ul>";
             for (var wu of w){
                 out += "<li>" + wu + "</li>"
@@ -321,7 +321,7 @@ out += "</ul>"
             out += "You won!<BR>"
         }else{ 
             out += "You lost!<BR>"}
-        if (forcelose){out += "<BR>You lost too many sheep!<BR><BR> Laban isn't happy."}else{
+        if (forcelose){out += "<BR>You lost or sold too many sheep!<BR><BR> Laban isn't happy."}else{
             out += "<BR>You split the flock according to coat pattern. <BR><BR>Your flock of spotted sheep was worth " + yv + "g,<BR><BR>while Laban's flock of solid-colored sheep was worth " + lv + "g.";
         }
                 out += "<BR><HR><BR><button onclick='newgame()'>Try Again?</button></fieldset>"; 
@@ -559,7 +559,7 @@ function dorandommove(){     for (let p of gd.pastures){
         }
         clickTab(0);
         gd.time += 1;
-        gd.longlog[gd.time]=[];
+        gd.longlog[gd.time-1]=[];
     } 
     function breedPasture(p){
         console.log("breeding " + p.name);       
@@ -672,7 +672,7 @@ function dorandommove(){     for (let p of gd.pastures){
         out += "age: " + s.age + "<BR>";
         return out;}    
     function gameData(){
-        this.time = 0;this.sheepIndex = 0;
+        this.time = 1;this.sheepIndex = 0;
         this.curPid = 0;this.curSid = 0;
         this.pastures = [];
         this.pastures.push(new pasture(0));this.pastures.push(new pasture(1));this.pastures.push(new pasture(2));this.pastures.push(new pasture(3));
@@ -751,7 +751,7 @@ function dorandommove(){     for (let p of gd.pastures){
   }   
   event.preventDefault();
 }, true); 
-function log(s){console.log(s);gd.longlog[gd.time].push(s);}   
+function log(s){console.log(s);gd.longlog[gd.time-1].push(s);}   
 function zClone(thing){return JSON.parse(JSON.stringify(thing));}
  function randint(min, max) {return Math.floor(Math.random() * (max - min + 1) ) + min; } 
   function randfrom(myarray){
