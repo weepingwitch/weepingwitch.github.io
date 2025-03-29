@@ -266,10 +266,10 @@
         var out = "<div class='mobile2' ><div >";
         //out += renderAllSheepList();
         for (let p of gd.pastures){
-            out += "<button onclick='selectandviewpasture(" + p.id + ")'>" + p.name + "</button><BR>";
+            out += "<button onclick='selectandviewpasture(" + p.id + ")'>" + p.name + "</button><BR><BR>";
             out += `<div class="progress-indicator segmented">
   <span class="progress-indicator-bar" style="width:` + (p.heldSheepIds.length/gd.maxSheep)*100   + `%;" />
-</div>`;    
+</div><BR>`;    
         }
 
         out += "<BR><HR><BR>";
@@ -390,7 +390,7 @@ out += "</ul>"
             gd.sheeps[gd.curSid].sexy += 10;
             
         }
-        clickTab(3);
+        clickTab(2);
     }
 
     function buyspace(){
@@ -411,9 +411,9 @@ out += "</ul>"
         var out = "";
 
         out += "<b>current money: " + gd.g + "g</b><BR><BR><div class=''>";
-        out += "Buy bigger pastures (8 more spaces each).<br>Current size: " + gd.maxSheep + "<br><button onclick='buyspace()'>" + 10*(gd.maxSheep + 8)  + "g</button><br><BR><hr><br>";
+        out += "Buy bigger pastures (8 more spaces each).<br>Current size: " + gd.maxSheep + "<br><BR><button onclick='buyspace()'  " + (gd.g<(10*(gd.maxSheep + 8)) ? "disabled " : "") + ">" + 10*(gd.maxSheep + 8)  + "g</button><br><BR><hr><br>";
         out += "Buy Poplar Branches (bundle of 2).<BR>Currently owned: " + gd.pb;
-        out += "<BR><button onclick='buypoplar()'>25g</button></div>";
+        out += "<BR><BR><button onclick='buypoplar()' " + ((gd.g<25) ? "disabled " : "") + ">25g</button></div>";
         
 
 
@@ -466,7 +466,7 @@ out += "</ul>"
             out += s.age + " seasons old.<BR><BR>";
 
                 if (s.age >= 2 && gd.pb > 0 && !s.hasbranch){
-                    out += "<button onclick='givepoplar()'>give poplar branches</button>"
+                    out += "<button onclick='givepoplar()'>give poplar branch</button>"
                 }
                 if (s.hasbranch){
                     out += "Has a poplar branch."
@@ -482,7 +482,7 @@ out += "</ul>"
   <div class="item4 window ">`;
     if (s.msi != -1 && s.fsi != -1){
             out += "mother: <div class='slink' onclick='selectandviewsheep(" + s.fsi + ")'>" + gd.sheeps[s.fsi].name + "</div> - ";
-            out += "father: <div class='slink' onclick='selectandviewsheep(" + s.msi + ")'>" + gd.sheeps[s.msi].name + "</div>";
+            out += "father: <div class='slink' onclick='selectandviewsheep(" + s.msi + ")'>" + gd.sheeps[s.msi].name + "</div><BR>";
             out += "<BR>";
         }
         if (s.kids.length > 0){
