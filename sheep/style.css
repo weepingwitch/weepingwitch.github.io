@@ -10,7 +10,7 @@
     --text-color: #222222;
     --surface: #f6d7b0;
     --button-highlight: #ffffff;
-    --button-face: #dfdfdf;
+    --button-face: #eccca2;
     --button-shadow: #806000;
     --window-frame: #0a0a0a;
     --dialog-blue: #806000;
@@ -135,7 +135,7 @@
     border: none;
     color: transparent;
     text-shadow: 0 0 var(--text-color);
-    background: var(--surface);
+    background: var(--button-face);
     box-shadow: var(--border-raised-outer), var(--border-raised-inner);
     border-radius: 0;
   
