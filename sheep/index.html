@@ -29,6 +29,10 @@
                 margin: 0 auto;
                 
             }
+            .slink{
+                display:inline;
+                border: 1px dashed gray;
+            }
 
             .mobile2 { display:flex;width:100%;}
             .mobile2 > div {
@@ -119,12 +123,12 @@
                           <li role="tab" aria-selected="true"><a href="#" onclick="clickTab(0);">Farm Overview</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(1);">Pasture Manager</a></li>
                           <li role="tab"><a href="#" onclick="clickTab(2);">Sheep Status</a></li>
-                          <li role="tab"><a href="#" onclick="clickTab(3);">Farm Log</a></li>
+                          <li role="tab"><a href="#" onclick="clickTab(3);">Market</a></li>
                           
                       
                         </menu>
                         <div class="window" role="tabpanel">
-                          <div class="window-body" id="tabbody" style="padding:1em;z-index: 1;">
+                          <div class="window-body" id="tabbody" style="padding:1em;z-index: 1;overflow-y: auto;">
 <!-- begin tab view-->
 
 
@@ -137,9 +141,9 @@
 <!-- end window content-->
                     </div>
                     <div class="status-bar" style="z-index: 0;">
-                        <p class="status-bar-field">season</p>
-                        <p class="status-bar-field" id="scount">Total Sheep:</p>
-                        <p class="status-bar-field" style="text-align:right">gold</p>
+                        <p class="status-bar-field" id="tplace">season</p>
+                        <p class="status-bar-field" id="splace">Total Sheep:</p>
+                        <p class="status-bar-field" id="gplace" style="text-align:right">gold</p>
                       </div>
                     <div class="status-bar" style="z-index: 0;">
                       <p class="status-bar-field">GenesOS 30.29-30.43</p>
@@ -157,7 +161,9 @@
    var curtab = 0;
    var tb = document.getElementById("tabbody");
    var tm = document.getElementById("tmenu");
-   var sc = document.getElementById("scount");
+   var sc = document.getElementById("splace");
+   var gc = document.getElementById("gplace");
+   var tc = document.getElementById("tplace");
    var firstrender = true;
 
     //main
@@ -200,9 +206,17 @@
 
     }
 
+    function updatestatus(){
+        sc.innerHTML = "total sheep: " + gd.numalive;
+        gc.innerHTML = gd.g + "g";
+        tc.innerHTML = "season " + gd.time;
+    }
+
     function clickTab(tid){
+        tb.style.maxHeight = "" + window.innerHeight*.7 + "px";
         tb.innerHTML = "";
         curtab = tid;
+        updatestatus();
        
         for (let t of tm.children){
             t.ariaSelected = false;
@@ -222,7 +236,9 @@
                renderSheepView();
                 break;
             case 3:
-               renderLogView();
+              // renderLogView();
+              tb.innerHTML = tid;
+              renderMarketView();
                 break;
             case 4:
                tb.innerHTML = tid;
@@ -252,7 +268,7 @@
         for (let p of gd.pastures){
             out += "<button onclick='selectandviewpasture(" + p.id + ")'>" + p.name + "</button><BR>";
             out += `<div class="progress-indicator segmented">
-  <span class="progress-indicator-bar" style="width:` + (p.heldSheepIds.length/p.maxSheep)*100   + `%;" />
+  <span class="progress-indicator-bar" style="width:` + (p.heldSheepIds.length/gd.maxSheep)*100   + `%;" />
 </div>`;    
         }
 
@@ -260,7 +276,7 @@
         out += "<button class='default' onclick='advancetime()'>Advance time</button><BR><BR>"
         out += "</div><div style='width:4%;'></div><div >";
             
-            out += "<ul class='tree-view'>";
+            out += "<ul class='tree-view' style='min-height:40px;overflow-y:auto;line-height:150%;'>";
     var wi = 0;
 for (var w of gd.longlog){
     out += "<li> ";
@@ -350,6 +366,62 @@ out += "</ul>"
         moveSheep(gd.curSid,npi);
     }
 
+
+    function buysheep(){
+
+    }
+
+    function buypoplar(){
+        if (gd.g >= 25){
+            gd.g -= 25;
+            gd.pb += 2;
+            clickTab(3);
+        }
+        else{
+            log ("Not enough money! Couldn't buy poplar branches.");
+            
+        }
+    }
+
+    function givepoplar(){
+        if (gd.pb > 0){
+            gd.pb -= 1;
+            gd.sheeps[gd.curSid].hasbranch = true;
+            gd.sheeps[gd.curSid].sexy += 10;
+            
+        }
+        clickTab(3);
+    }
+
+    function buyspace(){
+        var amt = 10*(gd.maxSheep + 8);
+        if (gd.g >= amt){
+            gd.g -= amt;
+            gd.maxSheep += 8;
+            clickTab(3)
+        }
+        else{
+            //alert("Not enough money!");
+            log("Not enough money! Couldn't buy bigger pastures.")
+        }
+    }
+  
+
+    function renderMarketView(){
+        var out = "";
+
+        out += "<b>current money: " + gd.g + "g</b><BR><BR><div class=''>";
+        out += "Buy bigger pastures (8 more spaces each).<br>Current size: " + gd.maxSheep + "<br><button onclick='buyspace()'>" + 10*(gd.maxSheep + 8)  + "g</button><br><BR><hr><br>";
+        out += "Buy Poplar Branches (bundle of 2).<BR>Currently owned: " + gd.pb;
+        out += "<BR><button onclick='buypoplar()'>25g</button></div>";
+        
+
+
+
+        tb.innerHTML = out;
+        return out;
+    }
+
     function renderPastureView(){
         var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev pasture</button></div><div class="item1 window"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /></div>
         <div class="item2"><button onclick="nextpast()">next pasture</button></div></div>
@@ -368,32 +440,55 @@ out += "</ul>"
 <div class="item0"><button onclick='prevsheepall()'>prev sheep</button></div>
   <div class="item1 window"><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b> in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button></div>
   <div class="item2"><button onclick="nextsheepall()">next sheep</button></div>
-  <div class="item3 window">` + ((s.female)? "female" : "male") + ", ";
+  <div class="item3 window">`;
+
+    if (s.age <2 ){
+        out += "It's a baby lamb.<BR><BR>"
+    }else{
+        out +=  ((s.female)? "female" : "male") + " - ";
+
+        out += s.pattern + " " + s.color + "<BR><BR>";
+    }
+
+    
+    
+   
+
     if (s.retired) {
-        out += "retired<BR>";
+        out += "Retired.<BR>";
     }
     
     else{
         if (s.sold){
-            out += "sold.<BR>"
+            out += "Sold.<BR>"
         }
         else{
-            out += s.age + " seasons old" + "<BR>";
+            out += s.age + " seasons old.<BR><BR>";
+
+                if (s.age >= 2 && gd.pb > 0 && !s.hasbranch){
+                    out += "<button onclick='givepoplar()'>give poplar branches</button>"
+                }
+                if (s.hasbranch){
+                    out += "Has a poplar branch."
+                }
+
+
+
         }
         
         }
-    out += s.pattern + " " + s.color;
+    
     out += `</div>
   <div class="item4 window ">`;
     if (s.msi != -1 && s.fsi != -1){
-            out += "<a onclick='selectandviewsheep(" + s.fsi + ")'>mother: " + gd.sheeps[s.fsi].name + "</a> - ";
-            out += "<a onclick='selectandviewsheep(" + s.msi + ")'>father: " + gd.sheeps[s.msi].name + "</a>";
+            out += "mother: <div class='slink' onclick='selectandviewsheep(" + s.fsi + ")'>" + gd.sheeps[s.fsi].name + "</div> - ";
+            out += "father: <div class='slink' onclick='selectandviewsheep(" + s.msi + ")'>" + gd.sheeps[s.msi].name + "</div>";
             out += "<BR>";
         }
         if (s.kids.length > 0){
-            out += "children: <ul>"
+            out += "children: <ul style='line-height:200%;'>"
             for (let sk of s.kids){
-                out += "<li onclick='selectandviewsheep(" + sk + ")'>" + gd.sheeps[sk].name + "</li>";
+                out += "<li onclick='selectandviewsheep(" + sk + ")'><div class='slink'>" + gd.sheeps[sk].name + "</div></li>";
             }
             out += "</ul>";
         }
@@ -530,7 +625,7 @@ return out;
             gd.numalive += p.heldSheepIds.length
         }
 
-        sc.innerHTML = "Total Sheep: " + gd.numalive;
+        updatestatus();
     }
 
 
@@ -545,7 +640,7 @@ return out;
         bg3 = Math.min(Math.max((((s1.g3 + s2.g3)/2)+randint(-5,5)),0),10);
 
         var bs = new sheep(bsx,bsy,bcx,bcy,bg1,bg2,bg3);
-        log("baa! " + s1.name + " and " + s2.name + " gave birth to " + bs.name);
+        log("baa! <div class='slink' onclick='selectandviewsheep(" + s1.id + ")'>" + s1.name + "</div> and <div class='slink' onclick='selectandviewsheep(" + s2.id + ")'>" + s2.name + "</div> gave birth to <div class='slink' onclick='selectandviewsheep(" + bs.id + ")'>" + bs.name + "</div>");
         bs.fsi = s1.id;
         bs.msi = s2.id;
         s1.kids.push(bs.id);
@@ -665,9 +760,11 @@ function sellsheep(){
 
             //only breed sometimes
             //can be buffed
-            if (p.heldSheepIds.length < p.maxSheep)
+            if (p.heldSheepIds.length < gd.maxSheep)
         {
-            if (randint(0,10) > 5){
+
+
+            if ((randint(0,10) > 5) || sbf.hasbranch || sbm.hasbranch){
                 breedSheep(sbf,sbm);
             }
         }
@@ -690,7 +787,7 @@ function sellsheep(){
     function moveSheep(sid, newpid){
         newpid = Math.min(newpid,gd.pastures.length-1)
         newpid = Math.max(0,newpid);
-        if (gd.pastures[newpid].heldSheepIds.length < gd.pastures[newpid].maxSheep){
+        if (gd.pastures[newpid].heldSheepIds.length < gd.maxSheep){
             var s = gd.sheeps[sid];
             if (!s.retired){
                 
@@ -698,24 +795,30 @@ function sellsheep(){
             rem(gd.pastures[s.pid].heldSheepIds, sid)
             gd.pastures[newpid].heldSheepIds.push(sid);
             s.pid = newpid;
-            log("moved " + s.name + " from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
+            log("moved <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
             gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
 
             }
             
         }else{
-            log ("pasture " + newpid + " full, couldn't move " + s.name);
+            log ("pasture " + newpid + " full, couldn't move <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div>");
         }
        
                clickTab(2);
     }
 
     function renderPastureList(pid){
-        var out = "<ul class='tree-view altlist'>";
+        var out = "<ul class='tree-view altlist' style='line-height:150%;'>";
         var p = gd.pastures[pid];
         for (let si of p.heldSheepIds){
             var s = gd.sheeps[si];
-            out +=  "<li onclick='selectandviewsheep(" + s.id + ")'>" + s.name + " - " + s.pattern + " " + s.color + "</li>";
+            out +=  "<li onclick='selectandviewsheep(" + s.id + ")'>" + s.name + " - " ;
+                if (s.age >= 2) {out += s.pattern + " " + s.color ;}
+                else{
+                    out += "lamb";
+                }
+                
+                out += "</li>";
         }
         out += "</ul>"
         return out;
@@ -768,6 +871,8 @@ function sellsheep(){
         this.sheeps = [];
         this.longlog = [[]];
         this.g = 40;
+        this.pb = 0;
+        this.maxSheep = 24;
         
     }
 
@@ -776,7 +881,7 @@ function sellsheep(){
         this.id = pid;
         this.name = "Pasture " + (this.id+1);
         this.heldSheepIds = []
-        this.maxSheep = 24;
+        
     }
    
 
@@ -808,6 +913,7 @@ function sellsheep(){
     this.getvalue = function(){return Math.floor(((24-this.age) + Math.max(this.g2+this.g3-this.g1,1)+10)/2);}
     this.dv = Math.random();
     this.sexy = this.g1+this.g2-this.g3;
+    this.hasbranch = false;
     this.fsi = -1;
     this.msi = -1;
     this.kids = [];
