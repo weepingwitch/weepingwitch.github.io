@@ -869,7 +869,45 @@ function sellsheep(){
     clickTab(2);
 }
 
+
+function dorandommove(){
+
+    for (let p of gd.pastures){
+            for(let si of p.heldSheepIds){
+                var s = gd.sheeps[si];
+                if (randint(0,100)>90){
+                    var pos = [0,1,2,3];
+                    rem(pos,s.pid);
+                    var np = randfrom(pos);
+                    if(gd.pastures[np].heldSheepIds.length < gd.maxSheep){
+                        moveSheep(s.id,np,true);
+                    }
+
+
+
+
+                }
+                else{
+                    //dont' move this sheep
+                    console.log("didn't move sheep overnight")
+                }
+                    
+               
+            }
+        }
+
+}
+
     function breedall(){
+
+
+
+        //randomly move from pastures
+        dorandommove();
+
+
+
+
         for (let p of gd.pastures){
             breedPasture(p);
             p.heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
@@ -983,7 +1021,7 @@ function sellsheep(){
 
     }
 
-    function moveSheep(sid, newpid){
+    function moveSheep(sid, newpid, overnight=false){
         newpid = Math.min(newpid,gd.pastures.length-1)
         newpid = Math.max(0,newpid);
         if (gd.pastures[newpid].heldSheepIds.length < gd.maxSheep){
@@ -994,8 +1032,15 @@ function sellsheep(){
             rem(gd.pastures[s.pid].heldSheepIds, sid)
             gd.pastures[newpid].heldSheepIds.push(sid);
             s.pid = newpid;
-            log("moved <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name);
-            gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
+            if (overnight){
+                log("oops! <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> jumped the fence from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name + ".");
+          
+            }
+            else{
+                log("moved <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div> from " + gd.pastures[oldpid].name + " to " + gd.pastures[newpid].name + ".");
+          
+            }
+              gd.pastures[newpid].heldSheepIds.sort((a,b) => gd.sheeps[a].id - gd.sheeps[b].id);
 
             }
             
