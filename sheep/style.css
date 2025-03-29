@@ -326,8 +326,7 @@
     padding: calc(2 * var(--border-width) + var(--element-spacing));
     padding-block-start: var(--element-spacing);
     margin: 0;
-    display:grid;
-    grid-template: auto / auto auto ;
+    
   }
   
   legend {

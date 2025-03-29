@@ -45,8 +45,8 @@
             .item0 {grid-area: prevb}
             .item1 { grid-area: header; background-color: #e1bf92;}
             .item2 { grid-area: menu;text-align: right; }
-            .item3 { grid-area: main; border:0px solid #e1bf92;border-right:2px solid #e1bf92; }
-            .item4 { grid-area: right; }
+            .item3 { grid-area: main;  }
+            .item4 { grid-area: right; border:0px solid #e1bf92;border-left:2px solid #e1bf92;}
             .item5 { grid-area: footer; }
             .item6 {grid-area: sellme;text-align: right;;}
 
@@ -130,7 +130,7 @@
                     <div class="title-bar">
                       <div class="title-bar-text">Jacob's Sheep Manager</div>
                     </div>
-                    <div class="window-body"  >
+                    <div class="window-body" id="wbody">
                 <BR>
                         <menu role="tablist" id="tmenu">
                           <li role="tab" aria-selected="true"><a href="#" onclick="clickTab(0);">Farm Overview</a></li>
@@ -203,10 +203,35 @@
        addNewSheep(false,true);
        addNewSheep(true,true);
        addNewSheep(true,true);
-       addNewSheep(false,false);
+      
+
+       gd.curPid = 1;
+       addNewSheep(true, false);
+       addNewSheep(false,true);
+       addNewSheep(true,true);
+       addNewSheep(false,true);
+       addNewSheep(true, false);
+       addNewSheep();
+
+       
+       
+       gd.curPid = 2;
+       addNewSheep(true, false);
+       addNewSheep(false,true);
+       addNewSheep(true,true);
+       addNewSheep(true,true);
+       addNewSheep();
+       addNewSheep();
+
+       gd.curPid = 3;
        addNewSheep();
        addNewSheep();
        addNewSheep();
+       addNewSheep();
+       addNewSheep();
+       addNewSheep();
+
+
        
        
       breedall();
@@ -219,6 +244,7 @@
 
     }
 
+  
     function updatestatus(){
         sc.innerHTML = "total sheep: " + gd.numalive;
         gc.innerHTML = gd.g + "g";
@@ -286,7 +312,13 @@
         }
 
         out += "<HR><BR>";
+
+            
         out += "<button class='default' onclick='advancetime()'>Advance time</button><BR><BR>"
+            if (gd.assessor){
+                out += calcflockvals();
+            }
+           
         out += "</div><div style='width:4%;'></div><div >";
             
             out += "<ul class='tree-view logview' style='overflow-y:auto;line-height:150%;'>";
@@ -407,7 +439,7 @@ out += "</ul>"
     }
 
     function buyspace(){
-        var amt = 10*(gd.maxSheep + 8);
+        var amt = 8*(gd.maxSheep + 8);
         if (gd.g >= amt){
             gd.g -= amt;
             gd.maxSheep += 8;
@@ -420,14 +452,71 @@ out += "</ul>"
     }
   
 
-    function renderMarketView(){
-        var out = "";
+    function buygeneview(){
+        gd.g -= 100;
+        gd.geneview = true;
+        log("You learned how to trace sheep genetics!");
+        clickTab(3);
+    }
 
-        out += "<b>current money: " + gd.g + "g</b><BR><BR><div class=''>";
-        out += "Buy bigger pastures (8 more spaces each).<br>Current size: " + gd.maxSheep + "<br><BR><button onclick='buyspace()'  " + (gd.g<(10*(gd.maxSheep + 8)) ? "disabled " : "") + ">" + 10*(gd.maxSheep + 8)  + "g</button><br><BR><hr><br>";
-        out += "Buy Poplar Branches (bundle of 2).<BR>Currently owned: " + gd.pb;
-        out += "<BR><BR><button onclick='buypoplar()' " + ((gd.g<25) ? "disabled " : "") + ">25g</button></div>";
-        
+    function buyassess(){
+        gd.g -= 150;
+        gd.assessor = true;
+        log ("You learned how to assess sheep value!");
+        clickTab(3);
+    }
+
+    function renderMarketView(){
+    
+        var out = "<div class='mobile2' ><div >";
+
+        out += "<fieldset>";
+            out += "<legend><b>current money: " + gd.g + "g</b></legend>"
+
+
+            out += "Buy Poplar Branches (bundle of 2).<BR><i>Currently owned: " + gd.pb + "</i>";
+        out += "<BR><BR><button onclick='buypoplar()' " + ((gd.g<25) ? "disabled " : "") + ">25g</button><BR><BR><HR><BR>";
+
+            if (!gd.geneview){
+                out += "Learn how to track sheep genealogy.<i><BR>Exclusive training seminar</i>";
+          
+          out += "<BR><BR><button onclick='buygeneview()' " + ((gd.g<100) ? "disabled " : "") + " >100g</button><br><BR><hr><br>";
+          
+            }
+            else{
+
+               
+            }
+
+            if (gd.assessor){
+                
+            }
+            else {
+             out += "Learn how to appraise sheep value.<BR><i>Exclusive training seminar</i><BR><BR>";
+             out += "<button onclick='buyassess()' " + ((gd.g<150) ? "disabled " : "") + " >150g</button><br><BR><hr><br>"
+            }
+            
+
+        out += "Buy bigger pastures (8 more spaces each).<br><i>Current size: " + gd.maxSheep + "</i><br><BR><button onclick='buyspace()'  " + (gd.g<(8*(gd.maxSheep + 8)) ? "disabled " : "") + ">" + 8*(gd.maxSheep + 8)  + "g</button><br><BR>";
+
+         
+
+       
+            out += "</fieldset>"
+            out += "</div><div style='width:4%;'></div><div><BR>What'll it be?<BR><BR><HR><BR>";
+               
+                if (gd.assessor){
+                out += calcflockvals();
+                 out += "<BR><BR><HR><BR>"
+            }
+
+            out += "<button onclick='divest()' style='color:red;'>Divest your flocks from Laban</button>"
+           
+              
+               
+             
+               
+                out += "</div></div>"
 
 
 
@@ -435,8 +524,49 @@ out += "</ul>"
         return out;
     }
 
+    function divest(){
+        var out = "";
+        curtab = 9;
+        
+        var yv = 0;
+        var lv = 0;
+        for (let p of gd.pastures){
+            for(let si of p.heldSheepIds){
+                var s = gd.sheeps[si];
+                if(s.pattern == "spotted "){
+                    yv += sval(s);
+                }
+                else{
+                    lv += sval(s);
+                }
+            }
+        }
+        out += "<fieldset> <legend>Game Over</legend>";
+
+        if (yv > lv){
+            out += "You won!<BR>"
+        }
+        else{ 
+            out += "You lost!<BR>"
+        }
+        out += "<BR>You split the flock according to coat pattern. <BR><BR>Your flock of spotted sheep was worth " + yv + "g,<BR><BR>while Laban's flock of solid-colored sheep was worth " + lv + "g.";
+
+        out += "<BR><HR><BR><button onclick='window.location.reload()'>Try Again?</button></fieldset>";
+
+
+        document.getElementById("wbody").innerHTML = out;
+
+    }
+
     function renderPastureView(){
-        var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev</button></div><div class="item1"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /></div>
+        var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev</button></div><div class="item1"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /><BR>`;
+            
+            if (gd.assessor){
+                out += calcpval();
+            }
+            
+            
+            out += `</div>
         <div class="item2"><button onclick="nextpast()">next</button></div></div>
         <BR><HR><BR>Sheep in pasture:<BR>`;
 
@@ -451,7 +581,13 @@ out += "</ul>"
         var out = "";
         out += `<div class="uigrid">
 <div class="item0"><button onclick='prevsheepall()'>Prev</button></div>
-  <div class="item1 "><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b> in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button></div>
+  <div class="item1" ><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b><Br>`;
+    
+    if (!s.retired && !s.sold)
+    out += `in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button>`;
+    
+    
+    out += `</div>
   <div class="item2"><button onclick="nextsheepall()">Next</button></div>
   <div class="item3 ">`;
 
@@ -493,7 +629,8 @@ out += "</ul>"
     
     out += `</div>
   <div class="item4 ">`;
-    if (s.msi != -1 && s.fsi != -1){
+    if (gd.geneview){
+        if (s.msi != -1 && s.fsi != -1){
             out += "Parents:<BR><br><div class='slink' onclick='selectandviewsheep(" + s.fsi + ")'>" + gd.sheeps[s.fsi].name + "</div> and ";
             out += "<div class='slink' onclick='selectandviewsheep(" + s.msi + ")'>" + gd.sheeps[s.msi].name + "</div><BR>";
             out += "<BR>";
@@ -509,6 +646,11 @@ out += "</ul>"
             out += "</ul>";
         }
     
+    }
+    else {
+        out += "Baa!"
+    }
+
     
     out += ` </div>
   <div class="item5 ">`;
@@ -518,7 +660,8 @@ out += "</ul>"
         
      
             <form name="pmove">
-            <fieldset>
+            <fieldset style="display:grid;
+    grid-template: auto / auto auto ;">
                 
   <legend>Assigned to</legend>
   <div class="field-row">
@@ -541,40 +684,27 @@ out += "</ul>"
 </fieldset>
 </form>
         
-        
-        
-        
         `;
     }
    out += `
-   </div><div class="item6">`;
-   if (!s.retired && !s.sold)  {out += `<button style="color:red;" onclick='sellsheep()'>sell for ` + sval(s) + `g</button>`;}
+   </div><div class="item6"><BR><BR><BR>`;
+   if (!s.retired && !s.sold)  {out += `<button style="color:red;" onclick='sellsheep()'>sell`;
+    
+    
+    if (gd.assessor){
+        out += ` for ` + sval(s) + "g"
+    }
+    
+    out += `</button>`;}
     
     out += `</div>
 </div>`;
         
 
-          
-           
-            
-       
-           
-          
-       
-       
-
-        //out += "spotg: " + s.sx + "," + s.sy + "<BR>";
-        //out +="colorg: " +  s.cx + "," + s.cy + "<BR>";
-       
-        
-        
-        
 
         tb.innerHTML = out;
         return out;
     }
-
-
 
     function renderLogView(){
 
@@ -645,6 +775,34 @@ return out;
     }
 
 
+    function calcflockvals(){
+       var fv = 0;
+        for (let p of gd.pastures){
+            for(let si of p.heldSheepIds){
+                var s = gd.sheeps[si];
+                
+                    fv += sval(s);
+               
+            }
+        }
+        var out = "total flock value: " + fv ;
+        return out;
+    }
+
+    function calcpval(){
+        var pv = 0;
+        var p = gd.pastures[gd.curPid];
+        for(let si of p.heldSheepIds){
+                var s = gd.sheeps[si];
+                
+                    pv += sval(s);
+               
+            }
+        var out = "total pasture value: " + pv;
+        return out;
+    }
+
+
     function breedSheep(s1, s2){
 
         bcx = randfrom([s1.cx,s2.cx]);
@@ -656,8 +814,14 @@ return out;
         bg3 = Math.min(Math.max((((s1.g3 + s2.g3)/2)+randint(-5,5)),0),10);
 
         var bs = new sheep(bsx,bsy,bcx,bcy,bg1,bg2,bg3);
-        log("baa! <div class='slink' onclick='selectandviewsheep(" + s1.id + ")'>" + s1.name + "</div> and <div class='slink' onclick='selectandviewsheep(" + s2.id + ")'>" + s2.name + "</div> gave birth to <div class='slink' onclick='selectandviewsheep(" + bs.id + ")'>" + bs.name + "</div>");
-        bs.fsi = s1.id;
+        if (gd.geneview){
+            log("baa! <div class='slink' onclick='selectandviewsheep(" + s1.id + ")'>" + s1.name + "</div> and <div class='slink' onclick='selectandviewsheep(" + s2.id + ")'>" + s2.name + "</div> gave birth to <div class='slink' onclick='selectandviewsheep(" + bs.id + ")'>" + bs.name + "</div>");
+ 
+        }
+        else{
+            log("baa! <div class='slink' onclick='selectandviewsheep(" + bs.id + ")'>" + bs.name + "</div> was born!");
+        }
+              bs.fsi = s1.id;
         bs.msi = s2.id;
         s1.kids.push(bs.id);
         s2.kids.push(bs.id);
@@ -886,9 +1050,11 @@ function sellsheep(){
         this.pastures.push(new pasture(3));
         this.sheeps = [];
         this.longlog = [[]];
-        this.g = 40;
+        this.g =50;
         this.pb = 0;
         this.maxSheep = 24;
+        this.geneview = false;
+        this.assessor = false;
         
     }
 
@@ -940,7 +1106,7 @@ function sellsheep(){
    }
 
    function sval(s){
-    return Math.floor(((24-s.age) + Math.max(s.g2+s.g3-s.g1,1)+10)/2);
+    return Math.floor(5 + ((28-s.age) + Math.max(s.g2+s.g3-s.g1,1)+10)/2);
    }
 
         //utility
