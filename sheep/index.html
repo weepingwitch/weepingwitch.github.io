@@ -273,6 +273,7 @@ out += "</ul>"
         log ("You learned how to assess sheep value!");
         clickTab(3);
     }    
+    function buybulk(){gd.g -= 100;gd.bulk=true;log("You can now sell sheep by the pasture-full!");clickTab(3);}
      function renderMarketView(){
         var out = "<div class='mobile2' ><div >";         out += "<fieldset>";
             out += "<legend><b>current money: " + gd.g + "g</b></legend>" 
@@ -281,10 +282,11 @@ out += "</ul>"
                 out += "Learn how to track sheep genealogy.<i><BR>Exclusive training seminar</i>";
           out += "<BR><BR><button onclick='buygeneview()' " + ((gd.g<100) ? "disabled " : "") + " >100g</button><br><BR><hr><br>";
             }
-            else{                
-            }             
-            if (gd.assessor){    
-            }
+            else{                }      
+            if(!gd.bulk){out += "Buy the ability to sell sheep in bulk.<BR><i>Special market membership</i>";
+                        out += "<BR><BR><button onclick='buybulk()' " + ((gd.g<100) ? "disabled " : "") + " >100g</button><br><BR><hr><br>";
+                }       
+            if (gd.assessor){    }
             else {
              out += "Learn how to appraise sheep value.<BR><i>Exclusive training seminar</i><BR><BR>";
              out += "<button onclick='buyassess()' " + ((gd.g<150) ? "disabled " : "") + " >150g</button><br><BR><hr><br>"
@@ -295,7 +297,7 @@ out += "</ul>"
                 if (gd.assessor){
                 out += calcflockvals();
                  out += "<BR><BR><HR><BR>"
-            }             out += "<button onclick='divest()' style='color:red;'>Divest your flocks from Laban</button>"             
+            }            if(gd.time>12){ out += "<button onclick='divest()' style='color:red;'>Divest your flocks from Laban</button>";}else{out+="After the 12th season, you can choose to seperate your flock from Laban."}             
                 out += "</div></div>"  ;        tb.innerHTML = out;
         return out;
     }     
@@ -333,23 +335,22 @@ out += "</ul>"
     }     
     function renderPastureView(){
         var out = `<div class='uigrid'><div class="item0"><button onclick='prevpast()'>prev</button></div><div class="item1"><input id='pname' type='text' value='` + gd.pastures[gd.curPid].name + `' onchange='renamepasture()' /><BR>`;
-
             if (gd.assessor){
                 out += calcpval();
             }
             out += `</div>
         <div class="item2"><button onclick="nextpast()">next</button></div></div>
         <BR><HR><BR>Sheep in pasture:<BR>`;         out += renderPastureList(gd.curPid);
-        out += "<BR><BR><button style='color:red;' onclick='sellpasture()'>Sell all sheep in pasture</button>"
+       if (gd.bulk){ out += "<BR><BR><button style='color:red;' onclick='sellpasture()'>Sell all sheep in pasture</button>";}
         tb.innerHTML = out;
         return out;
     }     
     function renderSheepView(){
-        var s = gd.sheeps[gd.curSid];         var out = "";
+        var s = gd.sheeps[gd.curSid];        
+         var out = "";
         out += `<div class="uigrid">
 <div class="item0"><button onclick='prevsheepall()'>Prev</button></div>
   <div class="item1" ><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b><Br>`;
-    
     if (!s.retired && !s.sold)
     out += `in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button>`;
     out += `</div>
@@ -636,7 +637,6 @@ function dorandommove(){     for (let p of gd.pastures){
         }else{
             log ("pasture " + newpid + " full, couldn't move <div class='slink' onclick='selectandviewsheep(" + s.id + ")'>" + s.name + "</div>");
         }
-       
                clickTab(2);
     }     function renderPastureList(pid){
         var out = "<ul class='tree-view altlist' style='line-height:150%;overflow-y:auto;height:31em;'>";
@@ -677,7 +677,7 @@ function dorandommove(){     for (let p of gd.pastures){
         this.pastures = [];
         this.pastures.push(new pasture(0));this.pastures.push(new pasture(1));this.pastures.push(new pasture(2));this.pastures.push(new pasture(3));
         this.sheeps = [];this.longlog = [[]];
-        this.g =50;this.pb = 0; this.maxSheep = 24;this.geneview = false;this.assessor = false;} 
+        this.g =50;this.pb = 0; this.maxSheep = 24;this.geneview = false;this.assessor = false;this.bulk=false;} 
     function pasture(pid){
         this.id = pid;
         this.name = "Pasture " + (this.id+1);
