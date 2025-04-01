@@ -132,7 +132,7 @@
     function updatestatus(){
         sc.innerHTML = "total sheep: " + gd.numalive;
         gc.innerHTML = gd.g + "g";
-        tc.innerHTML = "season " + gd.time;
+        tc.innerHTML = "season " + (gd.time + 1);
     }     
     function clickTab(tid){
         saveData();
@@ -560,7 +560,7 @@ function dorandommove(){     for (let p of gd.pastures){
         }
         clickTab(0);
         gd.time += 1;
-        gd.longlog[gd.time-1]=[];
+        gd.longlog[gd.time]=[];updateSheepCount();
     } 
     function breedPasture(p){
         console.log("breeding " + p.name);       
@@ -672,7 +672,7 @@ function dorandommove(){     for (let p of gd.pastures){
         out += "age: " + s.age + "<BR>";
         return out;}    
     function gameData(){
-        this.time = 1;this.sheepIndex = 0;
+        this.time = 0;this.sheepIndex = 0;
         this.curPid = 0;this.curSid = 0;
         this.pastures = [];
         this.pastures.push(new pasture(0));this.pastures.push(new pasture(1));this.pastures.push(new pasture(2));this.pastures.push(new pasture(3));
@@ -751,7 +751,7 @@ function dorandommove(){     for (let p of gd.pastures){
   }   
   event.preventDefault();
 }, true); 
-function log(s){console.log(s);gd.longlog[gd.time-1].push(s);}   
+function log(s){console.log(s);gd.longlog[gd.time].push(s);}   
 function zClone(thing){return JSON.parse(JSON.stringify(thing));}
  function randint(min, max) {return Math.floor(Math.random() * (max - min + 1) ) + min; } 
   function randfrom(myarray){
