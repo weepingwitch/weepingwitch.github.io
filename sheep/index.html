@@ -349,12 +349,12 @@ out += "</ul>"
         var s = gd.sheeps[gd.curSid];        
          var out = "";
         out += `<div class="uigrid">
-<div class="item0"><button onclick='prevsheepall()'>Prev</button></div>
+<div class="item0">`;  if(!s.retired && !s.sold) out += `<button onclick='prevsheep()'>Prev</button>`; out += `</div>
   <div class="item1" ><input id='sname' type='text' value='` + s.name + `' onchange='renamesheep()' /></b><Br>`;
     if (!s.retired && !s.sold)
     out += `in <button onclick='selectandviewpasture(` + s.pid + `)' >` + gd.pastures[s.pid].name  +`</button>`;
     out += `</div>
-  <div class="item2"><button onclick="nextsheepall()">Next</button></div>
+  <div class="item2">`;  if(!s.retired && !s.sold) out += `<button onclick="nextsheep()">Next</button>`; out += `</div>
   <div class="item3 ">`;     if (s.age <2 ){
         out += "It's a baby lamb.<BR><BR>"
     }else{
@@ -528,7 +528,7 @@ function sellsheep(){
     gd.numalive -= 1;
     gd.g += sval(s);
     log("sold " + s.name + " for " + sval(s) + "g");
-    clickTab(2);} 
+    clickTab(1);} 
     function sellpasture(){
         var sl = zClone(gd.pastures[gd.curPid].heldSheepIds)
         for (let si of sl){
@@ -737,11 +737,11 @@ function dorandommove(){     for (let p of gd.pastures){
       break;
       case "ArrowUp":
         if (curtab == 1) prevpast();
-        if (curtab == 2) prevsheepall();
+        if (curtab == 2) prevsheep();
       break;
     case "ArrowDown":
     if (curtab == 1) nextpast();
-    if (curtab == 2) nextsheepall();
+    if (curtab == 2) nextsheep();
       break;
     case "Tab": 
         if (curtab < 3) {clickTab(curtab + 1)}
