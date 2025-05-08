@@ -1,0 +1,105 @@
+<!doctype html><!-- hello i am willow and i made this game. -->
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">         
+    <title>color spells</title>         
+    <style type="text/css">
+        html{  width:100%;height:100%;}
+        body{ background-color:#989898; margin:0;padding:0; width:100%;height:100%;}   
+        #containerDiv{ width:100%;   }
+        button{background-color: gray; border:1px solid black;}
+        button:disabled {display:none;};
+    </style>
+    </head>
+    <body>
+        <div id="containerDiv">
+            <div id="castdiv"><BR></div><BR><button id="cb" onclick="castspell()">cast</button><BR>
+            <div id="drawdiv"></div>
+        </div>
+    </body>
+<script>
+var gd;
+var dd = document.getElementById("drawdiv");
+var cd = document.getElementById("castdiv");
+
+var cn=["(red)","(ora)","(yel)","(gre)","(blu)","(pur)","(whi)","(blk)"]
+var ci=["🔴","🟠","🟡","🟢","🔵","🟣","⚪️","⚫️"];
+
+newgame();
+
+
+function newgame(){
+    gd = {};
+    gd.bag = [];
+    gd.sb = [];
+    gd.hand = [];
+    gd.cast = [];
+    resetbag();
+    shuffle(gd.bag)
+    draw();
+   
+}
+
+
+function draw(n=10){
+shuffle(gd.bag);
+var out = "";
+for (var i=0; i <n; i++){
+    var nr = gd.bag.shift();
+    nr.spent = true;
+    gd.sb.push(nr);
+    gd.hand.push(nr);    
+}
+gd.hand.sort((a,b) => a.rt - b.rt);
+for (var hri in gd.hand){
+    var hr = gd.hand[hri];
+    out += "<button id='hb" + hri + "' onclick='casthand(" + hri + ")'>" + ci[hr.rt] + "</button>";
+}
+dd.innerHTML = out;
+console.log(gd.hand);
+}
+
+function casthand(hi){
+    var out = "";
+    console.log(hi);
+    var cr = gd.hand[hi];
+    gd.cast.push(cr);
+    console.log(gd.cast)
+    document.getElementById("hb" + hi).disabled = true;
+    for (var ncr of gd.cast){
+        out +=  ci[ncr.rt] ;
+    }
+    cd.innerHTML = out;
+}
+
+function castspell(){
+
+}
+
+function resetbag(){
+    for (var i=0; i<8; i++){
+        for (var j=0; j<4;j++){
+            gd.bag.push(new rune(i));
+        }
+    }
+}
+
+
+
+function rune(rtype){
+this.spent = false;
+this.rt = rtype;
+}
+
+
+function zClone(thing){return JSON.parse(JSON.stringify(thing));}
+function randint(min, max) {return Math.floor(Math.random() * (max - min + 1) ) + min; } 
+function randfrom(myarray){   return myarray[Math.floor(Math.random() * myarray.length)];} 
+function rem(a, ele) {a.forEach((item, index) => {if (item === ele) {a.splice(index, 1);}});return a;}
+function shuffle (array) { 
+  for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } 
+  return array; 
+}; 
+</script>
+
+
+</html>
