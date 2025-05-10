@@ -18,6 +18,7 @@
         <div id="containerDiv">
             <div id="disp1" class="dd">enemies !</div>
             <div id="disp2" class="dd">
+                <div id="ldiv"></div><BR>
                 <div id="castdiv"></div><BR>
                     <div id="drawdiv"></div><BR>
                     <button id="cb" onclick="castspell()">cast</button>|||||<button id="clb" onclick="clearspell()">clear</button>
@@ -29,27 +30,98 @@
     </body>
 <script>
 var gd;
-var dd = document.getElementById("drawdiv");
-var cd = document.getElementById("castdiv");
+var dd;
+var cd ;
+var ld;
 
 var cn=["(red)","(ora)","(yel)","(gre)","(blu)","(pur)","(whi)","(blk)"]
 var ci=["🔴","🟠","🟡","🟢","🔵","🟣","⚪️","⚫️"];
 
+
+function makespellbook(){
+ns("0","red attack");
+ns("1","ora attack");
+ns("2","yel attack");
+ns("3","gre attack");
+ns("4","blu attack");
+ns("5","pur attack");
+ns("6","whi attack");
+ns("7","blk attack");
+ns("00","strong red attack");
+ns("01","storng ora attack");
+ns("02","strong yel attack");
+ns("03","strong gre attack");
+ns("04","strong blu attack");
+ns("05","strong pur attack");
+ns("06","strong whi attack");
+ns("07","strong blk attack");
+ns("10","turn enemy red");
+ns("11","turn enemy ora");
+ns("12","turn enemy yel");
+ns("13","turn enemy gre");
+ns("14","turn enemy blu");
+ns("15","turn enemy pur");
+ns("16","turn enemy whi");
+ns("17","turn enemy blk");
+ns("20","red shield");
+ns("21","ora shield");
+ns("22","yel shield");
+ns("23","gre shield");
+ns("24","blu shield");
+ns("25","pur shield");
+ns("26","whi shield");
+ns("27","blk shield");
+ns("30","turn minion red");
+ns("31","turn minion ora");
+ns("32","turn minion yel");
+ns("33","turn minion gre");
+ns("34","turn minion blu");
+ns("35","turn minion pur");
+ns("36","turn minion whi");
+ns("37","turn minion blk");
+ns("40","red energy");
+ns("41","ora energy");
+ns("42","yel energy");
+ns("43","gre energy");
+ns("44","blu energy");
+ns("45","pur energy");
+ns("46","whi energy");
+ns("47","blk energy");
+
+
+}
+
+
 newgame();
 
-
-function newgame(){
+function initsavedata(){
     gd = {};
-    gd.maxcast = 3;
+    gd.maxcast = 2;
+    gd.maxhand = 5;
     gd.bag = [];
-    gd.sb = [];
+    gd.sdict = {};
     gd.hand = [];
     gd.cast = [];
     resetbag();
+    makespellbook();
+}
+
+
+function newgame(){
+    initsavedata();
+
     shuffle(gd.bag)
-    draw();
+    drawfull();
    
 }
+
+function drawfull(){
+    var dtimes = Math.max((gd.maxhand - gd.hand.length),0)
+    if (dtimes > 0){
+        draw(dtimes);
+    }
+}
+
 
 
 function draw(n=5){
@@ -57,14 +129,25 @@ shuffle(gd.bag);
 
 for (var i=0; i <n; i++){
     var nr = gd.bag.shift();
-    gd.sb.push(nr);
+    //gd.bag.push(nr);
     gd.hand.push(nr);    
 }
 drawspellui();
 
 }
 
+function getcaststring(){
+    var ss = "";
+    for (var ccr of gd.cast){
+        ss += ccr.rt;
+    }
+    return ss;
+}
+
 function drawspellui(){
+    dd = document.getElementById("drawdiv");
+    cd = document.getElementById("castdiv");
+    ld = document.getElementById("ldiv");
     gd.hand.sort((a,b) => a.rt - b.rt);
     var hout = "";
     var bd =  (gd.cast.length >= gd.maxcast);
@@ -80,6 +163,13 @@ function drawspellui(){
     cd.innerHTML = cout;
     document.getElementById("cb").disabled = (gd.cast.length == 0);
     document.getElementById("clb").disabled = (gd.cast.length == 0);
+
+    var ss = getcaststring();
+    var lout = "???"
+    if (gd.sdict[ss] != null) {
+        lout = gd.sdict[ss].name;
+    }
+    ld.innerHTML = lout;
 }
 
 function castrune(hi){
@@ -101,10 +191,20 @@ function clearspell(){
 }
 
 function castspell(){
+    var ss = getcaststring();
+   while(gd.cast.length > 0){
+        ccr = gd.cast.shift();
+        gd.bag.push(ccr);
+    }
+    drawfull();
+    drawspellui();
+    console.log(ss);
+    gd.sdict[ss].discovered = true;
 
 }
 
 function resetbag(){
+    gd.bag = [];
     for (var i=0; i<8; i++){
         for (var j=0; j<4;j++){
             gd.bag.push(new rune(i));
@@ -112,7 +212,20 @@ function resetbag(){
     }
 }
 
+function ns(ss="",name="spell", eid = 0){
+    var s = new spell(ss,name);
+    gd.sdict[ss] = s;
 
+}
+
+function spell(ss="",name="spell", eid = 0){
+    this.ss = ss;
+    this.name = name;
+    this.effect = null;
+    this.str = 1;
+    this.eid = eid;
+    this.discovered = false;
+}
 
 function rune(rtype){
 this.spent = false;
