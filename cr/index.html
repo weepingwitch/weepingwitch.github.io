@@ -16,13 +16,9 @@
     </head>
     <body>
         <div id="containerDiv">
-            <div id="disp1" class="dd">enemies !</div>
+            <div id="disp1" class="dd"></div>
             <div id="disp2" class="dd">
-                <div id="ldiv"></div><BR>
-                <div id="castdiv"></div><BR>
-                    <div id="drawdiv"></div><BR>
-                    <button id="cb" onclick="castspell()">cast</button>|||||<button id="clb" onclick="clearspell()">clear</button>
-
+               
 
             </div>
             
@@ -33,6 +29,8 @@ var gd;
 var dd;
 var cd ;
 var ld;
+var d1 = document.getElementById("disp1");
+var d2 = document.getElementById("disp2");
 
 var cn=["(red)","(ora)","(yel)","(gre)","(blu)","(pur)","(whi)","(blk)"]
 var ci=["🔴","🟠","🟡","🟢","🔵","🟣","⚪️","⚫️"];
@@ -110,8 +108,7 @@ function initsavedata(){
 function newgame(){
     initsavedata();
 
-    shuffle(gd.bag)
-    drawfull();
+   drawfightui();
    
 }
 
@@ -142,6 +139,19 @@ function getcaststring(){
         ss += ccr.rt;
     }
     return ss;
+}
+
+
+function drawfightui(){
+d1.innerHTML = "enemies!<BR>";
+d2.innerHTML = `
+ <div id="ldiv"></div><BR>
+                <div id="castdiv"></div><BR>
+                    <div id="drawdiv"></div><BR>
+                    <button id="cb" onclick="castspell()">cast</button>|||||<button id="clb" onclick="clearspell()">clear</button>
+
+`;
+drawfull();
 }
 
 function drawspellui(){
@@ -199,7 +209,11 @@ function castspell(){
     drawfull();
     drawspellui();
     console.log(ss);
-    gd.sdict[ss].discovered = true;
+    if (gd.sdict[ss] != null){
+        gd.sdict[ss].discovered = true;
+        d1.innerHTML += gd.sdict[ss].name + "<BR>";
+    }
+    
 
 }
 
