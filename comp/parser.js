@@ -60,6 +60,14 @@ function parseFactor(){
     let res = new ASTnode(Ntype.cint, cp.value);
     return res;
   }
+  if (cptype == Ttype.neg){
+    eat(Ttype.neg);
+    let rhs = parseStatement();
+    let res = new ASTnode(Ntype.unaryop,cptype);
+    res.rhs = rhs;
+    return res;
+
+  }
 
 }
 

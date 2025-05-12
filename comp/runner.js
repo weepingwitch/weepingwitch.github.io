@@ -18,7 +18,7 @@ payload += bout.join(",");
 payload += "];var icode = new Uint8Array(code);";
 payload += "WebAssembly.instantiate(icode).then(result => result.instance.exports.main()).then(result =>{document.write(result);});";
 
-WebAssembly.instantiate(bout).then(result => result.instance.exports.main()).then(result =>{addto(rdiv,result);});
+WebAssembly.instantiate(bout).then(result => result.instance.exports.main()).then(result =>{console.log(result);addto(rdiv,result);});
 
 
 
