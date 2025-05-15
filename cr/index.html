@@ -100,6 +100,7 @@ function initsavedata(){
     gd.sdict = {};
     gd.hand = [];
     gd.cast = [];
+    gd.locs={};
     resetbag();
     makespellbook();
 }
@@ -108,7 +109,12 @@ function initsavedata(){
 function newgame(){
     initsavedata();
 
-   drawfightui();
+   
+    nl("start","Brightly lit room","Light shines in the windows",["hall"]);
+    nl("hall","Hallway","A long narrow hallway with doors at either end",["start","end"]);
+    nl("end","Library","A room full of mysterious books",["hall"]);
+    renderloc("start");
+   //drawfightui();
    
 }
 
@@ -141,6 +147,16 @@ function getcaststring(){
     return ss;
 }
 
+function renderloc(locstr){
+    var loc = gd.locs[locstr];
+    d1.innerHTML = "<h1>" + loc.name + "</h1><BR>" + loc.desc;
+
+    var r2 = "<h2>Move:</h2>";
+    for (var re of loc.exits){
+        r2 += `<button onclick='renderloc("` + re + `")'>` + re + `</button><BR>`;
+    }
+    d2.innerHTML = r2;
+}
 
 function drawfightui(){
 d1.innerHTML = "enemies!<BR>";
@@ -230,6 +246,22 @@ function ns(ss="",name="spell", eid = 0){
     var s = new spell(ss,name);
     gd.sdict[ss] = s;
 
+}
+
+function loc(sname){
+    this.sname = sname;
+    this.name = "location name";
+    this.desc = "location description";
+    this.exits=[];
+    this.things=[];
+}
+
+function nl(sn,nn,desc,exs){
+    var n = new loc(sn);
+    n.name = nn;
+    n.desc = desc;
+    n.exits = exs;
+    gd.locs[sn] = n; 
 }
 
 function spell(ss="",name="spell", eid = 0){
