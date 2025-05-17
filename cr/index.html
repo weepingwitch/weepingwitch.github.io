@@ -11,17 +11,15 @@
         button:disabled:hover {background-color: gray;}
         .dd{border:1px solid black;height:48%;aspect-ratio: 1/1;}
         #castdiv{min-height:1.5em;}
+        canvas{image-rendering: pixelated;image-rendering: -moz-crisp-edges;image-rendering: crisp-edges;}
         
 </style>
     </head>
     <body>
         <div id="containerDiv">
             <div id="disp1" class="dd"></div>
-            <div id="disp2" class="dd">
-               
-
-            </div>
-            
+            <div id="disp2" class="dd"></div>
+            <div id="disp3" class="dd"></div>
         </div>
     </body>
 <script>
@@ -29,8 +27,11 @@ var gd;
 var dd;
 var cd ;
 var ld;
+var map;
+var md;
 var d1 = document.getElementById("disp1");
 var d2 = document.getElementById("disp2");
+var d3 = document.getElementById("disp3");
 
 var cn=["(red)","(ora)","(yel)","(gre)","(blu)","(pur)","(whi)","(blk)"]
 var ci=["🔴","🟠","🟡","🟢","🔵","🟣","⚪️","⚫️"];
@@ -89,6 +90,11 @@ ns("47","blk energy");
 
 }
 
+function makemap(){
+    nl("start","Brightly lit room","Light shines in the windows",["hall"]);
+    nl("hall","Hallway","A long narrow hallway with doors at either end",["start","end"]);
+    nl("end","Library","A room full of mysterious books",["hall"]);
+}
 
 newgame();
 
@@ -97,6 +103,8 @@ function initsavedata(){
     gd.maxcast = 2;
     gd.maxhand = 5;
     gd.bag = [];
+    gd.x = 3;
+    gd.y = 3;
     gd.sdict = {};
     gd.hand = [];
     gd.cast = [];
@@ -105,15 +113,38 @@ function initsavedata(){
     makespellbook();
 }
 
+function initmap(){
+    var cw = d3.clientWidth;
+d3.innerHTML = `<canvas id='mcanv' height='32' width='32' style="width:` + cw + `px;height:` + cw + `px;"></canvas>`;
+map = document.getElementById("mcanv").getContext("2d");
+md = map.getImageData(0,0,32,32);
+setpixel(gd.x,gd.y,"purple");
+console.log(md);
+map.putImageData(md,0,0);
+
+
+
+}
+
+function setpixel(x,y,c){
+    var ca = colorToRGBA(c);
+    var n = (y*32)+x;
+    setp(md.data,n,ca);
+}
+
+function setp(id,n,ca){
+var pn = n*4; id[pn] = ca[0];id[pn+1]=ca[1];id[pn+2]=ca[2];id[pn+3]=255;
+}
+
 
 function newgame(){
     initsavedata();
 
+   makemap();
+   initmap();
    
-    nl("start","Brightly lit room","Light shines in the windows",["hall"]);
-    nl("hall","Hallway","A long narrow hallway with doors at either end",["start","end"]);
-    nl("end","Library","A room full of mysterious books",["hall"]);
-    renderloc("start");
+    travel(3,3);
+    //travelroom("start");
    //drawfightui();
    
 }
@@ -147,13 +178,39 @@ function getcaststring(){
     return ss;
 }
 
-function renderloc(locstr){
+function travelroom(rmstr){
+    gd.curroom = rmstr;
+    renderrm(locstr);
+}
+
+function travel(x,y){
+    gd.x = x;
+    gd.y = y;
+    renderoutside();
+    initmap();
+}
+
+function renderoutside(){
+    var x = gd.x;
+    var y = gd.y;
+    d1.innerHTML = "<h1>outside</h1><BR>" + x + "," + y;
+    var d2o =``;
+    d2o += `--<button onclick="travel(` + x + `,` + (y-1) + `)">north</button><BR>`;
+  
+   
+    d2o += `<button onclick="travel(` + (x-1) + `,` + y + `)">west</button>`;
+    d2o += `<button onclick="travel(` + (x + 1) + `,` + y + `)">east</button><BR>`;
+    d2o += `--<button onclick="travel(` + x + `,` + (y+1) + `)">south</button> `;
+    d2.innerHTML = d2o;
+}
+
+function renderrm(locstr){
     var loc = gd.locs[locstr];
     d1.innerHTML = "<h1>" + loc.name + "</h1><BR>" + loc.desc;
 
     var r2 = "<h2>Move:</h2>";
     for (var re of loc.exits){
-        r2 += `<button onclick='renderloc("` + re + `")'>` + re + `</button><BR>`;
+        r2 += `<button onclick='travelroom("` + re + `")'>` + re + `</button><BR>`;
     }
     d2.innerHTML = r2;
 }
@@ -287,6 +344,23 @@ function shuffle (array) {
   for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } 
   return array; 
 }; 
+
+function colorToRGBA(color) {
+    // Returns the color as an array of [r, g, b, a] -- all range from 0 - 255
+    // color must be a valid canvas fillStyle. This will cover most anything
+    // you'd want to use.
+    // Examples:
+    // colorToRGBA('red')  # [255, 0, 0, 255]
+    // colorToRGBA('#f00') # [255, 0, 0, 255]
+    var cvs, ctx;
+    cvs = document.createElement('canvas');
+    cvs.height = 1;
+    cvs.width = 1;
+    ctx = cvs.getContext('2d');
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, 1, 1);
+    return ctx.getImageData(0, 0, 1, 1).data;
+}
 </script>
 
 
