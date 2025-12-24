@@ -1,9 +1,8 @@
 
-            // Allocate some memory for the moodule. Initial size is specified in pages of 16 kiB.
+// vram, 16 pages pages of 16 kiB.
 const memory = new WebAssembly.Memory( { initial: 16 } );
 
-// Everything we want to pass to our module during initialisation. The names of the keys
-// are not important, so long as our WASM module knows to look for them.
+
 const imports = {
     js: {
         mem: memory,
@@ -34,14 +33,11 @@ async function engine(){
     .then( module => new WebAssembly.Instance( module, imports ) )
     .then( instance => {
 
-       
-         // Set the pixel data in the module's memory
          frloop = instance.exports;
         const res = frloop.blank();
         frloop.init();
+        renderframe();
         
-
-       
 
     });
 }
@@ -54,20 +50,11 @@ async function engine(){
     var frame=0;
 
     initcanvas();
-
-        // Put the mod  ule's memory into an array suitable for use in ImageData.
-        // Allocate width x height x number of colour planes (RGBA = 4)
-        
-
-    renderframe();
      engine();
 
     function initcanvas(){
-        // Get the canvas element from the DOM
          canvas = document.getElementById('c');
          debugdiv = document.getElementById('d');
-
-        // Get a 2D graphics context for the canvas
          ctx = canvas.getContext('2d');
     }
 
@@ -75,13 +62,12 @@ function renderframe(){
 // Create an ImageData instance from the array
 
          img = new ImageData( byteArray, 512, 512 );
-
         // Put the image data into the canvas
         ctx.putImageData( img, 0, 0 );
         debugdiv.innerText = "image rendered, frame " + frame;
         if (frloop != null){
    // frloop.run();
-   frloop.setp((frame/512)+1,(frame%512));
+   frloop.setp(((frame)%512) + (frame/512),((frame)%512) + (frame/512));
         }       
         
         frame += 1;
