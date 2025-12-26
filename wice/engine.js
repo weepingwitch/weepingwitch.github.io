@@ -1,19 +1,18 @@
 
-// vram, 16 pages pages of 16 kiB.
-const memory = new WebAssembly.Memory( { initial: 16 } );
+// vram, plus extra storage lol
+const memory = new WebAssembly.Memory( { initial: 18 } );
 
 
 const imports = {
     js: {
         mem: memory,
-        log: (arg) => {console.log(arg);return arg}
+        log: (arg) => {console.log(arg);return arg},
+        randi: (arg) => {return Math.floor(Math.random() * arg) }
     }
 };
 
 const byteArray = new Uint8ClampedArray( memory.buffer, 0, 512 * 512 * 4 );
 var frloop;
-
-var encoded = "... contents of encoded from above ...";
 
 
 
@@ -51,6 +50,7 @@ async function engine(){
 
     initcanvas();
      engine();
+    
 
     function initcanvas(){
          canvas = document.getElementById('c');
@@ -64,15 +64,19 @@ function renderframe(){
          img = new ImageData( byteArray, 512, 512 );
         // Put the image data into the canvas
         ctx.putImageData( img, 0, 0 );
-        debugdiv.innerText = "image rendered, frame " + frame;
+        //debugdiv.innerText = "image rendered, frame " + frame;
         if (frloop != null){
    // frloop.run();
-   frloop.setp(((frame)%512) + (frame/512),((frame)%512) + (frame/512));
+   //frloop.sethl(frame%511,frame%511,5);
+   //frloop.setvl(frame%511,0,5);
+   frloop.ss();
         }       
         
         frame += 1;
         
         //console.log(byteArray);
         requestAnimationFrame(renderframe);
+
+        
         
 }
