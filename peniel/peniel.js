@@ -21,8 +21,10 @@ var curscene = null;
 var adiv = document.getElementById("art");
 var tdiv = document.getElementById("stext");
 var bdiv = document.getElementById("choices");
-bdiv.innerHTML = "<button id='advbut' class='button' onclick='butadvfn()'><span>...  </span></button>";
+bdiv.innerHTML = "<button id='advbut' class='button' onclick='butadvfn()'><span>...</span></button><BR><BR>";
+bdiv.innerHTML += "<button id='advbut2' class='button' onclick='butadvfn()'><span>..?</span></button><BR><BR>";
 var btn = document.getElementById("advbut");
+var bt2 = document.getElementById("advbut2");
 var sdiv = document.getElementById("scripture");
 
 
@@ -48,11 +50,10 @@ function scene(imgarrrayname, scripture){
     this.next = null;
     curscene = this;
 }
-function ad(dialogtxt, buttontext="..."){
-    adb(dialogtxt,buttontext);
-}
-function adb(dialogtxt,buttontext){
-     var newitem = [dialogtxt,buttontext]
+function ad(dialogtxt, buttontext="...", btn2text = null){
+    
+
+     var newitem = [dialogtxt,buttontext,btn2text]
     curscene.dialogs.push(newitem)
 }
 function chgscene(scene){
@@ -82,12 +83,12 @@ function butadvfn(){
     advance();
     
    if(!started){
-      document.getElementsByTagName("body")[0].style.webkitAnimationName="ccs";
+      document.getElementsByTagName("body")[0].style.animationName="ccs";
     
  started = true;
  //play music
  const myAudio = document.createElement("audio");
-myAudio.src = "peniel.mp3";
+myAudio.src = "chiasm.mp3";
 myAudio.play();
    }
     
@@ -99,6 +100,13 @@ function advance(){
     if (curscene.dialogs.length > curscene.di){
         tdiv.innerHTML = curscene.dialogs[curscene.di][0];
         btn.innerText = curscene.dialogs[curscene.di][1];
+        if (curscene.dialogs[curscene.di][2] != null){
+            bt2.innerText = curscene.dialogs[curscene.di][2];
+            bt2.style.display="inline";
+        }
+        else{
+             bt2.style.display="none";
+        }
     
     }
     else{
@@ -114,7 +122,7 @@ function advance(){
 }
 
 function resetscripture(text){
-    sdiv.innerHTML = text;
+    sdiv.innerHTML = text + "              ";
 
 }
 
