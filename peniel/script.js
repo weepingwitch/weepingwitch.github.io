@@ -1,6 +1,6 @@
 
 var s0 = new scene("begin","Genesis 32:23 - And he rose on that night and took his two wives and his two slavegirls and his eleven boys and he crossed over the Jabbok ford. And he took them and brought them across the stream, and he brought across all that he had. ")
-ad("");
+ad("","begin.");
 ad("You send your family across the river.");
 ad("You hope Esau will forgive you.","you hope.","you pray.")
 ad("You know he would be right to kill you.")
@@ -19,7 +19,7 @@ ad("You reach out to grab him.")
 ad("You feel him in your hands.")
 ad("You begin to wrestle.","you strike with your left hand.","you strike with your right hand.")
 ad("You feel him pulling away.")
-ad("You hold on tighter.")
+ad("You tighten your grip.")
 ad("You feel his hands on you.")
 ad("You feel him on your hips.")
 ad("He strikes you down.")
@@ -44,7 +44,7 @@ ad("You tear the soft flesh.")
 ad("The sticky juice runs down your neck.")
 ad("You feel your own soft flesh.")
 ad("You feel the shame.");
-ad("You feel it in your hips.")
+ad("You feel it in your hips.","it feels good.","it feels bad.")
 ad("You need to hide.")
 ad("You shrink into nothingness.","formless and empty.");
 
@@ -55,20 +55,24 @@ ad("")
 ad("You see your brother in front of you.");
 ad("He's younger than you.");
 ad("He tends to the sheep.");
+ad("You tend to the fields.")
+ad("Your fields are fertile.")
 ad("His offering was preferred.","your face falls.");
 ad("You call out.","'let us go out to the field!'");
 ad("Like a lamb, he follows you.");
-ad("You turn to him.")
+ad("You turn to him.","you love him.","you hate him.")
 ad("He looks at you.");
 ad("You look at him.");
 ad("You look at him.","you rise up.")
 ad("You rise up against him.")
 ad("You begin to wrestle.","you strike him.")
 ad("You strike him down.")
+ad("You hear his cry.");
 ad("You see his blood.")
 ad("You feel it in your hands.")
 ad("You feel it on your hips.")
 ad("The sticky juice runs down your leg.")
+ad("You feel the tears on your cheek.")
 ad("You feel the terror in your gut.")
 ad("You need to run.")
 ad("You run into nothingness.","formless and empty.")
@@ -79,12 +83,16 @@ ad("");
 ad("You see your father in front of you.")
 ad("Like a lamb, you follow him.");
 ad("","'where is the offering?'")
-ad("The Lord will provide.")
+ad("'The Lord will provide.'")
 ad("Your father reaches out.")
+ad("You feel his hands on you.")
 ad("He strikes you down.")
-ad("You feel his hands on you.","you reach out.")
-ad("You can't reach out.")
-ad("Your arms are bound.")
+ad("He binds your arms.")
+ad("You look at him.");
+ad("He looks at you.");
+ad("You feel the tears on your cheek.")
+ad("He hears your cry.")
+ad("You hear his cry.")
 ad("You feel the terror in your gut.")
 ad("You feel the stone beneath you.")
 ad("You know he would be right to kill you.")
@@ -108,14 +116,17 @@ ad("The world starts to shift.")
 ad("You feel him pulling away.")
 ad("You tighten your grip.")
 ad("You feel everything fall away beneath you.")
+ad("You feel the terror in your gut.")
 ad("Like a lamb, you follow him.");
+ad("You hear his cry.")
 ad("You are pulled into nothingness.","formless and empty.");
 
-var s5 = new scene("jake+leah","Genesis 29:20 - And Jacob served seven years for Rachel, and they seemed in his eyes but a few days in his love for her. And Jacob said to Laban, 'Give me my wife, for my time is done, and let me come to bed with her.' And Laban gathered all the men of the place and made a feast. And when evening came, he took Leah his daughter and brought her to Jacob, and he came to bed with her.")
+var s5 = new scene("jake+leah","Genesis 29:20 - And Jacob said to Laban, 'Give me my wife, for my time is done, and let me come to bed with her.' And Laban gathered all the men of the place and made a feast. And when evening came, he took Leah his daughter and brought her to Jacob, and he came to bed with her.")
 s4.next = s5;
 ad("")
 ad("Night has fallen.")
-ad("You aren't alone.","you reach out.")
+ad("You aren't alone.")
+ad("You feel your cousin in front of you.","you reach out.")
 ad("You pull off her garment.")
 ad("You feel her in your hands.")
 ad("Her flesh is soft.")
@@ -128,25 +139,37 @@ ad("You begin to wrestle.")
 ad("You tighten your grip.")
 ad("You feel her hands on you.")
 ad("You feel her on your hips.","you rise up.")
-ad("You rise up into her.")
+ad("You rise up into her.","roghly.","gently.")
 ad("Everything is soft and wet.")
+ad("You hear her cry.")
 ad("You feel it in your hips.")
 ad("The sticky juice runs down your leg.")
 ad("You feel her pulling away.")
-ad("You look at her.")
+ad("You look at her.","oh no.","is she?")
 ad("She looks at you.")
 ad("You feel the terror in your gut.")
+ad("You feel the tears on your cheek.")
 ad("You shrink into nothingness.","formless and empty.");
 
-var s6 = new scene("joe+bros","")
+var s6 = new scene("joe+bros","Genesis 37:23 - And it happened when Joseph came to his brothers that they stripped Joseph of his tunic, the ornamented tunic that he had on him. And they took him and flung him into the pit, and the pit was empty, there was no water in it. ")
 s5.next = s6;
 ad("")
 ad("You see your brothers in front of you.")
+ad("You want to play with them.")
+ad("You want to share your dreams with them.")
+ad("You reach out.")
+ad("They rise up against you.")
+ad("You feel their hands on you.")
+ad("They hear your cry.")
+ad("They pull off your garment.","you resist.","you let them.")
 ad("They strike you down.")
-
+ad("You feel the stone beneath you.")
+ad("You feel the tears on your cheek.")
+ad("You feel the terror in your gut.")
+ad("They throw you down.")
 ad("You fall into nothingness.","formless and empty.");
 
-var s7 = new scene("joe+wife","")
+var s7 = new scene("joe+wife","Genesis 39:10 - And so she spoke to Joseph day after day, and he would not listen to her, to lie by her, to be with her. [...] And she seized him by his garment, saying, 'Lie with me.' And he left his garment in her hand and he fled and went out. ")
 s6.next = s7;
 ad("")
 ad("You see him in front of you.")
@@ -163,7 +186,7 @@ ad("Except you.")
 ad("Your fields are fertile.","you yearn.")
 ad("You yearn.","'come to bed with me!'")
 ad("He refuses.","you ask.")
-ad("You ask.");
+ad("You ask.","because you're lonely.","because you're hungry.");
 ad("He refuses.","you beg.");
 ad("You beg.")
 ad("He refuses.")
@@ -182,19 +205,24 @@ ad("You cry into nothingness","formless and empty.")
 
 
 
-
-var s9 = new scene("god+form","Genesis 1:1 - When God began to create heaven and earth, and the earth then was welter and waste and darkness over the deep and God's breath hovering over the waters, God said, 'Let there be light.' And there was light.")
+var s9 = new scene("god+form","Genesis 1:1 - When God began to create heaven and earth, and the earth then was welter and waste and darkness over the deep and God's breath hovering over the waters [...] God made the vault and it divided the water beneath the vault from the water above the vault.")
 s7.next = s9;
 ad("");
 ad("You are alone.")
 ad("Formless and empty.")
-ad("Something hovers over you.","you reach out.")
+ad("Everything is soft and wet.")
+ad("Something flutters over you.","you reach out.")
 ad("You can't reach out.")
+ad("You yearn.")
 ad("She reaches out to you.")
-ad("You are split open.")
 ad("You rise up.")
 ad("She pushes you down.")
+ad("You feel her hands on you.")
+ad("She splits you open.")
 ad("Everything is soft and wet.")
+ad("She spreads out your insides.")
+ad("Everything is soft and wet.")
+ad("You aren't alone.")
 ad("The world starts to shift.")
 
 
@@ -204,8 +232,71 @@ s9.next = s10;
 ad("")
 ad("You are alone.")
 ad("You sense a man in front of you.");
+ad("It's impossible not to notice him.");
 ad("The man approaches you.","you reach out.")
 ad("You reach out to grab him.")
 ad("You feel him in your hands.")
 ad("You begin to wrestle.","you rise up.")
 ad("You strike him down.")
+ad("You feel him pulling away.")
+ad("You tighten your grip.")
+ad("You feel his hands on you.")
+ad("You feel him on your hips.")
+ad("He strikes you down.")
+ad("You feel the stone beneath you.")
+ad("You feel the terror in your gut.")
+ad("You rise up against him.")
+ad("He rises up against you.")
+ad("You strike him down.")
+ad("He strikes you down.")
+ad("You look at him.","with desire.","with hatred.");
+ad("He looks at you.");
+
+var s11 = new scene("hip","Genesis 32:26 - And he saw that he had not won out against him and he touched his hip-socket and Jacob's hip-socket was wrenched as he wrestled with him. ")
+s10.next = s11;
+ad("");
+ad("You feel his hand on your hip.")
+ad("He tears the soft flesh.")
+ad("He splits you open.")
+ad("You see your blood.")
+ad("You tighten your grip.")
+ad("'Let me go, for dawn is breaking.'")
+ad("You refuse.")
+ad("","'I will not go unless you bless me.'")
+ad("He looks at you.");
+ad("'What is your name?'","'Jacob.'")
+ad("'You are Jacob no more.'")
+ad("'You strive with God.'")
+ad("","'I strive with God.'");
+ad("You look at him.")
+ad("He is formless and empty.")
+ad("He is the terror in your gut.")
+ad("You feel him in your hip.")
+
+var s12 = new scene("begin","Genesis 32:31 - And Jacob called the name of the place Peniel, meaning, 'I have seen God face to face and I came out alive.' And the sun rose upon him as he passed Penuel and he was limping on his hip.")
+s11.next = s12;
+ad("");
+ad("You are alone on the bank of the river.")
+ad("You walk with a limp.")
+ad("You have seen God face to face.")
+ad("You have touched God.")
+ad("God has touched you.")
+ad("You hope Esau will forgive you.","you hope.","you pray.")
+ad("You know he would be right to kill you.")
+ad("")
+ad("You follow your family across the river.")
+var s13 = new scene("blank","")
+s12.next = s13;
+ad("")
+ad("You see your brother in front of you.")
+ad("You feel the tears on your cheek.")
+ad("You look at him.")
+ad("He looks at you.")
+ad("You embrace.")
+ad("")
+
+
+
+
+
+

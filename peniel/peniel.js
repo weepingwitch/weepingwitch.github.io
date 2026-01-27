@@ -1,18 +1,18 @@
 
 var imgs = {};
 imgs["begin"] = ["jabbok.jpg"] //0
-imgs["black"] = ["black.png"] //01
+imgs["black"] = ["night.jpeg"] //01
 imgs["eve+tree"] = ["cranach.jpg","rappaport.jpg","seebach.jpg","gauguin.jpg","12th.jpg","klimt.jpg"]
-imgs["cain+abel"] = ["giovane.jpg", "ca.jpg","tornioli.jpg","leadeth.jpg","crespi.jpg","vergara.jpg","Rebull.jpg"]
+imgs["cain+abel"] = ["giovane.jpg", "ca.jpg","tornioli.jpg","leadeth.jpg","crespi.jpg","vergara.jpg","Rebull.jpg","abel.jpeg"]
 imgs["abe+isaac"] = ["chagall.png","rome.jpg","bulgaria.jpg","woodcut.jpg","latvia.jpg","riminaldi.jpg","thys.jpg"] //3
-imgs["jake+esau"] = ["gripping.webp","sketch.jpg","dunner.jpg","banner.jpg","motley.jpg"] //birth4
-imgs["jake+isaac"] = ["black.png"] // =blessing5
-imgs["jake+leah"]= ["iris.jpg","gilmont.jpg","rafel.jpg","tender.jpeg","venus.jpg","thankfulness.jpg"] //6
-imgs["joe+bros"] = ["black.png"]//6
-imgs["joe+wife"] = ["black.png"]//7
+imgs["jake+esau"] = ["gripping.webp","sketch.jpg","dunner.jpg","banner.jpg","motley.jpg","pare.png","diagrams.jpg"] //birth4
+imgs["blank"] = ["black.png"] // =blessing5
+imgs["jake+leah"]= ["iris.jpg","tender.jpeg","venus.jpg","gray.jpeg","picasso.jpg","dali.jpg","degas.jpg","kneeling.jpg","embrace.jpg"] //6
+imgs["joe+bros"] = ["bilinska.jpg","antiphonary.jpg","bretheren.jpg","flandrin.jpg","ishmaelites.jpg","bratje.jpg"]//6
+imgs["joe+wife"] = ["barbieri.jpeg","rembrandt.jpg", "47613542.jpeg","frau.jpg","baldi.jpg","cesaire.jpg"]//7
 imgs["god+form"] = ["shigeru.png","wenceslas.jpg","Creation1.jpg","Creation2.jpg","Creation3.jpg","Creation4.jpg"]//9
-imgs["angel"] = ["dore.jpg","jacobangel.jpg","moreau.jpg","hartmann.jpg","Berlin.jpg"]//10
-
+imgs["angel"] = ["dore.jpg","jacobangel.jpg","moreau.jpg","hartmann.jpg","Berlin.jpg","bonnat.jpg","lutte.jpg","gutenberg.jpg"]//10
+imgs["hip"] = ["negative.jpg","degasnude.jpg","seated.jpeg","motion.jpg"]
 
 
 

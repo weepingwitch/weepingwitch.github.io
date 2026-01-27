@@ -15,11 +15,11 @@ html{
 
 @font-face {
     font-family: "hw";
-    src: url("angelina.TTF");
+    src: url("Cardinal.ttf");
 }
 @font-face {
     font-family: "sc";
-    src: url("Cardinal.ttf");
+    src: url("moms.ttf");
 }
 
 #container{
@@ -57,7 +57,7 @@ html{
     box-shadow: 0 0 8px 2px black inset;
     border-radius: 12px;
     margin:4px;
-
+min-height:17em;
     text-align: center;
 }
 
@@ -92,9 +92,12 @@ html{
 
 .button:hover  {
   background-color: #ff6969;
+  border-radius: 20px;
     transition: 0.5s;
+    font-size:23px;
+    padding:10px;
     color:black;
-    box-shadow: 3px 3px 3px #ffaaaa;
+    box-shadow: 8px 8px 8px #ffaaaa;
 }
 
 
@@ -104,8 +107,8 @@ html{
      margin:0 auto;
      box-shadow: 0 0 8px 8px black inset;
      font-family:sc;
-    
-     font-size: 18pt;
+    min-height:4em;
+     font-size: 14pt;
      background-color:papayawhip;
      padding:15px;
 }
@@ -119,6 +122,8 @@ html{
     background-color:white;
     margin:5px;
     padding:5px;
+    font-size: 20pt;
+    font-family:Georgia, 'Times New Roman', Times, serif;
     
    
 }
