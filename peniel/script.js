@@ -1,5 +1,6 @@
 
 var s0 = new scene("begin","Genesis 32:23 - And he rose on that night and took his two wives and his two slavegirls and his eleven boys and he crossed over the Jabbok ford. And he took them and brought them across the stream, and he brought across all that he had. ")
+s0.prev = s0;
 ad("","begin.");
 ad("You send your family across the river.");
 ad("You hope Esau will forgive you.","you hope.","you pray.")
@@ -11,6 +12,7 @@ ad("Night has fallen.", "formless and empty.")
 
 var s01 = new scene("black","Genesis 32:25 - And Jacob was left alone, and a man wrestled with him until the break of dawn.")
 s0.next = s01;
+s01.prev = s0;
 ad("")
 ad("You are alone.")
 ad("You sense a man in front of you.");
@@ -27,6 +29,7 @@ ad("You fall into nothingness.","formless and empty.");
 
 var s1 = new scene("eve+tree","Genesis 3:6 - And the woman saw that the tree was good for eating and that it was lust to the eyes and the tree was lovely to look at, and she took of its fruit and ate.");
 s01.next = s1;
+s1.prev = s01;
 ad("")
 ad("You see the fruit in front of you.");
 ad("It is beautiful to behold.");
@@ -51,6 +54,7 @@ ad("You shrink into nothingness.","formless and empty.");
 
 var s2 = new scene("cain+abel","Genesis 4:8 - And Cain said to Abel his brother, 'Let us go out to the field.' And when they were in the field, Cain rose against Abel his brother and killed him. And the Lord said to Cain, 'Where is Abel your brother?' And he said, 'I do not know. Am I my brother's keeper?'");
 s1.next = s2;
+s2.prev = s1;
 ad("")
 ad("You see your brother in front of you.");
 ad("He's younger than you.");
@@ -79,6 +83,7 @@ ad("You run into nothingness.","formless and empty.")
 
 var s3 = new scene("abe+isaac","Genesis 22:9 - And they came to the place that God had said to him, and Abraham built there an altar and laid out the wood and bound Isaac his son and placed him on the altar on top of the wood.")
 s2.next = s3;
+s3.prev = s2;
 ad("");
 ad("You see your father in front of you.")
 ad("Like a lamb, you follow him.");
@@ -101,6 +106,7 @@ ad("You shrink into nothingness.","formless and empty.");
 
 var s4 = new scene("jake+esau","Genesis 25:22 - And the children clashed together within her [...] And the first one came out ruddy, like a hairy mantle all over, and they called his name Esau. Then his brother came out, his hand grasping Esau’s heel, and they called his name Jacob.")
 s3.next = s4;
+s4.prev = s3;
 ad("");
 ad("You feel your brother in front of you.","you reach out.")
 ad("You begin to wrestle.")
@@ -123,6 +129,7 @@ ad("You are pulled into nothingness.","formless and empty.");
 
 var s5 = new scene("jake+leah","Genesis 29:20 - And Jacob said to Laban, 'Give me my wife, for my time is done, and let me come to bed with her.' And Laban gathered all the men of the place and made a feast. And when evening came, he took Leah his daughter and brought her to Jacob, and he came to bed with her.")
 s4.next = s5;
+s5.prev = s4;
 ad("")
 ad("Night has fallen.")
 ad("You aren't alone.")
@@ -153,6 +160,7 @@ ad("You shrink into nothingness.","formless and empty.");
 
 var s6 = new scene("joe+bros","Genesis 37:23 - And it happened when Joseph came to his brothers that they stripped Joseph of his tunic, the ornamented tunic that he had on him. And they took him and flung him into the pit, and the pit was empty, there was no water in it. ")
 s5.next = s6;
+s6.prev = s5;
 ad("")
 ad("You see your brothers in front of you.")
 ad("You want to play with them.")
@@ -171,6 +179,7 @@ ad("You fall into nothingness.","formless and empty.");
 
 var s7 = new scene("joe+wife","Genesis 39:10 - And so she spoke to Joseph day after day, and he would not listen to her, to lie by her, to be with her. [...] And she seized him by his garment, saying, 'Lie with me.' And he left his garment in her hand and he fled and went out. ")
 s6.next = s7;
+s7.prev = s6;
 ad("")
 ad("You see him in front of you.")
 ad("The boy is well-built and handsome.")
@@ -207,6 +216,7 @@ ad("You cry into nothingness","formless and empty.")
 
 var s9 = new scene("god+form","Genesis 1:1 - When God began to create heaven and earth, and the earth then was welter and waste and darkness over the deep and God's breath hovering over the waters [...] God made the vault and it divided the water beneath the vault from the water above the vault.")
 s7.next = s9;
+s9.prev = s7;
 ad("");
 ad("You are alone.")
 ad("Formless and empty.")
@@ -229,6 +239,7 @@ ad("The world starts to shift.")
 
 var s10 = new scene("angel","Genesis 32:25 - And Jacob was left alone, and a man wrestled with him until the break of dawn.")
 s9.next = s10;
+s10.prev = s9;
 ad("")
 ad("You are alone.")
 ad("You sense a man in front of you.");
@@ -254,6 +265,7 @@ ad("He looks at you.");
 
 var s11 = new scene("hip","Genesis 32:26 - And he saw that he had not won out against him and he touched his hip-socket and Jacob's hip-socket was wrenched as he wrestled with him. ")
 s10.next = s11;
+s11.prev = s10;
 ad("");
 ad("You feel his hand on your hip.")
 ad("He tears the soft flesh.")
@@ -275,6 +287,7 @@ ad("You feel him in your hip.")
 
 var s12 = new scene("begin","Genesis 32:31 - And Jacob called the name of the place Peniel, meaning, 'I have seen God face to face and I came out alive.' And the sun rose upon him as he passed Penuel and he was limping on his hip.")
 s11.next = s12;
+s12.prev = s11;
 ad("");
 ad("You are alone on the bank of the river.")
 ad("You walk with a limp.")
@@ -287,6 +300,7 @@ ad("")
 ad("You follow your family across the river.")
 var s13 = new scene("blank","")
 s12.next = s13;
+s13.prev = s12;
 ad("")
 ad("You see your brother in front of you.")
 ad("You feel the tears on your cheek.")

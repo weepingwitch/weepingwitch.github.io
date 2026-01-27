@@ -48,6 +48,7 @@ function scene(imgarrrayname, scripture){
     this.dialogs = []
     this.di = -1;
     this.next = null;
+    this.prev = null;
     curscene = this;
 }
 function ad(dialogtxt, buttontext="...", btn2text = null){
@@ -69,30 +70,55 @@ function chgscene(scene){
     resetscripture(scene.scripture);
 
     curscene = scene;
+    curscene.di = -1;
     advance();
     dodecay = false;
-
-  
-
-
-
-
 }
+
+
+function restart(){
+    console.log("restarting");
+    chgscene(curscene);
+}
+function prev(){
+    chgscene(curscene.prev);
+}
+
+var myAudio = null;
+
+
 function butadvfn(){
     dodecay = true;
     advance();
     
    if(!started){
       document.getElementsByTagName("body")[0].style.animationName="ccs";
-    
+    document.getElementById("controls").style.display="block";
  started = true;
  //play music
- const myAudio = document.createElement("audio");
+ if (myAudio == null){
+ myAudio = document.createElement("audio");
 myAudio.src = "chiasm.mp3";
+myAudio.loop = true;
 myAudio.play();
+ }
+
    }
     
 
+}
+
+function toggleaudio(){
+    myAudio.muted = !myAudio.muted;
+}
+
+function nextscene(){
+     if (curscene.next != null){
+            chgscene(curscene.next)
+        }
+        else{
+            document.getElementById("sources").style.display="block";
+        }
 }
 
 function advance(){
@@ -110,16 +136,12 @@ function advance(){
     
     }
     else{
-        if (curscene.next != null){
-            chgscene(curscene.next)
-        }
-        else{
-            document.getElementById("sources").style.display="block";
-        }
+       nextscene();
     }
   
 
 }
+
 
 function resetscripture(text){
     sdiv.innerHTML = text + "              ";

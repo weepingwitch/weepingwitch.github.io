@@ -72,6 +72,28 @@ min-height:17em;
 
 }
 
+.cbut{
+     display: inline-block;
+  border-radius: 4px;
+  background-color: #eeeeee;
+  border: none;
+  color: black;
+  
+  text-align: center;
+  font-size: 16px;
+  font-family:sc;
+  padding: 4px;
+
+  cursor: pointer;
+ 
+ border:1px solid black;
+}
+
+.cbut:hover{
+    background-color: #aaaaaa;
+     transition: 0.25s;
+}
+
 .button {
   display: inline-block;
   border-radius: 12px;
@@ -111,6 +133,18 @@ min-height:17em;
      font-size: 14pt;
      background-color:papayawhip;
      padding:15px;
+}
+
+#controls{
+    display:none;
+     margin:0 auto;
+     box-shadow: 0 0 8px 8px black inset;
+     font-family:sc;
+   
+     font-size: 14pt;
+     background-color:papayawhip;
+     padding:15px;
+     text-align: center;
 }
 
 
