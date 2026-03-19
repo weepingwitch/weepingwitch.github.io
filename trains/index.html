@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>hexgame</title>
+<link href="style.css" rel="stylesheet"></style>
+</head>
+<body>
+<div id="all" class="flexcontainer">
+   
+  <div id="canvasholder" class="flexitem">
+   
+</div>
+
+<div id="below" class="flexitem">
+     <div id="controlstext"><button onclick="btbutton()">build track</button><button  onclick="bcbutton()">build city</button> <h2>current mode: <div id="cmode">loading</div></h2></div>
+ 
+ <BR>
+    <div id="statstext">x<BR>x<BR>x<BR>x</div>
+
+
+<div id="ttable">
+
+    <table>
+        <tr>
+            <td><canvas class="tca" id="t_grass" width="4" height="2"></canvas></td>
+            <td><canvas class="tca" id="t_rocks" width="4" height="2"></canvas></td>
+            <td><canvas class="tca" id="t_water" width="4" height="2"></canvas></td>
+  
+        </tr>
+        <tr>
+            <td><canvas class="tca"  id="t_sand" width="4" height="2"></canvas></td>
+            <td><canvas class="tca" id="t_snow" width="4" height="2"></canvas></td>
+            <td><canvas class="tca" id="t_forest" width="4" height="2"></canvas></td>
+  
+        </tr>
+    </table>
+</div>
+</div>
+</div>
+<script src="engine.js"></script>
+<script src="hexmap.js"></script>
+<script src="graphics.js"></script>
+<script src="mapdata.js"></script>
+<script src="ui.js"></script>
+
+<script>init();</script>
+</body>
+</html>
