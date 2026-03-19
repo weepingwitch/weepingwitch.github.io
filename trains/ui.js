@@ -49,7 +49,10 @@ function click(h){
             updateinfopane(h);
             break;
         case "buildcity":
-            if (hastrains(h)){
+            console.log("considering a city");
+            console.log(g.cities);
+            console.log(h.i);
+            if (hastrains(h) && !(g.cities.includes(h.i))){
                 console.log("new city!")
                 g.cities.push(h.i);
                 drawall();
@@ -127,11 +130,11 @@ function updateinfopane(h){
    
   
     ddiv.innerHTML = h.i + "<BR>"
-    ddiv.innerHTML += h.hx + "," + h.hy + "; " + h.distfromsel + "," + h.landtype;
+    ddiv.innerHTML += h.hx + "," + h.hy + "; "  + h.landtype + "<BR>" + JSON.stringify(h.res);
     ddiv.innerHTML += "<BR>" + JSON.stringify(h.neighbors) + "<BR>" + JSON.stringify(h.rrs);
     }
     else{
-        ddiv.innerHTML = "x<BR>x<BR>x<BR>x";
+        ddiv.innerHTML = "x<BR>x<BR>x<BR>x<BR>x";
         hovered = null;
     }
 }
