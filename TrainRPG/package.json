@@ -1,0 +1,12 @@
+{
+    "name": "rmmz-game",
+    "main": "index.html",
+    "chromium-args": "--force-color-profile=srgb --disable-devtools",
+    "window": {
+        "title": "TrainRPG",
+        "width": 620,
+        "height": 480,
+        "position": "center",
+        "icon": "icon/icon.png"
+    }
+}
