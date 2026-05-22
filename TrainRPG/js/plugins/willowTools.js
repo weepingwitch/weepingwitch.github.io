@@ -14,7 +14,7 @@
 
  */
 
-
+/*
 //faster animation
 (function() {
 
@@ -27,7 +27,7 @@
         }
     }
 };
-
+*/
 
 //no input in ui
 
@@ -66,4 +66,4 @@
 		68: 'right',    // right arrow
 		83: 'down'     // down arrow
 	};
-})();
+
