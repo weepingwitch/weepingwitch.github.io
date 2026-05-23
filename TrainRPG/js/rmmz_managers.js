@@ -496,7 +496,6 @@ ConfigManager.makeData = function() {
     const config = {};
     config.alwaysDash = this.alwaysDash;
     config.commandRemember = this.commandRemember;
-    config.touchUI = this.touchUI;
     config.bgmVolume = this.bgmVolume;
     config.bgsVolume = this.bgsVolume;
     config.meVolume = this.meVolume;
@@ -507,7 +506,6 @@ ConfigManager.makeData = function() {
 ConfigManager.applyData = function(config) {
     this.alwaysDash = this.readFlag(config, "alwaysDash", false);
     this.commandRemember = this.readFlag(config, "commandRemember", false);
-    this.touchUI = this.readFlag(config, "touchUI", true);
     this.bgmVolume = this.readVolume(config, "bgmVolume");
     this.bgsVolume = this.readVolume(config, "bgsVolume");
     this.meVolume = this.readVolume(config, "meVolume");
@@ -1875,7 +1873,7 @@ ColorManager.damageColor = function(colorType) {
 };
 
 ColorManager.outlineColor = function() {
-    return "rgba(0, 0, 0, 0.6)";
+    return "rgba(f, f, f, 0.6)";
 };
 
 ColorManager.dimColor1 = function() {

@@ -2577,6 +2577,7 @@ Scene_Shop.prototype.createCommandWindow = function() {
     this._commandWindow.setHandler("sell", this.commandSell.bind(this));
     this._commandWindow.setHandler("cancel", this.popScene.bind(this));
     this.addWindow(this._commandWindow);
+    this.commandBuy();
 };
 
 Scene_Shop.prototype.commandWindowRect = function() {

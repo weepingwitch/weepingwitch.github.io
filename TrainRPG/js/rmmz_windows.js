@@ -3011,7 +3011,9 @@ Window_Options.prototype.addGeneralOptions = function() {
 };
 
 Window_Options.prototype.addVolumeOptions = function() {
+    this.addCommand(TextManager.bgmVolume, "bgmVolume");
     this.addCommand(TextManager.bgsVolume, "bgsVolume");
+  
     this.addCommand(TextManager.seVolume, "seVolume");
 };
 

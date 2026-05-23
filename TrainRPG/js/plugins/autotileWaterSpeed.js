@@ -32,6 +32,9 @@ var autotileWaterSpeed = {};
 * @desc Frames between water tile updates. 60 frames = 1 second 
 * 
 * 
+@command hello
+@text hello!
+@desc hello!!!
 * 
 * 
 * @help 
@@ -55,6 +58,8 @@ PluginManager.registerCommand('autotileWaterSpeed', "set", args => {
         autotileWaterSpeed.speed = args.speed;
         
     });
+
+
 
 Tilemap.prototype.update = function() {
     this.animationCount++;

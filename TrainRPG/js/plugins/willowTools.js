@@ -67,3 +67,18 @@
 		83: 'down'     // down arrow
 	};
 
+
+
+
+
+
+Game_Action.prototype.applyGlobal = function() {
+    for (const effect of this.item().effects) {
+        if (effect.code === Game_Action.EFFECT_COMMON_EVENT) {
+			//alert("hello! " + effect.dataId)
+            $gameTemp.reserveCommonEvent(effect.dataId);
+        }
+    }
+    this.updateLastUsed();
+    this.updateLastSubject();
+};
