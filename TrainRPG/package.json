@@ -3,7 +3,7 @@
     "main": "index.html",
     "chromium-args": "--force-color-profile=srgb --disable-devtools",
     "window": {
-        "title": "TrainRPG",
+        "title": "you are a girl on a train",
         "width": 1620,
         "height": 1080,
         "position": "center",
