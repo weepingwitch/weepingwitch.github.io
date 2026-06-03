@@ -4,8 +4,8 @@
     "chromium-args": "--force-color-profile=srgb --disable-devtools",
     "window": {
         "title": "trainchild",
-        "width": 1620,
-        "height": 1080,
+        "width": 810,
+        "height": 540,
         "position": "center",
         "icon": "icon/icon.png"
     }
