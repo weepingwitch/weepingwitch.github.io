@@ -1962,7 +1962,7 @@ Window_MenuStatus.prototype.maxItems = function() {
 };
 
 Window_MenuStatus.prototype.numVisibleRows = function() {
-    return 4;
+    return 2;
 };
 
 Window_MenuStatus.prototype.itemHeight = function() {
