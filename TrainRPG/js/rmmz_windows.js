@@ -1962,7 +1962,7 @@ Window_MenuStatus.prototype.maxItems = function() {
 };
 
 Window_MenuStatus.prototype.numVisibleRows = function() {
-    return 2;
+    return 3;
 };
 
 Window_MenuStatus.prototype.itemHeight = function() {
@@ -3000,14 +3000,12 @@ Window_Options.prototype.initialize = function(rect) {
 };
 
 Window_Options.prototype.makeCommandList = function() {
-    //this.addGeneralOptions();
+    this.addGeneralOptions();
     this.addVolumeOptions();
 };
 
 Window_Options.prototype.addGeneralOptions = function() {
-    this.addCommand(TextManager.alwaysDash, "alwaysDash");
-    this.addCommand(TextManager.commandRemember, "commandRemember");
-    this.addCommand(TextManager.touchUI, "touchUI");
+   
 };
 
 Window_Options.prototype.addVolumeOptions = function() {
